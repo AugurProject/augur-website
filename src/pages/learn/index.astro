@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import PageHero from '../../components/pages/PageHero.astro';
+import Glossary from '../../components/content/Glossary.astro';
+const guides = await getCollection('learn');
+const start = guides.filter(guide=>guide.data.order).sort((a,b)=>a.data.order!-b.data.order!);
+const moreIds=['writing-questions','when-a-question-cannot-be-answered','how-the-products-fit-together','reading-the-whitepaper'];
+const more=moreIds.flatMap(id=>guides.filter(guide=>guide.id===id));
+---
+<PageLayout title="Learn about Augur" description="Start with four short guides to oracles, Augur Lituus, disputes and REP, with definitions of the key terms.">
+ <PageHero title="Learn" lead="New to oracles? Start here. Four short guides take you from “what is an oracle?” to how REP keeps answers honest. No background needed." />
+ <section class="section site-container ruled">
+  <div class="section-heading"><h2>Start here</h2><p class="lead">Read these in order. Each guide builds on the one before and ends with where to go next.</p></div>
+  <ol class="guide-path">{start.map(guide=><li><a class="guide-card" href={`/learn/${guide.id}/`}><span class="step-number" aria-hidden="true">{String(guide.data.order).padStart(2,'0')}</span><h3>{guide.data.title}</h3><p>{guide.data.description}</p><span class="read-guide">Read guide <span aria-hidden="true">→</span></span></a></li>)}</ol>
+ </section>
+ <section class="section site-container ruled">
+  <div class="section-heading"><h2>More guides</h2><p class="lead">Focused explanations for when you need one specific thing.</p></div>
+  <div>{more.map(guide=><a class="more-guide" href={`/learn/${guide.id}/`}><span class="group">{guide.data.group}</span><div><h3>{guide.data.title}</h3><p>{guide.data.description}</p></div><span aria-hidden="true">→</span></a>)}</div>
+ </section>
+ <section id="key-terms" class="section site-container ruled"><div class="section-heading"><h2>Key terms</h2><p class="lead">The words you’ll meet most often, in plain language.</p></div><Glossary /></section>
+</PageLayout>
+<style>
+ .ruled{padding-top:72px}.ruled .section-heading{margin-bottom:48px}.guide-path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;list-style:none;padding:0;margin:0}.guide-card{display:flex;flex-direction:column;height:100%;min-height:364px;padding:28px;background:var(--web-quiet);border:1px solid var(--web-outline);text-decoration:none}.guide-card:hover{background:var(--web-raised);border-color:var(--brand-hover-edge)}.step-number{display:inline-grid;place-items:center;width:40px;height:40px;background:var(--primary);color:var(--primary-foreground);font:600 15px/22px var(--font-heading)}.guide-card h3{font-size:22px;line-height:30px;margin-top:28px}.guide-card p{margin-top:16px;color:var(--muted-foreground)}.read-guide{font:600 14px/20px var(--font-heading);margin-top:auto;padding-top:32px}.more-guide{display:grid;grid-template-columns:200px minmax(0,1fr) 24px;gap:40px;align-items:center;text-decoration:none;border-top:1px solid var(--border-quiet);padding:28px 0}.more-guide:last-child{border-bottom:1px solid var(--border-quiet)}.more-guide h3{font-size:22px;line-height:30px}.more-guide p{font-size:17px;line-height:26px;color:var(--muted-foreground);margin-top:6px}.more-guide .group{font-size:14px;color:var(--muted-foreground)}.more-guide:hover h3{text-decoration:underline;text-underline-offset:5px}@media(max-width:1023px){.guide-path{grid-template-columns:repeat(2,minmax(0,1fr))}.more-guide{grid-template-columns:140px 1fr 24px;gap:24px}}@media(max-width:600px){.guide-path{grid-template-columns:1fr}.guide-card{min-height:300px}.more-guide{grid-template-columns:1fr 24px;gap:12px}.more-guide .group{grid-column:1/-1}.more-guide h3{font-size:20px}}
+</style>
