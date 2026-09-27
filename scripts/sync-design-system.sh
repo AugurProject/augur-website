@@ -2,10 +2,12 @@
 set -euo pipefail
 
 PIN="629868678fa05d9cd0d8d14617ec29bf8df5d290"
-BASE="https://raw.githubusercontent.com/jubalm/augur-design-system/$PIN/public/r"
 
-# Baseline used by the website shell/home work. Registry dependencies pull utils/theme
-# where required. Add other upstream items only when a concrete page needs them.
+# The upstream contract documents full-SHA GitHub-native installs as the
+# strongest reproducible channel. Astro is not yet an upstream-verified
+# external consumer, so the first run of this script is itself an M1
+# compatibility gate: inspect the generated source/CSS and build before
+# treating the path as established.
 items=(
   augur-theme
   button
@@ -15,8 +17,9 @@ items=(
 )
 
 for item in "${items[@]}"; do
-  echo "Installing Augur Design System item: $item @ $PIN"
-  bunx shadcn@4.20.1 add "$BASE/$item.json" --yes
+  address="jubalm/augur-design-system/$item#$PIN"
+  echo "Installing Augur Design System item: $address"
+  bunx shadcn@4.20.1 add "$address" --overwrite -y
 done
 
-echo "Design system sync complete. Review and commit the generated source diff."
+echo "Design system sync complete. Review the generated source and CSS diff."

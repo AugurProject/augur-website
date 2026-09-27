@@ -31,6 +31,7 @@ Bootstrap target:
 - Astro 7.3.x
 - TypeScript
 - React 19.2.x through Astro integration
+- Tailwind CSS v4 only as the shadcn/registry CSS integration layer; website compositions should still prefer semantic Augur roles over ad-hoc utility styling
 - MDX for editorial content requiring structured embeds
 - Astro content collections for Learn, Blog, and Research
 - shadcn-compatible Augur source registry for shared theme/components
@@ -54,7 +55,7 @@ No CMS, database, client state framework, or server runtime is required by the s
 ├── scripts/
 │   └── sync-design-system.sh
 ├── src/
-│   ├── components/          # website-owned compositions
+│   ├── components/          # website-owned compositions + registry targets
 │   ├── content/
 │   │   ├── blog/
 │   │   ├── learn/
@@ -78,17 +79,23 @@ This repository pins design-system commit:
 
 `629868678fa05d9cd0d8d14617ec29bf8df5d290`
 
-Raw registry base:
+The upstream contract documents full-SHA GitHub-native item addresses as the strongest reproducible installation form:
 
 ```text
-https://raw.githubusercontent.com/jubalm/augur-design-system/629868678fa05d9cd0d8d14617ec29bf8df5d290/public/r/
+jubalm/augur-design-system/<item>#629868678fa05d9cd0d8d14617ec29bf8df5d290
 ```
 
-`scripts/sync-design-system.sh` installs the adopted baseline from that immutable ref. The installed source is committed here so website builds do not depend on GitHub at runtime.
+`scripts/sync-design-system.sh` installs the adopted baseline from that immutable ref. Installed source is committed here so website builds do not depend on GitHub at runtime.
+
+### Compatibility gate
+
+The upstream registry install has been verified against Vite + React 19 + Tailwind v4, not an external Astro consumer. Astro is still the site architecture because it fits the content-heavy/static problem and is already used inside the design-system repository, but M1 must prove the **external registry → Astro** path before visual implementation depends on it.
+
+Do not paper over registry incompatibility by copying foundation CSS. Either make the consumer path work and record evidence, or adjust the upstream distribution contract.
 
 Rules:
 
-- do not hand-edit generated/registry-installed foundation values just to satisfy a page;
+- do not hand-edit registry-installed foundation values just to satisfy a page;
 - site-specific composition CSS may consume semantic roles and composition spacing;
 - do not create a parallel palette/type/radius/focus system;
 - update the upstream pin deliberately and review the resulting source diff;
@@ -184,11 +191,13 @@ The two retired supply endpoints are an exception: production routing must retur
 Baseline:
 
 - Astro check/build;
+- registry-consumer compatibility proof;
 - internal route/link validation;
 - content-schema validation;
 - responsive browser checks;
 - accessibility/axe checks when browser tests land;
 - design-system theme/component conformance;
+- font self-hosting/no-third-party check;
 - screenshot review for visual changes;
 - migration redirect/410 tests before launch.
 

@@ -38,16 +38,17 @@ At the pin above:
 - `apps/docs/src/content/foundations/interaction.mdx`
 - `apps/docs/src/content/foundations/identity.mdx`
 - `apps/docs/src/content/reference/component-conventions.mdx`
+- `packages/design-system/docs/registry-contract.md`
 - `resources/brand/PROVENANCE.md`
 - `registry.json`
 - `public/r/*.json`
 
 ## Registry
 
-Immutable registry base for this pin:
+Strongest reproducible install form documented upstream:
 
-```text
-https://raw.githubusercontent.com/jubalm/augur-design-system/629868678fa05d9cd0d8d14617ec29bf8df5d290/public/r/
+```bash
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#629868678fa05d9cd0d8d14617ec29bf8df5d290"
 ```
 
 Available items at bootstrap:
@@ -62,7 +63,23 @@ Available items at bootstrap:
 - `page-header`
 - `empty-state`
 
-Use `scripts/sync-design-system.sh` for the website baseline. Install additional current items only when a page needs them.
+Use `scripts/sync-design-system.sh` for the website baseline. Install additional current items only when a concrete page needs them.
+
+## Important consumer-support boundary
+
+The design system's external registry contract is currently verified end-to-end against a **Vite + React 19 + Tailwind CSS v4** consumer. The upstream architecture expects Astro to work by shadcn convention, but explicitly does **not** claim Astro as a verified external registry consumer yet.
+
+The design-system docs application being Astro does not prove this path: it consumes the workspace package directly, not the external source registry.
+
+Therefore M1 begins with a compatibility gate:
+
+1. keep Astro + React + Tailwind v4 close to the verified consumer assumptions;
+2. run the pinned registry install;
+3. verify source destinations, CSS merge, Fontsource delivery, semantic variables, theme selectors, focus/reduced-motion rules, and production build;
+4. if it fails, fix/extend the upstream registry contract or choose an explicit supported consumption path;
+5. do **not** hand-copy foundation CSS as a workaround.
+
+This is a known integration question, not a reason to fork the design system.
 
 ## Visual contract
 
@@ -154,11 +171,11 @@ Upstream PNGs are lossless extractions from the canonical brand foundation PDF. 
 When intentionally adopting a newer design-system revision:
 
 1. inspect upstream commits since this pin;
-2. read affected `DESIGN.md`, foundation docs, component docs, and changelog;
+2. read affected `DESIGN.md`, foundation docs, component docs, registry contract, and changelog;
 3. update the pin here and in `scripts/sync-design-system.sh`;
 4. re-run the sync;
-5. review the source diff;
-6. test both themes, responsive layouts, keyboard/focus, and affected pages;
+5. review the source/CSS/dependency diff;
+6. test both themes, responsive layouts, keyboard/focus, fonts, and affected pages;
 7. record any site composition adjustment separately from foundation changes.
 
 Never update the pin merely to "get latest."
