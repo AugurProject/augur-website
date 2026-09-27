@@ -1,0 +1,76 @@
+---
+import { primaryNavigation, resourceNavigation } from "@/lib/site";
+
+// Pinned identity source: jubalm/augur-design-system@629868678fa05d9cd0d8d14617ec29bf8df5d290
+// resources/brand/assets/horizontal/{color,reversed}.png; hashes in resources/brand/PROVENANCE.md.
+
+const pathname = Astro.url.pathname.replace(/\/?$/, "/");
+const isCurrent = (href: string) => pathname === href;
+---
+
+<header class="site-header augur-type-ui">
+  <div class="site-frame site-header__inner">
+    <a class="site-header__brand" href="/" aria-label="Augur home" aria-current={isCurrent("/") ? "page" : undefined}>
+      <img class="site-header__brand-light" src="/brand/augur-horizontal-color.png" width="1440" height="481" alt="" />
+      <img class="site-header__brand-dark" src="/brand/augur-horizontal-reversed.png" width="1440" height="481" alt="" />
+    </a>
+
+    <nav class="site-header__desktop-nav" aria-label="Main navigation">
+      {primaryNavigation.slice(0, 2).map(({ href, label }) => (
+        <a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>
+      ))}
+      <details class="site-nav-resources">
+        <summary>Resources</summary>
+        <div class="site-nav-resources__panel">
+          {resourceNavigation.map(({ href, label }) => (
+            <a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>
+          ))}
+        </div>
+      </details>
+      {primaryNavigation.slice(2).map(({ href, label }) => (
+        <a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>
+      ))}
+    </nav>
+
+    <div class="site-header__desktop-actions">
+      <label class="site-theme-picker">Theme
+        <select data-site-theme aria-label="Color theme">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+      <a class="site-header__action augur-type-control" href="/protocol/">How Augur works <span aria-hidden="true">↗</span></a>
+    </div>
+
+    <details class="site-mobile-menu">
+      <summary>Menu</summary>
+      <div class="site-mobile-menu__panel">
+        <nav aria-label="Mobile navigation">
+          {primaryNavigation.slice(0, 2).map(({ href, label }) => (
+            <a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>
+          ))}
+          <details class="site-nav-resources site-nav-resources--mobile">
+            <summary>Resources</summary>
+            <div class="site-nav-resources__panel">
+              {resourceNavigation.map(({ href, label }) => (
+                <a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>
+              ))}
+            </div>
+          </details>
+          {primaryNavigation.slice(2).map(({ href, label }) => (
+            <a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>
+          ))}
+          <a class="site-header__action augur-type-control" href="/protocol/">How Augur works <span aria-hidden="true">↗</span></a>
+        </nav>
+        <label class="site-theme-picker">Theme
+          <select data-site-theme aria-label="Color theme">
+            <option value="system">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+      </div>
+    </details>
+  </div>
+</header>

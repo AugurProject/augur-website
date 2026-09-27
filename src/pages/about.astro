@@ -1,4 +1,19 @@
 ---
-import ScaffoldPage from "@/components/ScaffoldPage.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
 ---
-<ScaffoldPage title="About" question="Who is behind the work and how do I reach them?" boundary="Roles, funding, operator, and Contact." />
+
+<SiteLayout title="About" description="Augur project, foundation, and contact information.">
+  <main class="scaffold">
+    <p class="scaffold__status">Implementation scaffold · not production copy</p>
+    <h1>About Augur</h1>
+    <p class="scaffold__question">Who is behind the work, and how can I reach them?</p>
+    <section id="foundation">
+      <h2>Lituus Foundation</h2>
+      <p>The foundation’s funding and development-support role is described in the website strategy. Its precise operator attribution and public details require maintainer review.</p>
+    </section>
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>A general inquiry destination has not yet been verified for this rebuild. This section will provide a direct contact route after review.</p>
+    </section>
+  </main>
+</SiteLayout>

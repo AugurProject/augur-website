@@ -1,0 +1,38 @@
+name: Verify
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: bun install --frozen-lockfile
+      - run: bun run check
+      - run: bun run build
+      - run: node scripts/check-internal-links.mjs
+
+  registry-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: bun install --frozen-lockfile
+      - run: bun run design:sync
+      - name: Require pinned registry sync to preserve committed files
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git status --short
+            git diff --stat
+            exit 1
+          fi

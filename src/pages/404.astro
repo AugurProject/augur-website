@@ -1,16 +1,16 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 ---
-<SiteLayout title="Page not found" description="The requested Augur page was not found.">
-  <main class="scaffold">
-    <p class="scaffold__status">404</p>
-    <h1>Page not found</h1>
-    <p class="scaffold__question">The requested URL does not exist in this build.</p>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/protocol/">Protocol</a></li>
-      <li><a href="/research/">Research</a></li>
-      <li><a href="/faq/">FAQ</a></li>
+<SiteLayout title="Page not found" description="The requested Augur page was not found." canonical={false}>
+  <main class="site-frame site-not-found">
+    <p class="site-not-found__status augur-type-metadata">404 · Page not found</p>
+    <h1 class="augur-type-editorial-title">Page not found</h1>
+    <p>That address does not lead to a page here. Start with the site overview, or use a direct route:</p>
+    <ul class="site-not-found__links">
+      <li><a href="/">Augur overview</a></li>
+      <li><a href="/protocol/">How Augur works</a></li>
+      <li><a href="/developers/">For developers</a></li>
+      <li><a href="/research/">Research and sources</a></li>
     </ul>
   </main>
 </SiteLayout>

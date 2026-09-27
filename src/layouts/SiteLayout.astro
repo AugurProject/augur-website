@@ -1,12 +1,20 @@
 ---
-import "../styles/global.css";
+import "../index.css";
+import "../styles/site.css";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
 
 type Props = {
   title: string;
   description: string;
+  canonical?: string | false;
+  indexable?: boolean;
 };
 
-const { title, description } = Astro.props;
+const { title, description, canonical, indexable = false } = Astro.props;
+// The public origin is stable, while M1 preview and placeholder pages remain noindex.
+const canonicalUrl = canonical === false ? undefined : canonical ?? new URL(Astro.url.pathname, "https://augur.net").href;
+const documentTitle = title === "Augur" ? title : `${title} · Augur`;
 ---
 
 <!doctype html>
@@ -15,10 +23,55 @@ const { title, description } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="robots" content="noindex,nofollow" />
-    <title>{title} · Augur</title>
+    <meta name="robots" content={indexable ? "index,follow" : "noindex,nofollow"} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <title>{documentTitle}</title>
+    <script is:inline>
+      try {
+        const choice = localStorage.getItem("augur-theme");
+        if (choice === "light" || choice === "dark") document.documentElement.dataset.theme = choice;
+      } catch { /* System preference remains available when storage is blocked. */ }
+    </script>
   </head>
   <body>
-    <slot />
+    <a class="site-skip-link" href="#main-content">Skip to content</a>
+    <SiteHeader />
+    <div id="main-content" tabindex="-1" class="site-content"><slot /></div>
+    <SiteFooter />
+    <script>
+      const themeControls = document.querySelectorAll<HTMLSelectElement>("[data-site-theme]");
+      const current = document.documentElement.dataset.theme;
+      for (const control of themeControls) {
+        control.value = current === "light" || current === "dark" ? current : "system";
+        control.addEventListener("change", () => {
+          if (control.value === "system") {
+            delete document.documentElement.dataset.theme;
+          } else {
+            document.documentElement.dataset.theme = control.value;
+          }
+          try {
+            if (control.value === "system") localStorage.removeItem("augur-theme");
+            else localStorage.setItem("augur-theme", control.value);
+          } catch { /* Theme still applies for this page. */ }
+          for (const other of themeControls) other.value = control.value;
+        });
+      }
+
+      const disclosures = document.querySelectorAll<HTMLDetailsElement>(".site-nav-resources, .site-mobile-menu");
+      for (const disclosure of disclosures) {
+        disclosure.addEventListener("keydown", (event) => {
+          if (event.key !== "Escape" || !disclosure.open) return;
+          event.preventDefault();
+          event.stopPropagation();
+          disclosure.open = false;
+          disclosure.querySelector<HTMLElement>("summary")?.focus();
+        });
+      }
+      document.addEventListener("pointerdown", (event) => {
+        for (const disclosure of disclosures) {
+          if (!disclosure.contains(event.target as Node)) disclosure.open = false;
+        }
+      });
+    </script>
   </body>
 </html>

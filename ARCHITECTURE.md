@@ -65,7 +65,8 @@ No CMS, database, client state framework, or server runtime is required by the s
 │   │   ├── evidence.ts
 │   │   └── site.ts
 │   ├── pages/
-│   └── styles/
+│   ├── index.css             # registry theme merge target
+│   └── styles/              # registry typography + website composition
 └── public/
 ```
 
@@ -86,6 +87,8 @@ jubalm/augur-design-system/<item>#629868678fa05d9cd0d8d14617ec29bf8df5d290
 ```
 
 `scripts/sync-design-system.sh` installs the adopted baseline from that immutable ref. Installed source is committed here so website builds do not depend on GitHub at runtime.
+
+The registry's typography import is relative to the consumer CSS entry. For this Astro consumer, `components.json` points to `src/index.css`; the upstream `./styles/augur-typography.css` import then resolves to its registry target without modifying the theme payload. `src/styles/site.css` holds only website composition.
 
 ### Compatibility gate
 
@@ -108,6 +111,8 @@ Foundation values come from the design system.
 The website may define **composition contracts** the design system intentionally leaves product-specific: e.g. the website's page frame, a homepage grid, section rhythm, or a diagram-specific layout.
 
 Composition variables may organize design-system values but must not redefine brand primitives. Name them for their role, not as a new token scale.
+
+M1 shell composition uses `--site-frame-max: 80rem`, `--site-gutter: clamp(1rem, 3vw, 3rem)`, and `--site-section-gap: clamp(3rem, 6vw, 5rem)` in `src/styles/site.css`. These govern website layout, not Augur foundation values.
 
 Example acceptable local concerns:
 

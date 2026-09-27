@@ -4,16 +4,19 @@ set -euo pipefail
 PIN="629868678fa05d9cd0d8d14617ec29bf8df5d290"
 
 # The upstream contract documents full-SHA GitHub-native installs as the
-# strongest reproducible channel. Astro is not yet an upstream-verified
-# external consumer, so the first run of this script is itself an M1
-# compatibility gate: inspect the generated source/CSS and build before
-# treating the path as established.
+# strongest reproducible channel. This repo checks the installed result in CI;
+# see docs/DESIGN-SYSTEM.md for the Astro integration evidence and limits.
+# At this upstream pin, component registryDependencies omit the SHA. Install
+# dependents first, then each of their dependencies explicitly at the pin so
+# the final committed sources and theme come from this revision. The CI sync
+# drift check catches changes from any unpinned transitive resolution.
 items=(
-  augur-theme
-  button
-  card
-  page-header
   empty-state
+  card
+  button
+  page-header
+  utils
+  augur-theme
 )
 
 for item in "${items[@]}"; do

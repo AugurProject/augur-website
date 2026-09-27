@@ -81,6 +81,54 @@ Therefore M1 begins with a compatibility gate:
 
 This is a known integration question, not a reason to fork the design system.
 
+### M1 consumer verification (2026-09-27)
+
+The source for this installation is the pinned commit above, specifically its
+`public/r/{augur-theme,utils,button,card,page-header,empty-state}.json` built
+items. The source registry's `augur-theme` writes typography to
+`src/styles/augur-typography.css` and imports it as
+`./styles/augur-typography.css` from the configured Tailwind CSS entry. We set
+that entry to `src/index.css`, matching the upstream consumer's source-root CSS
+location. The import resolves in Astro without modifying any theme payload.
+
+This workspace could not fetch `raw.githubusercontent.com` through its SOCKS
+proxy. A direct `bun run design:sync` failed before writing files when shadcn
+requested `registry.json`. For an isolated compatibility check, the exact
+pinned built-item JSON was fetched through the GitHub connector and served
+locally to shadcn 4.20.1. Only its transitive registry addresses were changed
+to local URLs; item contents, CSS declarations, file targets, and npm versions
+were preserved. The item dependencies were installed separately at their
+declared exact versions because the local no-proxy test could not reach npm.
+This proves the shadcn merge and Astro build using the pinned item payload;
+it does not establish that the GitHub-native transport succeeds on this network.
+
+Observed results: `bun install` generated `bun.lock`; `bun run check` and
+`bun run build` pass with Astro 7.3.1, React 19.2.8, and Tailwind CSS 4.1.17.
+The production output includes Fontsource `@font-face` rules and local Sora and
+Schibsted Grotesk WOFF2 assets, with no Google font host. It includes light and
+dark semantic roles, `[data-theme]` selectors, system dark fallback, the focus
+ring, and the reduced-motion rule. The browser behavior and visual conformance
+still need a rendered pass. CI runs a frozen install, check, build, route/link
+validation, and a separate native registry sync drift check on GitHub runners.
+
+`components.json` has an empty `tailwind.baseColor`: shadcn 4.20.1 otherwise
+requests an unrelated `ui.shadcn.com/r/colors/neutral.json` even though Augur
+supplies all base roles. The empty value is accepted by the CLI and keeps the
+install independent of that scaffold palette.
+
+**Upstream dependency limitation:** the pinned component JSON records
+unversioned `registryDependencies` such as
+`jubalm/augur-design-system/utils`. The sync script installs dependent items
+first and then explicitly installs every baseline item at the pinned SHA, so
+the final source files should come from the pin. An upstream fix should pin
+transitive addresses in the generated registry or propagate the top-level ref.
+Until then, the native install graph is not fully immutable: a newer upstream
+default branch can be fetched transiently, and CSS merged along the way may
+drift. CI's full `git status --porcelain` check detects committed-source or
+CSS drift, including newly generated files, but does not make that upstream
+graph immutable. Review its result before declaring the GitHub-native path
+verified.
+
 ## Visual contract
 
 ### Core expression

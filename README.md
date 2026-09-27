@@ -23,9 +23,9 @@ Read these before implementation:
 
 ## Current state
 
-This bootstrap establishes implementation context and a minimal Astro route scaffold. It intentionally does **not** attempt the final homepage, visual composition, content migration, or deployment.
+The site currently has a verified Astro foundation and shared shell around direct-entry route placeholders. The placeholders are marked `noindex` and are not publication-ready content. The final homepage, content migration, contact/operator review, and production deployment are later work.
 
-The first meaningful implementation slice is the homepage vertical slice described in the strategy, after the design-system theme and required primitives are installed and verified.
+The pinned registry source is committed so ordinary builds do not fetch GitHub. Its generated CSS enters at `src/index.css`; website-only frame, gutter, section rhythm, and shell layout live in `src/styles/site.css`. See [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) for the registry proof and its limits.
 
 ## Stack direction
 
@@ -40,8 +40,7 @@ The first meaningful implementation slice is the homepage vertical slice describ
 ## Development
 
 ```bash
-bun install
-bun run design:sync
+bun install --frozen-lockfile
 bun run dev
 ```
 
@@ -50,9 +49,10 @@ Checks:
 ```bash
 bun run check
 bun run build
+node scripts/check-internal-links.mjs
 ```
 
-The bootstrap does not include a lockfile because dependencies have not yet been installed in this repository. The first implementation pass should generate and commit `bun.lock`, then CI should move to frozen installs.
+`bun run design:sync` intentionally refreshes the committed registry source from the pinned upstream revision. Review its source, CSS, and dependency diff before committing an update. The command needs network access to GitHub and the package registry; normal install/check/build does not need GitHub.
 
 ## Upstream projects
 
