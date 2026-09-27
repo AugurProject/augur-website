@@ -74,25 +74,19 @@ Registry-installed generic components should land in their configured source loc
 
 ## 5. Design-system consumption
 
-The design system's primary external distribution path is its GitHub-hosted shadcn-compatible source registry.
+The design system publishes shadcn-compatible built JSON alongside its GitHub-native source registry.
 
 This repository pins design-system commit:
 
 `629868678fa05d9cd0d8d14617ec29bf8df5d290`
 
-The upstream contract documents full-SHA GitHub-native item addresses as the strongest reproducible installation form:
-
-```text
-jubalm/augur-design-system/<item>#629868678fa05d9cd0d8d14617ec29bf8df5d290
-```
-
-`scripts/sync-design-system.sh` installs the adopted baseline from that immutable ref. Installed source is committed here so website builds do not depend on GitHub at runtime.
+At this pin, GitHub-native item addresses install untransformed package TSX with broken internal imports and missing component CSS imports. `scripts/sync-design-system.sh` instead fetches the commit-addressed `public/r/` built items, maps their transitive references to the same pinned set on a temporary loopback registry, and installs them with shadcn. See `docs/DESIGN-SYSTEM.md` and the upstream issue #92 for the evidence and repair path. Installed source is committed here so website builds do not depend on GitHub at runtime.
 
 The registry's typography import is relative to the consumer CSS entry. For this Astro consumer, `components.json` points to `src/index.css`; the upstream `./styles/augur-typography.css` import then resolves to its registry target without modifying the theme payload. `src/styles/site.css` holds only website composition.
 
 ### Compatibility gate
 
-The upstream registry install has been verified against Vite + React 19 + Tailwind v4, not an external Astro consumer. Astro is still the site architecture because it fits the content-heavy/static problem and is already used inside the design-system repository, but M1 must prove the **external registry → Astro** path before visual implementation depends on it.
+The built-item payload has now been consumed by Astro + React 19 + Tailwind v4 and built successfully. Its CSS, self-hosted fonts, theme selectors, and browser shell checks are verified in M1. The GitHub-native source path remains broken upstream and is not this site's sync mechanism.
 
 Do not paper over registry incompatibility by copying foundation CSS. Either make the consumer path work and record evidence, or adjust the upstream distribution contract.
 

@@ -45,7 +45,8 @@ At the pin above:
 
 ## Registry
 
-Strongest reproducible install form documented upstream:
+Upstream documents this GitHub-native form, but its component items are broken
+at the adopted commit (details below). Do not use it to sync this website:
 
 ```bash
 bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#629868678fa05d9cd0d8d14617ec29bf8df5d290"
@@ -63,7 +64,12 @@ Available items at bootstrap:
 - `page-header`
 - `empty-state`
 
-Use `scripts/sync-design-system.sh` for the website baseline. Install additional current items only when a concrete page needs them.
+Use `bun run design:sync` for the website baseline. It downloads the immutable
+`public/r/<item>.json` artifacts at the adopted SHA, rewrites only their
+transitive registry addresses to local URLs for this same pinned set, and
+serves them to shadcn 4.20.1 over loopback. No foundation values or component
+source are hand-maintained in this repository. Extend its explicit item list
+only when a concrete page needs another upstream item.
 
 ## Important consumer-support boundary
 
@@ -91,43 +97,56 @@ items. The source registry's `augur-theme` writes typography to
 that entry to `src/index.css`, matching the upstream consumer's source-root CSS
 location. The import resolves in Astro without modifying any theme payload.
 
-This workspace could not fetch `raw.githubusercontent.com` through its SOCKS
-proxy. A direct `bun run design:sync` failed before writing files when shadcn
-requested `registry.json`. For an isolated compatibility check, the exact
-pinned built-item JSON was fetched through the GitHub connector and served
-locally to shadcn 4.20.1. Only its transitive registry addresses were changed
-to local URLs; item contents, CSS declarations, file targets, and npm versions
-were preserved. The item dependencies were installed separately at their
-declared exact versions because the local no-proxy test could not reach npm.
-This proves the shadcn merge and Astro build using the pinned item payload;
-it does not establish that the GitHub-native transport succeeds on this network.
+The upstream generator embeds consumer-shaped `content` in `public/r/*.json`:
+it rewrites canonical package imports (`../../internal/cx` to `@/lib/utils`,
+relative pattern imports to consumer aliases) and adds CSS imports. The root
+`registry.json` drops that content and instead points `files.path` at the
+untransformed package files. A GitHub Actions run of the documented
+GitHub-native command completed but replaced the four baseline TSX files with
+broken `internal/cx` / pattern-relative imports and removed CSS imports.
+That is an upstream source-registry contract bug, separate from Astro.
+
+The site sync uses the pinned **built-JSON channel**. Its transient local
+server keeps every item field intact except `registryDependencies`, which it
+maps to the matching pinned item on loopback. This prevents the unpinned
+transitive addresses in upstream JSON from resolving to a moving default
+branch or to broken GitHub-native source. The source artifacts themselves
+still come from `raw.githubusercontent.com` at the fixed 40-character commit.
+CI runs the sync and fails on any file drift, including untracked files.
+
+This workspace's proxy blocks `raw.githubusercontent.com`; local verification
+used connector-fetched copies of those exact pinned built items via the
+script's `AUGUR_REGISTRY_SOURCE_DIR` test override, which is disabled in CI.
+Its npm dependencies were installed separately at the items' exact versions
+because the proxy-free loopback smoke could not reach npm. The production
+GitHub runner must still establish that the committed built-JSON sync and
+drift check pass over its actual network.
 
 Observed results: `bun install` generated `bun.lock`; `bun run check` and
 `bun run build` pass with Astro 7.3.1, React 19.2.8, and Tailwind CSS 4.1.17.
 The production output includes Fontsource `@font-face` rules and local Sora and
 Schibsted Grotesk WOFF2 assets, with no Google font host. It includes light and
 dark semantic roles, `[data-theme]` selectors, system dark fallback, the focus
-ring, and the reduced-motion rule. The browser behavior and visual conformance
-still need a rendered pass. CI runs a frozen install, check, build, route/link
-validation, and a separate native registry sync drift check on GitHub runners.
+ring, and the reduced-motion rule. CI runs a frozen install, check, build,
+route/link validation, a pinned built-JSON sync drift check, and four Chromium
+shell checks at desktop/mobile sizes in light/dark. The browser job saves
+screenshots as an Actions artifact for visual review; those shell checks do not
+establish final homepage design acceptance.
 
 `components.json` has an empty `tailwind.baseColor`: shadcn 4.20.1 otherwise
 requests an unrelated `ui.shadcn.com/r/colors/neutral.json` even though Augur
 supplies all base roles. The empty value is accepted by the CLI and keeps the
 install independent of that scaffold palette.
 
-**Upstream dependency limitation:** the pinned component JSON records
-unversioned `registryDependencies` such as
-`jubalm/augur-design-system/utils`. The sync script installs dependent items
-first and then explicitly installs every baseline item at the pinned SHA, so
-the final source files should come from the pin. An upstream fix should pin
-transitive addresses in the generated registry or propagate the top-level ref.
-Until then, the native install graph is not fully immutable: a newer upstream
-default branch can be fetched transiently, and CSS merged along the way may
-drift. CI's full `git status --porcelain` check detects committed-source or
-CSS drift, including newly generated files, but does not make that upstream
-graph immutable. Review its result before declaring the GitHub-native path
-verified.
+**Upstream repair:** generate consumer-shaped TSX files under the design
+system's `registry-src/` from canonical source, point root `registry.json`
+at those generated paths, and drift-check both forms. Its docs already
+describe these transforms, but only built JSON currently carries them.
+The generated `registryDependencies` are unversioned; they also need an
+immutable release strategy or propagated ref before a direct native install
+can claim full dependency-graph reproducibility. An upstream self-reference
+cannot literally embed its own eventual commit SHA in that same commit. Track
+the repair in `jubalm/augur-design-system` issue #92.
 
 ## Visual contract
 
