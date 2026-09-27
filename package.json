@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
+    "test:browser": "playwright test",
     "preview": "astro preview",
     "check": "astro check",
     "design:sync": "bash scripts/sync-design-system.sh"
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
+    "@playwright/test": "1.63.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
     "typescript": "6.0.3"

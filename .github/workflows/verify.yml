@@ -34,5 +34,27 @@ jobs:
           if [[ -n "$(git status --porcelain)" ]]; then
             git status --short
             git diff --stat
+            git diff -- src/components
             exit 1
           fi
+
+  browser:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test:browser
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: shell-browser-screenshots
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 14
