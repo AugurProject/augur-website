@@ -1,0 +1,31 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { siteRoutes } from "@/lib/site";
+---
+
+<SiteLayout
+  title="Website implementation scaffold"
+  description="Augur.net rebuild implementation scaffold."
+>
+  <main class="scaffold">
+    <p class="scaffold__status">Implementation scaffold · noindex</p>
+    <h1>Augur.net rebuild</h1>
+    <p class="scaffold__question">
+      This page is an implementation index, not the strategy homepage.
+      The final homepage must follow the nine-part sequence in SPEC.md.
+    </p>
+    <hr />
+    <h2>Canonical routes</h2>
+    <ul>
+      {siteRoutes.map((route) => (
+        <li>
+          <a href={route.href}>{route.label}</a> — {route.question}
+        </li>
+      ))}
+    </ul>
+    <p>
+      Start with <code>README.md</code>, <code>SPEC.md</code>,
+      <code>ARCHITECTURE.md</code>, and <code>AGENTS.md</code>.
+    </p>
+  </main>
+</SiteLayout>

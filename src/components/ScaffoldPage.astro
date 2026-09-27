@@ -1,0 +1,26 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+
+type Props = {
+  title: string;
+  question: string;
+  boundary: string;
+};
+
+const { title, question, boundary } = Astro.props;
+---
+
+<SiteLayout title={title} description={question}>
+  <main class="scaffold">
+    <p class="scaffold__status">Implementation scaffold · not production copy</p>
+    <h1>{title}</h1>
+    <p class="scaffold__question">{question}</p>
+    <hr />
+    <p><strong>Page boundary:</strong> {boundary}</p>
+    <p>
+      Implement this route from <code>SPEC.md</code> and <code>docs/STRATEGY.md</code>,
+      using the pinned Augur Design System. Do not treat this placeholder as a visual template.
+    </p>
+    <p><a href="/">Back to route index</a></p>
+  </main>
+</SiteLayout>
