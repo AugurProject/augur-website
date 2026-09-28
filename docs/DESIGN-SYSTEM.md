@@ -7,7 +7,7 @@ Repository: `jubalm/augur-design-system`
 Pinned commit:
 
 ```text
-8fa34fefc8b28360a61e14df967a2a710e7b252e
+a95bf329be66697c5dbd87a484a390139046aaf9
 ```
 
 Commit summary: `fix(registry): deliver theme roles via css, not cssVars.light/dark (#95)`.
@@ -49,7 +49,7 @@ Upstream documents this GitHub-native form, but its component items are broken
 at the adopted commit (details below). Do not use it to sync this website:
 
 ```bash
-bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#8fa34fefc8b28360a61e14df967a2a710e7b252e"
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#a95bf329be66697c5dbd87a484a390139046aaf9"
 ```
 
 Available items at bootstrap:
@@ -158,7 +158,7 @@ can claim full dependency-graph reproducibility. An upstream self-reference
 cannot literally embed its own eventual commit SHA in that same commit. Track
 the repair in `jubalm/augur-design-system` issue #92.
 
-### Pin update: 629868678f → 8fa34fefc8 (2026-09-28)
+### Pin update: 629868678f → a95bf329be (2026-09-28)
 
 Upstream commits adopted:
 

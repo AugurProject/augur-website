@@ -26,7 +26,7 @@ If a new implementation idea conflicts with the strategy, surface the conflict i
 
 ### Shared interface language
 
-`jubalm/augur-design-system` governs Augur-wide visual and interaction decisions. This repository currently adopts commit `8fa34fefc8b28360a61e14df967a2a710e7b252e`; see `docs/DESIGN-SYSTEM.md`.
+`jubalm/augur-design-system` governs Augur-wide visual and interaction decisions. This repository currently adopts commit `a95bf329be66697c5dbd87a484a390139046aaf9`; see `docs/DESIGN-SYSTEM.md`.
 
 Do not invent local replacements for design-system color, typography, spacing, radius, focus, theme, control behavior, or supplied identity artwork.
 
