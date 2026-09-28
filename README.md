@@ -16,7 +16,7 @@ Read these before implementation:
 - [ARCHITECTURE.md](ARCHITECTURE.md) — technical structure, design-system consumption, content/data boundaries, and testing direction.
 - [AGENTS.md](AGENTS.md) — operating rules for coding agents and contributors.
 - [docs/STRATEGY.md](docs/STRATEGY.md) — implementation-oriented transcript of the September 2026 website strategy.
-- [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) — current Augur Design System pin, authority, registry, and high-signal rules.
+- [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) — adopted Augur Design System release, authority, registry, and high-signal rules.
 - [docs/CONTENT-EVIDENCE.md](docs/CONTENT-EVIDENCE.md) — content models and claim/source discipline.
 - [docs/MIGRATION.md](docs/MIGRATION.md) — legacy route handling, redirects, archive rules, and retired APIs.
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — example Cloudflare Workers static-assets deploy (not configured here).
@@ -53,12 +53,12 @@ bun run build
 node scripts/check-internal-links.mjs
 ```
 
-`bun run design:sync` intentionally refreshes the committed registry source from the pinned upstream revision. Review its source, CSS, and dependency diff before committing an update. The command needs network access to GitHub and the package registry; normal install/check/build does not need GitHub.
+`bun run design:sync` intentionally refreshes the committed registry source from the adopted upstream release in `design-system.lock.json`, and records the commit that release resolves to. Review its source, CSS, dependency, and lock diff before committing an update. The command needs network access to GitHub and the package registry; normal install/check/build does not need GitHub.
 
 ## Upstream projects
 
 - Design system: `jubalm/augur-design-system`
-- Design-system pin for this bootstrap: `9638a72383c50a1d70016ea28e9f6bffaad42a27`
+- Adopted design-system release: `v0.1.0` ([design-system.lock.json](design-system.lock.json))
 - Migration/source site: `jubalm/augur-reboot-website`
 
-Do not silently follow newer design-system `main`. Compare changes and deliberately update the pin in [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) when adopting them.
+Do not follow newer design-system `main`. Adopt releases deliberately by changing `version` in the lock file and following the update procedure in [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md).

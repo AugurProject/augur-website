@@ -1,18 +1,20 @@
 # Augur Design System consumer contract
 
-## Adopted upstream revision
+## Adopted upstream release
 
 Repository: `jubalm/augur-design-system`
 
-Pinned commit:
+Adopted release: **`v0.1.0`**, recorded in
+[`design-system.lock.json`](../design-system.lock.json).
 
-```text
-9638a72383c50a1d70016ea28e9f6bffaad42a27
-```
+The release tag is the dependency identifier. `version` is the only field
+people edit in the lock file. `bun run design:sync` writes `resolved`, which
+holds the commit the tag points to and a SHA-256 for each built item. That
+record is kept for audit; CI fails if the tag later resolves to a different
+commit or an item's content changes.
 
-Commit summary: `fix(registry): deliver theme roles via css, not cssVars.light/dark (#95)`.
-
-This pin is deliberate. A newer upstream `main` is not automatically adopted.
+Adoption is deliberate. Neither a newer upstream `main` nor a newer release is
+adopted automatically.
 
 ## Authority
 
@@ -28,7 +30,7 @@ Do not treat screenshots or memory of the docs site as specification.
 
 ## High-signal upstream files
 
-At the pin above:
+At the adopted release:
 
 - `DESIGN.md`
 - `ARCHITECTURE.md`
@@ -46,10 +48,10 @@ At the pin above:
 ## Registry
 
 Upstream documents this GitHub-native form, but its component items are broken
-at the adopted commit (details below). Do not use it to sync this website:
+at the adopted release (details below). Do not use it to sync this website:
 
 ```bash
-bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#9638a72383c50a1d70016ea28e9f6bffaad42a27"
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#v0.1.0"
 ```
 
 Available items at bootstrap:
@@ -64,12 +66,15 @@ Available items at bootstrap:
 - `page-header`
 - `empty-state`
 
-Use `bun run design:sync` for the website baseline. It downloads the immutable
-`public/r/<item>.json` artifacts at the adopted SHA, rewrites only their
-transitive registry addresses to local URLs for this same pinned set, and
-serves them to shadcn 4.20.1 over loopback. No foundation values or component
-source are hand-maintained in this repository. Extend its explicit item list
-only when a concrete page needs another upstream item.
+Use `bun run design:sync` for the website baseline. It resolves the adopted
+release tag to its commit with `git ls-remote`, downloads the
+`public/r/<item>.json` artifacts at that commit, and checks that every
+transitive address carries the same release stamp (`#v0.1.0`). It then
+rewrites only those addresses to local URLs for this same set and serves the
+items to shadcn 4.20.1 over loopback. No foundation values or component source
+are hand-maintained in this repository. Extend the `items` list in
+`design-system.lock.json` only when a concrete page needs another upstream
+item.
 
 ## Important consumer-support boundary
 
@@ -152,11 +157,10 @@ install independent of that scaffold palette.
 system's `registry-src/` from canonical source, point root `registry.json`
 at those generated paths, and drift-check both forms. Its docs already
 describe these transforms, but only built JSON currently carries them.
-The generated `registryDependencies` are unversioned; they also need an
-immutable release strategy or propagated ref before a direct native install
-can claim full dependency-graph reproducibility. An upstream self-reference
-cannot literally embed its own eventual commit SHA in that same commit. Track
-the repair in `jubalm/augur-design-system` issue #92.
+Since `v0.1.0`, released items stamp their `registryDependencies` with the
+release tag, which answers the dependency-graph part of this gap. The
+source-registry repair is still tracked in `jubalm/augur-design-system`
+issue #92.
 
 ### Pin update: 629868678f → a95bf329be (2026-09-28)
 
@@ -183,6 +187,16 @@ declarations, so without the reset the old pin's `----` lines survived the
 update. The file holds only registry output (website CSS is in
 `src/styles/site.css`), so it is now a function of the pin alone. Two
 consecutive syncs produce identical output.
+
+### Release adoption: 9638a72 → v0.1.0 (2026-09-28)
+
+The design system now publishes immutable releases (upstream issue #4), and
+this site depends on `v0.1.0` instead of a raw commit SHA. Between `9638a72`
+and `v0.1.0` upstream changed the docs-site mobile menu (#3), release tooling
+and documentation, and stamped released `registryDependencies` with
+`#v0.1.0`. The sync maps those stamped addresses to loopback like the
+unstamped ones, so the installed source, CSS and dependencies are unchanged;
+only the lock file, the sync script and these references changed.
 
 ## Visual contract
 
@@ -296,14 +310,14 @@ favicon yet.
 
 ## Consumer update procedure
 
-When intentionally adopting a newer design-system revision:
+When intentionally adopting a newer design-system release:
 
-1. inspect upstream commits since this pin;
-2. read affected `DESIGN.md`, foundation docs, component docs, registry contract, and changelog;
-3. update the pin here and in `scripts/sync-design-system.mjs` (and other references: `rg <old-sha>`);
-4. re-run the sync;
-5. review the source/CSS/dependency diff;
-6. test both themes, responsive layouts, keyboard/focus, fonts, and affected pages;
-7. record any site composition adjustment separately from foundation changes.
+1. read the upstream `CHANGELOG.md` sections and GitHub Release notes since the adopted version;
+2. read affected `DESIGN.md`, foundation docs, component docs and the registry contract;
+3. set `version` in `design-system.lock.json` to the new tag (for example `v0.1.0` → `v0.2.0`);
+4. run `bun run design:sync`, which updates `resolved` in the lock file;
+5. review the source/CSS/dependency/lock diff;
+6. run `bun run check`, `bun run build` and the browser tests; test both themes, responsive layouts, keyboard/focus, fonts, and affected pages, and compare `/design-conformance/` against the release;
+7. record the adoption and any site composition adjustment here, separately from foundation changes.
 
-Never update the pin merely to "get latest."
+Adopt only released versions, never upstream `main`, and never update merely to "get latest."

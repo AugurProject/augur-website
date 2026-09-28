@@ -1,6 +1,9 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import DesignSpecimen from "@/components/DesignSpecimen.astro";
+import designSystem from "../../design-system.lock.json";
+
+const releaseUrl = `https://github.com/${designSystem.repository}/releases/tag/${designSystem.version}`;
 ---
 
 <SiteLayout
@@ -16,8 +19,8 @@ import DesignSpecimen from "@/components/DesignSpecimen.astro";
       in both themes. The two panels force a theme; the page around them follows the theme toggle.
     </p>
     <p class="augur-type-metadata">
-      Source: <code>jubalm/augur-design-system</code>{" "}at{" "}<code>9638a72383c50a1d70016ea28e9f6bffaad42a27</code>.
-      Built items:{" "}{["augur-theme", "utils", "button", "card", "page-header", "empty-state"].map((item, i) => <>{i > 0 && ", "}<code>{item}</code></>)}.
+      Source: <code>{designSystem.repository}</code>{" "}release{" "}<a href={releaseUrl}><code>{designSystem.version}</code></a>{" "}(commit{" "}<code>{designSystem.resolved.commit.slice(0, 7)}</code>).
+      Built items:{" "}{designSystem.items.map((item, i) => <>{i > 0 && ", "}<code>{item}</code></>)}.
       See{" "}<code>docs/DESIGN-SYSTEM.md</code>.
     </p>
     <div class="site-specimens">

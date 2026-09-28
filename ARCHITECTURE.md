@@ -76,11 +76,9 @@ Registry-installed generic components should land in their configured source loc
 
 The design system publishes shadcn-compatible built JSON alongside its GitHub-native source registry.
 
-This repository pins design-system commit:
+This repository depends on an immutable design-system release, currently `v0.1.0`. `design-system.lock.json` names it; the sync records the commit the tag resolves to and a hash of each built item, for audit only.
 
-`9638a72383c50a1d70016ea28e9f6bffaad42a27`
-
-At this pin, GitHub-native item addresses install untransformed package TSX with broken internal imports and missing component CSS imports. `scripts/sync-design-system.sh` instead fetches the commit-addressed `public/r/` built items, maps their transitive references to the same pinned set on a temporary loopback registry, and installs them with shadcn. See `docs/DESIGN-SYSTEM.md` and the upstream issue #92 for the evidence and repair path. Installed source is committed here so website builds do not depend on GitHub at runtime.
+At this release, GitHub-native item addresses install untransformed package TSX with broken internal imports and missing component CSS imports. `scripts/sync-design-system.sh` instead resolves the release tag to its commit, fetches the `public/r/` built items at that commit, maps their transitive references (stamped with the same release) to the same set on a temporary loopback registry, and installs them with shadcn. CI re-runs the sync and fails on any drift, including a release tag that moved. See `docs/DESIGN-SYSTEM.md` and the upstream issue #92 for the evidence and repair path. Installed source is committed here so website builds do not depend on GitHub at runtime.
 
 The registry's typography import is relative to the consumer CSS entry. For this Astro consumer, `components.json` points to `src/index.css`; the upstream `./styles/augur-typography.css` import then resolves to its registry target without modifying the theme payload. `src/styles/site.css` holds only website composition.
 
@@ -95,7 +93,7 @@ Rules:
 - do not hand-edit registry-installed foundation values just to satisfy a page;
 - site-specific composition CSS may consume semantic roles and composition spacing;
 - do not create a parallel palette/type/radius/focus system;
-- update the upstream pin deliberately and review the resulting source diff;
+- adopt a newer upstream release deliberately and review the resulting source diff;
 - if a local need is broadly reusable across Augur, upstream it.
 
 ## 6. Composition values vs foundation values

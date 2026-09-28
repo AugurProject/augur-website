@@ -1,0 +1,12 @@
+{
+  "repository": "jubalm/augur-design-system",
+  "version": "v0.1.0",
+  "items": [
+    "augur-theme",
+    "utils",
+    "button",
+    "card",
+    "page-header",
+    "empty-state"
+  ]
+}
