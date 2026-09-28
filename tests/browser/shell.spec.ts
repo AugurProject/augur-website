@@ -33,13 +33,19 @@ for (const viewport of viewports) {
           await expect(menu).toHaveAttribute("open", "");
         }
 
-        const picker = page.locator(
+        const toggle = page.locator(
           viewport.mobileMenu
-            ? ".site-mobile-menu [data-site-theme]"
-            : ".site-header__desktop-actions [data-site-theme]",
+            ? ".site-mobile-menu [data-site-theme-toggle]"
+            : ".site-header__desktop-actions [data-site-theme-toggle]",
         );
-        await picker.selectOption(theme);
-        await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+        // One press pins the opposite of the theme in effect.
+        const pressUntil = async (target: "light" | "dark") => {
+          for (let i = 0; i < 2 && (await page.locator("html").getAttribute("data-theme")) !== target; i++) {
+            await toggle.click();
+          }
+          await expect(page.locator("html")).toHaveAttribute("data-theme", target);
+        };
+        await pressUntil(theme);
         await page.reload();
         await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
 
@@ -48,20 +54,29 @@ for (const viewport of viewports) {
           await page.keyboard.press("Enter");
           await expect(menu).toHaveAttribute("open", "");
         }
-        await expect(picker).toHaveValue(theme);
+        const other = theme === "dark" ? "Light" : "Dark";
+        await expect(toggle).toHaveAttribute("aria-label", `Theme: ${theme === "dark" ? "Dark" : "Light"}. Switch to ${other}`);
 
-        await picker.selectOption("dark");
+        await pressUntil("dark");
         const darkBackground = await background(page);
-        await picker.selectOption("light");
+        await pressUntil("light");
         const lightBackground = await background(page);
         expect(darkBackground).not.toBe(lightBackground);
-        await picker.selectOption("system");
+
+        // With nothing stored, the system preference governs.
+        await page.evaluate(() => localStorage.removeItem("augur-theme"));
+        await page.reload();
         await expect(page.locator("html")).not.toHaveAttribute("data-theme", /.+/);
         await page.emulateMedia({ colorScheme: "dark" });
         await expect.poll(() => background(page)).toBe(darkBackground);
         await page.emulateMedia({ colorScheme: "light" });
         await expect.poll(() => background(page)).toBe(lightBackground);
-        await picker.selectOption(theme);
+        if (viewport.mobileMenu) {
+          await menuSummary.focus();
+          await page.keyboard.press("Enter");
+          await expect(menu).toHaveAttribute("open", "");
+        }
+        await pressUntil(theme);
 
         if (viewport.mobileMenu) {
           await menuSummary.focus();
@@ -80,23 +95,22 @@ for (const viewport of viewports) {
           await menuSummary.focus();
           await page.keyboard.press("Enter");
           await expect(menu).toHaveAttribute("open", "");
-          await page.keyboard.press("Tab"); // Protocol
-          await page.keyboard.press("Tab"); // Developers
-          await page.keyboard.press("Tab"); // Resources
+          // The sheet covers the viewport below the header and the page stops scrolling.
+          const panel = await menu.locator(".site-mobile-menu__panel").boundingBox();
+          expect(panel!.y + panel!.height).toBeCloseTo(viewport.height, 0);
+          await expect(page.locator("html")).toHaveCSS("overflow", "hidden");
+          for (const label of ["Protocol", "Developers", "Blog", "FAQ", "Learn"]) {
+            await page.keyboard.press("Tab");
+            await expect(menu.getByRole("link", { name: label, exact: true })).toBeFocused();
+          }
         } else {
-          await page.locator(".site-header__desktop-nav .site-nav-resources > summary").focus();
+          const resources = page.locator(".site-header__desktop-nav .site-nav-resources");
+          await resources.locator(":scope > summary").focus();
+          await page.keyboard.press("Enter");
+          await expect(resources).toHaveAttribute("open", "");
+          await page.keyboard.press("Tab");
+          await expect(resources.getByRole("link", { name: /^Learn/ })).toBeFocused();
         }
-
-        const resources = page.locator(
-          viewport.mobileMenu
-            ? ".site-nav-resources--mobile"
-            : ".site-header__desktop-nav .site-nav-resources",
-        );
-        await expect(resources.locator(":scope > summary")).toBeFocused();
-        await page.keyboard.press("Enter");
-        await expect(resources).toHaveAttribute("open", "");
-        await page.keyboard.press("Tab");
-        await expect(resources.getByRole("link", { name: "Learn" })).toBeFocused();
         await page.keyboard.press("Enter");
         await expect(page).toHaveURL(/\/learn\/$/);
         await expect(page.getByRole("heading", { level: 1, name: "Learn" })).toBeVisible();
@@ -104,3 +118,19 @@ for (const viewport of viewports) {
     }
   });
 }
+
+test("desktop Resources marks its section and shows hover in both themes", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const scheme of ["light", "dark"] as const) {
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.goto("/learn/");
+    const resources = page.locator(".site-header__desktop-nav .site-nav-resources");
+    await expect(resources).toHaveAttribute("data-current-section", "");
+    await resources.locator(":scope > summary").click();
+    const panel = resources.locator(".site-nav-resources__panel");
+    const link = panel.getByRole("link", { name: /^REP/ });
+    const panelBg = await panel.evaluate((el) => getComputedStyle(el).backgroundColor);
+    await link.hover();
+    await expect.poll(() => link.evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(panelBg);
+  }
+});

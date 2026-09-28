@@ -21,7 +21,10 @@ const documentTitle = title === "Augur" ? title : `${title} · Augur`;
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Static fallbacks: the --card role (surface-light-raised / surface-dark-1) at the pin. -->
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" data-site-theme-color />
+    <meta name="theme-color" content="#161629" media="(prefers-color-scheme: dark)" data-site-theme-color />
     <meta name="description" content={description} />
     <meta name="robots" content={indexable ? "index,follow" : "noindex,nofollow"} />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
@@ -39,23 +42,44 @@ const documentTitle = title === "Augur" ? title : `${title} · Augur`;
     <div id="main-content" tabindex="-1" class="site-content"><slot /></div>
     <SiteFooter />
     <script>
-      const themeControls = document.querySelectorAll<HTMLSelectElement>("[data-site-theme]");
-      const current = document.documentElement.dataset.theme;
-      for (const control of themeControls) {
-        control.value = current === "light" || current === "dark" ? current : "system";
-        control.addEventListener("change", () => {
-          if (control.value === "system") {
-            delete document.documentElement.dataset.theme;
-          } else {
-            document.documentElement.dataset.theme = control.value;
+      // One sun/moon toggle (the design-system docs masthead pattern): with
+      // nothing stored the system preference governs; a press pins the
+      // opposite of the theme in effect.
+      const dark = window.matchMedia("(prefers-color-scheme: dark)");
+      const toggles = document.querySelectorAll<HTMLButtonElement>("[data-site-theme-toggle]");
+      const effective = () => {
+        const applied = document.documentElement.dataset.theme;
+        return applied === "light" || applied === "dark" ? applied : dark.matches ? "dark" : "light";
+      };
+      const sync = () => {
+        const theme = effective();
+        const next = theme === "dark" ? "light" : "dark";
+        for (const toggle of toggles) {
+          toggle.dataset.theme = theme;
+          toggle.setAttribute("aria-label", `Theme: ${theme === "dark" ? "Dark" : "Light"}. Switch to ${next === "dark" ? "Dark" : "Light"}`);
+          const name = toggle.querySelector("[data-site-theme-name]");
+          if (name) name.textContent = theme === "dark" ? "Dark" : "Light";
+        }
+        // Browser chrome follows the header surface. Without a stored choice
+        // the two media-scoped metas already match the system theme.
+        if (document.documentElement.dataset.theme) {
+          const surface = getComputedStyle(document.documentElement).getPropertyValue("--card").trim();
+          for (const meta of document.querySelectorAll<HTMLMetaElement>("meta[data-site-theme-color]")) {
+            meta.removeAttribute("media");
+            if (surface) meta.content = surface;
           }
-          try {
-            if (control.value === "system") localStorage.removeItem("augur-theme");
-            else localStorage.setItem("augur-theme", control.value);
-          } catch { /* Theme still applies for this page. */ }
-          for (const other of themeControls) other.value = control.value;
+        }
+      };
+      for (const toggle of toggles) {
+        toggle.addEventListener("click", () => {
+          const next = effective() === "dark" ? "light" : "dark";
+          document.documentElement.dataset.theme = next;
+          try { localStorage.setItem("augur-theme", next); } catch { /* Applies to this page only. */ }
+          sync();
         });
       }
+      dark.addEventListener("change", sync);
+      sync();
 
       const disclosures = document.querySelectorAll<HTMLDetailsElement>(".site-nav-resources, .site-mobile-menu");
       for (const disclosure of disclosures) {

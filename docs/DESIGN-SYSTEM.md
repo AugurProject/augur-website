@@ -269,6 +269,31 @@ Rules:
 
 Upstream PNGs are lossless extractions from the canonical brand foundation PDF. Do not trace them into "official" SVGs.
 
+## Website shell composition
+
+The header, menus, theme control and footer are website composition. The
+pinned registry has no masthead, theme-toggle, icon or link-button item, so
+the shell follows the design-system docs masthead (`apps/docs` at the pin)
+instead of inventing its own pattern:
+
+- header and footer on the `--card` surface with `--border-quiet` rules;
+- 150px horizontal lockup with 24px block padding, which keeps the 1a
+  clearspace (≈21px at that size; the artwork has no transparent margin);
+- navigation in the `ui` role, muted with a foreground current state and a
+  2px foreground rule, so the primary action stays the header's one green
+  signal;
+- the docs sun/moon toggle (system preference implicit, a press pins the
+  opposite theme) and its Feather icon geometry (MIT), inlined;
+- the header action is a link carrying `buttonVariants({ size: "lg" })`
+  classes from the pinned Button, not a local button style;
+- group labels in `editorial-label`; mobile menu rows ruled like the docs
+  navigation, with its 24×2 current-page rule.
+
+Upstream gaps this works around: no registry masthead/theme toggle/icon set;
+Button renders only `<button>`; dark `--accent` equals `--popover`, so the
+site hovers menu rows on `--card`; no approved small-size mark, so there is no
+favicon yet.
+
 ## Consumer update procedure
 
 When intentionally adopting a newer design-system revision:

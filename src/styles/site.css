@@ -87,6 +87,48 @@ body {
   font-size: 0.9375em;
 }
 
+/* Chrome icons: Feather geometry (MIT), as in the design-system docs
+   masthead; currentColor so they follow the semantic roles. */
+.site-icon {
+  display: block;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Theme-matched identity artwork (header and footer lockups). */
+.site-brand-light,
+.site-brand-dark {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.site-brand-dark {
+  display: none;
+}
+
+[data-theme="dark"] .site-brand-light {
+  display: none;
+}
+
+[data-theme="dark"] .site-brand-dark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .site-brand-light {
+    display: none;
+  }
+
+  :root:not([data-theme="light"]) .site-brand-dark {
+    display: block;
+  }
+}
+
 .site-skip-link {
   position: absolute;
   z-index: 30;
@@ -101,177 +143,165 @@ body {
   top: 0.75rem;
 }
 
+/* Header: the lockup's field on the raised surface. The 150px lockup with
+   24px block padding keeps the 1a clearspace (≈21px) clear of the rule, as
+   in the design-system docs masthead. */
 .site-header {
   position: relative;
   z-index: 20;
   border-bottom: 1px solid var(--border-quiet);
-  background: var(--background);
+  background: var(--card);
+  color: var(--card-foreground);
   font-family: var(--augur-font-primary);
 }
 
 .site-header__inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  min-height: 6rem;
+  gap: var(--augur-spacing-2xl);
+  padding-block: var(--augur-spacing-xl);
 }
 
 .site-header__brand {
   display: block;
   flex: none;
-  width: 168px;
+  width: 150px;
   line-height: 0;
 }
 
-.site-header__brand img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.site-header__brand .site-header__brand-dark {
-  display: none;
-}
-
-[data-theme="dark"] .site-header__brand .site-header__brand-light {
-  display: none;
-}
-
-[data-theme="dark"] .site-header__brand .site-header__brand-dark {
-  display: block;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .site-header__brand .site-header__brand-light {
-    display: none;
-  }
-
-  :root:not([data-theme="light"]) .site-header__brand .site-header__brand-dark {
-    display: block;
-  }
-}
-
-.site-header__desktop-nav,
-.site-header__desktop-actions {
+/* Navigation sits beside the lockup; actions take the far edge. */
+.site-header__desktop-nav {
   display: flex;
   align-items: center;
-  gap: clamp(0.75rem, 1.5vw, 1.5rem);
+  gap: var(--augur-spacing-xl);
+  margin-inline-start: var(--augur-spacing-lg);
 }
 
-.site-header__desktop-nav > a,
-.site-nav-resources > summary,
-.site-mobile-menu > summary {
+.site-nav-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  padding: 0.5rem 0.25rem;
+  gap: var(--augur-spacing-xs);
+  height: 40px;
+  color: var(--muted-foreground);
   text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
+  list-style: none;
 }
 
-.site-header a:hover,
-.site-header summary:hover,
-.site-footer a:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.3em;
+.site-nav-link::-webkit-details-marker {
+  display: none;
 }
 
-.site-header [aria-current="page"] {
-  text-decoration: underline;
-  text-decoration-color: var(--ring);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.4em;
+.site-nav-link:hover,
+.site-nav-link[aria-current="page"],
+.site-nav-resources[open] > .site-nav-link,
+.site-nav-resources[data-current-section] > .site-nav-link {
+  color: var(--foreground);
+}
+
+/* Current page: a short foreground rule, so the header keeps one green
+   signal (the primary action). */
+.site-nav-link[aria-current="page"]::after,
+.site-nav-resources[data-current-section] > .site-nav-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  left: 0;
+  height: 2px;
+  background: var(--foreground);
 }
 
 .site-nav-resources {
   position: relative;
 }
 
-.site-nav-resources > summary,
-.site-mobile-menu > summary {
-  list-style: none;
+.site-nav-resources[open] .site-icon--chevron {
+  rotate: 180deg;
 }
 
-.site-nav-resources > summary::-webkit-details-marker,
-.site-mobile-menu > summary::-webkit-details-marker {
-  display: none;
-}
-
-.site-nav-resources > summary::after,
-.site-mobile-menu > summary::after {
-  content: "⌄";
-  margin-left: 0.5rem;
-  line-height: 1;
-}
-
-.site-nav-resources[open] > summary::after,
-.site-mobile-menu[open] > summary::after {
-  content: "⌃";
-}
-
+/* Hangs from the header's bottom rule: 5px (40px link centred in the 50px
+   lockup row) + 24px padding + 1px rule below the summary. */
 .site-nav-resources__panel {
   position: absolute;
-  top: calc(100% + 0.25rem);
-  left: 0;
-  min-width: 12rem;
-  padding: 0.5rem;
-  border: 1px solid var(--border);
-  background: var(--popover);
-  color: var(--popover-foreground);
+  top: calc(100% + 30px);
+  left: -17px;
+  width: 25rem;
+  padding: var(--augur-spacing-sm);
+  border: 1px solid var(--border-quiet);
+  border-top: 0;
+  background: var(--card);
+  color: var(--card-foreground);
 }
 
 .site-nav-resources__panel a {
-  display: flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0.5rem 0.75rem;
+  display: grid;
+  gap: 2px;
+  padding: var(--augur-spacing-md) var(--augur-spacing-sm);
   text-decoration: none;
 }
 
-.site-nav-resources__panel a:hover,
-.site-nav-resources__panel a:focus-visible {
+.site-nav-resources__panel a:hover {
   background: var(--accent);
   color: var(--accent-foreground);
 }
 
-.site-theme-picker {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.site-nav-resources__label {
+  color: var(--foreground);
 }
 
-.site-theme-picker select {
-  min-height: 44px;
-  padding: 0.5rem;
-  border: 1px solid var(--input);
-  border-radius: var(--augur-rounded-control);
-  background: var(--background);
-  color: var(--foreground);
+.site-nav-resources__panel a[aria-current="page"] .site-nav-resources__label {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+.site-nav-resources__desc {
+  color: var(--muted-foreground);
+}
+
+.site-header__desktop-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--augur-spacing-md);
+  margin-inline-start: auto;
+}
+
+.site-header__action {
+  flex: none;
+}
+
+/* One sun/moon toggle; the icon names the theme in effect (design-system
+   docs masthead pattern). */
+.site-theme-toggle {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--augur-spacing-sm);
+  min-width: 40px;
+  height: 40px;
+  padding: 0 var(--augur-spacing-sm);
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
   font: inherit;
   cursor: pointer;
 }
 
-.site-theme-picker select:hover {
-  border-color: var(--input-hover);
+.site-theme-toggle:hover {
+  color: var(--foreground);
 }
 
-.site-header__action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  padding: 0.75rem 1rem;
-  background: var(--primary);
-  color: var(--primary-foreground);
-  text-decoration: none;
-  white-space: nowrap;
+.site-theme-toggle .site-icon--moon,
+.site-theme-toggle[data-theme="dark"] .site-icon--sun {
+  display: none;
 }
 
-.site-header__action:hover {
-  background: var(--primary-hover);
-  color: var(--primary-hover-foreground);
+.site-theme-toggle[data-theme="dark"] .site-icon--moon {
+  display: block;
 }
 
 .site-mobile-menu {
@@ -279,54 +309,96 @@ body {
 }
 
 .site-footer {
-  margin-top: var(--site-section-gap);
-  padding-block: clamp(2.5rem, 5vw, 4rem);
   border-top: 1px solid var(--border-quiet);
-  color: var(--foreground);
+  background: var(--card);
+  color: var(--card-foreground);
 }
 
 .site-footer__inner {
   display: grid;
-  grid-template-columns: minmax(14rem, 1fr) minmax(0, 2fr);
-  gap: var(--site-section-gap);
+  grid-template-columns: minmax(16rem, 1fr) minmax(0, 2fr);
+  gap: var(--augur-spacing-2xl) var(--site-section-gap);
+  padding-block: clamp(3rem, 5vw, 4rem) var(--augur-spacing-xl);
 }
 
-.site-footer__name {
-  text-decoration: none;
+.site-footer__brand {
+  display: block;
+  width: 150px;
+  line-height: 0;
 }
 
 .site-footer__intro p {
   max-width: 36ch;
+  margin: var(--augur-spacing-xl) 0 0;
   color: var(--muted-foreground);
 }
 
 .site-footer__links {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem;
-}
-
-.site-footer__links div {
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
+  gap: var(--augur-spacing-xl);
 }
 
 .site-footer__links h2 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--augur-spacing-lg);
+  color: var(--muted-foreground);
 }
 
-.site-footer__links a {
-  width: fit-content;
+.site-footer__links ul {
+  display: grid;
+  gap: var(--augur-spacing-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer a {
   text-decoration: none;
 }
 
-.site-footer__note {
+.site-footer__links a,
+.site-footer__legal a {
+  color: inherit;
+}
+
+.site-footer__links a:hover,
+.site-footer__legal a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.site-footer__legal {
   grid-column: 1 / -1;
-  margin: 0;
-  padding-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--augur-spacing-sm) var(--augur-spacing-xl);
+  padding-top: var(--augur-spacing-xl);
   border-top: 1px solid var(--border-quiet);
   color: var(--muted-foreground);
+}
+
+.site-footer__legal p {
+  margin: 0;
+}
+
+.site-footer__legal ul {
+  display: flex;
+  gap: var(--augur-spacing-xl);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (pointer: coarse) {
+  .site-footer__links ul {
+    gap: 0;
+  }
+
+  .site-footer__links a {
+    display: inline-block;
+    padding-block: var(--augur-spacing-md);
+  }
 }
 
 /* Design-system conformance specimen (noindex proof page). */
@@ -437,6 +509,7 @@ body {
 }
 
 .site-specimen__row {
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: var(--augur-spacing-sm);
@@ -484,7 +557,7 @@ body {
   text-underline-offset: 0.25em;
 }
 
-@media (max-width: 69rem) {
+@media (max-width: 60rem) {
   .site-header__desktop-nav,
   .site-header__desktop-actions {
     display: none;
@@ -492,57 +565,100 @@ body {
 
   .site-mobile-menu {
     display: block;
-    font-family: var(--augur-font-primary);
+    margin-inline-start: auto;
   }
 
   .site-mobile-menu > summary {
-    min-width: 5.5rem;
-    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--augur-spacing-sm);
+    height: 44px;
+    margin-inline-end: calc(-1 * var(--augur-spacing-sm));
+    padding-inline: var(--augur-spacing-sm);
+    list-style: none;
+    cursor: pointer;
   }
 
+  .site-mobile-menu > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .site-mobile-menu[open] .site-mobile-menu__when-closed,
+  .site-mobile-menu:not([open]) .site-mobile-menu__when-open {
+    display: none;
+  }
+
+  /* A full-height sheet below the header, so the page never shows through. */
   .site-mobile-menu__panel {
     position: absolute;
     top: 100%;
     right: 0;
     left: 0;
-    max-height: calc(100dvh - 6rem);
+    height: calc(100dvh - 100%);
     overflow-y: auto;
-    padding: 1rem var(--site-gutter) 1.5rem;
-    border-bottom: 1px solid var(--border-quiet);
-    background: var(--background);
+    padding: var(--augur-spacing-sm) var(--site-gutter) var(--augur-spacing-2xl);
+    border-top: 1px solid var(--border-quiet);
+    background: var(--card);
+    color: var(--card-foreground);
   }
 
-  .site-mobile-menu__panel nav {
-    display: flex;
-    flex-direction: column;
+  :root:has(.site-mobile-menu[open]) {
+    overflow: hidden;
   }
 
-  .site-mobile-menu__panel nav > a,
-  .site-nav-resources--mobile > summary {
+  .site-mobile-menu__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Rule-led rows; the 24px slot holds the current-page rule. */
+  .site-mobile-menu__list a {
     display: flex;
     align-items: center;
-    min-height: 44px;
-    padding: 0.5rem;
+    gap: var(--augur-spacing-sm);
+    min-height: 48px;
+    border-bottom: 1px solid var(--border-quiet);
+    color: var(--foreground);
     text-decoration: none;
   }
 
-  .site-nav-resources--mobile .site-nav-resources__panel {
-    position: static;
-    min-width: 0;
-    padding: 0 0 0 1rem;
-    border: 0;
-    background: transparent;
-    color: inherit;
+  .site-mobile-menu__list a::before {
+    content: "";
+    flex: none;
+    width: 24px;
+    height: 2px;
   }
 
-  .site-mobile-menu__panel .site-header__action {
-    align-self: flex-start;
-    margin-block: 1rem;
+  .site-mobile-menu__list a[aria-current="page"]::before {
+    background: var(--foreground);
   }
 
-  .site-mobile-menu__panel .site-theme-picker {
-    padding: 1rem 0.5rem 0;
+  .site-mobile-menu__group {
+    margin: var(--augur-spacing-2xl) 0 var(--augur-spacing-xs);
+    padding-left: 32px;
+    color: var(--muted-foreground);
+  }
+
+  /* Outranks the package's .aug-button margin reset. */
+  .site-mobile-menu__panel .site-mobile-menu__action {
+    display: flex;
+    width: 100%;
+    margin-top: var(--augur-spacing-2xl);
+  }
+
+  .site-mobile-menu__theme {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--augur-spacing-lg);
+    padding-top: var(--augur-spacing-sm);
     border-top: 1px solid var(--border-quiet);
+  }
+
+  .site-theme-toggle--labelled {
+    margin-inline-end: calc(-1 * var(--augur-spacing-sm));
+    color: var(--foreground);
   }
 }
 
@@ -553,5 +669,6 @@ body {
 
   .site-footer__links {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: var(--augur-spacing-2xl);
   }
 }
