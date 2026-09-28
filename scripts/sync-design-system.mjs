@@ -3,7 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join } from "node:path";
 
-const PIN = "a95bf329be66697c5dbd87a484a390139046aaf9";
+const PIN = "9638a72383c50a1d70016ea28e9f6bffaad42a27";
 const REPO = "jubalm/augur-design-system";
 const ITEMS = ["augur-theme", "utils", "button", "card", "page-header", "empty-state"];
 const NAMES = new Set(ITEMS);

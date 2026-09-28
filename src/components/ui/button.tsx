@@ -1,33 +1,56 @@
 import "./button.css";
 import type { ComponentProps } from "react";
+import { Slot } from "radix-ui";
 import type { ButtonSize, ButtonVariant } from "./button-variants";
 import { buttonVariants } from "./button-variants";
 import { cx } from "@/lib/utils";
 
 export { buttonVariants } from "./button-variants";
 
-export type ButtonProps = ComponentProps<"button"> & {
+type ButtonStyleProps = {
   /** Visual intent. The default variant is the view's one green signal. */
   variant?: ButtonVariant;
   /** Control size. Default "md". */
   size?: ButtonSize;
-  /** Pending state: non-interactive, width-preserving, aria-busy. */
-  loading?: boolean;
 };
 
-export function Button({
-  variant,
-  size,
-  loading = false,
-  disabled = false,
-  type,
-  className,
-  children,
-  ...props
-}: ButtonProps) {
+/** Native `<button>` rendering. */
+export type ButtonElementProps = ComponentProps<"button"> &
+  ButtonStyleProps & {
+    asChild?: false;
+    /** Pending state: non-interactive, width-preserving, aria-busy. */
+    loading?: boolean;
+  };
+
+/** Slot rendering: the button classes are merged onto the single child
+ * element (typically an `<a>`), which keeps its own semantics. */
+export type ButtonAsChildProps = Omit<ComponentProps<"button">, "type" | "disabled"> &
+  ButtonStyleProps & {
+    asChild: true;
+    loading?: never;
+  };
+
+export type ButtonProps = ButtonElementProps | ButtonAsChildProps;
+
+export function Button(props: ButtonProps) {
+  if (props.asChild) {
+    const { asChild: _asChild, variant, size, className, ...rest } = props;
+    return <Slot.Root {...rest} className={cx(buttonVariants({ variant, size }), className)} />;
+  }
+  const {
+    asChild: _asChild,
+    variant,
+    size,
+    loading = false,
+    disabled = false,
+    type,
+    className,
+    children,
+    ...rest
+  } = props;
   return (
     <button
-      {...props}
+      {...rest}
       type={type ?? "button"}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
