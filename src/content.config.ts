@@ -37,7 +37,7 @@ const research = defineCollection({
     edition: z.string(),
     publishedAt: z.coerce.date().optional(),
     revisedAt: z.coerce.date().optional(),
-    sourceUrl: z.string().url(),
+    sourceUrl: z.url(),
     product: z.string().optional(),
     version: z.string().optional(),
     status: z.enum(["current", "historical", "discussion"]),
