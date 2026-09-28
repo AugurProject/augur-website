@@ -7,7 +7,7 @@ Repository: `jubalm/augur-design-system`
 Pinned commit:
 
 ```text
-a95bf329be66697c5dbd87a484a390139046aaf9
+9638a72383c50a1d70016ea28e9f6bffaad42a27
 ```
 
 Commit summary: `fix(registry): deliver theme roles via css, not cssVars.light/dark (#95)`.
@@ -49,7 +49,7 @@ Upstream documents this GitHub-native form, but its component items are broken
 at the adopted commit (details below). Do not use it to sync this website:
 
 ```bash
-bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#a95bf329be66697c5dbd87a484a390139046aaf9"
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#9638a72383c50a1d70016ea28e9f6bffaad42a27"
 ```
 
 Available items at bootstrap:

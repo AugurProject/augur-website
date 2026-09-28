@@ -1,3 +1,6 @@
+import "./button.css";
+
+/** Visual intent of the button. shadcn-compatible set, Augur-owned. */
 export type ButtonVariant =
   | "default"
   | "secondary"
