@@ -1,0 +1,28 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import DesignSpecimen from "@/components/DesignSpecimen.astro";
+---
+
+<SiteLayout
+  title="Design-system conformance"
+  description="Specimen of the pinned Augur Design System items installed in this website, in light and dark themes."
+  canonical={false}
+>
+  <main class="site-frame site-scaffold">
+    <p class="site-scaffold__status augur-type-metadata">Implementation proof · noindex · not linked from site navigation</p>
+    <h1 class="augur-type-editorial-title">Design-system conformance</h1>
+    <p class="site-scaffold__question">
+      Every Augur Design System item this website installs, rendered from the committed registry source
+      in both themes. The two panels force a theme; the page around them follows the theme picker.
+    </p>
+    <p class="augur-type-metadata">
+      Source: <code>jubalm/augur-design-system</code>{" "}at{" "}<code>629868678fa05d9cd0d8d14617ec29bf8df5d290</code>.
+      Built items:{" "}{["augur-theme", "utils", "button", "card", "page-header", "empty-state"].map((item, i) => <>{i > 0 && ", "}<code>{item}</code></>)}.
+      See{" "}<code>docs/DESIGN-SYSTEM.md</code>.
+    </p>
+    <div class="site-specimens">
+      <DesignSpecimen theme="light" />
+      <DesignSpecimen theme="dark" />
+    </div>
+  </main>
+</SiteLayout>

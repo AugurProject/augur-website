@@ -23,7 +23,7 @@ Read these before implementation:
 
 ## Current state
 
-The site currently has a verified Astro foundation and shared shell around direct-entry route placeholders. The placeholders are marked `noindex` and are not publication-ready content. The final homepage, content migration, contact/operator review, and production deployment are later work.
+The site currently has a verified Astro foundation and shared shell around direct-entry route placeholders. The placeholders are marked `noindex` and are not publication-ready content. `/design-conformance/` is a noindex specimen of every installed design-system item in both themes. The final homepage, content migration, contact/operator review, and production deployment are later work.
 
 The pinned registry source is committed so ordinary builds do not fetch GitHub. Its generated CSS enters at `src/index.css`; website-only frame, gutter, section rhythm, and shell layout live in `src/styles/site.css`. See [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) for the registry proof and its limits.
 

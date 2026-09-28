@@ -24,13 +24,14 @@ body {
 
 /* Tailwind preflight strips link underlines; restore them for links in page
    content so a link is identifiable without relying on color. Component and
-   navigation links carry a class and style themselves. */
-.site-content a:not([class]) {
+   navigation links carry a class and style themselves. Zero specificity so
+   design-system component rules (e.g. breadcrumb links) still win. */
+:where(.site-content a:not([class])) {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
-.site-content a:not([class]):hover {
+:where(.site-content a:not([class])):hover {
   text-decoration-thickness: 2px;
 }
 
@@ -325,6 +326,128 @@ body {
   margin: 0;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-quiet);
+  color: var(--muted-foreground);
+}
+
+/* Design-system conformance specimen (noindex proof page). */
+.site-scaffold > .site-specimens {
+  max-width: none;
+}
+
+.site-specimens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.site-specimen {
+  min-width: 0;
+  padding: var(--augur-spacing-xl);
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.site-specimen > h2 {
+  margin: 0 0 var(--augur-spacing-xl);
+}
+
+.site-specimen__group + .site-specimen__group {
+  margin-top: var(--augur-spacing-2xl);
+  padding-top: var(--augur-spacing-xl);
+  border-top: 1px solid var(--border-quiet);
+}
+
+.site-specimen__group > h3 {
+  margin: 0 0 var(--augur-spacing-lg);
+  color: var(--muted-foreground);
+}
+
+.site-specimen__logo {
+  display: block;
+  width: 168px;
+  height: auto;
+}
+
+.site-specimen__type {
+  display: grid;
+  gap: var(--augur-spacing-md);
+  margin: 0;
+}
+
+.site-specimen__type dt {
+  overflow-wrap: anywhere;
+}
+
+.site-specimen__type dd {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.site-specimen__swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: var(--augur-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-specimen__swatches li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--augur-spacing-xs);
+  padding: var(--augur-spacing-md);
+  border: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+
+.site-specimen__edges,
+.site-specimen__spacing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-md) var(--augur-spacing-xl);
+  margin: var(--augur-spacing-lg) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-specimen__spacing {
+  flex-direction: column;
+  margin-top: 0;
+}
+
+.site-specimen__edges li,
+.site-specimen__spacing li {
+  display: flex;
+  align-items: center;
+  gap: var(--augur-spacing-sm);
+}
+
+.site-specimen__edges span {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid;
+}
+
+.site-specimen__spacing span {
+  height: var(--augur-spacing-lg);
+  background: var(--foreground);
+}
+
+.site-specimen__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-sm);
+}
+
+.site-specimen__row + .site-specimen__row {
+  margin-top: var(--augur-spacing-md);
+}
+
+.site-specimen__note {
+  margin: 0 0 var(--augur-spacing-md);
   color: var(--muted-foreground);
 }
 

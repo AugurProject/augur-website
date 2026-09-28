@@ -133,6 +133,14 @@ shell checks at desktop/mobile sizes in light/dark. The browser job saves
 screenshots as an Actions artifact for visual review; those shell checks do not
 establish final homepage design acceptance.
 
+`/design-conformance/` (noindex, outside site navigation) renders every
+installed item — Button variants/sizes/states, Card, PageHeader, EmptyState
+— plus the type roles, semantic color roles, spacing scale, focus ring and
+supplied lockups, side by side in forced light and dark containers. Its
+browser test checks equal structure and dimensions across themes, square
+geometry, pinned families, the focus ring and supplied artwork. It is the
+visual reference to compare against upstream guidance when the pin changes.
+
 `components.json` has an empty `tailwind.baseColor`: shadcn 4.20.1 otherwise
 requests an unrelated `ui.shadcn.com/r/colors/neutral.json` even though Augur
 supplies all base roles. The empty value is accepted by the CLI and keeps the
