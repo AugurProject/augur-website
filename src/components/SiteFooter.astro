@@ -1,33 +1,45 @@
+---
+import { primaryNavigation, resourceNavigation } from "@/lib/site";
+
+const groups = [
+  { title: "Explore", links: primaryNavigation },
+  { title: "Resources", links: resourceNavigation },
+  {
+    title: "Project",
+    links: [
+      { href: "/about/", label: "About" },
+      { href: "/about/#contact", label: "Contact" },
+      { href: "/about/#foundation", label: "Lituus Foundation" },
+    ],
+  },
+];
+---
+
 <footer class="site-footer">
   <div class="site-frame site-footer__inner">
     <div class="site-footer__intro">
-      <a href="/" class="site-footer__name augur-type-heading-2">Augur</a>
+      <a class="site-footer__brand" href="/" aria-label="Augur home">
+        <img class="site-brand-light" src="/brand/augur-horizontal-color.png" width="1440" height="481" alt="" loading="lazy" />
+        <img class="site-brand-dark" src="/brand/augur-horizontal-reversed.png" width="1440" height="481" alt="" loading="lazy" />
+      </a>
       <p>Explore the protocol, inspect the open work, and find the context behind it.</p>
     </div>
-    <nav class="site-footer__links" aria-label="Footer navigation">
-      <div>
-        <h2 class="augur-type-control">Explore</h2>
-        <a href="/protocol/">Protocol</a>
-        <a href="/developers/">Developers</a>
-        <a href="/research/">Research</a>
-        <a href="/learn/">Learn</a>
-      </div>
-      <div>
-        <h2 class="augur-type-control">Follow</h2>
-        <a href="/blog/">Blog</a>
-        <a href="/faq/">FAQ</a>
-        <a href="/rep/">REP</a>
-        <a href="/history/">History</a>
-      </div>
-      <div>
-        <h2 class="augur-type-control">About</h2>
-        <a href="/about/">About</a>
-        <a href="/about/#contact">Contact</a>
-        <a href="/about/#foundation">Lituus Foundation</a>
-        <a href="/terms/">Terms</a>
-        <a href="/privacy/">Privacy</a>
-      </div>
+    <nav class="site-footer__links augur-type-ui" aria-label="Footer navigation">
+      {groups.map(({ title, links }) => (
+        <div>
+          <h2 class="augur-type-editorial-label">{title}</h2>
+          <ul>
+            {links.map(({ href, label }) => <li><a href={href}>{label}</a></li>)}
+          </ul>
+        </div>
+      ))}
     </nav>
-    <p class="site-footer__note augur-type-metadata">Operator and copyright attribution are pending maintainer review before publication.</p>
+    <div class="site-footer__legal augur-type-metadata">
+      <p>Operator and copyright attribution are pending maintainer review before publication.</p>
+      <ul>
+        <li><a href="/terms/">Terms</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
+      </ul>
+    </div>
   </div>
 </footer>
