@@ -14,10 +14,76 @@
 body {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  line-height: 1.5;
 }
 
 .site-content {
   flex: 1;
+}
+
+/* Tailwind preflight strips link underlines; restore them for links in page
+   content so a link is identifiable without relying on color. Component and
+   navigation links carry a class and style themselves. */
+.site-content a:not([class]) {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.site-content a:not([class]):hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Direct-entry placeholder pages. Shares the header/footer frame. */
+.site-scaffold {
+  padding-block: var(--site-section-gap);
+}
+
+.site-scaffold > * {
+  max-width: 65ch;
+}
+
+.site-scaffold__status {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.site-scaffold h1 {
+  margin-block: 0.5rem 1rem;
+}
+
+.site-scaffold h2 {
+  margin-block: 2rem 0.75rem;
+}
+
+.site-scaffold p {
+  margin-block: 0 1rem;
+}
+
+.site-scaffold__question {
+  font-size: 1.125rem;
+}
+
+.site-scaffold hr {
+  max-width: none;
+  margin-block: 2rem;
+  border: 0;
+  border-top: 1px solid var(--border-quiet);
+}
+
+.site-scaffold ul {
+  margin-block: 0 1rem;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+
+.site-scaffold li + li {
+  margin-top: 0.25rem;
+}
+
+.site-scaffold code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9375em;
 }
 
 .site-skip-link {
@@ -276,6 +342,7 @@ body {
 
 .site-not-found > p:not(.site-not-found__status) {
   max-width: 65ch;
+  margin-block: 0 1rem;
 }
 
 .site-not-found__links {

@@ -11,10 +11,10 @@ const { title, question, boundary } = Astro.props;
 ---
 
 <SiteLayout title={title} description={question}>
-  <main class="scaffold">
-    <p class="scaffold__status">Implementation scaffold · not production copy</p>
-    <h1>{title}</h1>
-    <p class="scaffold__question">{question}</p>
+  <main class="site-frame site-scaffold">
+    <p class="site-scaffold__status augur-type-metadata">Implementation scaffold · not production copy</p>
+    <h1 class="augur-type-editorial-title">{title}</h1>
+    <p class="site-scaffold__question">{question}</p>
     <hr />
     <p><strong>Page boundary:</strong> {boundary}</p>
     <p>

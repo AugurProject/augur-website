@@ -9,69 +9,6 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Website composition CSS follows the installed Augur theme.
- *
- * The registry owns foundation values below. Local rules use semantic roles
- * and do not redefine brand values.
- */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  background: var(--background, Canvas);
-  color: var(--foreground, CanvasText);
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: var(--augur-font-secondary, system-ui, sans-serif);
-  line-height: 1.5;
-    background-color: var(--background);
-    color: var(--foreground);
-}
-
-a {
-  color: inherit;
-}
-
-.scaffold {
-  width: min(100% - 48px, 70rem);
-  margin-inline: auto;
-  padding-block: 64px;
-}
-
-.scaffold__status {
-  font-size: 0.8125rem;
-}
-
-.scaffold__question {
-  max-width: 65ch;
-  font-size: 1.125rem;
-}
-
-.scaffold hr {
-  margin-block: 32px;
-  border: 0;
-  border-top: 1px solid currentColor;
-  opacity: 0.2;
-}
-
-.scaffold code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-@media (max-width: 599px) {
-  .scaffold {
-    width: min(100% - 32px, 70rem);
-    padding-block: 48px;
-  }
-}
-/*
  ---break---
  */
 @theme inline {
@@ -322,3 +259,7 @@ a {
  ---break---
  */
 @custom-variant dark (&:is([data-theme="dark"], [data-theme="dark"] *, :root:not([data-theme="light"]) *));
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+}

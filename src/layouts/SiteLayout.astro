@@ -66,6 +66,13 @@ const documentTitle = title === "Augur" ? title : `${title} · Augur`;
           disclosure.open = false;
           disclosure.querySelector<HTMLElement>("summary")?.focus();
         });
+        // Close when keyboard focus moves to something outside the disclosure.
+        // A null relatedTarget (window blur, click on inert area) is left to
+        // the pointerdown handler below.
+        disclosure.addEventListener("focusout", (event) => {
+          const next = event.relatedTarget;
+          if (disclosure.open && next instanceof Node && !disclosure.contains(next)) disclosure.open = false;
+        });
       }
       document.addEventListener("pointerdown", (event) => {
         for (const disclosure of disclosures) {
