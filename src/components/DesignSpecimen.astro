@@ -1,0 +1,165 @@
+---
+// Renders every installed Augur Design System item inside a forced theme
+// container. Static HTML only: no component here is hydrated.
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderBreadcrumb,
+  PageHeaderContent,
+  PageHeaderDescription,
+  PageHeaderTitle,
+} from "@/components/page-header";
+import { EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateTitle } from "@/components/empty-state";
+
+type Props = { theme: "light" | "dark" };
+const { theme } = Astro.props;
+const label = theme === "light" ? "Light theme" : "Dark theme";
+const id = `specimen-${theme}`;
+
+const typeRoles = [
+  ["display", "Sora 600 — identity and display"],
+  ["editorial-title", "Sora 400 — long-form titles"],
+  ["editorial-section", "Sora 400 — long-form sections"],
+  ["heading-1", "Sora 600 — interface titles"],
+  ["heading-2", "Sora 600 — interface sections"],
+  ["control", "Sora 600 — controls and actions"],
+  ["ui", "Sora 400 — navigation and interface text"],
+  ["body", "Schibsted Grotesk 400 — prose"],
+  ["metadata", "Schibsted Grotesk 400 — metadata and dense records"],
+  ["editorial-label", "Schibsted Grotesk 400 — tracked labels"],
+] as const;
+
+const colorRoles = [
+  ["background", "foreground"],
+  ["card", "card-foreground"],
+  ["popover", "popover-foreground"],
+  ["primary", "primary-foreground"],
+  ["primary-hover", "primary-hover-foreground"],
+  ["secondary", "secondary-foreground"],
+  ["muted", "muted-foreground"],
+  ["accent", "accent-foreground"],
+  ["destructive", "destructive-foreground"],
+] as const;
+
+const edgeRoles = ["border", "border-quiet", "input", "input-hover", "ring"] as const;
+const spacing = ["xs", "sm", "md", "lg", "xl", "2xl"] as const;
+---
+
+<section class="site-specimen" data-theme={theme} aria-labelledby={id}>
+  <h2 id={id} class="augur-type-editorial-section">{label}</h2>
+
+  <section class="site-specimen__group" aria-labelledby={`${id}-identity`}>
+    <h3 id={`${id}-identity`} class="augur-type-editorial-label">Identity</h3>
+    {theme === "light"
+      ? <img class="site-specimen__logo" src="/brand/augur-horizontal-color.png" width="1440" height="481" alt="Augur horizontal lockup, color variant" />
+      : <img class="site-specimen__logo" src="/brand/augur-horizontal-reversed.png" width="1440" height="481" alt="Augur horizontal lockup, reversed variant" />}
+  </section>
+
+  <section class="site-specimen__group" aria-labelledby={`${id}-type`}>
+    <h3 id={`${id}-type`} class="augur-type-editorial-label">Type roles</h3>
+    <dl class="site-specimen__type">
+      {typeRoles.map(([role, use]) => (
+        <div>
+          <dt class={`augur-type-${role}`}>{role}</dt>
+          <dd class="augur-type-metadata">{use}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="site-specimen__group" aria-labelledby={`${id}-color`}>
+    <h3 id={`${id}-color`} class="augur-type-editorial-label">Semantic color roles</h3>
+    <ul class="site-specimen__swatches">
+      {colorRoles.map(([surface, text]) => (
+        <li style={`background: var(--${surface}); color: var(--${text});`}>
+          <span class="augur-type-control">{surface}</span>
+          <span class="augur-type-metadata">on {text}</span>
+        </li>
+      ))}
+    </ul>
+    <ul class="site-specimen__edges">
+      {edgeRoles.map((edge) => (
+        <li class="augur-type-metadata"><span style={`border-color: var(--${edge});`} aria-hidden="true"></span>{edge}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="site-specimen__group" aria-labelledby={`${id}-spacing`}>
+    <h3 id={`${id}-spacing`} class="augur-type-editorial-label">Component spacing and geometry</h3>
+    <ul class="site-specimen__spacing">
+      {spacing.map((step) => (
+        <li class="augur-type-metadata"><span style={`width: var(--augur-spacing-${step});`} aria-hidden="true"></span>{step}</li>
+      ))}
+    </ul>
+    <p class="augur-type-metadata site-specimen__note">Controls and surfaces use the square control and surface radius roles.</p>
+  </section>
+
+  <section class="site-specimen__group" aria-labelledby={`${id}-button`}>
+    <h3 id={`${id}-button`} class="augur-type-editorial-label">Button</h3>
+    <p class="augur-type-metadata site-specimen__note">Specimens only: these buttons perform no action. Tab to them to see the shared focus ring.</p>
+    <div class="site-specimen__row">
+      <Button>Primary</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="link">Link</Button>
+      <Button variant="destructive">Destructive</Button>
+    </div>
+    <div class="site-specimen__row">
+      <Button variant="outline" size="sm">Small</Button>
+      <Button variant="outline" size="md">Medium</Button>
+      <Button variant="outline" size="lg">Large</Button>
+      <Button variant="outline" disabled>Disabled</Button>
+      <Button variant="outline" loading>Submit</Button>
+    </div>
+  </section>
+
+  <section class="site-specimen__group" aria-labelledby={`${id}-page-header`}>
+    <h3 id={`${id}-page-header`} class="augur-type-editorial-label">Page header</h3>
+    <PageHeader>
+      <PageHeaderBreadcrumb aria-label={`Breadcrumb specimen, ${label.toLowerCase()}`}>
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li><a href="/research/">Research</a></li>
+          <li><span aria-current="page">Specimen</span></li>
+        </ol>
+      </PageHeaderBreadcrumb>
+      <PageHeaderContent>
+        <PageHeaderTitle headingLevel={4}>Page title</PageHeaderTitle>
+        <PageHeaderDescription>Supporting line in the body voice with the muted pairing.</PageHeaderDescription>
+        <PageHeaderActions>
+          <Button variant="outline">Secondary action</Button>
+        </PageHeaderActions>
+      </PageHeaderContent>
+    </PageHeader>
+  </section>
+
+  <section class="site-specimen__group" aria-labelledby={`${id}-card`}>
+    <h3 id={`${id}-card`} class="augur-type-editorial-label">Card</h3>
+    <Card>
+      <CardHeader>
+        <CardTitle>Card title</CardTitle>
+        <CardDescription>Metadata voice with the muted pairing.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p>A grouping surface for a bounded record. Cards are not the default wrapper for page sections.</p>
+      </CardContent>
+      <CardFooter>
+        <Button variant="ghost" size="sm">Quiet action</Button>
+      </CardFooter>
+    </Card>
+  </section>
+
+  <section class="site-specimen__group" aria-labelledby={`${id}-empty`}>
+    <h3 id={`${id}-empty`} class="augur-type-editorial-label">Empty state</h3>
+    <EmptyState>
+      <EmptyStateTitle headingLevel={4}>Nothing recorded yet</EmptyStateTitle>
+      <EmptyStateDescription>The state is named in copy, never by color alone.</EmptyStateDescription>
+      <EmptyStateActions>
+        <Button variant="secondary">Secondary action</Button>
+      </EmptyStateActions>
+    </EmptyState>
+  </section>
+</section>

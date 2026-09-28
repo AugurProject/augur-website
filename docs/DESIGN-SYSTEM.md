@@ -7,10 +7,10 @@ Repository: `jubalm/augur-design-system`
 Pinned commit:
 
 ```text
-629868678fa05d9cd0d8d14617ec29bf8df5d290
+8fa34fefc8b28360a61e14df967a2a710e7b252e
 ```
 
-Commit summary: `feat(theme): separate control edges from panel edges; keep filled-button hover in family (#90)`.
+Commit summary: `fix(registry): deliver theme roles via css, not cssVars.light/dark (#95)`.
 
 This pin is deliberate. A newer upstream `main` is not automatically adopted.
 
@@ -45,10 +45,11 @@ At the pin above:
 
 ## Registry
 
-Strongest reproducible install form documented upstream:
+Upstream documents this GitHub-native form, but its component items are broken
+at the adopted commit (details below). Do not use it to sync this website:
 
 ```bash
-bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#629868678fa05d9cd0d8d14617ec29bf8df5d290"
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#8fa34fefc8b28360a61e14df967a2a710e7b252e"
 ```
 
 Available items at bootstrap:
@@ -63,7 +64,12 @@ Available items at bootstrap:
 - `page-header`
 - `empty-state`
 
-Use `scripts/sync-design-system.sh` for the website baseline. Install additional current items only when a concrete page needs them.
+Use `bun run design:sync` for the website baseline. It downloads the immutable
+`public/r/<item>.json` artifacts at the adopted SHA, rewrites only their
+transitive registry addresses to local URLs for this same pinned set, and
+serves them to shadcn 4.20.1 over loopback. No foundation values or component
+source are hand-maintained in this repository. Extend its explicit item list
+only when a concrete page needs another upstream item.
 
 ## Important consumer-support boundary
 
@@ -80,6 +86,103 @@ Therefore M1 begins with a compatibility gate:
 5. do **not** hand-copy foundation CSS as a workaround.
 
 This is a known integration question, not a reason to fork the design system.
+
+### M1 consumer verification (2026-09-27)
+
+This verification was made at the previous pin
+`629868678fa05d9cd0d8d14617ec29bf8df5d290`. The pin update below records what
+changed since. The source for this installation was that commit, specifically its
+`public/r/{augur-theme,utils,button,card,page-header,empty-state}.json` built
+items. The source registry's `augur-theme` writes typography to
+`src/styles/augur-typography.css` and imports it as
+`./styles/augur-typography.css` from the configured Tailwind CSS entry. We set
+that entry to `src/index.css`, matching the upstream consumer's source-root CSS
+location. The import resolves in Astro without modifying any theme payload.
+
+The upstream generator embeds consumer-shaped `content` in `public/r/*.json`:
+it rewrites canonical package imports (`../../internal/cx` to `@/lib/utils`,
+relative pattern imports to consumer aliases) and adds CSS imports. The root
+`registry.json` drops that content and instead points `files.path` at the
+untransformed package files. A GitHub Actions run of the documented
+GitHub-native command completed but replaced the four baseline TSX files with
+broken `internal/cx` / pattern-relative imports and removed CSS imports.
+That is an upstream source-registry contract bug, separate from Astro.
+
+The site sync uses the pinned **built-JSON channel**. Its transient local
+server keeps every item field intact except `registryDependencies`, which it
+maps to the matching pinned item on loopback. This prevents the unpinned
+transitive addresses in upstream JSON from resolving to a moving default
+branch or to broken GitHub-native source. The source artifacts themselves
+still come from `raw.githubusercontent.com` at the fixed 40-character commit.
+CI runs the sync and fails on any file drift, including untracked files.
+
+This workspace's proxy blocks `raw.githubusercontent.com`; local verification
+used connector-fetched copies of those exact pinned built items via the
+script's `AUGUR_REGISTRY_SOURCE_DIR` test override, which is disabled in CI.
+Its npm dependencies were installed separately at the items' exact versions
+because the proxy-free loopback smoke could not reach npm. The production
+GitHub runner must still establish that the committed built-JSON sync and
+drift check pass over its actual network.
+
+Observed results: `bun install` generated `bun.lock`; `bun run check` and
+`bun run build` pass with Astro 7.3.1, React 19.2.8, and Tailwind CSS 4.1.17.
+The production output includes Fontsource `@font-face` rules and local Sora and
+Schibsted Grotesk WOFF2 assets, with no Google font host. It includes light and
+dark semantic roles, `[data-theme]` selectors, system dark fallback, the focus
+ring, and the reduced-motion rule. CI runs a frozen install, check, build,
+route/link validation, a pinned built-JSON sync drift check, and four Chromium
+shell checks at desktop/mobile sizes in light/dark. The browser job saves
+screenshots as an Actions artifact for visual review; those shell checks do not
+establish final homepage design acceptance.
+
+`/design-conformance/` (noindex, outside site navigation) renders every
+installed item — Button variants/sizes/states, Card, PageHeader, EmptyState
+— plus the type roles, semantic color roles, spacing scale, focus ring and
+supplied lockups, side by side in forced light and dark containers. Its
+browser test checks equal structure and dimensions across themes, square
+geometry, pinned families, the focus ring and supplied artwork. It is the
+visual reference to compare against upstream guidance when the pin changes.
+
+`components.json` has an empty `tailwind.baseColor`: shadcn 4.20.1 otherwise
+requests an unrelated `ui.shadcn.com/r/colors/neutral.json` even though Augur
+supplies all base roles. The empty value is accepted by the CLI and keeps the
+install independent of that scaffold palette.
+
+**Upstream repair:** generate consumer-shaped TSX files under the design
+system's `registry-src/` from canonical source, point root `registry.json`
+at those generated paths, and drift-check both forms. Its docs already
+describe these transforms, but only built JSON currently carries them.
+The generated `registryDependencies` are unversioned; they also need an
+immutable release strategy or propagated ref before a direct native install
+can claim full dependency-graph reproducibility. An upstream self-reference
+cannot literally embed its own eventual commit SHA in that same commit. Track
+the repair in `jubalm/augur-design-system` issue #92.
+
+### Pin update: 629868678f → 8fa34fefc8 (2026-09-28)
+
+Upstream commits adopted:
+
+- #91 `feat(docs)`: docs-site sun/moon theme toggle. The theming contract
+  (`data-theme` on `<html>` or any container, attribute absent = system) is
+  unchanged. This site's System/Light/Dark select still conforms; no site
+  change.
+- #93 `docs(color)`: docs-site live-example stage note. No consumer effect.
+- #95 `fix(registry)`: `augur-theme` delivers semantic roles in `css`
+  (`:root`/`.dark`) instead of `cssVars.light`/`dark`. Installs no longer
+  write about 24 invalid `--role: var(----role)` entries into `@theme inline`
+  (upstream issue #94, found in this repository's M1 review).
+
+Registry diff: only `src/index.css` changed. Components, typography,
+dependencies, `bun.lock` and brand assets are identical (brand PNG SHA-256
+checked against the new pin). Role values are unchanged, so rendered colors
+are unchanged.
+
+`bun run design:sync` now resets `src/index.css` to the bare Tailwind entry
+before installing. shadcn merges into the existing file and never removes
+declarations, so without the reset the old pin's `----` lines survived the
+update. The file holds only registry output (website CSS is in
+`src/styles/site.css`), so it is now a function of the pin alone. Two
+consecutive syncs produce identical output.
 
 ## Visual contract
 
@@ -172,7 +275,7 @@ When intentionally adopting a newer design-system revision:
 
 1. inspect upstream commits since this pin;
 2. read affected `DESIGN.md`, foundation docs, component docs, registry contract, and changelog;
-3. update the pin here and in `scripts/sync-design-system.sh`;
+3. update the pin here and in `scripts/sync-design-system.mjs` (and other references: `rg <old-sha>`);
 4. re-run the sync;
 5. review the source/CSS/dependency diff;
 6. test both themes, responsive layouts, keyboard/focus, fonts, and affected pages;

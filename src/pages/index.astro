@@ -7,15 +7,15 @@ import { siteRoutes } from "@/lib/site";
   title="Website implementation scaffold"
   description="Augur.net rebuild implementation scaffold."
 >
-  <main class="scaffold">
-    <p class="scaffold__status">Implementation scaffold · noindex</p>
-    <h1>Augur.net rebuild</h1>
-    <p class="scaffold__question">
+  <main class="site-frame site-scaffold">
+    <p class="site-scaffold__status augur-type-metadata">Implementation scaffold · noindex</p>
+    <h1 class="augur-type-editorial-title">Augur.net rebuild</h1>
+    <p class="site-scaffold__question">
       This page is an implementation index, not the strategy homepage.
       The final homepage must follow the nine-part sequence in SPEC.md.
     </p>
     <hr />
-    <h2>Canonical routes</h2>
+    <h2 class="augur-type-editorial-section">Canonical routes</h2>
     <ul>
       {siteRoutes.map((route) => (
         <li>
@@ -24,8 +24,8 @@ import { siteRoutes } from "@/lib/site";
       ))}
     </ul>
     <p>
-      Start with <code>README.md</code>, <code>SPEC.md</code>,
-      <code>ARCHITECTURE.md</code>, and <code>AGENTS.md</code>.
+      Start with <code>README.md</code>, <code>SPEC.md</code>, <code>ARCHITECTURE.md</code>,
+      and <code>AGENTS.md</code>.
     </p>
   </main>
 </SiteLayout>

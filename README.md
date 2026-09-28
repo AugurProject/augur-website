@@ -19,13 +19,14 @@ Read these before implementation:
 - [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) — current Augur Design System pin, authority, registry, and high-signal rules.
 - [docs/CONTENT-EVIDENCE.md](docs/CONTENT-EVIDENCE.md) — content models and claim/source discipline.
 - [docs/MIGRATION.md](docs/MIGRATION.md) — legacy route handling, redirects, archive rules, and retired APIs.
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — example Cloudflare Workers static-assets deploy (not configured here).
 - [docs/IMPLEMENTATION-PLAN.md](docs/IMPLEMENTATION-PLAN.md) — staged execution plan and acceptance gates.
 
 ## Current state
 
-This bootstrap establishes implementation context and a minimal Astro route scaffold. It intentionally does **not** attempt the final homepage, visual composition, content migration, or deployment.
+The site currently has a verified Astro foundation and shared shell around direct-entry route placeholders. The placeholders are marked `noindex` and are not publication-ready content. `/design-conformance/` is a noindex specimen of every installed design-system item in both themes. The final homepage, content migration, contact/operator review, and production deployment are later work.
 
-The first meaningful implementation slice is the homepage vertical slice described in the strategy, after the design-system theme and required primitives are installed and verified.
+The pinned registry source is committed so ordinary builds do not fetch GitHub. Its generated CSS enters at `src/index.css`; website-only frame, gutter, section rhythm, and shell layout live in `src/styles/site.css`. See [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) for the registry proof and its limits.
 
 ## Stack direction
 
@@ -40,8 +41,7 @@ The first meaningful implementation slice is the homepage vertical slice describ
 ## Development
 
 ```bash
-bun install
-bun run design:sync
+bun install --frozen-lockfile
 bun run dev
 ```
 
@@ -50,14 +50,15 @@ Checks:
 ```bash
 bun run check
 bun run build
+node scripts/check-internal-links.mjs
 ```
 
-The bootstrap does not include a lockfile because dependencies have not yet been installed in this repository. The first implementation pass should generate and commit `bun.lock`, then CI should move to frozen installs.
+`bun run design:sync` intentionally refreshes the committed registry source from the pinned upstream revision. Review its source, CSS, and dependency diff before committing an update. The command needs network access to GitHub and the package registry; normal install/check/build does not need GitHub.
 
 ## Upstream projects
 
 - Design system: `jubalm/augur-design-system`
-- Design-system pin for this bootstrap: `629868678fa05d9cd0d8d14617ec29bf8df5d290`
+- Design-system pin for this bootstrap: `8fa34fefc8b28360a61e14df967a2a710e7b252e`
 - Migration/source site: `jubalm/augur-reboot-website`
 
 Do not silently follow newer design-system `main`. Compare changes and deliberately update the pin in [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) when adopting them.

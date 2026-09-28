@@ -66,7 +66,33 @@ export const siteRoutes: SiteRoute[] = [
     question: "How does earlier information apply?",
     boundary: "Dated chronology, versions, and original sources.",
   },
+  {
+    href: "/terms/",
+    label: "Terms",
+    question: "What terms apply?",
+    boundary: "Reviewed operator, dates, contact, and policy detail.",
+  },
+  {
+    href: "/privacy/",
+    label: "Privacy",
+    question: "What data practices apply?",
+    boundary: "Reviewed operator, dates, contact, and privacy detail.",
+  },
 ];
+
+export const primaryNavigation = [
+  { href: "/protocol/", label: "Protocol" },
+  { href: "/developers/", label: "Developers" },
+  { href: "/blog/", label: "Blog" },
+  { href: "/faq/", label: "FAQ" },
+] as const;
+
+export const resourceNavigation = [
+  { href: "/learn/", label: "Learn" },
+  { href: "/rep/", label: "REP" },
+  { href: "/research/", label: "Research" },
+  { href: "/history/", label: "History" },
+] as const;
 
 export const productOrder = [
   "Augur",

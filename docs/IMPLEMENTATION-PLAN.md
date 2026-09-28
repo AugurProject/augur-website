@@ -32,7 +32,7 @@ Deliverables:
 - theme behavior;
 - baseline accessibility;
 - lockfile and deterministic CI;
-- preview deployment;
+- documented deployment example (`docs/DEPLOYMENT.md`). Hosted previews are out of scope: the repository will be transferred, so account, CI deploy and previews belong to the new owner;
 - route/link/404 foundation.
 
 Acceptance:
