@@ -181,7 +181,7 @@ Do not hydrate purely decorative animation.
 
 ## 10. Deployment boundary
 
-The site should emit portable static output unless a strategy requirement proves otherwise. Cloudflare is a natural deployment option given the existing Augur infrastructure, but deployment configuration is a separate implementation decision and should not force server-side architecture into editorial pages.
+The site should emit portable static output unless a strategy requirement proves otherwise. Cloudflare is a natural deployment option given the existing Augur infrastructure, but deployment configuration is a separate implementation decision and should not force server-side architecture into editorial pages. The documented example is a Cloudflare Worker serving `dist/` as static assets; see `docs/DEPLOYMENT.md`. The repository ships no deployment configuration or credentials.
 
 The two retired supply endpoints are an exception: production routing must return explicit 410 responses with a short machine-readable message. Their implementation depends on the chosen edge/deployment layer.
 

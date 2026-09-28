@@ -19,6 +19,7 @@ Read these before implementation:
 - [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) — current Augur Design System pin, authority, registry, and high-signal rules.
 - [docs/CONTENT-EVIDENCE.md](docs/CONTENT-EVIDENCE.md) — content models and claim/source discipline.
 - [docs/MIGRATION.md](docs/MIGRATION.md) — legacy route handling, redirects, archive rules, and retired APIs.
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — example Cloudflare Workers static-assets deploy (not configured here).
 - [docs/IMPLEMENTATION-PLAN.md](docs/IMPLEMENTATION-PLAN.md) — staged execution plan and acceptance gates.
 
 ## Current state
