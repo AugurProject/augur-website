@@ -8,5 +8,17 @@
     "card",
     "page-header",
     "empty-state"
-  ]
+  ],
+  "resolved": {
+    "version": "v0.1.0",
+    "commit": "7e2f1a861af7a384eb37ff53f1f31bf11d6eeb0c",
+    "items": {
+      "augur-theme": "sha256-umwJ9r2Po50DU+gDllKIntoLGMtcaIW8VDU8HtCUGe8=",
+      "utils": "sha256-tDcP/rkWrUOPnImiKsE3hGbomLV+AtTewZzWoUH8P68=",
+      "button": "sha256-wcAYpf7F780RQ59QX29EJ64d/k8EK15MmO5auFGd3Qw=",
+      "card": "sha256-PiKo5TdgUKElWbUgPvBDuac2adDl7fimwi7I0GoDgLc=",
+      "page-header": "sha256-JM7U4FBFvloBzpD6doNOIjjJaSBmfPHNZwj/XCI7eDs=",
+      "empty-state": "sha256-CTcExaE6/e6QZhCy2p5D/CRI8xiHn842QirA5+OS1AE="
+    }
+  }
 }
