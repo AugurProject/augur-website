@@ -57,7 +57,7 @@ node scripts/check-internal-links.mjs
 ## Upstream projects
 
 - Design system: `jubalm/augur-design-system`
-- Design-system pin for this bootstrap: `629868678fa05d9cd0d8d14617ec29bf8df5d290`
+- Design-system pin for this bootstrap: `8fa34fefc8b28360a61e14df967a2a710e7b252e`
 - Migration/source site: `jubalm/augur-reboot-website`
 
 Do not silently follow newer design-system `main`. Compare changes and deliberately update the pin in [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) when adopting them.

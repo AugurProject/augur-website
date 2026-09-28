@@ -7,10 +7,10 @@ Repository: `jubalm/augur-design-system`
 Pinned commit:
 
 ```text
-629868678fa05d9cd0d8d14617ec29bf8df5d290
+8fa34fefc8b28360a61e14df967a2a710e7b252e
 ```
 
-Commit summary: `feat(theme): separate control edges from panel edges; keep filled-button hover in family (#90)`.
+Commit summary: `fix(registry): deliver theme roles via css, not cssVars.light/dark (#95)`.
 
 This pin is deliberate. A newer upstream `main` is not automatically adopted.
 
@@ -49,7 +49,7 @@ Upstream documents this GitHub-native form, but its component items are broken
 at the adopted commit (details below). Do not use it to sync this website:
 
 ```bash
-bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#629868678fa05d9cd0d8d14617ec29bf8df5d290"
+bunx shadcn@4.20.1 add "jubalm/augur-design-system/<item>#8fa34fefc8b28360a61e14df967a2a710e7b252e"
 ```
 
 Available items at bootstrap:
@@ -89,7 +89,9 @@ This is a known integration question, not a reason to fork the design system.
 
 ### M1 consumer verification (2026-09-27)
 
-The source for this installation is the pinned commit above, specifically its
+This verification was made at the previous pin
+`629868678fa05d9cd0d8d14617ec29bf8df5d290`. The pin update below records what
+changed since. The source for this installation was that commit, specifically its
 `public/r/{augur-theme,utils,button,card,page-header,empty-state}.json` built
 items. The source registry's `augur-theme` writes typography to
 `src/styles/augur-typography.css` and imports it as
@@ -155,6 +157,32 @@ immutable release strategy or propagated ref before a direct native install
 can claim full dependency-graph reproducibility. An upstream self-reference
 cannot literally embed its own eventual commit SHA in that same commit. Track
 the repair in `jubalm/augur-design-system` issue #92.
+
+### Pin update: 629868678f → 8fa34fefc8 (2026-09-28)
+
+Upstream commits adopted:
+
+- #91 `feat(docs)`: docs-site sun/moon theme toggle. The theming contract
+  (`data-theme` on `<html>` or any container, attribute absent = system) is
+  unchanged. This site's System/Light/Dark select still conforms; no site
+  change.
+- #93 `docs(color)`: docs-site live-example stage note. No consumer effect.
+- #95 `fix(registry)`: `augur-theme` delivers semantic roles in `css`
+  (`:root`/`.dark`) instead of `cssVars.light`/`dark`. Installs no longer
+  write about 24 invalid `--role: var(----role)` entries into `@theme inline`
+  (upstream issue #94, found in this repository's M1 review).
+
+Registry diff: only `src/index.css` changed. Components, typography,
+dependencies, `bun.lock` and brand assets are identical (brand PNG SHA-256
+checked against the new pin). Role values are unchanged, so rendered colors
+are unchanged.
+
+`bun run design:sync` now resets `src/index.css` to the bare Tailwind entry
+before installing. shadcn merges into the existing file and never removes
+declarations, so without the reset the old pin's `----` lines survived the
+update. The file holds only registry output (website CSS is in
+`src/styles/site.css`), so it is now a function of the pin alone. Two
+consecutive syncs produce identical output.
 
 ## Visual contract
 
@@ -247,7 +275,7 @@ When intentionally adopting a newer design-system revision:
 
 1. inspect upstream commits since this pin;
 2. read affected `DESIGN.md`, foundation docs, component docs, registry contract, and changelog;
-3. update the pin here and in `scripts/sync-design-system.sh`;
+3. update the pin here and in `scripts/sync-design-system.mjs` (and other references: `rg <old-sha>`);
 4. re-run the sync;
 5. review the source/CSS/dependency diff;
 6. test both themes, responsive layouts, keyboard/focus, fonts, and affected pages;

@@ -78,7 +78,7 @@ The design system publishes shadcn-compatible built JSON alongside its GitHub-na
 
 This repository pins design-system commit:
 
-`629868678fa05d9cd0d8d14617ec29bf8df5d290`
+`8fa34fefc8b28360a61e14df967a2a710e7b252e`
 
 At this pin, GitHub-native item addresses install untransformed package TSX with broken internal imports and missing component CSS imports. `scripts/sync-design-system.sh` instead fetches the commit-addressed `public/r/` built items, maps their transitive references to the same pinned set on a temporary loopback registry, and installs them with shadcn. See `docs/DESIGN-SYSTEM.md` and the upstream issue #92 for the evidence and repair path. Installed source is committed here so website builds do not depend on GitHub at runtime.
 

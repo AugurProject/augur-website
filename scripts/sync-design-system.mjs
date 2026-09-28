@@ -1,9 +1,9 @@
 import { spawn } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join } from "node:path";
 
-const PIN = "629868678fa05d9cd0d8d14617ec29bf8df5d290";
+const PIN = "8fa34fefc8b28360a61e14df967a2a710e7b252e";
 const REPO = "jubalm/augur-design-system";
 const ITEMS = ["augur-theme", "utils", "button", "card", "page-header", "empty-state"];
 const NAMES = new Set(ITEMS);
@@ -53,6 +53,12 @@ await new Promise((resolve, reject) => {
   server.once("error", reject);
   server.listen(0, "127.0.0.1", resolve);
 });
+
+// src/index.css holds only registry output (website CSS lives in
+// src/styles/site.css). shadcn merges into the existing file and never
+// removes declarations, so start from the bare Tailwind entry to keep the
+// result a function of the pin alone, not of every earlier pin.
+await writeFile("src/index.css", '@import "tailwindcss";\n');
 
 try {
   const port = server.address().port;
