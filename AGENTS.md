@@ -26,7 +26,7 @@ If a new implementation idea conflicts with the strategy, surface the conflict i
 
 ### Shared interface language
 
-`jubalm/augur-design-system` governs Augur-wide visual and interaction decisions. This repository currently adopts commit `9638a72383c50a1d70016ea28e9f6bffaad42a27`; see `docs/DESIGN-SYSTEM.md`.
+`jubalm/augur-design-system` governs Augur-wide visual and interaction decisions. This repository currently adopts release `v0.1.0`, recorded with its resolved commit in `design-system.lock.json`; see `docs/DESIGN-SYSTEM.md`.
 
 Do not invent local replacements for design-system color, typography, spacing, radius, focus, theme, control behavior, or supplied identity artwork.
 
@@ -122,7 +122,7 @@ Every PR should state:
 
 - strategy requirement or issue being implemented;
 - changed routes/surfaces;
-- design-system items used and pin;
+- design-system items used and adopted release;
 - content/evidence sources touched;
 - verification performed and observed result;
 - remaining limitations or unresolved decisions;

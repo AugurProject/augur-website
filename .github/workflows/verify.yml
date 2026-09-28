@@ -29,7 +29,7 @@ jobs:
           bun-version: 1.4.0
       - run: bun install --frozen-lockfile
       - run: bun run design:sync
-      - name: Require pinned registry sync to preserve committed files
+      - name: Require release registry sync to preserve committed files and lock
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
             git status --short
