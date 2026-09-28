@@ -25,6 +25,10 @@ const documentTitle = title === "Augur" ? title : `${title} · Augur`;
     <!-- Static fallbacks: the --card role (surface-light-raised / surface-dark-1) at the pin. -->
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" data-site-theme-color />
     <meta name="theme-color" content="#161629" media="(prefers-color-scheme: dark)" data-site-theme-color />
+    <!-- Approved favicon and app icon, byte-identical to the pinned design system's resources/brand/assets/icon. -->
+    <link rel="icon" href="/brand/icon/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/brand/icon/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/brand/icon/apple-touch-icon.png" sizes="180x180" />
     <meta name="description" content={description} />
     <meta name="robots" content={indexable ? "index,follow" : "noindex,nofollow"} />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
