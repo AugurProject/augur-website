@@ -1,0 +1,91 @@
+---
+import SectionHead from "./SectionHead.astro";
+import BranchingLedger from "./BranchingLedger.astro";
+import { sourceById } from "@/lib/evidence";
+
+const overview = sourceById("zoltar-system-overview");
+const docs = "https://augurproject.github.io/zoltar/docs/explanation";
+
+// Secondary products share one small row (SPEC.md §3). Descriptions follow
+// the Zoltar system overview.
+const alsoOnZoltar = [
+  {
+    name: "Augur Statoblast",
+    line: "Prediction markets on Zoltar: one security pool per question and universe, with local disputes and fork migration.",
+    href: `${docs}/statoblast.html`,
+    linkText: "Statoblast docs",
+  },
+  {
+    name: "Statoblast Trading",
+    line: "An exchange for Statoblast shares. It is one of possibly many, and it neither creates nor resolves markets.",
+    href: `${docs}/trading.html`,
+    linkText: "Trading docs",
+  },
+];
+---
+
+<!-- 06 · Zoltar. Navy in the light theme, Surface 2 in the dark theme. The
+     shared-foundation link is this band's green; the ledger stays neutral. -->
+<section id="zoltar" class="home-band home-band--zoltar" data-theme="dark" aria-labelledby="zoltar-title">
+  <div class="site-frame">
+    <SectionHead index="06" label="Zoltar: a shared foundation" title="Bring your own oracle. Share the foundation." headingId="zoltar-title">
+      <p>
+        Zoltar is a forkable base layer. Different oracle designs can share REP within a universe, as long as they
+        handle forking into separate protocol states.
+      </p>
+    </SectionHead>
+
+    <div class="home-zoltar">
+      <div class="home-zoltar__text">
+        <p class="home-zoltar__intro">
+          Zoltar records questions, universes, REP and forks. It never judges which answer is true.
+        </p>
+        <blockquote class="home-quote">
+          <p>
+            A dishonest majority can win a vote, but it cannot stop honest participants from walking away with a copy
+            of the books.
+          </p>
+          <footer class="augur-type-editorial-label">
+            <cite>Zoltar system overview</cite>
+          </footer>
+        </blockquote>
+        <ul class="home-zoltar__links">
+          <li>
+            <a class="home-arrow-link home-arrow-link--signal" href="/developers/#shared-oracle-foundation">
+              Explore the shared foundation
+              <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+            </a>
+          </li>
+          <li>
+            <a class="home-arrow-link" href={overview.url}>
+              Read the system overview
+              <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="8 7 17 7 17 16" /></svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="home-zoltar__figure">
+        <BranchingLedger />
+      </div>
+    </div>
+
+    <div class="home-also">
+      <h3 class="home-also__label augur-type-editorial-label">Also on Zoltar</h3>
+      <ul>
+        {alsoOnZoltar.map(({ name, line, href, linkText }) => (
+          <li>
+            <p class="home-also__name">{name}</p>
+            <p class="home-also__line">{line}</p>
+            <a class="home-arrow-link" href={href}>
+              {linkText}
+              <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="8 7 17 7 17 16" /></svg>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="home-also__repo">
+        Both are built in the open in the <a href={sourceById("zoltar-repo").url}>Zoltar repository</a>.
+      </p>
+    </div>
+  </div>
+</section>

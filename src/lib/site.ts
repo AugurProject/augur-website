@@ -94,6 +94,24 @@ export const resourceNavigation = [
   { href: "/history/", label: "History" },
 ] as const;
 
+// Augur is a community project: its contact routes are the community
+// channels linked from the current augur.net (checked 2026-10-01). The
+// site also links x.com/AugurLituus, which returned 404 on that date, so it
+// is left out until a maintainer confirms the handle.
+export type CommunityChannel = {
+  id: string;
+  label: string;
+  handle: string;
+  href: string;
+};
+
+export const communityChannels: CommunityChannel[] = [
+  { id: "discord", label: "Discord", handle: "Community discussion", href: "https://discord.gg/Y3tCZsSmz3" },
+  { id: "telegram", label: "Telegram", handle: "t.me/augurlituus", href: "https://t.me/augurlituus" },
+  { id: "x-project", label: "X", handle: "@AugurProject", href: "https://x.com/AugurProject" },
+  { id: "github", label: "GitHub", handle: "AugurProject", href: "https://github.com/AugurProject" },
+];
+
 export const productOrder = [
   "Augur",
   "Augur Lituus",

@@ -1,0 +1,65 @@
+---
+import SectionHead from "./SectionHead.astro";
+
+// Short answer + qualification + one deeper route (SPEC.md §11). Answers stay
+// visible: no accordion. Facts: launch year from the Augur blog (21 July
+// 2026); Moon Fork details from "The Augur Moon Fork Is Complete" (5 August
+// 2026).
+const questions = [
+  {
+    id: "still-markets",
+    question: "Is Augur still a prediction market?",
+    answer:
+      "Augur launched on Ethereum mainnet in 2018 as a prediction-market protocol. Its focus now is resolution: Augur Lituus is an oracle design that prediction markets and other applications could use, while Augur Statoblast continues the market line on Zoltar.",
+    link: { href: "/history/", text: "How Augur got here" },
+  },
+  {
+    id: "build-today",
+    question: "Can I build with Augur Lituus today?",
+    answer:
+      "Not in production. Augur Lituus is in development: the whitepaper is published and the implementation is underway in a public repository. You can read the design and the code, and assess fit, now.",
+    link: { href: "/developers/", text: "What you can explore today" },
+  },
+  {
+    id: "disagree",
+    question: "What if people disagree about the result?",
+    answer:
+      "Anyone can challenge a reported answer by staking more REP behind a different one. Most questions are expected to settle through these rounds; under the proposed rules, a fork is the rare last resort.",
+    link: { href: "/protocol/", text: "Challenges, delays and forks" },
+  },
+  {
+    id: "which-rep",
+    question: "Which REP do I hold after the Moon Fork?",
+    answer:
+      "REP migrated to the Yes universe before the window closed on 3 August 2026, including by an exchange on your behalf, is now REPv2_Yes_1. REP migrated to No is REPv2_No_1, and REP that never migrated stays in the old universe. Check the contract address, not the ticker.",
+    link: { href: "/rep/", text: "Check your REP version" },
+  },
+];
+---
+
+<!-- 08 · Common questions. The section rule is this band's only green. -->
+<section id="questions" class="home-band home-band--white home-band--dark-raised" aria-labelledby="questions-title">
+  <div class="site-frame">
+    <SectionHead index="08" label="Common questions" title="Direct answers, with the caveats attached." headingId="questions-title">
+      <p>The questions newcomers and returning REP holders ask first.</p>
+    </SectionHead>
+
+    <ul class="home-faq">
+      {questions.map(({ id, question, answer, link }) => (
+        <li class="home-faq__item">
+          <h3 id={`faq-${id}`} class="home-faq__question">{question}</h3>
+          <p class="home-faq__answer">{answer}</p>
+          <a class="home-arrow-link" href={link.href}>
+            {link.text}
+            <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <a class="home-arrow-link home-more" href="/faq/">
+      View all questions
+      <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+    </a>
+  </div>
+</section>

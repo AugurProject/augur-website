@@ -1,0 +1,52 @@
+---
+import "@/components/ui/button.css";
+import { buttonVariants } from "@/components/ui/button-variants";
+import QuestionRecord from "./QuestionRecord.astro";
+import { communityChannels } from "@/lib/site";
+
+const discord = communityChannels.find(({ id }) => id === "discord")!;
+const otherChannels = communityChannels.filter(({ id }) => id !== "discord");
+---
+
+<!-- 09 · Closing action. A fixed Navy band; the footer continues it. -->
+<section id="next" class="home-band home-band--navy home-close" data-theme="dark" aria-labelledby="next-title">
+  <div class="site-frame">
+    <div class="home-close__grid">
+      <div class="home-close__message">
+        <p class="home-eyebrow home-eyebrow--quiet augur-type-editorial-label">
+          <span class="home-eyebrow__rule" aria-hidden="true"></span>
+          09 · Next steps
+        </p>
+        <h2 id="next-title" class="home-close__lines">
+          <span>Explore the protocol.</span>
+          <span>Inspect the open work.</span>
+          <span>Join the conversation.</span>
+        </h2>
+        <div class="home-actions">
+          <a class={buttonVariants({ size: "lg" })} href="/protocol/">How Augur works</a>
+          <a class={`${buttonVariants({ variant: "outline", size: "lg" })} home-external`} href={discord.href}>
+            Join the Discord<span class="home-sr"> (community discussion)</span>
+            <svg class="site-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="8 7 17 7 17 16" /></svg>
+          </a>
+        </div>
+        <div class="home-community">
+          <p class="home-community__intro">
+            Augur is a community project. Questions, ideas and reports go to the community channels.
+          </p>
+          <ul class="home-community__channels" aria-label="Community channels">
+            {otherChannels.map(({ label, handle, href }) => (
+              <li>
+                <span class="augur-type-editorial-label">{label}</span>
+                <a href={href}>{handle}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div class="home-close__record">
+        <QuestionRecord variant="closing" idPrefix="closing-record" />
+      </div>
+    </div>
+  </div>
+</section>

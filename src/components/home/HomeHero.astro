@@ -1,0 +1,85 @@
+---
+import "@/components/ui/button.css";
+import { buttonVariants } from "@/components/ui/button-variants";
+import QuestionRecord from "./QuestionRecord.astro";
+import { sourceById } from "@/lib/evidence";
+
+const whitepaper = sourceById("lituus-whitepaper");
+
+const propositions = [
+  {
+    label: "Permissionless",
+    line: "No approval needed to ask or to report. Fees, bonds and token requirements apply.",
+    link: { href: "/protocol/", text: "How access works" },
+  },
+  {
+    label: "Economically secured",
+    line: "Reporters put REP at risk, so a wrong answer is designed to be costly.",
+    link: { href: "/protocol/", text: "Security assumptions" },
+  },
+  {
+    label: "Open work",
+    line: "Open-source code and research, developed in public.",
+    link: { href: "#open-work", text: "Inspect the work" },
+  },
+  {
+    label: "Zoltar",
+    line: "Different oracle designs can share REP if they handle forking.",
+    link: { href: "#zoltar", text: "The shared foundation" },
+  },
+];
+---
+
+<!-- 01 · Orientation. A fixed Navy band in both themes (issue #6). -->
+<section class="home-band home-band--navy home-hero" data-theme="dark" aria-labelledby="home-title">
+  <div class="site-frame">
+    <div class="home-hero__grid">
+      <div class="home-hero__message">
+        <p class="home-eyebrow augur-type-editorial-label">
+          <span class="home-eyebrow__rule" aria-hidden="true"></span>
+          Augur Lituus · In development
+        </p>
+        <h1 id="home-title" class="home-hero__title">The Frontier of Decentralized Truth</h1>
+        <p class="home-hero__lead">
+          Augur Lituus is permissionless, decentralized resolution infrastructure in development for prediction
+          markets and applications that depend on real-world outcomes.
+        </p>
+        <div class="home-actions">
+          <a class={buttonVariants({ size: "lg" })} href="/protocol/">Explore the protocol</a>
+          <a class={`${buttonVariants({ variant: "outline", size: "lg" })} home-external`} href={whitepaper.url}>
+            Read the whitepaper<span class="home-sr"> (PDF on GitHub)</span>
+            <svg class="site-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="8 7 17 7 17 16" /></svg>
+          </a>
+        </div>
+        <p class="home-hero__returning">
+          <span>Returning to Augur?</span>
+          <a href="/history/">See what changed</a>
+          <span aria-hidden="true">·</span>
+          <a href="/rep/">Check your REP version</a>
+        </p>
+      </div>
+
+      <div class="home-hero__record">
+        <QuestionRecord variant="hero" idPrefix="hero-record">
+          <a class="q-record__follow" href="#why">
+            Follow this question
+            <svg class="site-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" /></svg>
+          </a>
+        </QuestionRecord>
+      </div>
+    </div>
+
+    <ul class="home-props" aria-label="What Augur Lituus offers">
+      {propositions.map(({ label, line, link }) => (
+        <li>
+          <p class="home-props__label augur-type-editorial-label">{label}</p>
+          <p class="home-props__line">{line}</p>
+          <a class="home-arrow-link" href={link.href}>
+            {link.text}
+            <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

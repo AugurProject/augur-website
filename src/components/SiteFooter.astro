@@ -1,21 +1,32 @@
 ---
-import { primaryNavigation, resourceNavigation } from "@/lib/site";
+import { communityChannels, primaryNavigation, resourceNavigation } from "@/lib/site";
+
+type Props = {
+  /** "navy" continues the page's closing Navy band (homepage). */
+  tone?: "default" | "navy";
+};
+
+const { tone = "default" } = Astro.props;
 
 const groups = [
   { title: "Explore", links: primaryNavigation },
   { title: "Resources", links: resourceNavigation },
   {
+    title: "Community",
+    links: communityChannels.map(({ label, href }) => ({ href, label })),
+  },
+  {
     title: "Project",
     links: [
       { href: "/about/", label: "About" },
-      { href: "/about/#contact", label: "Contact" },
-      { href: "/about/#foundation", label: "Lituus Foundation" },
+      { href: "/about/#community", label: "Contact" },
+      { href: "https://lituus.foundation", label: "Lituus Foundation" },
     ],
   },
 ];
 ---
 
-<footer class="site-footer">
+<footer class:list={["site-footer", { "site-footer--navy": tone === "navy" }]} data-theme={tone === "navy" ? "dark" : undefined}>
   <div class="site-frame site-footer__inner">
     <div class="site-footer__intro">
       <a class="site-footer__brand" href="/" aria-label="Augur home">

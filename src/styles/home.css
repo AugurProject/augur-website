@@ -1,0 +1,2159 @@
+/* Homepage composition (M2). Website-owned layout for the nine-part narrative
+   in SPEC.md §5, following the homepage design concept v2. Colour, type
+   families, focus and motion policy come from the pinned design-system theme;
+   this file only arranges semantic roles.
+
+   Departures from the pinned guidance, all proposals in the concept and
+   recorded in the PR: the 64px hero headline, Sora Light (300) for the cover
+   and closing lines, and three fixed Navy bands that stay dark in both
+   themes. */
+@import "@fontsource/sora/300.css";
+
+.home {
+  --home-gap: 24px;
+  --home-band-pad: clamp(3.5rem, 7vw, 6rem);
+  --home-block-gap: clamp(3rem, 6vw, 4.5rem);
+}
+
+/* ------------------------------------------------------------------ bands */
+
+/* Each band names its light surface; in the dark theme bands sit on the Navy
+   canvas unless they carry --dark-raised (Surface 1). The Navy bands carry
+   data-theme="dark", so every role inside them is the dark role. */
+.home-band {
+  --band-bg: var(--background);
+  --band-raised: var(--card);
+  --stair-fill: var(--muted);
+  padding-block: var(--home-band-pad);
+  background: var(--band-bg);
+  color: var(--foreground);
+}
+
+.home-band--paper {
+  --band-bg: var(--background);
+  --band-raised: var(--card);
+}
+
+.home-band--white {
+  --band-bg: var(--card);
+  --band-raised: var(--background);
+}
+
+.home-band--muted {
+  --band-bg: var(--muted);
+  --band-raised: var(--card);
+}
+
+.home-band--navy,
+.home-band--zoltar {
+  --band-bg: var(--background);
+  --band-raised: var(--popover);
+  --stair-fill: var(--card);
+}
+
+:root[data-theme="dark"] :is(.home-band--paper, .home-band--white, .home-band--muted) {
+  --band-bg: var(--background);
+  --band-raised: var(--card);
+  --stair-fill: var(--card);
+}
+
+:root[data-theme="dark"] .home-band--dark-raised {
+  --band-bg: var(--card);
+  --band-raised: var(--popover);
+  --stair-fill: var(--popover);
+}
+
+:root[data-theme="dark"] .home-band--zoltar {
+  --band-bg: var(--popover);
+  --band-raised: var(--accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) :is(.home-band--paper, .home-band--white, .home-band--muted) {
+    --band-bg: var(--background);
+    --band-raised: var(--card);
+    --stair-fill: var(--card);
+  }
+
+  :root:not([data-theme="light"]) .home-band--dark-raised {
+    --band-bg: var(--card);
+    --band-raised: var(--popover);
+    --stair-fill: var(--popover);
+  }
+
+  :root:not([data-theme="light"]) .home-band--zoltar {
+    --band-bg: var(--popover);
+    --band-raised: var(--accent);
+  }
+}
+
+/* --------------------------------------------------------- shared pieces */
+
+.home p,
+.home li {
+  text-wrap: pretty;
+}
+
+.home-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The short orienting rule: the band's green (Deep on light, Green on Navy). */
+.home-rule {
+  display: block;
+  width: 48px;
+  height: 2px;
+  margin: var(--augur-spacing-lg) 0 var(--augur-spacing-xl);
+  background: var(--primary);
+}
+
+.home-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--augur-spacing-md);
+  margin: 0;
+  color: var(--primary);
+}
+
+.home-eyebrow--quiet {
+  color: var(--muted-foreground);
+}
+
+.home-eyebrow__rule {
+  flex: none;
+  width: 24px;
+  height: 2px;
+  background: currentColor;
+}
+
+/* A tracked label with an optional muted aside: "LABEL  Aside". */
+.home-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--augur-spacing-xs) var(--augur-spacing-lg);
+  margin: 0 0 var(--augur-spacing-lg);
+  color: var(--foreground);
+}
+
+.home-label__aside {
+  color: var(--muted-foreground);
+}
+
+.home-caption {
+  margin: var(--augur-spacing-lg) 0 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-md);
+  margin-top: var(--augur-spacing-2xl);
+}
+
+/* Text actions: Sora, always underlined, so a link never relies on colour. */
+.home-arrow-link {
+  display: inline;
+  color: var(--foreground);
+  font-family: var(--augur-font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+.home-arrow-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.home-arrow-link .site-icon {
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: -0.125em;
+}
+
+/* A band's green text action (06). */
+.home-arrow-link--signal {
+  color: var(--primary);
+}
+
+.home-more {
+  display: inline-block;
+  margin-top: var(--augur-spacing-2xl);
+}
+
+/* Status markers: the word carries the state; the square shape reinforces it. */
+.home-marker {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid currentColor;
+}
+
+.home-marker[data-shape="filled"] {
+  background: currentColor;
+}
+
+.home-marker[data-shape="half"]::after {
+  content: "";
+  position: absolute;
+  inset: 0 50% 0 0;
+  background: currentColor;
+}
+
+.home-marker[data-shape="dashed"] {
+  border-style: dashed;
+}
+
+/* ----------------------------------------------------------- section head */
+
+.home-head {
+  display: grid;
+  gap: var(--augur-spacing-xl) var(--home-gap);
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  padding-top: var(--augur-spacing-lg);
+  border-top: 1px solid var(--border);
+}
+
+.home-head__index {
+  display: flex;
+  gap: var(--augur-spacing-md);
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.home-head__number {
+  color: var(--foreground);
+}
+
+.home-head__title {
+  max-width: 22ch;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.home-head__lead p {
+  max-width: 58ch;
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 20px;
+  line-height: 30px;
+}
+
+@media (max-width: 37.49rem) {
+  .home-head__lead p {
+    font-size: 18px;
+    line-height: 28px;
+  }
+}
+
+@media (min-width: 64rem) {
+  .home-head {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home-head__index {
+    grid-column: 1 / span 3;
+  }
+
+  .home-head__main {
+    grid-column: 4 / -1;
+  }
+}
+
+/* -------------------------------------------------------------- 01 hero */
+
+.home-hero {
+  padding-block: clamp(3rem, 6vw, 5rem) clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.home-hero__grid {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 3rem) var(--home-gap);
+}
+
+.home-hero__title {
+  margin: var(--augur-spacing-xl) 0 0;
+  font-family: var(--augur-font-primary);
+  font-size: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+  font-weight: 600;
+  line-height: 1.0625;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.home-hero__lead {
+  max-width: 36em;
+  margin: var(--augur-spacing-xl) 0 0;
+  color: var(--muted-foreground);
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.home-hero__returning {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-xs) var(--augur-spacing-sm);
+  margin: var(--augur-spacing-xl) 0 0;
+  color: var(--muted-foreground);
+  font-family: var(--augur-font-primary);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-hero__returning a {
+  color: var(--foreground);
+}
+
+.home-props {
+  display: grid;
+  gap: var(--augur-spacing-2xl) var(--home-gap);
+  margin: clamp(3rem, 5vw, 4rem) 0 0;
+  padding: var(--augur-spacing-xl) 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.home-props li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.home-props__label {
+  margin: 0 0 var(--augur-spacing-sm);
+  color: var(--muted-foreground);
+}
+
+.home-props__line {
+  margin: 0 0 var(--augur-spacing-md);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-props .home-arrow-link {
+  margin-top: auto;
+}
+
+@media (max-width: 37.49rem) {
+  .home-hero__lead {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .home .home-actions > a {
+    flex: 1 1 100%;
+  }
+}
+
+@media (min-width: 37.5rem) {
+  .home-props {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 50rem) {
+  .home-hero__grid {
+    grid-template-columns: minmax(0, 7fr) minmax(18rem, 5fr);
+    align-items: center;
+  }
+}
+
+@media (min-width: 64rem) {
+  .home-props {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ------------------------------------------------- question record (01, 09) */
+
+.q-record {
+  container-type: inline-size;
+  display: grid;
+  gap: var(--augur-spacing-xl);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--band-raised);
+  color: var(--foreground);
+}
+
+.q-record__header {
+  display: flex;
+  align-items: center;
+  gap: var(--augur-spacing-md);
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.q-record__rule {
+  flex: none;
+  width: 24px;
+  height: 2px;
+  background: var(--muted-foreground);
+}
+
+.q-record__header > span:not(.q-record__rule) {
+  white-space: nowrap;
+}
+
+.q-record__tag {
+  margin-inline-start: auto;
+}
+
+.q-record__question {
+  margin: 0;
+  font-family: var(--augur-font-primary);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: -0.005em;
+}
+
+.q-record--closing .q-record__question {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.q-record__fields {
+  display: grid;
+  gap: var(--augur-spacing-lg);
+  margin: 0;
+}
+
+.q-record__fields dt {
+  color: var(--muted-foreground);
+}
+
+.q-record__fields dd {
+  margin: var(--augur-spacing-xs) 0 0;
+}
+
+.q-record__group-label {
+  margin: 0 0 var(--augur-spacing-sm);
+  color: var(--muted-foreground);
+}
+
+/* Outcomes are record fields, not controls: equal cells, none emphasised. */
+.q-record__outcomes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--augur-spacing-sm);
+}
+
+.q-record__outcomes li {
+  padding: 10px var(--augur-spacing-sm);
+  background: var(--accent);
+  font-family: var(--augur-font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: center;
+}
+
+.q-record__state {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--augur-spacing-sm);
+}
+
+/* The path between states: quiet and dashed while the question is open. */
+.q-record__state::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  left: 6px;
+  border-top: 1px dashed var(--input);
+  transform-origin: left center;
+}
+
+.q-record__state li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--augur-spacing-sm);
+  color: var(--muted-foreground);
+  font-family: var(--augur-font-primary);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.q-record__state li:first-child {
+  align-items: flex-start;
+}
+
+.q-record__state li:last-child {
+  align-items: flex-end;
+}
+
+.q-record__marker {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--muted-foreground);
+  background: var(--band-raised);
+}
+
+.q-record__state li[data-current] {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.q-record__state li[data-current] .q-record__marker {
+  border-color: var(--foreground);
+  background: var(--foreground);
+}
+
+/* The closing record draws the whole path; the outcome stays unrecorded. */
+.q-record--closing .q-record__state::before {
+  top: 5px;
+  border-top: 2px solid var(--muted-foreground);
+}
+
+@container (max-width: 22rem) {
+  .q-record__question {
+    font-size: 19px;
+    line-height: 26px;
+  }
+
+  .q-record__state li {
+    font-size: 13px;
+  }
+}
+
+.q-record__follow {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--foreground);
+  font-family: var(--augur-font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.q-record__follow:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* --------------------------------------------------- 02 why resolution */
+
+.home-why {
+  display: grid;
+  gap: var(--home-block-gap) var(--home-gap);
+}
+
+.home-why__prose p {
+  max-width: 60ch;
+  margin: 0 0 var(--augur-spacing-lg);
+  font-size: 17px;
+  line-height: 28px;
+}
+
+.home-why__prose .home-pull {
+  max-width: 20ch;
+  margin: var(--augur-spacing-2xl) 0 0;
+  font-family: var(--augur-font-primary);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 36px;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.home-verdicts {
+  display: grid;
+  gap: var(--augur-spacing-md);
+}
+
+.home-verdict {
+  display: flex;
+  flex-direction: column;
+  gap: var(--augur-spacing-md);
+  padding: var(--augur-spacing-xl);
+  background: var(--band-raised);
+}
+
+.home-verdict__label {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.home-verdict__evidence {
+  margin: 0;
+}
+
+.home-verdict__result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--augur-spacing-sm) var(--augur-spacing-md);
+  margin: auto 0 0;
+  padding-top: var(--augur-spacing-md);
+  border-top: 1px solid var(--border);
+}
+
+.home-verdict__key {
+  color: var(--muted-foreground);
+}
+
+.home-verdict__result strong {
+  font-family: var(--augur-font-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Deep only reinforces the word on the qualifying verdict. */
+.home-verdict[data-qualifies] .home-verdict__result {
+  color: var(--primary);
+}
+
+@media (max-width: 37.49rem) {
+  .home-why__prose .home-pull {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .home-why__prose p {
+    font-size: 16px;
+    line-height: 26px;
+  }
+}
+
+@media (min-width: 37.5rem) and (max-width: 63.99rem) {
+  .home-verdicts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .home-why {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home-why__prose {
+    grid-column: 1 / span 6;
+  }
+
+  .home-why__evidence {
+    grid-column: 8 / -1;
+  }
+}
+
+/* ------------------------------------------- 03 the escalation staircase */
+
+.stair {
+  --stair-h: 13.5rem;
+  --stair-head: 4.5rem;
+  --stair-cols: 1fr 1fr 1.8fr 1.1fr 1.1fr;
+  --stair-path: var(--primary);
+  display: grid;
+  gap: var(--augur-spacing-2xl);
+  margin: 0;
+}
+
+.stair__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--augur-spacing-sm) var(--home-gap);
+}
+
+.stair__caption .home-label {
+  margin: 0;
+}
+
+.stair__note {
+  max-width: 52ch;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* The chart is decorative (aria-hidden); the ordered list below is the
+   content. Below 45rem the chart gives way to rungs inside each stage. */
+.stair__chart {
+  display: none;
+}
+
+.stair__stages {
+  display: grid;
+  gap: var(--augur-spacing-2xl);
+}
+
+.stair__stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--augur-spacing-md);
+  min-width: 0;
+}
+
+.stair__name {
+  display: flex;
+  gap: var(--augur-spacing-sm);
+  margin: 0;
+  font-family: var(--augur-font-primary);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.stair__num {
+  color: var(--muted-foreground);
+  font-weight: 400;
+}
+
+.stair__what {
+  margin: 0;
+}
+
+.stair__example {
+  margin: 0;
+  padding-top: var(--augur-spacing-md);
+  border-top: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.stair__example > span {
+  display: block;
+  margin-bottom: var(--augur-spacing-xs);
+  color: var(--foreground);
+}
+
+.stair__stage--final .stair__name {
+  color: var(--stair-path);
+}
+
+/* Mobile ladder: each stage opens with a rung whose length is the stake. */
+.stair__rung {
+  position: relative;
+  display: block;
+  height: 10px;
+  margin-bottom: var(--augur-spacing-xs);
+  background: var(--stair-fill);
+  border-right: 3px solid var(--stair-path);
+}
+
+.stair__rung--ask {
+  width: 12px;
+  background: var(--stair-path);
+}
+
+.stair__rung--report {
+  width: 26%;
+}
+
+.stair__rung--challenge {
+  width: 44%;
+  margin-bottom: 36px;
+}
+
+.stair__rung--challenge::before,
+.stair__rung--challenge::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 10px;
+  background: var(--stair-fill);
+  border-right: 3px solid var(--stair-path);
+}
+
+.stair__rung--challenge::before {
+  top: 16px;
+  width: calc(62 / 44 * 100%);
+}
+
+.stair__rung--challenge::after {
+  top: 32px;
+  width: calc(80 / 44 * 100%);
+}
+
+.stair__rung--final {
+  width: 80%;
+}
+
+.stair__rung--act {
+  width: 80%;
+  border: 1px solid var(--input);
+  background: transparent;
+}
+
+.stair__exceptions {
+  display: grid;
+  gap: var(--augur-spacing-lg) var(--home-gap);
+  padding-top: var(--augur-spacing-xl);
+  border-top: 1px solid var(--border);
+}
+
+.stair__exceptions .home-label {
+  margin: 0;
+}
+
+.stair__exceptions ul {
+  display: grid;
+  gap: var(--augur-spacing-md) var(--augur-spacing-2xl);
+}
+
+.stair__exceptions li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--augur-spacing-md);
+}
+
+.stair__exceptions .home-marker {
+  margin-top: 6px;
+  color: var(--muted-foreground);
+}
+
+.stair__exceptions p {
+  max-width: 54ch;
+  margin: 0;
+}
+
+.stair__exceptions strong {
+  font-weight: 600;
+}
+
+.stair__exceptions .home-arrow-link {
+  justify-self: start;
+}
+
+@media (min-width: 45rem) {
+  .stair {
+    --stair-cols: 0.7fr 0.9fr 1.6fr 1fr 1.5fr;
+  }
+
+  .stair__rung {
+    display: none;
+  }
+
+  .stair__chart {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--stair-cols);
+    grid-template-rows: calc(var(--stair-h) + var(--stair-head)) auto;
+    border-bottom: 0;
+  }
+
+  /* The ground line. */
+  .stair__chart::after {
+    content: "";
+    grid-row: 1;
+    grid-column: 1 / -1;
+    align-self: end;
+    border-bottom: 1px solid var(--input);
+  }
+
+  .stair__cell {
+    position: relative;
+    grid-row: 1;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .stair__cell--ask { grid-column: 1; }
+  .stair__cell--report { grid-column: 2; }
+  .stair__cell--challenge { grid-column: 3; }
+  .stair__cell--final { grid-column: 4; }
+  .stair__cell--act { grid-column: 5; }
+
+  .stair__ground {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 6px;
+    height: 2px;
+    background: var(--stair-path);
+  }
+
+  .stair__node {
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background: var(--stair-path);
+  }
+
+  /* A step: tonal mass, a green tread, and a green riser from the previous
+     height. Heights are fractions of --stair-h, never amounts. */
+  .stair__step {
+    position: relative;
+    flex: 1;
+    height: calc(var(--stair-h) * var(--h));
+    border-top: 2px solid var(--stair-path);
+    background: var(--stair-fill);
+    z-index: 1;
+  }
+
+  .stair__step::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 2px;
+    height: calc(var(--stair-h) * (var(--h) - var(--prev)) + 2px);
+    background: var(--stair-path);
+  }
+
+  .stair__landing-label {
+    position: absolute;
+    top: var(--augur-spacing-md);
+    left: var(--augur-spacing-lg);
+    color: var(--stair-path);
+    font-family: var(--augur-font-primary);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+  }
+
+  .stair__final-node {
+    position: absolute;
+    top: -7px;
+    left: -5px;
+    z-index: 2;
+    width: 12px;
+    height: 12px;
+    background: var(--stair-path);
+  }
+
+  /* The rare fork: a neutral dashed climb through the threshold. */
+  .stair__fork {
+    position: absolute;
+    right: calc(100% / 6 - 1px);
+    bottom: calc(var(--stair-h) * 0.8);
+    z-index: 2;
+    width: 0;
+    height: calc(var(--stair-h) * 0.2 + var(--stair-head) - 1.5rem);
+  }
+
+  .stair__fork-riser {
+    position: absolute;
+    top: 2.25rem;
+    bottom: 0;
+    left: 0;
+    border-left: 1.5px dashed var(--muted-foreground);
+  }
+
+  .stair__fork-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 6px 10px;
+    border: 1.5px dashed var(--muted-foreground);
+    background: var(--band-bg);
+    color: var(--foreground);
+    font-family: var(--augur-font-primary);
+    font-size: 13px;
+    line-height: 20px;
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+
+  .stair__threshold {
+    position: relative;
+    grid-row: 1;
+    grid-column: 2 / 5;
+    align-self: end;
+    height: calc(var(--stair-h) * 0.92);
+    border-top: 1.5px dashed var(--muted-foreground);
+    pointer-events: none;
+  }
+
+  .stair__threshold span {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    padding-bottom: 4px;
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  /* After Final, the application takes the answer: a neutral hand-off. */
+  .stair__handoff {
+    position: absolute;
+    bottom: calc(var(--stair-h) * 0.8 - 1px);
+    left: 0;
+    width: 32px;
+    height: 2px;
+    background: var(--muted-foreground);
+  }
+
+  .stair__handoff::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--muted-foreground);
+    border-right: 2px solid var(--muted-foreground);
+    transform: rotate(45deg);
+  }
+
+  .stair__act-box {
+    position: absolute;
+    bottom: calc(var(--stair-h) * 0.8 - 1.375rem);
+    left: 40px;
+    right: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--input);
+    background: var(--band-bg);
+    font-family: var(--augur-font-primary);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 22px;
+    text-align: center;
+  }
+
+  .stair__axis {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: var(--stair-cols);
+    padding-top: var(--augur-spacing-md);
+    font-family: var(--augur-font-primary);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+  }
+
+  .stair__axis li {
+    padding-right: var(--augur-spacing-md);
+  }
+
+  .stair__stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--augur-spacing-2xl) var(--home-gap);
+  }
+
+  .stair__exceptions ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Wide: each stage's text sits under its own part of the climb, with the
+   stage rows aligned across columns. */
+@media (min-width: 70rem) {
+  .stair {
+    --stair-cols: 1fr 1fr 1.8fr 1.1fr 1.1fr;
+  }
+
+  .stair__axis {
+    display: none;
+  }
+
+  .stair__stages {
+    grid-template-columns: var(--stair-cols);
+    grid-template-rows: repeat(3, auto);
+    gap: var(--augur-spacing-md) 0;
+    margin-top: calc(-1 * var(--augur-spacing-md));
+  }
+
+  .stair__stage {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    gap: inherit;
+    padding-right: var(--home-gap);
+  }
+
+  .stair__exceptions {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .stair__exceptions .home-label {
+    grid-column: 1 / span 2;
+  }
+
+  .stair__exceptions ul,
+  .stair__exceptions .home-arrow-link {
+    grid-column: 3 / -1;
+  }
+}
+
+/* -------------------------------------------------------- 04 open work */
+
+.home-sources__list {
+  border-top: 2px solid var(--foreground);
+}
+
+.home-source {
+  display: grid;
+  gap: var(--augur-spacing-sm) var(--home-gap);
+  padding: var(--augur-spacing-xl) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.home-source__product {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-xs) var(--augur-spacing-md);
+  margin: 0;
+}
+
+.home-source__kind {
+  color: var(--muted-foreground);
+}
+
+.home-source__title {
+  margin: 0 0 var(--augur-spacing-xs);
+  font-family: var(--augur-font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.home-source__purpose {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.home-source__record {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.home-source__record .augur-type-editorial-label {
+  color: var(--muted-foreground);
+}
+
+.home-source__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-sm) var(--augur-spacing-xl);
+  margin: 0;
+}
+
+.home-roadmap {
+  margin-top: var(--home-block-gap);
+}
+
+.home-roadmap__columns {
+  display: grid;
+  gap: var(--augur-spacing-2xl) var(--home-gap);
+}
+
+.home-roadmap__column {
+  padding-top: var(--augur-spacing-lg);
+  border-top: 2px solid var(--foreground);
+}
+
+.home-roadmap__status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 var(--augur-spacing-sm);
+  font-family: var(--augur-font-primary);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.home-roadmap__item {
+  padding: var(--augur-spacing-lg) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.home-roadmap__product {
+  margin: 0 0 var(--augur-spacing-xs);
+  color: var(--muted-foreground);
+}
+
+.home-roadmap__deliverable {
+  margin: 0 0 var(--augur-spacing-sm);
+}
+
+.home-roadmap__item[data-secondary] .home-roadmap__deliverable {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-roadmap__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px var(--augur-spacing-sm);
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.home-roadmap__meta a {
+  color: var(--foreground);
+  white-space: nowrap;
+}
+
+.home-field {
+  display: grid;
+  gap: var(--augur-spacing-sm) var(--home-gap);
+  margin-top: var(--home-block-gap);
+  padding: var(--augur-spacing-xl) 0;
+  border-block: 1px solid var(--border);
+}
+
+.home-field__label {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-xs) var(--augur-spacing-md);
+  margin: 0;
+}
+
+.home-field__text {
+  max-width: 62ch;
+  margin: 0;
+}
+
+.home-field .home-arrow-link {
+  justify-self: start;
+}
+
+@media (min-width: 48rem) {
+  .home-roadmap__columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .home-source,
+  .home-field {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: baseline;
+  }
+
+  .home-source__product,
+  .home-field__label {
+    grid-column: 1 / span 3;
+  }
+
+  .home-source__body {
+    grid-column: 4 / span 5;
+  }
+
+  .home-source__record {
+    grid-column: 9 / span 2;
+  }
+
+  .home-source__links {
+    grid-column: 11 / -1;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home-field__text {
+    grid-column: 4 / span 6;
+  }
+
+  .home-field .home-arrow-link {
+    grid-column: 10 / -1;
+    justify-self: end;
+    white-space: nowrap;
+  }
+}
+
+/* ------------------------------------------------------- 05 use cases */
+
+.home-uses {
+  display: grid;
+  gap: var(--augur-spacing-lg);
+}
+
+.home-use {
+  background: var(--band-raised);
+}
+
+.home-use article {
+  display: flex;
+  flex-direction: column;
+  gap: var(--augur-spacing-md);
+  height: 100%;
+  padding: var(--augur-spacing-xl);
+}
+
+.home-use__tag {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.home-use__name {
+  margin: 0;
+  font-family: var(--augur-font-primary);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 26px;
+}
+
+.home-use__problem {
+  margin: 0;
+}
+
+.home-use__flow {
+  margin: var(--augur-spacing-sm) 0 var(--augur-spacing-lg);
+}
+
+.home-use__flow li {
+  position: relative;
+  display: flex;
+  gap: var(--augur-spacing-md);
+  padding-bottom: var(--augur-spacing-lg);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-use__flow li:last-child {
+  padding-bottom: 0;
+}
+
+.home-use__flow li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: 2px;
+  left: 5px;
+  border-left: 1.5px solid var(--input);
+}
+
+.home-use__node {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  margin-top: 4px;
+  border: 1.5px solid var(--muted-foreground);
+  background: var(--band-raised);
+}
+
+.home-use__flow li[data-step="resolver"] {
+  font-family: var(--augur-font-primary);
+  font-weight: 600;
+}
+
+.home-use__flow li[data-step="resolver"] .home-use__node {
+  border-color: var(--foreground);
+  background: var(--foreground);
+}
+
+.home-use .home-arrow-link {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.home-fit {
+  margin-top: var(--home-block-gap);
+}
+
+.home-fit__questions {
+  display: grid;
+  gap: var(--augur-spacing-xl) var(--home-gap);
+}
+
+.home-fit__questions li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: start;
+  gap: var(--augur-spacing-xs) var(--augur-spacing-lg);
+  padding-top: var(--augur-spacing-lg);
+  border-top: 2px solid var(--foreground);
+}
+
+.home-fit__number {
+  grid-row: span 2;
+  font-family: var(--augur-font-primary);
+  font-size: 28px;
+  line-height: 30px;
+}
+
+.home-fit__question {
+  margin: 0;
+  font-family: var(--augur-font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.home-fit__detail {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-fit__action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--augur-spacing-lg) var(--augur-spacing-xl);
+  margin-top: var(--augur-spacing-2xl);
+}
+
+.home-fit__note {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@media (min-width: 48rem) {
+  .home-uses,
+  .home-fit__questions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* --------------------------------------------------------- 06 zoltar */
+
+.home-zoltar {
+  display: grid;
+  gap: var(--home-block-gap) var(--home-gap);
+}
+
+.home-zoltar__intro {
+  max-width: 44ch;
+  margin: 0;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.home-quote {
+  margin: var(--augur-spacing-2xl) 0;
+  padding-left: var(--augur-spacing-xl);
+  border-left: 2px solid var(--border);
+}
+
+.home-quote p {
+  margin: 0;
+  font-family: var(--augur-font-primary);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 34px;
+  letter-spacing: -0.005em;
+}
+
+.home-quote footer {
+  margin-top: var(--augur-spacing-lg);
+  color: var(--muted-foreground);
+}
+
+.home-quote cite {
+  font-style: normal;
+}
+
+.home-quote cite a {
+  color: inherit;
+}
+
+.home-zoltar__links {
+  display: grid;
+  gap: var(--augur-spacing-md);
+}
+
+.home-also {
+  display: grid;
+  gap: var(--augur-spacing-lg) var(--home-gap);
+  margin-top: var(--home-block-gap);
+  padding-top: var(--augur-spacing-xl);
+  border-top: 1px solid var(--border);
+}
+
+.home-also__label {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.home-also ul {
+  display: grid;
+  gap: var(--augur-spacing-xl) var(--home-gap);
+}
+
+.home-also li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.home-also__name {
+  margin: 0 0 var(--augur-spacing-xs);
+  font-family: var(--augur-font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.home-also__line {
+  max-width: 56ch;
+  margin: 0 0 var(--augur-spacing-sm);
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-also__repo {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-also__repo a {
+  color: var(--foreground);
+}
+
+@media (max-width: 37.49rem) {
+  .home-quote p {
+    font-size: 22px;
+    line-height: 30px;
+  }
+}
+
+@media (min-width: 48rem) {
+  .home-also ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .home-zoltar {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .home-zoltar__text {
+    grid-column: 1 / span 5;
+  }
+
+  .home-zoltar__figure {
+    grid-column: 6 / -1;
+  }
+
+  .home-also {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home-also__label {
+    grid-column: 1 / span 3;
+  }
+
+  .home-also ul,
+  .home-also__repo {
+    grid-column: 4 / -1;
+  }
+}
+
+/* ------------------------------------------ 06 figure: branching ledger */
+
+.ledger {
+  container-type: inline-size;
+  display: grid;
+  gap: var(--augur-spacing-lg);
+  margin: 0;
+}
+
+.ledger__tag {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.ledger__diagram {
+  position: relative;
+  height: 22.5rem;
+}
+
+.ledger__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 1.5;
+}
+
+.ledger__lines * {
+  vector-effect: non-scaling-stroke;
+}
+
+.ledger__lines--tall {
+  display: none;
+}
+
+.ledger__connector {
+  stroke: var(--input);
+  stroke-width: 1;
+}
+
+.ledger__connector--yours {
+  stroke-dasharray: 4 4;
+}
+
+.ledger__parent-line {
+  stroke-width: 2.5;
+}
+
+/* All three branches share one stroke: none is the continuation. */
+.ledger__branches path {
+  stroke: var(--foreground);
+  stroke-width: 1.5;
+}
+
+.ledger__designs li {
+  position: absolute;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 16%;
+  height: 13%;
+  border: 1px solid var(--input);
+  background: var(--band-bg);
+  font-family: var(--augur-font-primary);
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.ledger__designs li:nth-child(1) { left: 2%; }
+.ledger__designs li:nth-child(2) { left: 20%; }
+.ledger__designs li:nth-child(3) { left: 38%; }
+
+.ledger__designs li[data-yours] {
+  border-style: dashed;
+  font-weight: 600;
+}
+
+.ledger__parent,
+.ledger__fork,
+.ledger__children li {
+  margin: 0;
+}
+
+.ledger__parent strong,
+.ledger__fork strong,
+.ledger__children strong {
+  display: block;
+  font-family: var(--augur-font-primary);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.ledger__parent span,
+.ledger__fork-text span,
+.ledger__children span:not(.ledger__child-node) {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.ledger__parent {
+  position: absolute;
+  top: calc(50% + 12px);
+  left: 0;
+  max-width: 30%;
+}
+
+/* Zero-size anchors at the fork and at each branch end. */
+.ledger__fork {
+  position: absolute;
+  top: 50%;
+  left: 58%;
+  width: 0;
+  height: 0;
+}
+
+.ledger__fork-node,
+.ledger__child-node {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  width: 14px;
+  height: 14px;
+}
+
+.ledger__fork-node {
+  background: var(--foreground);
+}
+
+.ledger__fork-text {
+  position: absolute;
+  top: 14px;
+  right: 10px;
+  width: max-content;
+  max-width: 8.5rem;
+  text-align: right;
+}
+
+.ledger__children li {
+  position: absolute;
+  left: 84%;
+  width: 0;
+  height: 0;
+}
+
+.ledger__children li:nth-child(1) { top: 14%; }
+.ledger__children li:nth-child(2) { top: 50%; }
+.ledger__children li:nth-child(3) { top: 86%; }
+
+.ledger__child-node {
+  border: 1.5px solid var(--foreground);
+  background: var(--band-bg);
+}
+
+.ledger__children strong,
+.ledger__children span:not(.ledger__child-node) {
+  position: relative;
+  left: 16px;
+  width: max-content;
+}
+
+.ledger__children strong {
+  top: -11px;
+}
+
+.ledger__children span:not(.ledger__child-node) {
+  top: -11px;
+}
+
+.ledger__caption {
+  max-width: 60ch;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* Narrow: the ledger turns vertical and branches downward. */
+@container (max-width: 34rem) {
+  .ledger__diagram {
+    height: 32rem;
+  }
+
+  .ledger__lines--wide {
+    display: none;
+  }
+
+  .ledger__lines--tall {
+    display: block;
+  }
+
+  .ledger__designs li {
+    width: 28%;
+    height: 11%;
+  }
+
+  .ledger__designs li:nth-child(1) { left: 2.6667%; }
+  .ledger__designs li:nth-child(2) { left: 36%; }
+  .ledger__designs li:nth-child(3) { left: 69.3333%; }
+
+  .ledger__parent {
+    top: calc(26% + 10px);
+    max-width: 44%;
+  }
+
+  .ledger__fork {
+    top: 52%;
+    left: 50%;
+  }
+
+  .ledger__fork-text {
+    top: -11px;
+    right: auto;
+    left: 16px;
+    max-width: calc(50cqi - 1.5rem);
+    text-align: left;
+  }
+
+  .ledger__children li {
+    top: 80%;
+  }
+
+  .ledger__children li:nth-child(1) { top: 80%; left: 16.6667%; }
+  .ledger__children li:nth-child(2) { top: 80%; left: 50%; }
+  .ledger__children li:nth-child(3) { top: 80%; left: 83.3333%; }
+
+  .ledger__children strong,
+  .ledger__children span:not(.ledger__child-node) {
+    left: 0;
+    top: 14px;
+    text-align: center;
+    transform: translateX(-50%);
+  }
+}
+
+/* --------------------------------------------------------- 07 the blog */
+
+.home-posts {
+  display: grid;
+  gap: var(--home-block-gap) var(--home-gap);
+}
+
+.home-post {
+  min-width: 0;
+}
+
+.home-post--featured {
+  display: grid;
+  gap: var(--augur-spacing-xl);
+}
+
+/* A generated typographic cover (proposal): Navy field, label, short rule
+   and the title in Sora Light. It replaces old featured images without new
+   artwork, and the article's URL, title and date are unchanged. */
+.home-cover {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 16 / 7;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--background);
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+:root[data-theme="dark"] .home-cover {
+  background: var(--popover);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .home-cover {
+    background: var(--popover);
+  }
+}
+
+.home-cover__pathway {
+  color: var(--muted-foreground);
+}
+
+.home-cover__rule {
+  width: 32px;
+  height: 2px;
+  margin-top: var(--augur-spacing-xl);
+  background: var(--primary);
+}
+
+.home-cover__title {
+  max-width: 16ch;
+  margin-top: auto;
+  font-family: var(--augur-font-primary);
+  font-size: clamp(1.75rem, 1rem + 2.4vw, 2.5rem);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.home-post__body {
+  display: grid;
+  gap: var(--augur-spacing-sm);
+}
+
+.home-post__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-xs) var(--augur-spacing-lg);
+  margin: 0;
+}
+
+.home-post__title {
+  margin: 0;
+  font-family: var(--augur-font-primary);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: -0.005em;
+}
+
+.home-post--compact .home-post__title {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.home-post__title a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.home-post__title a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.home-post__summary {
+  max-width: 56ch;
+  margin: 0;
+}
+
+.home-post__byline {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-post--compact {
+  display: grid;
+  align-content: start;
+  gap: var(--augur-spacing-sm);
+  padding-top: var(--augur-spacing-lg);
+  border-top: 2px solid var(--foreground);
+}
+
+@media (min-width: 48rem) {
+  .home-posts {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home-post--featured {
+    grid-column: 1 / span 7;
+  }
+
+  .home-post--compact {
+    grid-column: 9 / -1;
+  }
+}
+
+/* ------------------------------------------------- 08 common questions */
+
+.home-faq {
+  display: grid;
+  gap: 0 clamp(1.5rem, 4vw, 3rem);
+}
+
+.home-faq__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--augur-spacing-md);
+  padding: var(--augur-spacing-xl) 0 var(--augur-spacing-2xl);
+  border-top: 1px solid var(--border);
+}
+
+.home-faq__question {
+  margin: 0;
+  font-family: var(--augur-font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.home-faq__answer {
+  max-width: 60ch;
+  margin: 0;
+}
+
+.home-faq .home-arrow-link {
+  margin-top: auto;
+}
+
+@media (min-width: 48rem) {
+  .home-faq {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ----------------------------------------------------- 09 closing band */
+
+.home-close {
+  padding-block: clamp(4rem, 9vw, 7.5rem);
+}
+
+.home-close__grid {
+  display: grid;
+  gap: var(--home-block-gap) var(--home-gap);
+}
+
+.home-close__lines {
+  display: grid;
+  margin: var(--augur-spacing-xl) 0 0;
+  font-family: var(--augur-font-primary);
+  font-size: clamp(1.75rem, 1.1rem + 2.7vw, 3rem);
+  font-weight: 300;
+  line-height: 1.1667;
+  letter-spacing: -0.01em;
+}
+
+.home-community {
+  margin-top: clamp(2.5rem, 5vw, 3rem);
+  padding-top: var(--augur-spacing-xl);
+  border-top: 1px solid var(--border);
+}
+
+.home-community__intro {
+  max-width: 52ch;
+  margin: 0 0 var(--augur-spacing-lg);
+  color: var(--muted-foreground);
+}
+
+.home-community__channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--augur-spacing-lg) var(--augur-spacing-2xl);
+}
+
+.home-community__channels li {
+  display: grid;
+  gap: var(--augur-spacing-xs);
+}
+
+.home-community__channels span {
+  color: var(--muted-foreground);
+}
+
+.home-community__channels a {
+  font-family: var(--augur-font-primary);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@media (pointer: coarse) {
+  .home-community__channels a,
+  .home-hero__returning a,
+  .home-roadmap__meta a {
+    display: inline-block;
+    padding-block: var(--augur-spacing-md);
+  }
+}
+
+@media (min-width: 64rem) {
+  .home-close__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: center;
+  }
+
+  .home-close__message {
+    grid-column: 1 / span 7;
+  }
+
+  .home-close__record {
+    grid-column: 8 / -1;
+  }
+}
+
+/* ------------------------------------------------------------- motion */
+
+/* Played once when a figure first enters view (index.astro). Armed figures
+   start from their first frame; everything else is static. The design
+   system's reduced-motion rule also collapses any animation. */
+@keyframes home-rise {
+  from { clip-path: inset(100% -4px 0 -4px); }
+  to { clip-path: inset(-4px -4px 0 -4px); }
+}
+
+@keyframes home-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes home-grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes home-reveal-right {
+  from { clip-path: inset(0 42% 0 58%); }
+  to { clip-path: inset(-4px -4px -4px -4px); }
+}
+
+@keyframes home-reveal-down {
+  from { clip-path: inset(52% 0 48% 0); }
+  to { clip-path: inset(-4px -4px -4px -4px); }
+}
+
+[data-motion-state="armed"] .stair__step {
+  clip-path: inset(100% -4px 0 -4px);
+}
+
+[data-motion-state="armed"] :is(.stair__ground, .stair__node, .stair__fork, .stair__threshold, .stair__handoff, .stair__act-box),
+[data-motion-state="armed"] :is(.ledger__children li, .ledger__fork-text),
+[data-motion-state="armed"].q-record .q-record__state li:not([data-current]) .q-record__marker {
+  opacity: 0;
+}
+
+[data-motion-state="armed"] .ledger__branches.ledger__lines--wide {
+  clip-path: inset(0 42% 0 58%);
+}
+
+[data-motion-state="armed"] .ledger__branches.ledger__lines--tall {
+  clip-path: inset(52% 0 48% 0);
+}
+
+[data-motion-state="armed"].q-record--closing .q-record__state::before {
+  transform: scaleX(0);
+}
+
+[data-motion-state="play"] :is(.stair__ground, .stair__node) {
+  animation: home-fade 200ms ease-out both;
+}
+
+[data-motion-state="play"] .stair__step {
+  animation: home-rise 260ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 160ms);
+}
+
+[data-motion-state="play"] :is(.stair__threshold, .stair__fork) {
+  animation: home-fade 300ms ease-out 1040ms both;
+}
+
+[data-motion-state="play"] :is(.stair__handoff, .stair__act-box) {
+  animation: home-fade 300ms ease-out 1200ms both;
+}
+
+[data-motion-state="play"] .ledger__branches.ledger__lines--wide {
+  animation: home-reveal-right 520ms cubic-bezier(0.3, 0.6, 0.2, 1) both;
+}
+
+[data-motion-state="play"] .ledger__branches.ledger__lines--tall {
+  animation: home-reveal-down 520ms cubic-bezier(0.3, 0.6, 0.2, 1) both;
+}
+
+[data-motion-state="play"] .ledger__fork-text {
+  animation: home-fade 240ms ease-out both;
+}
+
+[data-motion-state="play"] .ledger__children li {
+  animation: home-fade 260ms ease-out 480ms both;
+}
+
+[data-motion-state="play"].q-record--closing .q-record__state::before {
+  animation: home-grow-x 900ms cubic-bezier(0.4, 0, 0.2, 1) 120ms both;
+}
+
+[data-motion-state="play"].q-record .q-record__state li:not([data-current]) .q-record__marker {
+  animation: home-fade 200ms ease-out both;
+  animation-delay: calc(var(--i, 0) * 300ms);
+}
+
+@media print {
+  [data-motion-state] *,
+  [data-motion-state] *::before {
+    animation: none !important;
+    clip-path: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

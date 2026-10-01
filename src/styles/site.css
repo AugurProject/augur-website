@@ -327,6 +327,13 @@ body {
   line-height: 0;
 }
 
+/* Homepage: the footer continues the closing Navy band (data-theme="dark"
+   on the footer), under a Surface 3 hairline. */
+.site-footer--navy {
+  background: var(--background);
+  color: var(--foreground);
+}
+
 .site-footer__intro p {
   max-width: 36ch;
   margin: var(--augur-spacing-xl) 0 0;
@@ -335,7 +342,7 @@ body {
 
 .site-footer__links {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--augur-spacing-xl);
 }
 

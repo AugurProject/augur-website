@@ -1,0 +1,67 @@
+---
+import { workedExample } from "@/lib/worked-example";
+
+// The brand foundation's query record applied to the worked example. The
+// hero opens it; the closing band returns to it with the whole path drawn
+// and the outcome still unrecorded. It never shows a report or a result.
+type Props = {
+  variant: "hero" | "closing";
+  idPrefix: string;
+};
+
+const { variant, idPrefix } = Astro.props;
+const { question, cutoff, outcomes, states } = workedExample;
+const current = "Asked";
+---
+
+<article
+  class={`q-record q-record--${variant}`}
+  aria-labelledby={`${idPrefix}-label`}
+  data-motion={variant === "closing" ? "record" : undefined}
+>
+  <header class="q-record__header augur-type-editorial-label">
+    <span class="q-record__rule" aria-hidden="true"></span>
+    <span id={`${idPrefix}-label`}>Worked example</span>
+    <span class="q-record__tag">Illustrative</span>
+  </header>
+
+  <p class="q-record__question">{question}</p>
+
+  <dl class="q-record__fields">
+    <div>
+      <dt class="augur-type-editorial-label">Evidence cutoff</dt>
+      <dd><time datetime={cutoff.iso}>{cutoff.label}</time></dd>
+    </div>
+    {variant === "closing" && (
+      <div>
+        <dt class="augur-type-editorial-label">Outcome</dt>
+        <dd>Not recorded. No report, challenge or result is shown for this example.</dd>
+      </div>
+    )}
+  </dl>
+
+  <div class="q-record__group">
+    <p id={`${idPrefix}-outcomes`} class="q-record__group-label augur-type-editorial-label">Possible outcomes</p>
+    <ul class="q-record__outcomes" aria-labelledby={`${idPrefix}-outcomes`}>
+      {outcomes.map((outcome) => <li>{outcome}</li>)}
+    </ul>
+  </div>
+
+  <div class="q-record__group">
+    <p id={`${idPrefix}-state`} class="q-record__group-label augur-type-editorial-label">State</p>
+    <ol class="q-record__state" aria-labelledby={`${idPrefix}-state`}>
+      {states.map((state, i) => (
+        <li
+          style={`--i: ${i}`}
+          data-current={state === current ? "" : undefined}
+          aria-current={state === current ? "step" : undefined}
+        >
+          <span class="q-record__marker" aria-hidden="true"></span>
+          <span class="q-record__state-name">{state}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <slot />
+</article>

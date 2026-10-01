@@ -1,0 +1,26 @@
+---
+// The editorial section opener from the brand foundation's pages: a tracked
+// index label in the narrow left column; title, short rule and lead beside it.
+type Props = {
+  index: string;
+  label: string;
+  title: string;
+  headingId: string;
+};
+
+const { index, label, title, headingId } = Astro.props;
+---
+
+<header class="home-head">
+  <p class="home-head__index augur-type-editorial-label">
+    <span class="home-head__number">{index}</span>
+    <span>{label}</span>
+  </p>
+  <div class="home-head__main">
+    <h2 id={headingId} class="home-head__title augur-type-editorial-title">{title}</h2>
+    <span class="home-rule" aria-hidden="true"></span>
+    <div class="home-head__lead">
+      <slot />
+    </div>
+  </div>
+</header>

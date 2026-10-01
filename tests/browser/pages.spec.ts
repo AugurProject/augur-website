@@ -17,7 +17,8 @@ for (const viewport of viewports) {
       ]) {
         await page.goto(path);
         const brand = await page.locator(".site-header__brand").boundingBox();
-        const main = await page.locator("main").boundingBox();
+        // Homepage bands run full bleed; their content sits in the shared frame.
+        const main = await page.locator("main.site-frame, main .site-frame").first().boundingBox();
         const footer = await page.locator(".site-footer__inner").boundingBox();
         expect(main!.x).toBeCloseTo(brand!.x, 0);
         expect(main!.x).toBeCloseTo(footer!.x, 0);
@@ -30,7 +31,7 @@ for (const viewport of viewports) {
         expect(heading.size).toBeGreaterThan(24);
 
         if (hasContentLink) {
-          await expect(page.locator("main a").first()).toHaveCSS("text-decoration-line", "underline");
+          await expect(page.locator("main a:not([class])").first()).toHaveCSS("text-decoration-line", "underline");
         }
       }
     });

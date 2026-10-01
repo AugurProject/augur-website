@@ -1,0 +1,151 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { sourceById } from "@/lib/evidence";
+import { roadmap, roadmapColumns } from "@/lib/roadmap";
+
+// Reference records: one row per inspectable source. Dates are the latest
+// public commit or edition, checked against each source on 2026-10-01.
+const index = [
+  {
+    product: "Augur Lituus",
+    kind: "Paper",
+    source: sourceById("lituus-whitepaper"),
+    purpose: "The whitepaper: the proposed design and a comparative analysis of oracle attack costs, by Ryan Garner and Philip Monastirsky.",
+    record: { label: "Edition", value: "January 2026 · 33 pages" },
+    links: [{ href: sourceById("lituus-whitepaper").url, text: "Read the whitepaper", context: "(PDF on GitHub)" }],
+  },
+  {
+    product: "Augur Lituus",
+    kind: "Code",
+    source: sourceById("lituus-cs"),
+    purpose: "The implementation in progress, engineered by ChainSafe and reviewed by the Lituus Foundation: Solidity contracts with unit, fuzz and invariant tests.",
+    record: { label: "Last commit", value: "2026-07-23" },
+    links: [{ href: sourceById("lituus-cs").url, text: "View the source", context: "of Lituus-CS on GitHub" }],
+  },
+  {
+    product: "Zoltar",
+    kind: "Code and docs",
+    source: sourceById("zoltar-repo"),
+    purpose: "The forkable base layer and the prediction-market layer built on it, with Statoblast Trading, the augurScan explorer and published protocol documentation.",
+    record: { label: "Last commit", value: "2026-10-01" },
+    links: [
+      { href: sourceById("zoltar-docs").url, text: "Read the docs", context: "for Zoltar" },
+      { href: sourceById("zoltar-repo").url, text: "View the source", context: "of Zoltar on GitHub" },
+    ],
+  },
+  {
+    product: "Research",
+    kind: "Notes",
+    source: sourceById("oracle-research"),
+    purpose: "Open design notes on escalation games, forking, auctions and fees.",
+    record: { label: "Last commit", value: "2026-06-08" },
+    links: [{ href: sourceById("oracle-research").url, text: "Browse the notes", context: "on GitHub" }],
+  },
+];
+
+const shapes = { completed: "filled", "in-progress": "half", next: "open" } as const;
+---
+
+<!-- 04 · Open work, roadmap and code. The section rule is this band's only green. -->
+<section id="open-work" class="home-band home-band--paper home-band--dark-raised" aria-labelledby="open-work-title">
+  <div class="site-frame">
+    <SectionHead index="04" label="Open work, roadmap and code" title="Everything is open. Inspect it." headingId="open-work-title">
+      <p>
+        All our work is open source, and our research happens in public. Each source below says what it is and how
+        current it is.
+      </p>
+    </SectionHead>
+
+    <div class="home-sources">
+      <h3 class="home-label augur-type-editorial-label">
+        <span>Sources</span>
+        <span class="home-label__aside">Checked 1 October 2026</span>
+      </h3>
+      <ul class="home-sources__list">
+        {index.map(({ product, kind, source, purpose, record, links }) => (
+          <li class="home-source">
+            <p class="home-source__product augur-type-editorial-label">
+              <span>{product}</span>
+              <span class="home-source__kind">{kind}</span>
+            </p>
+            <div class="home-source__body">
+              <h4 class="home-source__title">{source.title}</h4>
+              <p class="home-source__purpose">{purpose}</p>
+            </div>
+            <p class="home-source__record">
+              <span class="augur-type-editorial-label">{record.label}</span>
+              <span>{record.value}</span>
+            </p>
+            <p class="home-source__links">
+              {links.map(({ href, text, context }) => (
+                <a class="home-arrow-link" href={href}>
+                  {text}<span class="home-sr"> {context}</span>
+                  <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="8 7 17 7 17 16" /></svg>
+                </a>
+              ))}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="home-roadmap">
+      <h3 class="home-label augur-type-editorial-label">
+        <span>Roadmap</span>
+        <span class="home-label__aside">Candidate entries · awaiting maintainer confirmation</span>
+      </h3>
+      <div class="home-roadmap__columns">
+        {roadmapColumns.map(({ status, label }) => (
+          <section class="home-roadmap__column" aria-labelledby={`roadmap-${status}`}>
+            <h4 id={`roadmap-${status}`} class="home-roadmap__status">
+              <span class="home-marker" data-shape={shapes[status]} aria-hidden="true"></span>
+              {label}
+            </h4>
+            <ul>
+              {roadmap
+                .filter((entry) => entry.status === status)
+                .map((entry) => (
+                  <li class="home-roadmap__item" data-secondary={entry.secondary ? "" : undefined}>
+                    <p class="home-roadmap__product augur-type-editorial-label">{entry.product}</p>
+                    <p class="home-roadmap__deliverable">{entry.deliverable}</p>
+                    <p class="home-roadmap__meta">
+                      <span>{entry.dated}</span>
+                      <span aria-hidden="true">·</span>
+                      <span>
+                        Evidence:{" "}
+                        {entry.evidence.map((id, i) => {
+                          const source = sourceById(id);
+                          return (
+                            <>
+                              {i > 0 && ", "}
+                              <a href={source.url}>{source.shortTitle ?? source.title}</a>
+                            </>
+                          );
+                        })}
+                      </span>
+                    </p>
+                  </li>
+                ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+      <p class="home-caption">A roadmap shows direction, not adoption.</p>
+    </div>
+
+    <aside class="home-field" aria-labelledby="field-record-label">
+      <p id="field-record-label" class="home-field__label augur-type-editorial-label">
+        <span>Field record</span>
+        <span class="home-label__aside">Augur v2 · August 2026</span>
+      </p>
+      <p class="home-field__text">
+        Augur v2’s fork mechanism, its last resort for settling disputes, completed its first full run on Ethereum
+        mainnet. Augur v2 is the predecessor protocol: this is not evidence for Augur Lituus.
+      </p>
+      <a class="home-arrow-link" href="/history/">
+        The dated record in History
+        <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+      </a>
+    </aside>
+  </div>
+</section>

@@ -9,9 +9,11 @@ type Props = {
   description: string;
   canonical?: string | false;
   indexable?: boolean;
+  /** "navy" continues a closing Navy band into the footer (homepage). */
+  footerTone?: "default" | "navy";
 };
 
-const { title, description, canonical, indexable = false } = Astro.props;
+const { title, description, canonical, indexable = false, footerTone = "default" } = Astro.props;
 // The public origin is stable, while M1 preview and placeholder pages remain noindex.
 const canonicalUrl = canonical === false ? undefined : canonical ?? new URL(Astro.url.pathname, "https://augur.net").href;
 const documentTitle = title === "Augur" ? title : `${title} · Augur`;
@@ -44,7 +46,7 @@ const documentTitle = title === "Augur" ? title : `${title} · Augur`;
     <a class="site-skip-link" href="#main-content">Skip to content</a>
     <SiteHeader />
     <div id="main-content" tabindex="-1" class="site-content"><slot /></div>
-    <SiteFooter />
+    <SiteFooter tone={footerTone} />
     <script>
       // One sun/moon toggle (the design-system docs masthead pattern): with
       // nothing stored the system preference governs; a press pins the

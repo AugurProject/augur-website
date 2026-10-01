@@ -1,8 +1,9 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
+import { communityChannels } from "@/lib/site";
 ---
 
-<SiteLayout title="About" description="Augur project, foundation, and contact information.">
+<SiteLayout title="About" description="Augur project, foundation, and community channels.">
   <main class="site-frame site-scaffold">
     <p class="site-scaffold__status augur-type-metadata">Implementation scaffold · not production copy</p>
     <h1 class="augur-type-editorial-title">About Augur</h1>
@@ -11,9 +12,14 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
       <h2 class="augur-type-editorial-section">Lituus Foundation</h2>
       <p>The foundation’s funding and development-support role is described in the website strategy. Its precise operator attribution and public details require maintainer review.</p>
     </section>
-    <section id="contact">
-      <h2 class="augur-type-editorial-section">Contact</h2>
-      <p>A general inquiry destination has not yet been verified for this rebuild. This section will provide a direct contact route after review.</p>
+    <section id="community">
+      <h2 class="augur-type-editorial-section">Community and contact</h2>
+      <p>Augur is a community project. Questions, ideas and reports go to its community channels, with Discord as the main place for discussion.</p>
+      <ul>
+        {communityChannels.map(({ label, handle, href }) => (
+          <li><a href={href}>{label}</a> — {handle}</li>
+        ))}
+      </ul>
     </section>
   </main>
 </SiteLayout>

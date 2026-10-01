@@ -1,0 +1,68 @@
+---
+import SectionHead from "./SectionHead.astro";
+
+// Editor picks from the current archive. Titles, dates, authors and summaries
+// are as published on augur.net/blog (checked 2026-10-01). Articles keep their
+// current URLs until the archive migrates into this site's blog collection.
+const featured = {
+  title: "The Augur Lituus Whitepaper",
+  summary: "A proposed modular oracle for outsourced resolution, and a comparative analysis of oracle security.",
+  date: { iso: "2026-01-29", label: "29 January 2026" },
+  author: "Lituus Foundation",
+  pathway: "Research and design",
+  href: "https://www.augur.net/blog/the-augur-lituus-whitepaper/",
+};
+
+const compact = {
+  title: "The Augur Moon Fork Is Complete",
+  summary:
+    "Augur v2’s forking mechanism, the protocol’s last resort for settling disputes, completed its first full end-to-end run on Ethereum mainnet.",
+  date: { iso: "2026-08-05", label: "5 August 2026" },
+  author: "@AugurProject",
+  pathway: "Project updates",
+  href: "https://www.augur.net/blog/post-fork-announcements/",
+};
+---
+
+<!-- 07 · From the Blog. The section rule is this band's only green. -->
+<section id="blog" class="home-band home-band--paper" aria-labelledby="blog-title">
+  <div class="site-frame">
+    <SectionHead index="07" label="From the Blog" title="The reasoning, and the record." headingId="blog-title">
+      <p>Dated articles on the design and on the work as it happens.</p>
+    </SectionHead>
+
+    <div class="home-posts">
+      <article class="home-post home-post--featured" aria-labelledby="post-featured">
+        <a class="home-cover" href={featured.href} tabindex="-1" aria-hidden="true" data-theme="dark">
+          <span class="home-cover__pathway augur-type-editorial-label">{featured.pathway}</span>
+          <span class="home-cover__title">{featured.title}</span>
+          <span class="home-cover__rule"></span>
+        </a>
+        <div class="home-post__body">
+          <p class="home-post__meta augur-type-editorial-label">
+            <span>{featured.pathway}</span>
+            <span class="home-label__aside"><time datetime={featured.date.iso}>{featured.date.label}</time></span>
+          </p>
+          <h3 id="post-featured" class="home-post__title"><a href={featured.href}>{featured.title}</a></h3>
+          <p class="home-post__summary">{featured.summary}</p>
+          <p class="home-post__byline">By {featured.author}</p>
+        </div>
+      </article>
+
+      <article class="home-post home-post--compact" aria-labelledby="post-compact">
+        <p class="home-post__meta augur-type-editorial-label">
+          <span>{compact.pathway}</span>
+          <span class="home-label__aside"><time datetime={compact.date.iso}>{compact.date.label}</time></span>
+        </p>
+        <h3 id="post-compact" class="home-post__title"><a href={compact.href}>{compact.title}</a></h3>
+        <p class="home-post__summary">{compact.summary}</p>
+        <p class="home-post__byline">By {compact.author}</p>
+      </article>
+    </div>
+
+    <a class="home-arrow-link home-more" href="/blog/">
+      Explore the Blog
+      <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+    </a>
+  </div>
+</section>

@@ -1,0 +1,104 @@
+---
+import "@/components/ui/button.css";
+import { buttonVariants } from "@/components/ui/button-variants";
+import SectionHead from "./SectionHead.astro";
+
+// Illustrative uses only (SPEC.md §5, §7). Augur Lituus is in development,
+// so none of these is a supported integration path yet.
+const uses = [
+  {
+    id: "markets",
+    name: "Prediction markets",
+    problem: "Resolve an event question so the market can settle.",
+    flow: ["Was the milestone demonstrated by the cutoff?", "Augur Lituus resolves the question", "The market settles positions"],
+    link: { href: "#how", text: "Follow the worked example" },
+  },
+  {
+    id: "payments",
+    name: "Event-dependent payments",
+    problem: "Use an external outcome as the condition for a payment.",
+    flow: ["Was flight AB123 delayed by more than two hours?", "Augur Lituus resolves the question", "The contract determines the payout"],
+    link: { href: "/developers/", text: "Timing and Invalid outcomes" },
+  },
+  {
+    id: "designs",
+    name: "Custom oracle designs",
+    problem: "Define your own resolution rules while sharing REP.",
+    flow: ["Your resolution rules", "Zoltar records universes, REP and forks", "Shared REP, if your design handles forks"],
+    link: { href: "#zoltar", text: "Explore the base layer" },
+  },
+];
+
+const fit = [
+  {
+    question: "Can the question be resolved clearly?",
+    detail: "Evidence, cutoff, timezone, outcomes, and what counts as Invalid.",
+  },
+  {
+    question: "Can the application wait and bear the costs?",
+    detail: "Reporting and challenge time, fees and bonds.",
+  },
+  {
+    question: "Can the team use the result safely?",
+    detail: "Delayed, disputed and Invalid outcomes, and the assumptions behind them.",
+  },
+];
+---
+
+<!-- 05 · Use cases and application fit. The fit button is this band's green. -->
+<section id="use-cases" class="home-band home-band--muted" aria-labelledby="use-cases-title">
+  <div class="site-frame">
+    <SectionHead index="05" label="Illustrative uses" title="Let your application ask, not decide." headingId="use-cases-title">
+      <p>
+        Augur Lituus is designed so applications can outsource resolution. Instead of building their own dispute
+        system, they stop being the focal point of a contested result.
+      </p>
+    </SectionHead>
+
+    <ul class="home-uses">
+      {uses.map(({ id, name, problem, flow, link }) => (
+        <li class="home-use">
+          <article aria-labelledby={`use-${id}`}>
+            <p class="home-use__tag augur-type-editorial-label">Illustrative</p>
+            <h3 id={`use-${id}`} class="home-use__name">{name}</h3>
+            <p class="home-use__problem">{problem}</p>
+            <ol class="home-use__flow">
+              {flow.map((step, i) => (
+                <li data-step={i === 1 ? "resolver" : undefined}>
+                  <span class="home-use__node" aria-hidden="true"></span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+            <a class="home-arrow-link" href={link.href}>
+              {link.text}
+              <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+            </a>
+          </article>
+        </li>
+      ))}
+    </ul>
+
+    <div class="home-fit">
+      <h3 class="home-label augur-type-editorial-label">
+        <span>Application fit</span>
+        <span class="home-label__aside">Three questions before you build</span>
+      </h3>
+      <ol class="home-fit__questions">
+        {fit.map(({ question, detail }, i) => (
+          <li>
+            <span class="home-fit__number" aria-hidden="true">{i + 1}</span>
+            <p class="home-fit__question">{question}</p>
+            <p class="home-fit__detail">{detail}</p>
+          </li>
+        ))}
+      </ol>
+      <div class="home-fit__action">
+        <a class={buttonVariants({ size: "lg" })} href="/developers/#application-fit">Explore application fit</a>
+        <p class="home-fit__note">
+          Illustrative uses. Augur Lituus is in development, and no integration path is established yet.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

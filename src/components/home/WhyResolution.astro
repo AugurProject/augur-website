@@ -1,0 +1,71 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { workedExample } from "@/lib/worked-example";
+
+const verdicts = [
+  {
+    id: "claim",
+    label: "A breakthrough claim",
+    evidence: "A press release, or a video of a sample levitating.",
+    verdict: "Does not qualify",
+    qualifies: false,
+  },
+  {
+    id: "demonstration",
+    label: "An independent demonstration",
+    evidence: `An original experimental report plus a replication by a separate institution with no shared authors and independently prepared samples. Both publish methods, measurements and uncertainty before ${workedExample.cutoff.date}.`,
+    verdict: "Qualifies as evidence",
+    qualifies: true,
+  },
+];
+---
+
+<!-- 02 · Why resolution matters. -->
+<section id="why" class="home-band home-band--paper home-band--dark-raised" aria-labelledby="why-title">
+  <div class="site-frame">
+    <SectionHead index="02" label="Why resolution matters" title="Who decides what actually happened?" headingId="why-title">
+      <p>
+        A prediction market can settle itself, but it cannot see the world. Before it pays anyone, something has to
+        establish what occurred. When someone stands to profit from the wrong answer, that something becomes the
+        target.
+      </p>
+    </SectionHead>
+
+    <div class="home-why">
+      <div class="home-why__prose">
+        <p>
+          For small markets this is unremarkable: a team checks the evidence, a committee decides, token holders vote.
+          As the stakes grow, manipulating the resolution can pay better than trading on the correct outcome, and every
+          ambiguity in the question becomes a point of attack.
+        </p>
+        <p>
+          Augur was built on the position that no company or committee should hold the final word. Disputed outcomes are
+          settled through an open economic process instead: participants stake value on competing answers and lose it
+          when they back the wrong one.
+        </p>
+        <p class="home-pull">What happens when participants disagree about that answer?</p>
+      </div>
+
+      <div class="home-why__evidence">
+        <p class="home-label augur-type-editorial-label">
+          <span>Worked example</span>
+          <span class="home-label__aside">What counts as evidence</span>
+        </p>
+        <div class="home-verdicts">
+          {verdicts.map(({ id, label, evidence, verdict, qualifies }) => (
+            <article class="home-verdict" data-qualifies={qualifies ? "" : undefined} aria-labelledby={`verdict-${id}`}>
+              <h3 id={`verdict-${id}`} class="home-verdict__label augur-type-editorial-label">{label}</h3>
+              <p class="home-verdict__evidence">{evidence}</p>
+              <p class="home-verdict__result">
+                <span class="home-marker" data-shape={qualifies ? "filled" : "open"} aria-hidden="true"></span>
+                <span class="home-verdict__key augur-type-editorial-label">Verdict</span>
+                <strong>{verdict}</strong>
+              </p>
+            </article>
+          ))}
+        </div>
+        <p class="home-caption">The question has to be precise enough to tell these apart.</p>
+      </div>
+    </div>
+  </div>
+</section>

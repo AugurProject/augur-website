@@ -1,0 +1,134 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { workedExample } from "@/lib/worked-example";
+
+// The process follows the Augur Lituus whitepaper (January 2026 edition,
+// "Protocol Summary" and "Escalation Game"). The figure shows only that each
+// challenge stakes more: no amounts, durations or axis values.
+const { criteria, cutoff } = workedExample;
+
+const stages = [
+  {
+    id: "ask",
+    name: "Ask",
+    what: "Someone asks a clear question with defined outcomes, including Invalid, and pays a query fee in REP.",
+    example: `Yes requires ${criteria.temperature}, ${criteria.pressure}, zero resistance and the Meissner effect, independently replicated before ${cutoff.date}.`,
+  },
+  {
+    id: "report",
+    name: "Report",
+    what: "Anyone can propose an answer by placing a REP bond behind it.",
+    example: "After the cutoff, someone reports Yes or No against the criteria.",
+  },
+  {
+    id: "challenge",
+    name: "Challenge rounds",
+    what: "Anyone who disagrees can stake more REP on a different answer. It replaces the answer and opens a new round.",
+    example: "A report can be challenged if the evidence misses the temperature, pressure or independence criteria.",
+  },
+  {
+    id: "final",
+    name: "Final",
+    what: "When a round passes without a challenge, the latest answer becomes final.",
+    example: "The outcome is recorded. This page never shows which.",
+  },
+  {
+    id: "act",
+    name: "Application acts",
+    what: "The application settles under its own rules, including what Invalid means for it.",
+    example: "The market settles. Resolution and settlement are separate steps.",
+  },
+];
+---
+
+<!-- 03 · How Augur Lituus approaches it. The staircase is this band's green. -->
+<section id="how" class="home-band home-band--white" aria-labelledby="how-title">
+  <div class="site-frame">
+    <SectionHead index="03" label="How Augur Lituus approaches it" title="An answer anyone can challenge." headingId="how-title">
+      <p>
+        Most questions are expected to resolve through reporting and challenges. Forks are designed to be rare.
+      </p>
+    </SectionHead>
+
+    <figure class="stair" aria-labelledby="stair-caption" data-motion="stair">
+      <figcaption id="stair-caption" class="stair__caption">
+        <span class="home-label augur-type-editorial-label">
+          <span>Proposed design</span>
+          <span class="home-label__aside">Augur Lituus whitepaper, January 2026</span>
+        </span>
+        <span class="stair__note">Each challenge must stake more than the last, so the climb gets steeper. Step heights are conceptual.</span>
+      </figcaption>
+
+      <div class="stair__chart" aria-hidden="true">
+        <div class="stair__cell stair__cell--ask">
+          <span class="stair__ground"></span>
+          <span class="stair__node"></span>
+        </div>
+        <div class="stair__cell stair__cell--report">
+          <span class="stair__step" style="--h: 0.26; --prev: 0; --i: 1"></span>
+        </div>
+        <div class="stair__cell stair__cell--challenge">
+          <span class="stair__step" style="--h: 0.44; --prev: 0.26; --i: 2"></span>
+          <span class="stair__step" style="--h: 0.62; --prev: 0.44; --i: 3"></span>
+          <span class="stair__step" style="--h: 0.8; --prev: 0.62; --i: 4"></span>
+          <span class="stair__fork">
+            <span class="stair__fork-riser"></span>
+            <span class="stair__fork-box">Rare: fork</span>
+          </span>
+        </div>
+        <div class="stair__cell stair__cell--final">
+          <span class="stair__step stair__step--landing" style="--h: 0.8; --prev: 0.8; --i: 5">
+            <span class="stair__final-node"></span>
+            <span class="stair__landing-label">Final</span>
+          </span>
+        </div>
+        <div class="stair__cell stair__cell--act">
+          <span class="stair__handoff"></span>
+          <span class="stair__act-box">Application acts</span>
+        </div>
+        <span class="stair__threshold"><span>Fork threshold</span></span>
+        <ol class="stair__axis">
+          {stages.map((stage, i) => <li>{String(i + 1).padStart(2, "0")} {stage.name}</li>)}
+        </ol>
+      </div>
+
+      <ol class="stair__stages">
+        {stages.map((stage, i) => (
+          <li class={`stair__stage stair__stage--${stage.id}`}>
+            <span class={`stair__rung stair__rung--${stage.id}`} aria-hidden="true"></span>
+            <h3 class="stair__name">
+              <span class="stair__num">{String(i + 1).padStart(2, "0")}</span>
+              {stage.name}
+            </h3>
+            <p class="stair__what">{stage.what}</p>
+            <p class="stair__example">
+              <span class="augur-type-editorial-label">In the example</span>
+              {stage.example}
+            </p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="stair__exceptions">
+        <h3 class="home-label augur-type-editorial-label">Exceptions</h3>
+        <ul>
+          <li>
+            <span class="home-marker" data-shape="dashed" aria-hidden="true"></span>
+            <p>
+              <strong>Rare: a last-resort fork.</strong> If a challenge reaches the fork threshold, the protocol forks
+              and REP holders move their REP to the outcome they support.
+            </p>
+          </li>
+          <li>
+            <span class="home-marker" data-shape="open" aria-hidden="true"></span>
+            <p><strong>No report.</strong> A question with no report within three days resolves as Invalid.</p>
+          </li>
+        </ul>
+        <a class="home-arrow-link" href="/protocol/">
+          Read the process and its assumptions
+          <svg class="site-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+        </a>
+      </div>
+    </figure>
+  </div>
+</section>

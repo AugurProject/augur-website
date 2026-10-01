@@ -1,31 +1,62 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
-import { siteRoutes } from "@/lib/site";
+import HomeHero from "@/components/home/HomeHero.astro";
+import WhyResolution from "@/components/home/WhyResolution.astro";
+import HowItResolves from "@/components/home/HowItResolves.astro";
+import OpenWork from "@/components/home/OpenWork.astro";
+import UseCases from "@/components/home/UseCases.astro";
+import ZoltarFoundation from "@/components/home/ZoltarFoundation.astro";
+import FromTheBlog from "@/components/home/FromTheBlog.astro";
+import CommonQuestions from "@/components/home/CommonQuestions.astro";
+import ClosingAction from "@/components/home/ClosingAction.astro";
+import "@/styles/home.css";
+
+// M2: the strategy's nine-part homepage narrative (SPEC.md §5), composed from
+// the homepage design concept v2 (docs/HOMEPAGE-CONCEPT.md, PR #7).
 ---
 
 <SiteLayout
-  title="Website implementation scaffold"
-  description="Augur.net rebuild implementation scaffold."
+  title="Augur"
+  description="Augur Lituus is permissionless, decentralized resolution infrastructure in development for prediction markets and applications that depend on real-world outcomes."
+  footerTone="navy"
 >
-  <main class="site-frame site-scaffold">
-    <p class="site-scaffold__status augur-type-editorial-label">Implementation scaffold · noindex</p>
-    <h1 class="augur-type-editorial-title">Augur.net rebuild</h1>
-    <p class="site-scaffold__question">
-      This page is an implementation index, not the strategy homepage.
-      The final homepage must follow the nine-part sequence in SPEC.md.
-    </p>
-    <hr />
-    <h2 class="augur-type-editorial-section">Canonical routes</h2>
-    <ul>
-      {siteRoutes.map((route) => (
-        <li>
-          <a href={route.href}>{route.label}</a> — {route.question}
-        </li>
-      ))}
-    </ul>
-    <p>
-      Start with <code>README.md</code>, <code>SPEC.md</code>, <code>ARCHITECTURE.md</code>,
-      and <code>AGENTS.md</code>.
-    </p>
+  <main class="home">
+    <HomeHero />
+    <WhyResolution />
+    <HowItResolves />
+    <OpenWork />
+    <UseCases />
+    <ZoltarFoundation />
+    <FromTheBlog />
+    <CommonQuestions />
+    <ClosingAction />
   </main>
+
+  <script>
+    // Three moments of motion, each played once as its figure first enters
+    // view: the staircase rises, the ledger branches extend, and the closing
+    // record draws its path. Everything is complete and static without
+    // JavaScript, under reduced motion, or when a figure is already in view.
+    const motionAllowed = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+    const figures = document.querySelectorAll<HTMLElement>("[data-motion]");
+    if (motionAllowed && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            const figure = entry.target as HTMLElement;
+            observer.unobserve(figure);
+            figure.dataset.motionState = "play";
+          }
+        },
+        { threshold: 0.35 },
+      );
+      const viewport = window.innerHeight;
+      for (const figure of figures) {
+        if (figure.getBoundingClientRect().top < viewport) continue;
+        figure.dataset.motionState = "armed";
+        observer.observe(figure);
+      }
+    }
+  </script>
 </SiteLayout>
