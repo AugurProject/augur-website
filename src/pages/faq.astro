@@ -1,0 +1,15 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import PageHero from '../components/pages/PageHero.astro';
+import FaqItem from '../components/content/FaqItem.astro';
+import { faqEntries, faqCategories } from '../data/faq';
+const idFor=(value:string)=>value.toLowerCase().replaceAll(' ','-');
+const order=['augur-today','augur-lituus','trading','who-decides','disagreement','invalid','rep-role','rep-actions','rep-holding','rep-augur-ticker','rep-wallet','rep-missed-migration','honest-fork','build-today','talk-to-team'];
+---
+<PageLayout title="Frequently asked questions | Augur" description="Short answers about Augur, how its oracle works, REP and building with Augur Lituus.">
+ <PageHero title="Frequently asked questions" lead="Short answers, each with a link to go deeper." />
+ <div class="site-container faq-layout"><nav aria-label="Question groups">{faqCategories.map(category=><a href={`#${idFor(category)}`}>{category}</a>)}</nav><div>{faqCategories.map((category,index)=><section id={idFor(category)} class="faq-group"><h2>{category}</h2>{order.flatMap(id=>faqEntries.filter(entry=>entry.id===id&&entry.category===category)).map((entry,entryIndex)=><FaqItem entry={entry} open={index===0&&entryIndex===0} pageQuestion />)}</section>)}</div></div>
+</PageLayout>
+<style>
+ .faq-layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:80px;padding-block:72px 96px}.faq-layout nav{position:sticky;top:32px;align-self:start}.faq-layout nav a{display:flex;align-items:center;min-height:52px;padding:12px 16px;border-left:1px solid transparent;text-decoration:none;font:400 16px/24px var(--font-heading);color:var(--muted-foreground)}.faq-layout nav a:hover,.faq-layout nav a:focus-visible{background:var(--web-quiet);border-color:var(--primary);color:var(--foreground)}.faq-group h2{font-size:28px;line-height:36px;margin-bottom:20px}.faq-group+.faq-group{margin-top:64px}@media(max-width:1023px){.faq-layout{grid-template-columns:1fr;gap:48px}.faq-layout nav{position:static;display:flex;flex-wrap:wrap;gap:8px}.faq-layout nav a{border:1px solid var(--web-outline)}}@media(max-width:600px){.faq-layout{padding-block:48px 64px}.faq-layout nav a{font-size:14px}.faq-group h2{font-size:24px}}
+</style>
