@@ -1,0 +1,82 @@
+---
+import type { FaqEntry } from '../../data/faq';
+interface Props { entry: FaqEntry; open?: boolean; name?: string; pageQuestion?: boolean; }
+const { entry, open = false, name = 'page-faq', pageQuestion = false }=Astro.props;
+// A link to the page the reader is already on (“More about REP” on /rep/) is left out.
+const linkHere=entry.link.href===Astro.url.pathname;
+// The line draws under the words only; an off-site arrow sits beside it.
+const offSite=entry.link.label.endsWith(' ↗');
+const linkLabel=offSite?entry.link.label.slice(0,-2):entry.link.label;
+---
+<details name={name} open={open} class="faq-item" id={`faq-${entry.id}`}>
+ <summary><span>{pageQuestion&&entry.pageQuestion?entry.pageQuestion:entry.question}</span><span class="faq-toggle" aria-hidden="true"></span></summary>
+ <div class="faq-answer"><p>{entry.answer}</p>{!linkHere&&<a class="line-link" href={entry.link.href}><span class="button-label">{linkLabel}</span>{offSite&&<span aria-hidden="true">↗</span>}</a>}</div>
+</details>
+<script>
+ import {faqTimeline} from '../../motion/timelines';
+ import {motionTime} from '../../motion/debug';
+ // Opening a question: the answer is revealed by an eased, clipped height
+ // change (same-document view transition), the toggle turns from plus to
+ // minus, a Green edge draws down and the answer rises in. Questions below
+ // slide rather than jump. Native details keep keyboard and exclusive-group
+ // behaviour; without view transitions the change is instant apart from the
+ // small CSS transitions. Nothing animates on page load.
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const transitions=typeof document.startViewTransition==='function';
+ const root=document.documentElement;
+ root.style.setProperty('--faq-transition-time',`${motionTime(faqTimeline.transition)}ms`);
+ document.querySelectorAll<HTMLDetailsElement>('.faq-item').forEach(item=>{
+  if(item.dataset.faqMotion!==undefined)return;
+  item.dataset.faqMotion=transitions?'transition':'';
+  item.style.setProperty('--faq-answer-time',`${motionTime(faqTimeline.panel)}ms`);
+  item.style.setProperty('--faq-answer-stagger',`${motionTime(faqTimeline.stagger)}ms`);
+  let revealOnOpen=false;
+  // Keep the question and start of its answer visible after a mobile expansion.
+  item.addEventListener('toggle', event => {
+   const requested=revealOnOpen;revealOnOpen=false;
+   if (!requested || !item.open || !matchMedia('(max-width: 767px)').matches) return;
+   requestAnimationFrame(() => {
+    const summary=item.querySelector('summary');
+    if (!summary) return;
+    const top=summary.getBoundingClientRect().top;
+    if (top<24 || top>innerHeight*.55) summary.scrollIntoView({block:'start',behavior:reduced.matches?'instant':'smooth'});
+   });
+  });
+  item.querySelector('summary')?.addEventListener('click',event=>{
+   revealOnOpen=event.isTrusted&&!item.open;
+   if(reduced.matches)return;
+   const opening=!item.open;
+   if(opening){item.dataset.faqOpening='';window.setTimeout(()=>delete item.dataset.faqOpening,motionTime(faqTimeline.transition+faqTimeline.panel));}
+   if(!transitions)return;
+   event.preventDefault();
+   // Name every question in this accordion (and its frame) for the transition only.
+   const scope=item.closest('.faq-accordion');
+   const items=[...(scope??document).querySelectorAll<HTMLDetailsElement>('.faq-item')];
+   items.forEach((other,i)=>other.style.setProperty('view-transition-name',`faq-${i}`));
+   scope?.setAttribute('style','view-transition-name:faq-frame');
+   root.dataset.faqTransition='';
+   const tidy=()=>{items.forEach(other=>other.style.removeProperty('view-transition-name'));scope?.removeAttribute('style');delete root.dataset.faqTransition;};
+   const transition=document.startViewTransition(()=>{item.open=opening;});
+   transition.finished.then(tidy,tidy);
+  });
+ });
+</script>
+<style>
+ @keyframes faq-answer-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+ .faq-item{position:relative;border-left:2px solid transparent;padding:0 16px 0 22px;transition:background-color 180ms ease-out,border-color 180ms ease-out}
+ /* The Green edge draws down from the question when it opens. */
+ .faq-item::before{content:'';position:absolute;left:-2px;top:0;bottom:0;width:2px;background:var(--primary);transform:scaleY(0);transform-origin:top;transition:transform var(--faq-answer-time,320ms) cubic-bezier(.22,.61,.36,1)}
+ .faq-item[open]::before{transform:scaleY(1)}
+ .faq-item:not([open]):has(>summary:hover){background:var(--web-tile);border-left-color:var(--web-hover-edge)}.faq-item[open]{background:var(--card)}
+ .faq-item:has(>summary:focus-visible){outline:2px solid var(--ring);outline-offset:-2px}.faq-item:not([open]):has(>summary:focus-visible){background:var(--web-tile)}summary:focus-visible{outline:0}
+ summary{display:flex;justify-content:space-between;align-items:center;gap:24px;list-style:none;padding:24px 0;cursor:pointer;font:600 18px/26px var(--font-heading)}summary::-webkit-details-marker{display:none}
+ /* Plus to minus: the toggle turns half a revolution while its upright bar lies flat. */
+ .faq-toggle{position:relative;display:block;width:32px;height:32px;flex:none;border:1px solid var(--web-outline);transition:transform var(--faq-answer-time,320ms) cubic-bezier(.22,.61,.36,1),background-color 180ms ease-out,border-color 180ms ease-out}
+ .faq-toggle::before,.faq-toggle::after{content:'';position:absolute;left:9px;top:14px;width:12px;height:1.5px;background:var(--foreground);transition:transform var(--faq-answer-time,320ms) cubic-bezier(.22,.61,.36,1),background-color 180ms ease-out}.faq-toggle::after{transform:rotate(90deg)}
+ summary:hover .faq-toggle{border-color:var(--muted-foreground)}details[open] .faq-toggle{background:var(--primary);border-color:var(--primary);transform:rotate(180deg)}details[open]>summary:hover .faq-toggle{background:var(--web-action-hover);border-color:var(--web-action-hover)}details[open] .faq-toggle::before,details[open] .faq-toggle::after{background:var(--primary-foreground)}details[open] .faq-toggle::after{transform:rotate(0)}
+ .faq-answer{padding-bottom:24px;font-size:16px;line-height:26px;color:var(--muted-foreground);overflow-wrap:break-word}.faq-answer a{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-top:12px;font:600 14px/20px var(--font-heading);color:var(--foreground)}
+ /* Only a question the reader opens animates its answer; the open one on load does not. */
+ @media(prefers-reduced-motion:no-preference){.faq-item[data-faq-opening][open] .faq-answer>*{animation:faq-answer-enter var(--faq-answer-time,320ms) cubic-bezier(.22,.61,.36,1) calc(var(--faq-answer-stagger,50ms) * 2) both}.faq-item[data-faq-opening][open] .faq-answer>*+*{animation-delay:calc(var(--faq-answer-stagger,50ms) * 3)}}
+ @media(prefers-reduced-motion:reduce){.faq-item,.faq-item::before,.faq-toggle,.faq-toggle::before,.faq-toggle::after{transition:none}}
+ @media(forced-colors:active){details[open]{border-color:Highlight}.faq-item::before{background:Highlight}.faq-toggle{border-color:ButtonText}.faq-item:has(>summary:focus-visible){outline-color:Highlight}}
+</style>

@@ -1,0 +1,47 @@
+---
+import {site} from '../../data/site';
+import {links} from '../../data/links';
+import Icon from '../primitives/Icon.astro';
+import announcementState from './announcement-state.js?raw';
+const enabled=site.announcement.enabled&&(!site.announcement.until||Date.parse(site.announcement.until)>Date.now());
+---
+{enabled&&<aside class="announcement" aria-label="Latest Augur update" data-announcement={site.announcement.id}><div class="announcement-inner"><div class="announcement-message"><strong>Augur is back.</strong><span>Restarted in 2025, forked in August 2026, building Augur Lituus now.</span><a class="line-link" href={links.q2Report.url}><span class="button-label">Catch up</span> →</a></div><button type="button" class="announcement-dismiss" aria-label="Dismiss announcement" hidden data-announcement-dismiss><Icon name="x"/></button></div></aside><script is:inline set:html={announcementState}></script>}
+<script>
+// Dismissal is remembered per browser; the header slides up over the fading bar (transform and
+// opacity only), or the bar simply goes with reduced motion.
+const bar=document.querySelector<HTMLElement>('[data-announcement]');
+bar?.querySelector('[data-announcement-dismiss]')?.addEventListener('click',()=>{
+  try{localStorage.setItem('augur:announcement-dismissed',bar.dataset.announcement!);}catch{}
+  const followers:HTMLElement[]=[];
+  for(let el=bar.nextElementSibling;el;el=el.nextElementSibling)if(el instanceof HTMLElement&&!(el instanceof HTMLScriptElement))followers.push(el);
+  const header=followers[0];
+  if(bar.contains(document.activeElement))header?.querySelector<HTMLElement>('a[href],button')?.focus({preventScroll:true});
+  const before=header?.getBoundingClientRect().top??0;
+  bar.style.cssText=`position:absolute;left:0;right:0;top:${bar.getBoundingClientRect().top+scrollY}px`;
+  document.documentElement.dataset.announcement='dismissed';
+  const delta=before-(header?.getBoundingClientRect().top??0);
+  if(!delta||matchMedia('(prefers-reduced-motion: reduce)').matches){bar.remove();return;}
+  const timing={duration:320,easing:'cubic-bezier(.22,.61,.36,1)'};
+  bar.animate([{opacity:1},{opacity:0}],{duration:200,easing:'ease-out',fill:'forwards'});
+  const slides=followers.map(el=>el.animate([{transform:`translateY(${delta}px)`},{transform:'none'}],timing));
+  slides[0]?.finished.finally(()=>bar.remove());
+});
+</script>
+<style>
+.announcement{min-height:40px;background:var(--web-raised);font:400 14px/20px var(--font-body)}
+.announcement-inner{position:relative;width:min(1248px,calc(100% - 2 * var(--page-gutter)));margin-inline:auto;display:flex;justify-content:center}
+.announcement-message{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 24px}
+strong{font:600 14px/20px var(--font-heading);white-space:nowrap}strong::before{content:'';display:inline-block;width:6px;height:6px;background:var(--primary);margin-right:10px;vertical-align:middle}
+.announcement-message>span{color:var(--muted-foreground)}a{margin-left:16px;white-space:nowrap}
+/* Subtle close: a 12 px Phosphor × whose ink (8 px) matches the body x-height and centres on the
+   line's cap height (y 20). The 32 px target hangs 12 px past the content edge so the ink's right
+   edge lines up with the header's right edge. */
+.announcement-dismiss{position:absolute;top:4px;right:-12px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;padding:0;border:0;background:transparent;color:var(--muted-foreground);opacity:.7;cursor:pointer;transition:color 180ms ease-out,opacity 180ms ease-out}
+.announcement-dismiss:hover{color:var(--foreground);opacity:1}
+.announcement-dismiss:focus-visible{outline-offset:-2px;opacity:1}
+.announcement-dismiss :global(.web-icon),.announcement-dismiss :global(svg){width:12px;height:12px}
+/* Below 900 px the one-line message would run under the ×, so it takes the stacked layout. */
+@media(max-width:899px){.announcement-inner{justify-content:flex-start}.announcement-message{flex:1;padding:10px 32px 10px 0;flex-wrap:wrap;gap:4px 10px}.announcement-message>span{order:3;text-align:center;width:100%}a{margin-left:0}}
+@media(prefers-reduced-motion:reduce){.announcement-dismiss{transition:none}}
+@media(forced-colors:active){.announcement-dismiss{color:ButtonText}}
+</style>

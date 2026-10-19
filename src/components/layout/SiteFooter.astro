@@ -1,0 +1,81 @@
+---
+import Brand from '../primitives/Brand.astro';
+import Icon from '../primitives/Icon.astro';
+import Button from '../primitives/Button.astro';
+import {navigationGroups,type NavigationItem} from '../../data/navigation';
+import {links} from '../../data/links';
+import {site} from '../../data/site';
+const email=links.contact.url.replace(/^mailto:/,'');
+// Both rows sit on the site's 500 / 80 / 668 heading grid, so the newsletter and the first
+// link column share one edge with every section above. One footer nav landmark; every
+// footer heading is an h2, a peer of the contact title rather than nested under it.
+---
+<footer class="site-footer">
+  <div id="contact" class="contact-band">
+    <div class="site-container footer-grid">
+      <div class="contact-copy"><h2 id="contact-title">Talk to the Augur team.</h2><p>Ask about the protocol or share feedback. Building on it? Tell us what your project needs.</p><div class="contact-actions"><Button href={links.contact.url}>Talk to us</Button><a class="contact-email" href={links.contact.url}>{email}</a></div></div>
+      <div class="newsletter"><h2 id="newsletter-title">Follow Augur's progress</h2><p>Research, development and product updates.</p>
+        <form class="newsletter-form" action={site.newsletter.provider ?? undefined} method={site.newsletter.provider ? 'post' : 'dialog'} aria-labelledby="newsletter-title" data-newsletter={site.newsletter.provider ? undefined : 'prototype'}>
+          <div class="newsletter-row"><div class="field"><label for="newsletter-email">Email address</label><input type="email" id="newsletter-email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required maxlength="254" aria-describedby="newsletter-email-error" /></div><Button type="submit" variant="outline">Subscribe</Button></div>
+          <p class="field-error" id="newsletter-email-error" hidden></p>
+          <p class="newsletter-status" role="status" aria-live="polite" data-newsletter-status></p>
+        </form></div>
+    </div>
+  </div>
+  <div class="site-container footer-grid directory">
+    <div class="identity"><a href="/" aria-label="Augur home"><Brand /></a><p>Augur's work is funded and coordinated by the <a href={links.foundation.url}>Lituus Foundation<Icon name="arrow-up-right"/></a>.</p></div>
+    <nav class="footer-links" aria-label="Footer">{navigationGroups.map(group=><div><h2>{group.label}</h2><ul>{group.items.map(item=><li><a class="line-link" href={item.href}>{(item as NavigationItem).logo&&<Icon name={(item as NavigationItem).logo!} class="social-logo"/>}<span class="button-label">{item.label}</span>{('external' in item && item.external)&&<Icon name="arrow-up-right"/>}</a></li>)}</ul></div>)}</nav>
+  </div>
+</footer>
+<script>
+ // Visual prototype: no subscription provider is configured, so the form validates
+ // locally and says plainly that nothing was sent. method="dialog" keeps the
+ // no-JavaScript submission local as well.
+ const form=document.querySelector<HTMLFormElement>('[data-newsletter=prototype]');
+ if(form){
+  form.noValidate=true;
+  const input=form.querySelector<HTMLInputElement>('input[type=email]')!;
+  const error=form.querySelector<HTMLElement>('#newsletter-email-error')!;
+  const status=form.querySelector<HTMLElement>('[data-newsletter-status]')!;
+  const validate=()=>{
+   const value=input.value.trim();
+   const message=!value?'Enter your email address.':input.validity.typeMismatch||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)?'Enter a valid email address, like you@example.com.':'';
+   error.textContent=message;error.hidden=!message;input.setAttribute('aria-invalid',String(Boolean(message)));
+   return !message;
+  };
+  input.addEventListener('blur',()=>{if(input.value.trim()||input.getAttribute('aria-invalid')==='true')validate();});
+  input.addEventListener('input',()=>{status.replaceChildren();if(input.getAttribute('aria-invalid')==='true')validate();});
+  form.addEventListener('submit',event=>{
+   event.preventDefault();status.replaceChildren();
+   if(!validate()){input.focus();return;}
+   const blog=document.createElement('a');blog.href='https://www.augur.net/blog/';blog.textContent='Follow the blog';
+   status.append('Email sign-up isn’t connected yet, so nothing was sent or saved. ',blog,' for updates in the meantime.');
+  });
+ }
+</script>
+<style>
+.footer-grid{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);gap:80px}
+.contact-band{padding-block:96px}
+.contact-copy h2{margin-bottom:16px;text-wrap:balance}.contact-copy p{font-size:18px;line-height:28px;color:var(--muted-foreground);max-width:540px;margin-bottom:24px}
+/* Both ways to reach the team sit together: the contact page, and the inbox beside it. */
+.contact-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px}.contact-email{line-height:24px}.contact-email:hover{text-decoration-thickness:2px}
+.newsletter h2{font-size:20px;line-height:26px;letter-spacing:0;margin-bottom:12px}.newsletter>p{color:var(--muted-foreground);margin-bottom:24px}
+.newsletter-row{display:flex;align-items:flex-end;gap:12px}.newsletter .field{flex:1;min-width:0;gap:12px}.newsletter .field>label{font-weight:400}.newsletter .field input{background:var(--web-tile)}
+.newsletter .field-error{margin-top:12px}.newsletter-status{margin-top:12px;font-size:14px;line-height:20px;color:var(--muted-foreground)}.newsletter-status:empty{display:none}.newsletter-status a{color:var(--foreground)}
+.directory{padding-block:48px 64px}
+/* The logo heads the first column level with the link headings; the funding line closes it as a
+   colophon, its last baseline on the last link row's (7 px clears that row's centred 24 px line). */
+.identity{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:7px}.identity p{font-size:14px;line-height:22px;color:var(--muted-foreground);max-width:300px}
+.identity p a{color:var(--foreground);white-space:nowrap}.identity p a:hover{text-decoration-thickness:2px}.identity p :global(.web-icon),.identity p :global(.web-icon svg){width:12px;height:12px}.identity p :global(.web-icon){margin-left:2px;vertical-align:-1px}
+.footer-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px}
+.footer-links h2{font:600 14px/20px var(--font-heading);letter-spacing:0;color:var(--muted-foreground);margin-bottom:16px}.footer-links ul{list-style:none;padding:0;margin:0}
+.footer-links li a{display:flex;align-items:center;gap:4px;min-height:38px;line-height:24px}.footer-links :global(.web-icon),.footer-links :global(.web-icon svg){width:14px;height:14px}
+/* Community destinations carry their logo before the name. */
+.footer-links :global(.social-logo),.footer-links :global(.social-logo svg){width:18px;height:18px}.footer-links :global(.social-logo){margin-right:6px;color:var(--muted-foreground);transition:color 180ms ease-out}.footer-links a:hover :global(.social-logo){color:var(--foreground)}
+/* Below 1280 a 1fr / 1fr contact row over four equal link columns with the same gap, so the
+   newsletter's edge lands on the third column; the identity row splits on that edge too. */
+@media(max-width:1279px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}.directory{grid-template-columns:minmax(0,1fr)}.identity{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;align-items:center;padding-bottom:0}.footer-links{gap:48px}}
+@media(max-width:767px){.contact-band{padding-block:64px}.footer-grid{grid-template-columns:minmax(0,1fr)}.directory{padding-block:40px 48px;row-gap:40px}.identity{display:flex;align-items:flex-start;gap:24px}.footer-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}.footer-links li a{min-height:44px}}
+/* Under 375 px the field would clip its placeholder beside the button: stack them. */
+@media(max-width:374px){.newsletter-row{flex-direction:column;align-items:stretch}}
+</style>

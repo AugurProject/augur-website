@@ -1,0 +1,14 @@
+---
+interface Props { variant: 'bonds' | 'steps' | 'fork' | 'field'; large?: boolean; class?: string; }
+const { variant, large = false, class: className } = Astro.props;
+const useLarge = large && variant === 'bonds';
+---
+<div class:list={['blog-cover', className]} aria-hidden="true" data-cover-fade>
+  <img src={`/images/blog/${variant}${useLarge?'-large':''}.svg`} width={useLarge?1248:264} height={useLarge?655:139} alt="" loading="lazy" decoding="async" />
+</div>
+<script>
+ import {playOnce} from '../../motion/play-once';
+ import {timing} from '../../motion/timelines';
+ document.querySelectorAll('[data-cover-fade]').forEach(cover=>playOnce(cover,animate=>animate(cover,[{opacity:0},{opacity:1}],{duration:timing.longPanel})));
+</script>
+<style>.blog-cover{width:100%;aspect-ratio:1200/630;overflow:hidden}.blog-cover img{display:block;width:100%;height:100%;object-fit:fill}</style>

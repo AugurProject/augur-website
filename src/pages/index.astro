@@ -1,16 +1,19 @@
 ---
+import PageLayout from '../layouts/PageLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import Tenets from '../components/home/Tenets.astro';
+import Applications from '../components/home/Applications.astro';
+import HowItWorks from '../components/home/HowItWorks.astro';
+import Roadmap from '../components/home/Roadmap.astro';
+import LearnMore from '../components/home/LearnMore.astro';
 ---
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<PageLayout>
+ <Hero/><Tenets/><Applications/><HowItWorks/><Roadmap/><LearnMore/>
+ <script>
+  // These sections exist only here, so the page starts them once from one script; each init
+  // finds its own sections. One entry instead of five identical ones keeps the JavaScript budget.
+  import {initAnswerRibbon,initTenets,initRepZone} from '../motion/home-art';
+  import {initHomeInteractions} from '../motion/home-interactions';
+  initAnswerRibbon();initTenets();initHomeInteractions();initRepZone();
+ </script>
+</PageLayout>

@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+import AnnouncementBar from '../components/layout/AnnouncementBar.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url';
+---
+<!doctype html>
+<html lang="en" class="dark">
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0e0e21" />
+  <title>Augur | The frontier of decentralized truth</title>
+  <meta name="description" content="Real-world answers for onchain apps, controlled by no one." />
+  <link rel="icon" href="/brand/kit/rep-token/rep-token-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/brand/kit/rep-token/rep-token-icon.png" />
+  <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
+ </head>
+ <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <AnnouncementBar /><SiteHeader />
+  <main id="main" tabindex="-1"><slot /></main>
+  <SiteFooter />
+  <div class="page-field" data-page-field aria-hidden="true"></div>
+  <script>import {initPageField} from '../motion/page-field';initPageField();</script>
+ </body>
+</html>
