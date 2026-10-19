@@ -6,6 +6,8 @@ site. Current code and approved decisions govern development. Read the
 are not specifications or required dependencies.
 
 Before editing files under `docs/`, read [docs/AGENTS.md](docs/AGENTS.md).
+Before changing identity, shared controls or homepage geometry, read
+[design sources and adaptations](docs/design-sources.md).
 
 ## Scope and implementation
 
