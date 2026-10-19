@@ -2,7 +2,7 @@
 
 - [Project overview](../README.md): Project purpose, installation and local preview commands.
 - [Temporary port handoff](port-handoff.md): Read before resolving the remaining migration decisions and review; delete after the removal condition is met.
-- [Landing page](landing-page.md): Homepage structure, content, navigation, styles and interactions, including unresolved editorial decisions and verification limits.
+- [Landing page](landing-page.md): Homepage structure, build inputs, Cloudflare configuration, content, styles and interactions, including unresolved decisions and verification limits.
 - [Design sources and adaptations](design-sources.md): Read before changing identity, controls or geometry; records design references, website adaptations and collaboration with the active design-system project.
 - [Repository agent guidance](../AGENTS.md): Repository-wide rules for coding agents.
 - [Documentation agent guidance](AGENTS.md): Rules for agents maintaining this directory.

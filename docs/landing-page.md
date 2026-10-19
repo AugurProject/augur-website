@@ -22,6 +22,33 @@ Tailwind Vite plugin. [global.css](../src/styles/global.css) defines Tailwind v4
 shared tokens, controls and utilities; specialized artwork and section styles
 remain scoped. Fonts are Sora and Schibsted Grotesk from Fontsource packages.
 
+## Build inputs and deployment
+
+[package.json](../package.json) and [package-lock.json](../package-lock.json)
+define the npm build. There is no separate asset or design-system generation
+step. Shared CSS is authored in [global.css](../src/styles/global.css) and
+[disclosures.css](../src/styles/disclosures.css); Tailwind runs through Vite.
+Fontsource supplies Sora 400/600 and Schibsted Grotesk 400. The layout preloads
+the packaged Sora Latin 600 WOFF2; keep that preload aligned with the headline
+font when changing typography. Brand files, artwork geometry and packaged icons
+are local inputs; building requires no design-tool connection or external
+prototype checkout.
+
+The page renders through Astro components; browser scripts enhance the rendered
+HTML without framework hydration. Keep browser-only APIs inside browser scripts
+and motion controllers rather than component frontmatter. Current application
+code requires no API keys or provider credentials. `PUBLIC_SITE_INDEXABLE` only
+sets the unused export described above; it is not a launch or indexing switch.
+
+[wrangler.jsonc](../wrangler.jsonc) configures the Cloudflare server entrypoint,
+the `ASSETS` binding for `./dist`, Worker name `augur-website`, compatibility date
+and observability. Preserve the adapter/configuration pairing when changing the
+build. `npm run preview` rebuilds before previewing; `npm run deploy` rebuilds
+and then runs `wrangler deploy`. Deployment needs Cloudflare access. The current
+configuration specifies no custom domain or route; the production account,
+hostname and response-header policy still need review. Do not infer a production
+deployment from a successful build.
+
 ## Content and destinations
 
 [navigation.ts](../src/data/navigation.ts) links to homepage sections and published
@@ -51,6 +78,14 @@ The homepage starts its section controllers in
 [index.astro](../src/pages/index.astro); shared browser behavior lives in
 [src/motion](../src/motion/). The query/REP explanation uses one walkthrough;
 only earlier completed steps have strikethrough and checks.
+
+[timelines.ts](../src/motion/timelines.ts) holds shared timing; choreography files
+in [src/motion](../src/motion/) define the looping artwork. Reuse
+[play-once.ts](../src/motion/play-once.ts) and
+[loop-scene.ts](../src/motion/loop-scene.ts) to preserve session and visibility
+behavior. In development, [debug.ts](../src/motion/debug.ts) supports
+`?motion=slow` for five-times-longer timings and `?motion=replay` for replay
+comparisons. Production ignores both controls.
 
 [tabs.ts](../src/motion/tabs.ts) reveals a selected panel after explicit interaction
 at widths up to 767px. [FaqItem.astro](../src/components/content/FaqItem.astro)
