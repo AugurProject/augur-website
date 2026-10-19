@@ -1,0 +1,78 @@
+---
+import { currentRep } from '../../data/rep';
+import { links } from '../../data/links';
+import Icon from '../primitives/Icon.astro';
+/** The current REP token, as a wallet or explorer would show it (owner, 19 Oct 2026: /rep/ is
+ * rebuilt). It keeps the contract-reference job of today's augur.net/rep for exchanges, wallets
+ * and explorers, in the hero where they look first. The REP token icon is the token's identity
+ * (Brand Foundation 02.10), used here for the token itself. The address shows its first six and
+ * last four characters in Paper and the rest in Pewter, the parts people compare with a wallet. */
+const head = currentRep.address.slice(0, 6), tail = currentRep.address.slice(-4), middle = currentRep.address.slice(6, -4);
+---
+<section class="token-card" id="contract" aria-labelledby="token-symbol">
+ <div class="token-head">
+  <img class="token-icon" src="/brand/kit/rep-token/rep-token-icon.svg" alt="" width="48" height="48" />
+  <div class="token-name"><h2 id="token-symbol">{currentRep.symbol}</h2><p>{currentRep.name} · listed as {currentRep.listing}</p></div>
+  <span class="token-status">Current</span>
+ </div>
+ <dl class="token-facts">
+  <div><dt>Chain</dt><dd>{currentRep.chain}</dd></div>
+  <div><dt>Chain ID</dt><dd>{currentRep.chainId}</dd></div>
+  <div><dt>Decimals</dt><dd>{currentRep.decimals}</dd></div>
+ </dl>
+ <div class="token-contract">
+  <p class="token-label" id="contract-label">Contract address</p>
+  <p class="token-address" aria-labelledby="contract-label"><span>{head}</span><span class="address-middle">{middle}</span><span>{tail}</span></p>
+  <div class="token-actions">
+   <button type="button" class="button outline token-copy" data-copy-address={currentRep.address}><span class="copy-idle"><Icon name="copy"/>Copy address</span><span class="copy-done" aria-hidden="true"><Icon name="check"/>Copied</span></button>
+   <a class="button text" href={links.repToken.url}><span class="button-label">View on Etherscan</span><Icon name="arrow-up-right"/></a>
+  </div>
+  <p class="sr-only" role="status" aria-live="polite" data-copy-address-status></p>
+ </div>
+ <p class="token-note">Augur Lituus is being built around this token. Address checked on Etherscan, {currentRep.checked}.</p>
+</section>
+<script>
+ // Copy the address; the label turns to “Copied” for a moment and a polite status confirms it.
+ const status = document.querySelector<HTMLElement>('[data-copy-address-status]');
+ for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy-address]')) {
+  let timer = 0;
+  button.addEventListener('click', async () => {
+   try {
+    await navigator.clipboard.writeText(button.dataset.copyAddress!);
+    button.dataset.copied = '';
+    if (status) status.textContent = 'Contract address copied';
+    clearTimeout(timer);
+    timer = window.setTimeout(() => { delete button.dataset.copied; if (status) status.textContent = ''; }, 2000);
+   } catch {
+    if (status) status.textContent = 'Could not copy. Select the address and copy it instead.';
+   }
+  });
+ }
+</script>
+<style>
+ .token-card{align-self:center;background:var(--web-quiet);border:1px solid var(--web-outline);padding:28px}
+ .token-head{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:16px}
+ .token-icon{display:block;width:48px;height:48px}
+ .token-name h2{font:600 22px/30px var(--font-heading);letter-spacing:0;overflow-wrap:anywhere}
+ .token-name p{font-size:14px;line-height:20px;color:var(--muted-foreground);margin-top:2px}
+ /* The current mark: a Green square and the word, as the old version table's “Current reference”. */
+ .token-status{display:inline-flex;align-items:center;gap:8px;align-self:start;padding:6px 10px;box-shadow:inset 0 0 0 1px var(--primary);font:600 13px/18px var(--font-heading);white-space:nowrap}
+ .token-status::before{content:'';width:7px;height:7px;background:var(--primary)}
+ .token-facts{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:16px;margin:24px 0 0;padding:20px 0;border-block:1px solid var(--border-quiet)}
+ .token-facts dt,.token-label{font-size:13px;line-height:18px;color:var(--muted-foreground)}
+ .token-facts dd{margin:4px 0 0;font:600 16px/24px var(--font-heading);font-variant-numeric:tabular-nums}
+ .token-contract{padding-top:20px}
+ .token-address{margin-top:6px;font:600 15px/24px var(--font-heading);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;user-select:all}
+ .address-middle{color:var(--muted-foreground)}
+ .token-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;margin-top:16px}
+ /* “Copied” takes the label's place without changing the button's width. */
+ .token-copy{display:inline-grid;padding-inline:18px}
+ .token-copy>span{grid-area:1/1;display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:opacity 160ms ease-out}
+ .token-copy .copy-done{opacity:0}
+ .token-copy[data-copied] .copy-idle{opacity:0}.token-copy[data-copied] .copy-done{opacity:1}
+ .token-copy :global(.web-icon){width:18px;height:18px}
+ .token-copy .copy-done :global(.web-icon){color:var(--primary)}
+ .token-note{margin-top:20px;font-size:13px;line-height:20px;color:var(--muted-foreground)}
+ @media(max-width:767px){.token-card{padding:20px}.token-head{grid-template-columns:40px minmax(0,1fr);gap:12px}.token-icon{width:40px;height:40px}.token-status{grid-column:1/-1;justify-self:start}.token-facts{grid-template-columns:1fr 1fr}.token-facts>div:first-child{grid-column:1/-1}.token-address{font-size:15px}}
+ @media(forced-colors:active){.token-card{border-color:CanvasText}.token-status{border:1px solid Highlight}.token-status::before{forced-color-adjust:none;background:Highlight}}
+</style>

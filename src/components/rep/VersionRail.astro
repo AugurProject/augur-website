@@ -1,0 +1,91 @@
+---
+import { versions, shortAddress } from '../../data/rep';
+import Icon from '../primitives/Icon.astro';
+/** Which REP do you hold? One row per version, oldest first, on a lineage rail like a commit
+ * graph: REPv1 and REPv2 on the main lane, the Moon Fork splitting it, REPv2_Yes_1 carrying the
+ * main lane on (Green, current) and REPv2_No_1 on a side lane. Each row says what the token is and
+ * what holding it means; the scam notice closes the list. The rail is decoration; the order and
+ * the fork are also in the text. */
+const rows = versions.rows;
+const before = rows.slice(0, versions.fork.after + 1), after = rows.slice(versions.fork.after + 1);
+---
+<div class="versions">
+ <div class="versions-head" aria-hidden="true"><span></span><span>Version</span>{versions.fields.map(field => <span>{field.label}</span>)}</div>
+ <ol class="version-list" aria-label="REP versions, oldest first">
+  {before.map((row, index) => <li class="version"><span class:list={['rail', index === 0 ? 'rail-start' : 'rail-through']} aria-hidden="true"><i class="node"></i></span>
+   <div class="version-name"><h3>{row.name}</h3><span class="version-status">{row.status}</span></div>
+   {versions.fields.map(field => <dl class="version-cell"><dt>{field.label}</dt><dd>{row[field.key]}</dd></dl>)}
+  </li>)}
+  <li class="version version-fork"><span class="rail rail-split" aria-hidden="true"><i class="node"></i><i class="elbow"></i></span>
+   <p><strong>{versions.fork.label}</strong> {versions.fork.text}</p>
+  </li>
+  {after.map((row, index) => <li class:list={['version', { 'is-current': row.current, 'is-branch': index > 0 }]}><span class:list={['rail', index === 0 ? 'rail-main-end' : 'rail-branch-end']} aria-hidden="true"><i class="node"></i></span>
+   <div class="version-name"><h3>{row.name}</h3><span class="version-status">{row.status}</span></div>
+   {versions.fields.map(field => <dl class="version-cell"><dt>{field.label}</dt><dd>{row[field.key]}{row.current && field.key === 'holder' && <> <a class="line-link is-ruled" href="#contract"><span class="button-label">Contract {shortAddress}</span></a></>}</dd></dl>)}
+  </li>)}
+ </ol>
+ <aside class="safety" aria-labelledby="safety-title"><Icon name="warning-circle"/><div><h3 id="safety-title">{versions.safety.title}</h3><p>{versions.safety.text}</p></div></aside>
+</div>
+<style>
+ /* Columns: the rail, the version and its status, what it is, what holding it means. */
+ .versions{--rail:64px;--lane-1:14px;--lane-2:42px;--node-y:37px}
+ .versions-head,.version{display:grid;grid-template-columns:var(--rail) minmax(0,260fr) minmax(0,440fr) minmax(0,480fr);column-gap:24px}
+ .versions-head{padding-bottom:12px;font:600 13px/18px var(--font-heading);color:var(--muted-foreground)}
+ .version-list{list-style:none;margin:0;padding:0}
+ .version{position:relative;border-top:1px solid var(--border-quiet)}
+ .version:last-child{border-bottom:1px solid var(--border-quiet)}
+ .version>:not(.rail){padding-block:24px}
+ .version-name{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+ .version h3{font:600 20px/26px var(--font-heading);overflow-wrap:anywhere}
+ .version-status{display:inline-flex;align-items:center;gap:8px;padding:4px 10px;box-shadow:inset 0 0 0 1px var(--web-outline);font:600 13px/18px var(--font-heading);color:var(--muted-foreground);white-space:nowrap}
+ .is-current .version-status{box-shadow:inset 0 0 0 1px var(--primary);color:var(--foreground)}
+ .is-current .version-status::before{content:'';width:7px;height:7px;background:var(--primary)}
+ .version-cell{margin:0}
+ .version-cell dt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+ .version-cell dd{margin:0;font-size:16px;line-height:26px;color:var(--muted-foreground)}
+ .version-cell:last-of-type dd{color:var(--foreground)}
+ .version-cell a{color:var(--foreground);font-weight:600;font-family:var(--font-heading);font-size:15px;text-underline-offset:5px;white-space:nowrap}
+ .is-current{background:color-mix(in srgb,var(--primary) 5%,var(--background))}
+ /* The rail: Mist lines and squares on two lanes, drawn with the row's own pseudo-elements so it
+    runs unbroken from row to row. The node sits on the version name's first line. */
+ .rail{position:relative;align-self:stretch}
+ .rail::before,.rail::after,.elbow{content:'';position:absolute;width:2px;background:var(--mark-participant)}
+ .rail::before{left:calc(var(--lane-1) - 1px);top:0;bottom:0}
+ .rail-start::before{top:var(--node-y)}
+ .rail-main-end::before{bottom:auto;height:var(--node-y);background:var(--primary)}
+ .rail-branch-end::before{display:none}
+ /* The side lane leaves the main one at the fork and runs down past REPv2_Yes_1 to REPv2_No_1. */
+ .rail-split::after{left:calc(var(--lane-2) - 1px);top:var(--node-y);bottom:0}
+ .rail-main-end::after{left:calc(var(--lane-2) - 1px);top:0;bottom:0}
+ .rail-branch-end::after{left:calc(var(--lane-2) - 1px);top:0;height:var(--node-y)}
+ .rail-split::before{background:linear-gradient(var(--mark-participant) 0 var(--node-y),var(--primary) var(--node-y))}
+ .elbow{left:var(--lane-1);top:calc(var(--node-y) - 1px);width:calc(var(--lane-2) - var(--lane-1));height:2px}
+ .node{position:absolute;z-index:1;left:calc(var(--lane-1) - 4px);top:calc(var(--node-y) - 4px);width:8px;height:8px;background:var(--mark-participant)}
+ .rail-branch-end .node{left:calc(var(--lane-2) - 4px)}
+ .rail-main-end .node{left:calc(var(--lane-1) - 6px);top:calc(var(--node-y) - 6px);width:12px;height:12px;background:var(--primary)}
+ /* The fork itself: a hollow square where the lanes part, and one line of text. */
+ .rail-split .node{left:calc(var(--lane-1) - 5px);top:calc(var(--node-y) - 5px);width:10px;height:10px;background:var(--background);box-shadow:inset 0 0 0 2px var(--foreground)}
+ .version-fork{border-top-style:dashed}
+ .version-fork p{grid-column:2/-1;font-size:15px;line-height:26px;color:var(--muted-foreground)}
+ .version-fork strong{font:600 15px/26px var(--font-heading);color:var(--foreground);margin-right:6px}
+ /* The scam notice: a warning mark and two sentences, on a tile under the list. */
+ .safety{display:grid;grid-template-columns:24px minmax(0,1fr);gap:16px;margin-top:40px;padding:24px 28px;background:var(--web-quiet);box-shadow:inset 0 0 0 1px var(--web-outline)}
+ .safety :global(.web-icon){width:24px;height:24px;color:var(--destructive)}
+ .safety h3{font:600 18px/26px var(--font-heading)}
+ .safety p{margin-top:6px;max-width:880px;font-size:16px;line-height:25px;color:var(--muted-foreground)}
+ /* Below 1024 each row stacks beside the rail: the name and status on one line, then the two
+    labelled cells. The rail spans the stack. */
+ @media(max-width:1023px){
+  .versions-head{display:none}
+  .version{grid-template-columns:var(--rail) minmax(0,1fr)}
+  .rail{grid-row:span 3}
+  .version>:not(.rail){grid-column:2;padding-block:0}
+  .version>.version-name{flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px 12px;padding-top:24px}
+  .version>.version-cell{margin-top:12px}
+  .version>.version-cell:last-child{padding-bottom:24px}
+  .version-cell dt{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;margin-bottom:2px;font:600 13px/18px var(--font-heading);color:var(--muted-foreground)}
+  .version.version-fork>p{padding-block:24px}
+ }
+ @media(max-width:767px){.versions{--rail:44px;--lane-1:10px;--lane-2:30px}.version{column-gap:12px}.safety{padding:20px;gap:12px}}
+ @media(forced-colors:active){.rail::before,.rail::after,.elbow,.node{forced-color-adjust:none;background:CanvasText}.rail-main-end .node,.rail-main-end::before{background:Highlight}.rail-split::before{background:CanvasText}.rail-split .node{background:Canvas;box-shadow:inset 0 0 0 2px CanvasText}.version-status{border:1px solid CanvasText}.is-current .version-status{border-color:Highlight}.safety{border:1px solid CanvasText}.safety :global(.web-icon){color:CanvasText}}
+</style>

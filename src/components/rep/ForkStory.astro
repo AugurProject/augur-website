@@ -1,0 +1,105 @@
+---
+import { fork, moonFork } from '../../data/rep';
+import Icon from '../primitives/Icon.astro';
+/** If a fork happens. Left: the proposed Augur Lituus steps on a rail, the step that asks
+ * something of holders marked by a hollow Green square (the How it works holder note's “act”
+ * mark). Right: the split as a picture, then the one fork that has happened, Augur v2's Moon
+ * Fork, kept apart as deployed history with its own rules. The diagram is HTML squares and an
+ * SVG connector; its entrance (once per session) draws the branches and slides the REP in. */
+const total = moonFork.phases.reduce((sum, phase) => sum + phase.days, 0);
+---
+<div class="fork-story">
+ <ol class="fork-steps">
+  {fork.steps.map(step => <li class:list={{ 'is-action': step.action }}><span class="step-mark" aria-hidden="true"></span><h3>{step.title}</h3><p>{step.text}</p></li>)}
+ </ol>
+ <div class="fork-side">
+  <figure class="fork-figure" data-fork-diagram>
+   <div class="fork-diagram" role="img" aria-label={fork.diagram.summary}>
+    <div class="trunk"><span class="trunk-label">{fork.diagram.trunk}</span><span class="trunk-line"><i class="left-behind" data-left-behind></i></span><span class="trunk-note">{fork.diagram.left}</span></div>
+    <span class="fork-node"><i></i><span>{fork.diagram.node}</span></span>
+    <svg class="fork-connector" viewBox="0 0 40 210" preserveAspectRatio="none" aria-hidden="true"><path d="M0 105H16V35H40" pathLength="1"/><path d="M0 105H40" pathLength="1"/><path d="M16 105V175H40" pathLength="1"/></svg>
+    <ul class="branches">{fork.diagram.branches.map(branch => <li class:list={{ lead: branch.lead }}><span class="branch-line"><span class="branch-squares">{Array.from({ length: branch.squares }, () => <i data-arrive></i>)}</span></span><span class="branch-label">{branch.label}</span></li>)}</ul>
+   </div>
+   <figcaption>{fork.diagram.caption}</figcaption>
+  </figure>
+  <article class="moon-fork" aria-labelledby="moon-fork-title">
+   <p class="moon-meta">{moonFork.meta}</p>
+   <h3 id="moon-fork-title">{moonFork.title}</h3>
+   <p class="moon-text">{moonFork.text}</p>
+   <ol class="moon-phases" aria-label="Moon Fork timeline">
+    {moonFork.phases.map((phase, index) => <li style={`--share:${phase.days / total}`} class:list={{ 'is-migration': index === 1 }}><span class="phase-bar" aria-hidden="true"></span><span class="phase-dates">{phase.start}{phase.end && <> – {phase.end}</>}</span><strong>{phase.label}</strong><span class="phase-detail">{phase.detail}</span></li>)}
+   </ol>
+   <p class="moon-note">{moonFork.note}</p>
+   <a class="button text" href={moonFork.link.href}><span class="button-label">{moonFork.link.label}</span><Icon name="arrow-up-right"/></a>
+  </article>
+ </div>
+</div>
+<script>
+ import { playOnce } from '../../motion/play-once';
+ import { easing } from '../../motion/timelines';
+ // The branches draw out of the fork node (SVG stroke draw), then the REP slides along them into
+ // each universe, one square after another; the square left behind stays put.
+ const root = document.querySelector('[data-fork-diagram]');
+ if (root) playOnce(root, animate => {
+  root.querySelectorAll('.fork-connector path').forEach((path, index) => animate(path, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { delay: 150 + index * 80, duration: 520, easing: easing.draw }));
+  root.querySelectorAll('[data-arrive]').forEach((square, index) => animate(square, [{ opacity: 0, transform: 'translateX(-48px)' }, { opacity: 1, transform: 'none' }], { delay: 560 + index * 110, duration: 520, easing: easing.reveal }));
+  animate(root.querySelector('.trunk-note'), [{ opacity: 0 }, { opacity: 1 }], { delay: 1200, duration: 320 });
+ }, { threshold: .5 });
+</script>
+<style>
+ .fork-story{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);column-gap:80px}
+ /* The steps spread along their rail to the height of the picture and the Moon Fork beside them. */
+ /* Steps on a rail of squares: Mist marks, a hollow Green one where holders act. */
+ .fork-steps{position:relative;list-style:none;margin:0;padding:8px 0;display:grid;align-content:space-between;gap:36px}
+ .fork-steps::before{content:'';position:absolute;left:3.5px;top:22px;bottom:22px;width:1px;background:var(--web-outline)}
+ .fork-steps li{position:relative;padding-left:36px}
+ .step-mark{position:absolute;left:0;top:11px;width:8px;height:8px;background:var(--mark-participant)}
+ .fork-steps .is-action .step-mark{left:-2px;top:9px;width:12px;height:12px;background:var(--background);box-shadow:inset 0 0 0 2px var(--primary)}
+ .fork-steps h3{font:600 22px/30px var(--font-heading)}
+ .fork-steps p{margin-top:8px;font-size:18px;line-height:28px;color:var(--muted-foreground)}
+ .fork-steps .is-action p{color:var(--foreground)}
+ .fork-side{display:grid;gap:16px}
+ /* The split: one universe on the left, the fork node, three universes on the right. */
+ .fork-figure{margin:0;padding:28px 28px 20px;background:var(--web-quiet);box-shadow:inset 0 0 0 1px var(--web-outline)}
+ .fork-diagram{--square:16px;display:grid;grid-template-columns:minmax(0,1fr) auto 40px minmax(0,1.35fr);align-items:center;height:210px}
+ .trunk{display:grid;grid-template-rows:70px 2px 70px;align-content:center;height:100%}
+ .trunk-label{align-self:end;padding-bottom:10px;font:600 13px/18px var(--font-heading);color:var(--muted-foreground)}
+ .trunk-line{position:relative;height:2px;background:var(--mark-participant)}
+ .left-behind{position:absolute;right:28px;top:calc(var(--square) / -2 + 1px);width:var(--square);height:var(--square);background:var(--web-quiet);border:1.5px dashed var(--mark-participant);box-sizing:border-box}
+ .trunk-note{align-self:start;justify-self:end;margin-right:6px;padding-top:12px;font-size:13px;line-height:18px;color:var(--muted-foreground)}
+ .fork-node{position:relative;display:grid;place-items:center}
+ .fork-node i{width:12px;height:12px;background:var(--foreground)}
+ .fork-node span{position:absolute;bottom:20px;font:600 13px/18px var(--font-heading);white-space:nowrap}
+ .fork-connector{display:block;width:40px;height:210px;overflow:visible;fill:none;stroke:var(--mark-participant);stroke-width:2;stroke-dasharray:1;vector-effect:non-scaling-stroke}
+ .fork-connector path{vector-effect:non-scaling-stroke}
+ .branches{list-style:none;margin:0;padding:0;display:grid;grid-template-rows:repeat(3,70px);height:210px}
+ /* Each branch line sits on its row's centre line, where the connector ends (35, 105, 175). */
+ .branches li{display:grid;grid-template-rows:34px 2px 34px}
+ .branch-line{grid-row:2;position:relative;height:2px;background:var(--mark-participant)}
+ .branch-label{grid-row:3;padding-top:14px}
+ .branch-squares{position:absolute;left:12px;top:calc(var(--square) / -2 + 1px);display:flex;gap:4px}
+ .branch-squares i{width:var(--square);height:var(--square);background:var(--muted-foreground)}
+ .branches .lead .branch-squares i{background:var(--primary)}
+ .branches .lead .branch-line{background:var(--primary)}
+ .branch-label{font:600 13px/18px var(--font-heading);color:var(--muted-foreground)}
+ .branches .lead .branch-label{color:var(--foreground)}
+ .fork-figure figcaption{margin-top:12px;font-size:13px;line-height:18px;color:var(--muted-foreground)}
+ /* The one fork that has happened: deployed history, with a timeline in proportion to its phases. */
+ .moon-fork{padding:28px;background:var(--background);box-shadow:inset 0 0 0 1px var(--web-outline)}
+ .moon-meta{font-size:13px;line-height:18px;color:var(--muted-foreground)}
+ .moon-fork h3{margin-top:4px;font:600 22px/30px var(--font-heading)}
+ .moon-text{margin-top:10px;font-size:16px;line-height:25px}
+ .moon-phases{display:flex;gap:4px;list-style:none;margin:20px 0 0;padding:0}
+ .moon-phases li{flex:var(--share) 1 0;display:flex;flex-direction:column;gap:2px;min-width:0}
+ .phase-bar{height:8px;margin-bottom:10px;background:var(--mark-participant)}
+ .is-migration .phase-bar{background:var(--muted-foreground)}
+ .phase-dates{font-size:13px;line-height:18px;color:var(--muted-foreground);font-variant-numeric:tabular-nums}
+ .moon-phases strong{font:600 15px/22px var(--font-heading)}
+ .phase-detail{font-size:13px;line-height:18px;color:var(--muted-foreground)}
+ .moon-note{margin-top:20px;font-size:14px;line-height:21px;color:var(--muted-foreground)}
+ .moon-fork .button{margin-top:4px}
+ @media(max-width:1279px){.fork-story{column-gap:48px}.fork-figure,.moon-fork{padding:24px}}
+ @media(max-width:1023px){.fork-story{grid-template-columns:1fr;row-gap:48px}.fork-steps{padding:0}.fork-steps::before{top:14px;bottom:14px}}
+ @media(max-width:767px){.fork-figure,.moon-fork{padding:20px}.fork-diagram{--square:12px;grid-template-columns:minmax(0,.8fr) auto 28px minmax(0,1.2fr)}.fork-connector{width:28px}.left-behind{right:12px}.trunk-note{margin:0}.branch-squares{left:8px;gap:3px}.branch-label,.trunk-label{font-size:12px;line-height:16px}.fork-steps h3{font-size:20px;line-height:28px}.fork-steps p{font-size:16px;line-height:24px}}
+ @media(forced-colors:active){.fork-figure,.moon-fork{border:1px solid CanvasText}.fork-steps::before{forced-color-adjust:none;background:CanvasText}.step-mark,.fork-node i,.branch-squares i{forced-color-adjust:none;background:CanvasText}.branches .lead .branch-squares i,.branches .lead .branch-line{background:Highlight}.fork-steps .is-action .step-mark{box-shadow:inset 0 0 0 2px Highlight;background:Canvas}.trunk-line,.branch-line,.phase-bar{forced-color-adjust:none;background:CanvasText}.fork-connector{stroke:CanvasText}}
+</style>
