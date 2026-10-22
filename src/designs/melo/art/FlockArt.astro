@@ -1,0 +1,16 @@
+---
+import {flockArt,flockClusters,flockGlyphs,flockPole} from '../data/hero-flock';
+// The /2/ hero's lituus flock (hero-flock.ts). Each cluster sits at its resting pose, so no JavaScript,
+// reduced motion and print show the settled artwork; hero-flock-v2.js plays the loop and answers the
+// pointer and taps. No <style> or <script> here: the styles are in home-v2-only.css and the driver is
+// inline on /2/ only, so "/" is unchanged. Sizes are artwork units (572 wide) in container units.
+const cq=(units:number)=>`${+(units*100/flockArt.width).toFixed(3)}cqw`;
+const fills={mist:'var(--mark-participant)',pewter:'var(--muted-foreground)',paper:'var(--foreground)',green:'var(--primary)'} as const;
+const alpha={mist:.8,pewter:.85,paper:.92,green:.95} as const;
+const transform=([x,y,angle,scale]:readonly number[])=>`translate(${cq(x!)},${cq(y!)}) rotate(${angle}deg) scale(${scale})`;
+---
+<div class="flock" data-flock aria-hidden="true">
+ <svg class="flock-glyphs" width="0" height="0" focusable="false"><defs>{flockGlyphs.map((squares,g)=><symbol id={`flock-g${g}`} viewBox="-13.5 -13.5 27 27">{squares.map(s=><rect x={s.x-s.size/2} y={s.y-s.size/2} width={s.size} height={s.size} fill={fills[s.tone]} opacity={alpha[s.tone]}/>)}</symbol>)}</defs></svg>
+ {flockClusters.map(c=><span class="flock-c" data-c={c.type} data-p={c.phase} data-l={c.lateral} style={`transform:${transform(c.pose)}${c.pose[4]<1?`;opacity:${c.pose[4]}`:''};--l:${c.lateral}`}><svg class="flock-l" focusable="false"><use href={`#flock-g${c.glyph}`}/></svg></span>)}
+ <span class="flock-centre" data-flock-centre style={`left:${cq(flockPole[0]-17)};top:${cq(flockPole[1]-17)}`}><svg viewBox="0 0 34 34" focusable="false"><rect x="1" y="1" width="32" height="32" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="4 4"/></svg></span>
+</div>

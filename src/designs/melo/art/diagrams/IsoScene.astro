@@ -1,0 +1,21 @@
+---
+import { isoScenes, type IsoKind, type SvgNode } from '../../data/tenets-iso';
+import glyphMaster from '../../../../../public/brand/kit/glyph/augur-glyph-reversed.svg?raw';
+// The /2/ Why Augur cards' isometric scenes (owner, 22 Oct 2026): Two roads, Middleman crumbles and the
+// Catapult. Each scene's module (tenets-iso.ts lists them) builds its drawing at the resting frame and its
+// loop's keyframes; tenets-iso-v2.js plays them on the `data-iso` names. The Augur glyph painted on Two roads'
+// Augur Lituus road is the supplied reversed master: its paths go into the drawing's `roads-glyph` group
+// unchanged, as on the Brand page. No <style> or <script> here: the styles are in home-v2-only.css and the
+// driver is inline on /2/ only, so "/" is unchanged.
+interface Props { kind: IsoKind; }
+const { kind } = Astro.props;
+const scene = isoScenes[kind];
+const glyphPaths = glyphMaster.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+---
+<svg viewBox="0 0 336 168" width="336" height="168" class="tenet-diagram tenet-iso" data-iso-scene={kind} aria-hidden="true">
+  <g transform={scene.transform}>{(function render(nodes: SvgNode[]): any { return nodes.map(({ tag, attrs, children }) => {
+    if (attrs.class === 'roads-glyph') return <g {...attrs} set:html={glyphPaths}/>;
+    const Tag = tag as any;
+    return children ? <Tag {...attrs}>{render(children)}</Tag> : <Tag {...attrs}/>;
+  }); })(scene.world)}</g>
+</svg>
