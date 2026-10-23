@@ -6,7 +6,7 @@ This repository is the future home of the Augur website for [augur.net](https://
 
 The [documentation index](docs/README.md) links to implementation context and documentation guidance.
 
-Use npm with `package-lock.json` and Node `>=22.22.0`:
+Use npm with `package-lock.json` and Node `>=22.23.4`:
 
 ```sh
 npm ci
