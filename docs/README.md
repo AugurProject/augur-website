@@ -12,7 +12,7 @@
 
 Keep each document short, scoped and actionable. Update documentation when the facts or approved decisions it describes change. Preserve unresolved decisions and verification limits. Link to existing guidance rather than repeating it.
 
-Keep this README as a reader-facing index and shared writing guide. Index entries describe what each document covers and when to read it. Maintenance steps belong in [AGENTS.md](AGENTS.md); writing rules belong here.
+Keep this README as a reader-facing index and shared writing guide. Index entries describe what each document covers and when to read it.
 
 ## Writing style
 

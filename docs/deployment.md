@@ -21,8 +21,6 @@ Other branches and pull requests then get preview builds.
 
 To deploy from a local machine, run `npm run deploy`. It requires Cloudflare access.
 
-`astro.config.mjs` must set `session: false` on the Cloudflare adapter. Without it, the adapter's default KV session binding fails the Workers preview build with error 10021 (missing `namespace_id`).
-
 ## Before going public
 
 - Choose the production deployment target.
