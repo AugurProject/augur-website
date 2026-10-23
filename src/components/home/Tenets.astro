@@ -56,9 +56,9 @@ const closer={statement:'The answer is nobody’s call.',paths:[
  /* Hover edge (owner, 19 Oct 2026: "the whole website where it makes sense", the tenet cards named):
     a 1 px ring on the folder's silhouette (outer edge, then the same edge 1 px in, cut out evenodd), in
     the shared hover Green, fading in over 180 ms. The cards are not controls, so the cursor stays. */
- .tenet-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:var(--web-hover-edge);opacity:0;transition:opacity 180ms ease-out;
+ .tenet-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:var(--brand-hover-edge);opacity:0;transition:opacity 180ms ease-out;
   clip-path:polygon(evenodd,0 0,var(--tab) 0,var(--tab) var(--step),calc(var(--tab) + var(--step)) var(--step),calc(var(--tab) + var(--step)) calc(var(--step) * 2),calc(var(--tab) + var(--step) * 2) calc(var(--step) * 2),calc(var(--tab) + var(--step) * 2) var(--lip),100% var(--lip),100% 100%,0 100%,0 0,1px 1px,1px calc(100% - 1px),calc(100% - 1px) calc(100% - 1px),calc(100% - 1px) calc(var(--lip) + 1px),calc(var(--tab) + var(--step) * 2 - 1px) calc(var(--lip) + 1px),calc(var(--tab) + var(--step) * 2 - 1px) calc(var(--step) * 2 + 1px),calc(var(--tab) + var(--step) - 1px) calc(var(--step) * 2 + 1px),calc(var(--tab) + var(--step) - 1px) calc(var(--step) + 1px),calc(var(--tab) - 1px) calc(var(--step) + 1px),calc(var(--tab) - 1px) 1px,1px 1px)}
- .tenet-closer::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;border:1px solid var(--web-hover-edge);opacity:0;transition:opacity 180ms ease-out}
+ .tenet-closer::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;border:1px solid var(--brand-hover-edge);opacity:0;transition:opacity 180ms ease-out}
  @media(hover:hover) and (pointer:fine){.tenet-card:hover::after,.tenet-closer:hover::after{opacity:1}}
  @media(prefers-reduced-motion:reduce){.tenet-card::after,.tenet-closer::after{transition:none}}
  .tenet-tab{display:flex;align-items:center;gap:8px;height:var(--lip);padding:0 32px;font:600 14px/20px var(--font-heading);letter-spacing:.01em;margin:0}

@@ -2,7 +2,8 @@
 @import '@fontsource/sora/600.css';
 @import '@fontsource/schibsted-grotesk/400.css';
 @import 'tailwindcss';
-@import './augur-theme.css';
+@import '@augurproject/design-system/theme.css';
+@import '@augurproject/design-system/tokens.tailwind.css';
 @import './disclosures.css';
 
 @theme {
@@ -11,8 +12,6 @@
   --color-signal: var(--augur-color-accent);
   --color-muted: var(--augur-color-secondary-dark);
   --color-outline: #383848;
-  --font-sans: 'Schibsted Grotesk', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: 'Sora', ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -21,9 +20,6 @@
   p { text-wrap: pretty; }
   ::selection { background: var(--color-signal); color: var(--color-navy); }
 }
-
-/* Unlayered so it outranks the design system's :focus-visible rule. */
-a:focus-visible { outline: 2px solid var(--color-signal); outline-offset: 6px; }
 
 /* Homepage brand roles share the canonical Tailwind theme. Component-specific
    artwork and choreography stay scoped to their Astro components. */
@@ -34,20 +30,15 @@ a:focus-visible { outline: 2px solid var(--color-signal); outline-offset: 6px; }
   --color-mist: var(--augur-color-surface-dark-mist);
   --color-graphite: var(--augur-color-secondary);
 }
-/* Overrides only where the design system's dark values differ from the site. Tokens the
-   system already sets identically (background, foreground, primary, ring, muted) are not redeclared. */
+/* Site-only roles. The design system supplies the shared ones, including --card, --border,
+   --brand-hover-edge, --primary-hover and --primary-active. */
 :root.dark {
-  --card: var(--color-tile);
-  --border: var(--color-mist);
   --web-band: var(--color-tile);
   --web-tile: var(--color-tile);
   --web-quiet: var(--color-quiet);
   --web-well: var(--color-navy);
   --web-raised: var(--color-raised);
   --web-outline: var(--color-outline);
-  --web-hover-edge: color-mix(in srgb, var(--color-signal), transparent 50%);
-  --web-action-hover: #27d19b;
-  --web-action-pressed: #24bc8d;
   --mark-participant: var(--color-mist);
   --mark-past: var(--color-graphite);
   --mark-signal: var(--color-signal);
@@ -99,10 +90,10 @@ a:focus-visible { outline: 2px solid var(--color-signal); outline-offset: 6px; }
   .web-icon,.web-icon>span,.web-icon svg { @apply inline-block size-5 shrink-0; }
   .web-icon>span,.web-icon svg { @apply block; }
   .button { @apply inline-flex min-h-12 items-center justify-center gap-3 border border-transparent bg-signal px-6 py-[11px] font-heading text-base font-semibold leading-6 text-navy no-underline; border-radius:0; }
-  .button:hover { background:var(--web-action-hover); }
-  .button:active { background:var(--web-action-pressed); }
+  .button:hover { background:var(--primary-hover); }
+  .button:active { background:var(--primary-active); }
   .button.outline { @apply border-outline bg-transparent text-paper; }
-  .button.outline:hover { @apply bg-tile; border-color:var(--web-hover-edge); }
+  .button.outline:hover { @apply bg-tile; border-color:var(--brand-hover-edge); }
   .button.text { @apply border-0 bg-transparent px-0 text-paper; }
   .button:disabled { @apply pointer-events-none bg-quiet text-muted; }
   .button-label { @apply relative inline-block; }
