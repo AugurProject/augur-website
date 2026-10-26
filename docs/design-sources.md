@@ -37,7 +37,7 @@ Each adaptation is a source-level fact, not a claim of rendered conformity. "App
 
 The site declares a design-system role only where its value differs from the package's. With `0.2.0` none differ: the site no longer redeclares `--card`, `--border`, `--font-sans`, `--font-heading`, the link focus rule, or its own hover-edge and filled-button colours. Site-only roles (`--web-*`, `--mark-*`) stay in [global.css](../src/styles/global.css). Recheck this when upgrading the package.
 
-`--color-muted` in the site's `@theme` has the same resolved value as the package's mapping. Removing it changed the computed value in the browser, and the cause has not been traced, so it stays until checked.
+`--color-muted` in the site's `@theme` does not match the package's mapping, so it stays. The package's bridge maps `--color-muted` to `var(--muted)`, the quiet surface role (`--augur-color-surface-dark-1`, `#161629`, in dark). The site uses `text-muted` for placeholder and disabled-button text and needs the text colour (`--augur-color-secondary-dark`, `#a1a1b8`), which the package exposes as `--muted-foreground`. Without the override, the placeholder and disabled-button text compute to `#161629`, the same colour as their `bg-quiet` background, so they become invisible. The override is a naming collision between shadcn's `muted` (a surface) and the site's `muted` (a text colour), not a cascade-layer or `@theme inline` effect. Removing it would need the two `text-muted` uses in [global.css](../src/styles/global.css) to become `text-muted-foreground`; this is not done here.
 
 The package's reduced-motion rule is a layered `!important` rule, so it outranks the site's unlayered one: transitions and animations collapse to 0.01ms rather than the site's 0.001ms.
 
