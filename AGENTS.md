@@ -15,6 +15,8 @@ A claim is verified when you have checked it against its source in the current s
 
 When writing markdown, write each paragraph as a single line. Do not hard-wrap prose; let the editor wrap it. Break lines only between blocks: paragraphs, list items, headings and code fences.
 
+Docs are organized by type (guides, reference, explanation, records); see [docs/AGENTS.md](docs/AGENTS.md#document-types).
+
 ## Working with Astro
 
 Use the official Astro Docs MCP at `https://mcp.docs.astro.build/mcp` for task-specific Astro documentation.

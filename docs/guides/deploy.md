@@ -1,6 +1,6 @@
-# Deployment
+# Deploy
 
-The site builds to static files in `dist/`. Any static host can serve them.
+The site builds to static files in `dist/`. Any static host can serve them. Configuration facts are in [wrangler.jsonc](../../wrangler.jsonc) and [astro.config.mjs](../../astro.config.mjs); production decisions still open are in [open decisions](../records/open-decisions.md#deployment).
 
 ## Build
 
@@ -21,8 +21,4 @@ Other branches and pull requests then get preview builds.
 
 To deploy from a local machine, run `npm run deploy`. It requires Cloudflare access.
 
-## Before going public
-
-- Choose the production deployment target.
-- Configure the custom domain and routes.
-- Set the public hostname and response-header policy.
+Keep `session: false` in `astro.config.mjs`; the comment there says why.
