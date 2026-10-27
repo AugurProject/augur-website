@@ -10,7 +10,7 @@ The site builds to static files in `dist/`. Any static host can serve them. Conf
 
 ## Deploy to Cloudflare Workers
 
-Worker name: `augur-website` (from `wrangler.jsonc`).
+Worker name: `augur-website-next` (from `wrangler.jsonc`).
 
 1. In the Cloudflare dashboard, connect the Worker to this repository through the Git integration.
 2. Set the production branch to `main`.
