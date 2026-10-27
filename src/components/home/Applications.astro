@@ -33,9 +33,8 @@ const check='40 144 96 200 224 72';
  <div class="site-container">
   <div class="section-heading"><h2 id="applications-heading">What can Augur&nbsp;Lituus power?</h2><p class="lead">Any app that needs to know what happened in the world.<br/>It asks a question and acts on the answer.</p></div>
   <div class="cases" data-tabs data-applications data-panel-swap data-activation="manual" data-active="0">
-   <div class="case-tabs" role="tablist" aria-label="Use cases" aria-orientation="vertical" style={`--count:${applications.length}`}>
-    {applications.map((app,i)=><button type="button" role="tab" id={`application-tab-${app.id}`} aria-controls={`application-panel-${app.id}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} class="case-tab"><span class="case-icon" aria-hidden="true"><Icon name={app.icon}/></span><span class="case-label"><span class="case-name">{app.title}</span><span class="case-blurb" aria-hidden="true">{app.summary}</span></span></button>)}
-    <span class="case-hover" aria-hidden="true"></span><span class="case-marker" aria-hidden="true"></span>
+   <div class="case-tabs" role="tablist" aria-label="Use cases" aria-orientation="vertical">
+    {applications.map((app,i)=><button type="button" role="tab" id={`application-tab-${app.id}`} aria-controls={`application-panel-${app.id}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} class="case-tab"><span class="case-mark" aria-hidden="true"></span><span class="case-label"><span class="case-name">{app.title}</span><span class="case-blurb" aria-hidden="true">{app.summary}</span></span></button>)}
    </div>
    <div class="case-stage">
     {applications.map((app,i)=><div role="tabpanel" id={`application-panel-${app.id}`} aria-labelledby={`application-tab-${app.id}`} class="case-panel" tabindex="0" hidden={i!==0}>
@@ -66,43 +65,27 @@ const check='40 144 96 200 224 72';
     each with its name and what it covers, so a reader sees every case without clicking; on the right one
     worked example that reads top to bottom. Research: UMA's builder tabs make a real question the proof;
     SEDA gives each use case one small live picture; NN/g asks that the selected tab join its panel. */
- .applications{--case-gap:80px;padding-block:72px}.section-heading{margin-bottom:48px}
+ .applications{--case-gap:80px}
  /* Balanced, with a no-break space in the name: "What can / Augur Lituus power?" never splits the name.
     The heading is the section's one visible mention of the name; only the Insurance note names it again. */
  #applications-heading{text-wrap:balance}
- /* The list sits on the heading row's 500 column and runs through the 80 gutter into the example, so the
-    picked case and its example form one surface. The rows share the example's height. */
+ /* The list is three tiles (web lab /2/, gap item 3.1; owner, 27 Oct 2026: without its Green connector):
+    from 1024 they sit 8 apart in the heading row's 500 column, Dark 1 at rest and Dark 2, the example's
+    colour, once picked. The gutter to the example stays open; the lab draws a 2 px Green line there, and
+    Green is a signal, not decoration. Hover is Dark 3 and no Green edge. An 8 px square mark, centred on
+    the name's first line, replaces the 44 px icon tile: Mist at rest, Green picked, Paper and turned onto
+    its corner on hover. Each tile paints its own colour, so there is no sliding marker or hover copy. */
  .cases{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);column-gap:var(--case-gap)}
- .case-tabs{position:relative;isolation:isolate;display:grid;grid-auto-rows:1fr;margin-right:calc(-1 * var(--case-gap));background:var(--web-quiet)}
- .case-tab{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;align-items:start;column-gap:20px;padding:24px calc(var(--case-gap) + 24px) 24px 32px;border:0;border-top:1px solid var(--web-outline);background:transparent;color:var(--muted-foreground);text-align:left;cursor:pointer;transition:border-color 240ms ease-out 280ms,color 240ms ease-out}
- /* A hairline gives way at once to the arriving marker, and shows again only once the marker has passed. */
- .case-tab:first-child,.case-tab[aria-selected="true"],.case-tab[aria-selected="true"]+.case-tab{border-top-color:transparent;transition-delay:0ms}
- /* The picked row's surface is one marker that glides to the row picked (owner, 19 Oct 2026: polished
-    motion), so the list and the example read as one object that moves together. The rows share one
-    height, so the marker moves by whole rows; the picked row's name and Green tile catch up as it lands.
-    Below 1024, where rows stack apart, each row carries its own surface instead. */
- .case-marker{position:absolute;z-index:-1;inset:0 0 auto;height:calc(100% / var(--count));background:var(--web-tile);transition:transform 560ms cubic-bezier(.16,1,.3,1);pointer-events:none}
- [data-active="1"]>.case-tabs>.case-marker{transform:translateY(100%)}[data-active="2"]>.case-tabs>.case-marker{transform:translateY(200%)}
- /* Hover (owner, 19 Oct 2026: "a little interactive when hovering … more professional"): a faint copy
-    of the marker follows the pointer, or keyboard focus, across the unpicked rows. It glides between
-    rows and fades in where it first appears (home-interactions.ts sets --hover), so the list answers
-    before a click. Transform and opacity only. */
- .case-hover{position:absolute;z-index:-1;inset:0 0 auto;height:calc(100% / var(--count));background:var(--web-tile);opacity:0;transform:translateY(calc(var(--hover,0) * 100%));transition:transform 420ms cubic-bezier(.16,1,.3,1),opacity 200ms ease-out;pointer-events:none}
- .case-hover.is-shown{opacity:.45}
- /* The name's first line centers on the 44 px icon tile. */
- .case-label{display:grid;gap:8px;min-width:0;padding-top:6px}
+ .case-tabs{display:grid;grid-auto-rows:1fr;gap:8px}
+ .case-tab{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;align-items:start;column-gap:16px;padding:24px 32px;border:0;background:var(--web-quiet);color:var(--muted-foreground);text-align:left;cursor:pointer;transition:background-color 180ms ease-out,color 180ms ease-out}
+ .case-label{display:grid;gap:8px;min-width:0}
  .case-name{font:400 clamp(20px,1.67vw,24px)/1.3 var(--font-heading);letter-spacing:-.01em;text-wrap:balance}
  .case-blurb{font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
- .case-icon{display:grid;place-items:center;width:44px;height:44px;background:var(--web-raised);color:var(--muted-foreground);transition:background-color 240ms ease-out,color 240ms ease-out,transform 120ms ease-out}.case-icon :global(.web-icon),.case-icon :global(svg){width:22px;height:22px}
- /* The picked case is the example's surface and its icon tile fills Green (owner, 6 Oct 2026: never a
-    side edge). Unpicked cases brighten their name and take the hover edge. */
- .case-tab[aria-selected="true"]{color:var(--foreground);cursor:default;transition-delay:0ms,120ms}
- .case-tab[aria-selected="true"] .case-icon{background:var(--primary);color:var(--background);transition-delay:140ms}
- /* An unpicked row under the pointer brightens its name and its glyph lifts a little; the surface
-    behind it is the hover copy above, so there is no outline. */
- .case-icon :global(svg){transition:transform 320ms cubic-bezier(.16,1,.3,1)}
- @media(hover:hover) and (pointer:fine){.case-tab:not([aria-selected="true"]):hover{color:var(--foreground)}.case-tab:not([aria-selected="true"]):hover .case-icon{color:var(--foreground)}.case-tab:not([aria-selected="true"]):hover .case-icon :global(svg){transform:scale(1.1)}}
- .case-tab:not([aria-selected="true"]):active .case-icon{transform:scale(.94)}
+ .case-mark{width:8px;height:8px;margin-top:calc((clamp(20px,1.67vw,24px) * 1.3 - 8px) / 2);background:var(--mark-participant);transition:background-color 240ms ease-out,transform 200ms cubic-bezier(.16,1,.3,1)}
+ .case-tab[aria-selected="true"]{background:var(--web-tile);color:var(--foreground);cursor:default}
+ .case-tab[aria-selected="true"] .case-mark{background:var(--primary);transition-delay:140ms}
+ @media(hover:hover) and (pointer:fine){.case-tab:not([aria-selected="true"]):hover{background:var(--web-raised);color:var(--foreground)}.case-tab:not([aria-selected="true"]):hover .case-mark{background:var(--foreground);transform:rotate(45deg) scale(.9)}}
+ .case-tab:not([aria-selected="true"]):active{background:var(--web-tile)}.case-tab:not([aria-selected="true"]):active .case-mark{transform:rotate(45deg) scale(.75)}
  .case-tab:focus-visible{outline-offset:-2px}
  /* The example reads one way, top to bottom: the question, its two answers (the picked one lights up),
     a rule, then what the app does and a picture of it. Every case stays laid out in the one cell, the
@@ -155,7 +138,7 @@ const check='40 144 96 200 224 72';
     ends on its evidence. Its question is muted and its offer Paper, the house setup and payoff, with the
     button right after the text. In the DOM, and stacked below 1024, the ask still follows the reasons, so
     reading and focus order end on it. */
- .builder-case{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);grid-template-areas:"title ask" "reasons reasons";column-gap:var(--case-gap);row-gap:48px;align-items:start;margin-top:80px}
+ .builder-case{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);grid-template-areas:"title ask" "reasons reasons";column-gap:var(--case-gap);row-gap:48px;align-items:start;margin-top:var(--block-gap)}
  .builder-title{grid-area:title;margin:0;font:600 clamp(26px,2.22vw,32px)/1.25 var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
  .builder-reasons{grid-area:reasons;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--case-gap);list-style:none;margin:0;padding:0}
  .builder-reasons li{display:grid;align-content:start;font:400 18px/28px var(--font-heading);letter-spacing:-.01em;color:var(--muted-foreground);text-wrap:pretty}
@@ -166,21 +149,20 @@ const check='40 144 96 200 224 72';
  .builder-ask p{flex:0 1 auto;margin:0;font-size:18px;line-height:28px;color:var(--foreground);text-wrap:pretty}
  .ask-setup,.ask-payoff{display:block}.ask-setup{color:var(--muted-foreground);text-wrap:balance}
  .builder-ask :global(.button){flex:none}
- @media(forced-colors:active){.case-stage{border:1px solid CanvasText}.case-marker,.case-hover{display:none}.case-tab:not([aria-selected="true"]):hover{outline:1px solid CanvasText;outline-offset:-1px}.case-tab[aria-selected="true"]{outline:1px solid CanvasText;outline-offset:-1px}.case-tab[aria-selected="true"] .case-icon,.case-fill{forced-color-adjust:none;background:Highlight;color:HighlightText}.case-pick{forced-color-adjust:none;color:HighlightText}.case-option{border-color:CanvasText}.builder-icon{border:1px solid CanvasText}}
- @media(prefers-reduced-motion:reduce){.case-tab,.case-icon,.case-icon :global(svg),.case-marker,.case-hover{transition:none}}
- @media(max-width:1200px){.applications{--case-gap:48px}.case-tab{column-gap:16px;padding-left:24px}.case-panel{padding:40px}}
+ @media(forced-colors:active){.case-stage{border:1px solid CanvasText}.case-tab{outline:1px solid CanvasText;outline-offset:-1px}.case-mark{forced-color-adjust:none;background:CanvasText}.case-tab[aria-selected="true"] .case-mark{background:Highlight}.case-fill{forced-color-adjust:none;background:Highlight;color:HighlightText}.case-pick{forced-color-adjust:none;color:HighlightText}.case-option{border-color:CanvasText}.builder-icon{border:1px solid CanvasText}}
+ @media(prefers-reduced-motion:reduce){.case-tab,.case-mark{transition:none}}
+ @media(max-width:1200px){.applications{--case-gap:48px}.case-tab{padding:24px}.case-panel{padding:40px}}
  /* Below 1024 the list becomes rows of names above the example, which shows the summary itself. */
  @media(max-width:1023px){
   .cases{grid-template-columns:minmax(0,1fr)}
-  .case-tabs{grid-auto-rows:auto;margin:0 0 4px;gap:4px;background:none}
-  .case-tab{align-items:center;min-height:64px;padding:10px 20px;column-gap:14px;border-top:0;background:var(--web-quiet);transition-property:background-color,color;transition-delay:0ms}.case-icon{width:40px;height:40px}.case-label{padding-top:0}
-  .case-tab[aria-selected="true"]{background:var(--web-tile)}.case-marker,.case-hover{display:none}
+  .case-tabs{grid-auto-rows:auto;margin:0 0 4px;gap:4px}
+  .case-tab{align-items:center;min-height:64px;padding:10px 20px;column-gap:14px}.case-mark{margin-top:0}
   .case-blurb{display:none}
   .case-panel{padding:36px 32px 44px}
   /* Stacked, the cases differ in height, so the stage fits the case shown instead of the tallest. */
   .case-panel[hidden]{display:none!important}
   .case-summary{position:static;width:auto;height:auto;margin:0 0 20px;overflow:visible;clip:auto;white-space:normal;max-width:34em;font-size:18px;line-height:28px;color:var(--muted-foreground);text-wrap:pretty}
-  .builder-case{display:block;margin-top:56px}.builder-title{margin-bottom:24px}
+  .builder-case{display:block}.builder-title{margin-bottom:24px}
   /* Stacked, each reason is a row: its icon tile beside its claim and point. */
   .builder-reasons{grid-template-columns:minmax(0,1fr);row-gap:28px}
   .builder-reasons li{grid-template-columns:44px minmax(0,1fr);column-gap:20px}.builder-icon{grid-row:span 2;margin:0}
@@ -188,7 +170,7 @@ const check='40 144 96 200 224 72';
  }
  /* Phones: tighter rows and gutters. */
  @media(max-width:767px){
-  .case-tab{min-height:56px;padding:8px 16px}.case-icon{width:36px;height:36px}
+  .case-tab{min-height:56px;padding:8px 16px}
   .case-panel{padding:28px 20px 36px}
   .case-summary,.case-explanation,.builder-ask p{font-size:16px;line-height:24px}
   .builder-ask{flex-direction:column;align-items:flex-start;gap:20px}.builder-reasons li{column-gap:16px;grid-template-columns:40px minmax(0,1fr)}.builder-icon{width:40px;height:40px}

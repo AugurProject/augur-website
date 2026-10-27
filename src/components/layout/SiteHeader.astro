@@ -30,10 +30,10 @@ const isCurrent=(href:string)=>within(href)&&!href.includes('#');
         </a></li>;})}</ul></div>
       </details>)}
     </nav>
-    <div class="header-actions"><Button href="#contact" variant="outline">Talk to us</Button><button class="mobile-open" type="button" aria-label="Open navigation" aria-controls="mobile-navigation" aria-expanded="false" data-mobile-open><Icon name="list" /></button></div>
+    <div class="header-actions"><Button href="#contact" variant="outline">Talk to us</Button><button class="mobile-open" type="button" aria-controls="mobile-navigation" aria-expanded="false" data-mobile-open>Menu</button></div>
   </div>
   <dialog id="mobile-navigation" class="mobile-navigation" aria-labelledby="mobile-nav-title">
-    <div class="mobile-top"><a href="/" aria-label="Augur home"><Brand/></a><h2 id="mobile-nav-title" class="sr-only">Navigation</h2><button type="button" aria-label="Close navigation" data-mobile-close><Icon name="x"/></button></div>
+    <div class="mobile-top"><a href="/" aria-label="Augur home"><Brand/></a><h2 id="mobile-nav-title" class="sr-only">Navigation</h2><button type="button" data-mobile-close>Close</button></div>
     <nav aria-label="Mobile navigation">{navigationGroups.map(group=><div class="mobile-group"><h3>{group.label}</h3><ul>{group.items.map(item=><li><a href={item.href}>{(item as NavigationItem).logo&&<Icon name={(item as NavigationItem).logo!} class="social-logo"/>}{item.label}{('external' in item && item.external)&&<Icon name="arrow-up-right"/>}</a></li>)}</ul></div>)}</nav>
   </dialog>
   <noscript><nav class="fallback-nav" aria-label="Navigation">{navigationGroups.flatMap(group=>group.items).map(item=><a href={item.href}>{item.label}{('external' in item && item.external)?' ↗':''}</a>)}</nav></noscript>
@@ -120,7 +120,7 @@ ul{list-style:none;padding:0;margin:0}
 .header-actions{display:flex;gap:16px;align-items:center}.mobile-open{display:none}
 .mobile-navigation{position:fixed;inset:0;margin:0;width:100%;max-width:none;height:100svh;max-height:none;padding:24px;background:var(--background);color:var(--foreground);border:0;overflow-y:auto}
 .mobile-navigation::backdrop{background:var(--background)}.mobile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
-.mobile-top button,.mobile-open{width:44px;height:44px;align-items:center;justify-content:center;background:transparent;border:1px solid var(--web-outline);color:var(--foreground)}
+.mobile-top button,.mobile-open{min-width:44px;height:44px;padding:0 16px;align-items:center;justify-content:center;background:transparent;border:1px solid var(--web-outline);color:var(--foreground);font:600 16px/24px var(--font-heading);white-space:nowrap;cursor:pointer}
 .mobile-navigation nav{display:grid;grid-template-columns:1fr 1fr;gap:32px 16px}.mobile-group h3{font-size:14px;line-height:20px;color:var(--muted-foreground);margin-bottom:12px}
 .mobile-group a{display:flex;gap:8px;align-items:center;min-height:44px;padding-block:10px;text-decoration:none}
 .mobile-group a :global(.web-icon),.mobile-group a :global(svg){width:16px;height:16px}.mobile-group a :global(.social-logo),.mobile-group a :global(.social-logo svg){width:20px;height:20px}.mobile-group a :global(.social-logo){margin-right:4px}

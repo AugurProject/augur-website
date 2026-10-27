@@ -62,10 +62,10 @@ const email=links.contact.url.replace(/^mailto:/,'');
 .newsletter h2{font-size:20px;line-height:26px;letter-spacing:0;margin-bottom:12px}.newsletter>p{color:var(--muted-foreground);margin-bottom:24px}
 .newsletter-row{display:flex;align-items:flex-end;gap:12px}.newsletter .field{flex:1;min-width:0;gap:12px}.newsletter .field>label{font-weight:400}.newsletter .field input{background:var(--web-tile)}
 .newsletter .field-error{margin-top:12px}.newsletter-status{margin-top:12px;font-size:14px;line-height:20px;color:var(--muted-foreground)}.newsletter-status:empty{display:none}.newsletter-status a{color:var(--foreground)}
-.directory{padding-block:48px 64px}
-/* The logo heads the first column level with the link headings; the funding line closes it as a
-   colophon, its last baseline on the last link row's (7 px clears that row's centred 24 px line). */
-.identity{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:7px}.identity p{font-size:14px;line-height:22px;color:var(--muted-foreground);max-width:300px}
+.directory{padding-block:48px 64px;border-top:1px solid var(--web-outline)}
+/* A hairline opens the directory, so the contact band and the links read as two groups. The logo heads the
+   first column level with the link headings, and the funding line sits 16 under it. */
+.identity{display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:16px}.identity p{font-size:14px;line-height:22px;color:var(--muted-foreground);max-width:300px}
 .identity p a{color:var(--foreground);white-space:nowrap}.identity p a:hover{text-decoration-thickness:2px}.identity p :global(.web-icon),.identity p :global(.web-icon svg){width:12px;height:12px}.identity p :global(.web-icon){margin-left:2px;vertical-align:-1px}
 .footer-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px}
 .footer-links h2{font:600 14px/20px var(--font-heading);letter-spacing:0;color:var(--muted-foreground);margin-bottom:16px}.footer-links ul{list-style:none;padding:0;margin:0}

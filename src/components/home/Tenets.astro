@@ -25,11 +25,11 @@ const closer={statement:'The answer is nobody’s call.',paths:[
  </div>
  <div class="answer-band" data-answer-band><p class="site-container" data-answer>With Augur, users don't rely on parties to control answers.</p></div>
  <div class="site-container tenet-grid">
-  {tenets.map(({title,diagram:Diagram,claim,body})=><article class="tenet-card" data-tenet-card>
-   <h3 class="tenet-tab">{title}</h3>
+  {tenets.map(({title,diagram:Diagram,claim,body})=><article class="tenet-card" data-tenet-card aria-labelledby={`tenet-${title.toLowerCase()}`}>
+   <p class="tenet-tab" id={`tenet-${title.toLowerCase()}`}>{title}</p>
    <div class="tenet-visual"><Diagram/></div>
    <div class="tenet-copy">
-    <p class="tenet-claim"><span class="setup">{claim[0]}</span><span>{claim[1]}</span></p>
+    <h3 class="tenet-claim"><span>{claim[0]}</span><span>{claim[1]}</span></h3>
     <p class="tenet-body">{body}</p>
    </div>
   </article>)}
@@ -43,8 +43,8 @@ const closer={statement:'The answer is nobody’s call.',paths:[
  </div>
 </section>
 <style>
- .tenets{padding-top:64px}.tenets>.site-container:first-child{padding-top:72px;padding-bottom:56px}.section-heading{margin-bottom:0}.answer-band{position:relative;overflow:hidden;background:var(--primary);color:var(--background);padding:24px 0 28px}.answer-band p{font-family:var(--font-heading);font-size:clamp(26px,2.5vw,36px);font-weight:600;line-height:44px;letter-spacing:-.01em;text-wrap:balance}
- .tenet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-top:48px;padding-bottom:96px}
+ .tenets{padding-block:var(--section-space)}.answer-band{position:relative;overflow:hidden;background:var(--primary);color:var(--background);padding:24px 0 28px}.answer-band p{font-family:var(--font-heading);font-size:clamp(26px,2.5vw,36px);font-weight:600;line-height:44px;letter-spacing:-.01em;text-wrap:balance}
+ .tenet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-top:var(--heading-gap)}
  /* Folder card: the tab's edge steps down in three 12 px squares (tread = riser), so the notch reads
     as deliberate pixels, never as an aliased diagonal; the answer ribbon's edge steps the same way.
     The fill is an aria-hidden layer behind the content, so the clip never cuts text, glows or focus.
@@ -67,8 +67,8 @@ const closer={statement:'The answer is nobody’s call.',paths:[
  .tenet-visual :global(svg){display:block;width:100%;height:auto;aspect-ratio:2/1;overflow:visible}
  .tenet-card :global(:is(rect,[data-motion])){transform-box:fill-box;transform-origin:center}
  .tenet-copy{flex:1;display:flex;flex-direction:column;padding:28px 32px 32px;border-top:1px solid var(--web-outline)}
- .tenet-claim{font:600 22px/30px var(--font-heading);letter-spacing:-.01em;color:var(--foreground);margin:0}.setup{color:var(--muted-foreground)}.tenet-claim span{display:block;text-wrap:balance}
- .tenet-body{font-size:16px;line-height:24px;color:var(--muted-foreground);margin:12px 0 0}
+ .tenet-claim{font:600 24px/32px var(--font-heading);letter-spacing:-.01em;color:var(--foreground);margin:0}.setup{color:var(--muted-foreground)}.tenet-claim span{display:block;text-wrap:balance}
+ .tenet-body{font-size:16px;line-height:24px;color:var(--muted-foreground);margin:12px 0 0;text-wrap:balance}
  /* Closer: one panel for Augus's two readers, so nothing floats. It is a subgrid of the card columns
     with no gap of its own, so each cell runs to the middle of the card gutter: the cell edges sit
     centred under the gutters and every cell's text starts on its card's text edge (32 px in, plus
@@ -87,11 +87,11 @@ const closer={statement:'The answer is nobody’s call.',paths:[
  @media print{.answer-band :global(:is(.ribbon-fill,.ribbon-overlay,.ribbon-edge)){display:none}.answer-band[data-ribbon]{background:var(--primary);color:var(--background)}}
  @media(forced-colors:active){.tenet-card{border:1px solid CanvasText}.tenet-card::before,.tenet-card::after,.tenet-closer::after{display:none}.tenet-tab::before,.closer-who::before{forced-color-adjust:none;background:CanvasText}}
  /* Tablet: one card per row, the diagram beside the copy under a shared tab. */
- @media(max-width:1023px){.tenets>.site-container:first-child{padding-top:48px}.tenet-grid{grid-template-columns:1fr;max-width:760px;gap:20px}
+ @media(max-width:1023px){.tenet-grid{grid-template-columns:1fr;max-width:760px;gap:20px}
   .tenet-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto 1fr}.tenet-tab{grid-column:1/-1}
   .tenet-visual{display:flex;align-items:center;padding:16px 28px 28px}.tenet-copy{border-top:0;border-left:1px solid var(--web-outline);padding:20px 28px 28px}
   .tenet-closer{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:20px}.closer-statement{grid-column:1/-1;padding:20px 28px}.closer-path{padding:20px 28px}}
- @media(max-width:600px){.tenets{padding-top:40px}.answer-band p{line-height:1.3}.tenet-grid{padding-bottom:64px}.answer-band{padding-block:24px}
+ @media(max-width:600px){.answer-band p{line-height:1.3}.answer-band{padding-block:24px}
   .tenet-card{display:flex;--tab:184px}.tenet-tab{padding:0 24px}.tenet-visual{padding:16px 24px 24px}.tenet-copy{border-left:0;border-top:1px solid var(--web-outline);padding:24px}
-  .tenet-claim{font-size:20px;line-height:28px}.tenet-closer{grid-template-columns:1fr}.closer-statement{padding:20px 24px;font-size:22px;line-height:30px}.closer-path{padding:20px 24px}.closer-path+.closer-path::after{bottom:auto;right:0;border-left:0;border-top:1px solid var(--web-outline)}.closer-line{font-size:18px;line-height:27px}}
+  .tenet-closer{grid-template-columns:1fr}.closer-statement{padding:20px 24px;font-size:22px;line-height:30px}.closer-path{padding:20px 24px}.closer-path+.closer-path::after{bottom:auto;right:0;border-left:0;border-top:1px solid var(--web-outline)}.closer-line{font-size:18px;line-height:27px}}
 </style>

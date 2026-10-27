@@ -30,8 +30,9 @@ const [featured,next]=posts;
  </div>
 </div></section>
 <style>
- .home-learn{background:var(--web-band);padding-block:72px 96px}
- .learn-title{margin-bottom:48px;text-wrap:balance}
+ .home-learn{background:var(--web-band)}
+ .learn-title{margin-bottom:var(--heading-gap);text-wrap:balance}
+ :global(.faq-item summary>span:first-child){text-wrap:balance}
  /* 704 / 80 / 464 at 1440: answers need the measure (every homepage question on one line), posts the narrower column.
     Subgrid rows give both columns one heading line, one list height and one button line. */
  .learn-grid{display:grid;grid-template-columns:minmax(0,1fr) 464px;grid-template-rows:auto 1fr auto;column-gap:80px}
@@ -77,8 +78,6 @@ const [featured,next]=posts;
   .featured-text{padding:24px}
  }
  @media(max-width:767px){
-  .home-learn{padding-block:64px}
-  .learn-title{margin-bottom:40px}
   .faq-accordion :global(.faq-answer){padding-right:16px}
   .faq-accordion :global(summary),:is(.featured-post,.post-row) h4{font-size:16px;line-height:24px}
   .featured-post{display:block}
