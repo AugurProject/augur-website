@@ -32,4 +32,4 @@ The design reference will be firmed up once these are provided. Until then, item
 - **Written record of the hover-edge decision (19 October 2026).** Reported by the owner; not yet recorded in this repository.
 - **Owner approvals for the other adaptations.** None found yet.
 - **Earlier prototype and design-file frames.** No reachable copy. Historical only; not a specification or a source to keep in sync.
-- **Design-system alignment.** Package pinned to `0.2.0`; the brand foundation PDF reference stays at `f3c089a`. Alignment with later design-system changes is not established.
+- **Design-system alignment.** Package pinned to `0.3.0`; the brand foundation PDF reference stays at `f3c089a`. Alignment with later design-system changes is not established.

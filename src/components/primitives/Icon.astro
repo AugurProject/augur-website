@@ -1,10 +1,10 @@
 ---
-import ArrowRightSvg from '@phosphor-icons/core/assets/bold/arrow-right-bold.svg?raw';
-import ArrowUpRightSvg from '@phosphor-icons/core/assets/bold/arrow-up-right-bold.svg?raw';
+import ArrowRightSvg from '@augurproject/design-system/icons/arrow-right.svg?raw';
+import ArrowUpRightSvg from '@augurproject/design-system/icons/arrow-up-right.svg?raw';
 import BookOpenSvg from '@phosphor-icons/core/assets/bold/book-open-bold.svg?raw';
 import ChartLineUpSvg from '@phosphor-icons/core/assets/bold/chart-line-up-bold.svg?raw';
-import CheckSvg from '@phosphor-icons/core/assets/bold/check-bold.svg?raw';
-import ChevronDownSvg from '@phosphor-icons/core/assets/bold/caret-down-bold.svg?raw';
+import CheckSvg from '@augurproject/design-system/icons/check.svg?raw';
+import ChevronDownSvg from '@augurproject/design-system/icons/chevron-down.svg?raw';
 import ClockSvg from '@phosphor-icons/core/assets/bold/clock-bold.svg?raw';
 import DiscordLogoSvg from '@phosphor-icons/core/assets/bold/discord-logo-bold.svg?raw';
 import EyeSvg from '@phosphor-icons/core/assets/bold/eye-bold.svg?raw';
@@ -12,20 +12,21 @@ import GithubLogoSvg from '@phosphor-icons/core/assets/bold/github-logo-bold.svg
 import InfoSvg from '@phosphor-icons/core/assets/bold/info-bold.svg?raw';
 import ListSvg from '@phosphor-icons/core/assets/bold/list-bold.svg?raw';
 import ListChecksSvg from '@phosphor-icons/core/assets/bold/list-checks-bold.svg?raw';
-import PlusSvg from '@phosphor-icons/core/assets/bold/plus-bold.svg?raw';
+import PlusSvg from '@augurproject/design-system/icons/plus.svg?raw';
 import PuzzlePieceSvg from '@phosphor-icons/core/assets/bold/puzzle-piece-bold.svg?raw';
 import ScalesSvg from '@phosphor-icons/core/assets/bold/scales-bold.svg?raw';
 import TelegramLogoSvg from '@phosphor-icons/core/assets/bold/telegram-logo-bold.svg?raw';
 import UmbrellaSvg from '@phosphor-icons/core/assets/bold/umbrella-bold.svg?raw';
 import UsersThreeSvg from '@phosphor-icons/core/assets/bold/users-three-bold.svg?raw';
-import XSvg from '@phosphor-icons/core/assets/bold/x-bold.svg?raw';
+import XSvg from '@augurproject/design-system/icons/x.svg?raw';
 import XLogoSvg from '@phosphor-icons/core/assets/bold/x-logo-bold.svg?raw';
 
 interface Props { name: string; class?: string; }
 const { name, class: className } = Astro.props;
 
 // Explicit raw SVG imports render on the server; no browser icon runtime.
-// Keep the existing chevron-down name as an alias for Phosphor’s caret-down.
+// Six glyphs (arrow-right, arrow-up-right, check, chevron-down, plus, x) are the design system's square-cut
+// strokes; the rest are Phosphor Bold. The data-fixed-weight/data-glyph hooks stay on every icon.
 const icons: Partial<Record<string, string>> = {
   'arrow-right': ArrowRightSvg,
   'arrow-up-right': ArrowUpRightSvg,
@@ -50,6 +51,6 @@ const icons: Partial<Record<string, string>> = {
   'x-logo': XLogoSvg,
 };
 const markup = Object.hasOwn(icons, name) ? icons[name] : undefined;
-if (!markup) throw new Error(`Unknown Phosphor Bold icon: ${name}`);
+if (!markup) throw new Error(`Unknown icon: ${name}`);
 ---
 <span class:list={['web-icon', className]} data-fixed-weight="bold" aria-hidden="true"><span data-glyph="bold" set:html={markup} /></span>

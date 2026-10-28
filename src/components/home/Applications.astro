@@ -26,8 +26,8 @@ const builderCase={
   {icon:'eye',title:'Proof, not promises.',line:'Every outcome is public, so users can verify it themselves.'},
  ],
 };
-// The answer's check is Phosphor Bold's own centreline drawn as a stroke, so it can draw in.
-const check='40 144 96 200 224 72';
+// The answer's check is the design system's check path (icons/check.svg) as a polyline, so it can draw in.
+const check='4.5 10.5 8.25 14.25 15.5 7';
 ---
 <section class="applications section" id="applications" aria-labelledby="applications-heading">
  <div class="site-container">
@@ -40,7 +40,7 @@ const check='40 144 96 200 224 72';
     {applications.map((app,i)=><div role="tabpanel" id={`application-panel-${app.id}`} aria-labelledby={`application-tab-${app.id}`} class="case-panel" tabindex="0" hidden={i!==0}>
      <p class="case-summary">{app.summary}</p>
      <p class="case-question">{app.question}</p>
-     <p class="case-answer"><span class="sr-only">Possible answers: {app.outcomes.join(' or ')}. Answer: {app.answer}.</span><span class="case-options" aria-hidden="true">{app.outcomes.map(outcome=>outcome===app.answer?<span class="case-option is-answer">{outcome}<span class="case-fill"></span><span class="case-pick">{outcome}<svg class="case-check" viewBox="0 0 256 256" focusable="false"><polyline points={check} pathLength="1"/></svg></span></span>:<span class="case-option is-other">{outcome}</span>)}</span></p>
+     <p class="case-answer"><span class="sr-only">Possible answers: {app.outcomes.join(' or ')}. Answer: {app.answer}.</span><span class="case-options" aria-hidden="true">{app.outcomes.map(outcome=>outcome===app.answer?<span class="case-option is-answer">{outcome}<span class="case-fill"></span><span class="case-pick">{outcome}<svg class="case-check" viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1"/></svg></span></span>:<span class="case-option is-other">{outcome}</span>)}</span></p>
      <p class="case-by">Decided in the open, not by {app.notBy}.</p>
      <div class="case-act">
       <p class="case-action">{app.action}</p>
@@ -109,7 +109,7 @@ const check='40 144 96 200 224 72';
  .case-fill{position:absolute;inset:-1px;background:var(--primary);transform-origin:left}
  .case-pick{position:absolute;inset:-1px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--background)}
  .case-check{width:20px;height:20px;overflow:visible}
- .case-check polyline{fill:none;stroke:currentColor;stroke-width:24;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 3}
+ .case-check polyline{fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:square;stroke-linejoin:miter;stroke-dasharray:1 3}
  /* Who did not decide the answer (owner, 19 Oct 2026, from Augus's notes): one muted line under the
     chips, so each case shows the party it keeps out of the decision. */
  .case-by{margin:12px 0 0;font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
