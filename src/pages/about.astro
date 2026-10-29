@@ -1,0 +1,159 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import PageHero from '../components/pages/PageHero.astro';
+import Icon from '../components/primitives/Icon.astro';
+import { history } from '../data/history';
+import { links } from '../data/links';
+
+// Website first (19 October 2026); Figma About 218:45 follows on "update figma" (figma-workflow.md).
+// Roles: Augur blog 21 July 2026 and Q2 2026 report. No backstop or veto: whitepaper §2.
+type Action = { label: string; href: string; logo?: string; name?: string };
+const roles: { role: string; name: string; text: string; actions: Action[] }[] = [
+ { role: 'Funds and coordinates', name: 'Lituus Foundation', text: 'Took on stewardship of Augur and its treasury in 2025. It funds more than one team working on the problem and reviews the Augur Lituus code against the whitepaper.', actions: [{ label: 'lituus.foundation', href: links.foundation.url }] },
+ { role: 'Engineers Augur Lituus', name: 'ChainSafe', text: 'Builds the Augur Lituus implementation in a public repository, and completed its first milestones in July 2026.', actions: [{ label: 'chainsafe.io', href: links.chainSafe.url }] },
+ { role: 'Builds Augur Statoblast', name: 'Dark Florist', text: 'An independent team funded by the Foundation. It builds Augur Statoblast, a prediction market on Zoltar, and pursues its own oracle research.', actions: [{ label: 'GitHub', name: 'Dark Florist on GitHub', href: links.darkFlorist.url, logo: 'github-logo' }] },
+];
+const principles: { title: string; text: string; actions: Action[] }[] = [
+ { title: 'Open source', text: 'Augur Lituus and Zoltar are developed in public repositories, where anyone can follow or audit the work.', actions: [{ label: 'Augur Lituus code', href: links.lituusCode.url, logo: 'github-logo' }, { label: 'Zoltar code', href: links.zoltarCode.url, logo: 'github-logo' }] },
+ { title: 'Research first', text: 'Each design is published for review before it is built. The whitepaper came out six months before the first implementation milestones.', actions: [{ label: 'Read the whitepaper', href: links.whitepaper.url }] },
+ { title: 'Clear about status', text: 'Quarterly reports say what is done and what is still open, including the parts still being worked out.', actions: [{ label: 'Q2 2026 report', href: links.q2Report.url }] },
+];
+// A quiet stretch of more than three years between entries draws the line dashed.
+const gapAfter = (index: number) => index < history.length - 1 && history[index + 1].year - history[index].year > 3;
+---
+<PageLayout title="About Augur" description="Why Augur exists, how it got from a 2018 prediction market to Augur Lituus, and who builds it today.">
+ <PageHero title="About Augur" lead="Augur is a decentralized oracle. It tells apps on the blockchain what happened in the real world.">
+  <p class="hero-more">It launched on Ethereum in 2018 as a prediction market. Since 2025 the Lituus Foundation has led its restart, and the work now centers on Augur Lituus, one of the next versions of Augur’s oracle.</p>
+ </PageHero>
+
+ <section id="mission" class="section site-container ruled" aria-labelledby="mission-title">
+  <div class="section-heading mission">
+   <h2 id="mission-title">No company or committee should hold the final word on what happened.</h2>
+   <div class="mission-copy">
+    <p class="lead">Augur was built on that position from the start, and Augur Lituus is too.</p>
+    <p>Knowledge of the world is spread across many people, and no central authority can gather all of it without bias. So Augur’s answers come from the people who know, with something to lose if they are wrong.</p>
+    <a class="cite line-link is-ruled" href={links.whitepaper.url}><span class="button-label">Augur Lituus whitepaper, §1</span><span aria-hidden="true">↗</span></a>
+   </div>
+  </div>
+ </section>
+
+ <section id="history" class="section site-container ruled" aria-labelledby="history-title">
+  <div class="section-heading"><h2 id="history-title">The story so far</h2><p class="lead">Over a decade on Ethereum, from a prediction market to an oracle for any app.</p></div>
+  <ol class="timeline">
+   {history.map((entry, index) => (
+    <li class:list={['event', { now: !entry.datetime, 'gap-after': gapAfter(index) }]}>
+     <div class="event-head">
+      {entry.datetime ? <time class="event-date" datetime={entry.datetime}>{entry.date}</time> : <p class="event-date">{entry.date}</p>}
+      <h3>{entry.title}</h3>
+     </div>
+     <p class="event-text">{entry.text}</p>
+     {entry.figure && <p class="event-figure"><strong>{entry.figure.value}</strong><span>{entry.figure.caption}</span></p>}
+     <a class="cite line-link is-ruled" href={links[entry.source.key].url}><span class="button-label">{entry.source.label}</span><span aria-hidden="true">↗</span></a>
+    </li>
+   ))}
+  </ol>
+  <div class="timeline-next"><a class="button outline" href="/#roadmap">See what comes next</a></div>
+ </section>
+
+ <section id="who" class="section site-container ruled" aria-labelledby="who-title">
+  <div class="section-heading"><h2 id="who-title">Who does what</h2><p class="lead">The Lituus Foundation funds independent teams to build Augur. Neither the Foundation nor the teams decide what the oracle answers.</p></div>
+  <ul class="builders" role="list">
+   {roles.map(item => (
+    <li class="tile">
+     <p class="role-label">{item.role}</p>
+     <h3>{item.name}</h3>
+     <p>{item.text}</p>
+     <div class="card-actions">{item.actions.map(action => <a class="button text" href={action.href} aria-label={action.name}>{action.logo && <Icon name={action.logo} />}<span class="button-label">{action.label}</span><Icon name="arrow-up-right" /></a>)}</div>
+    </li>
+   ))}
+  </ul>
+  <div class="decides">
+   <div class="decides-head">
+    <p class="role-label">Decides the answers</p>
+    <h3>Anyone with REP at stake</h3>
+   </div>
+   <div class="decides-body">
+    <p>Anyone can report what happened or challenge a report by putting REP behind it, and a fork is the last resort. No one holds a backstop or veto over Augur Lituus answers, the Foundation included.</p>
+    <a class="button text" href="/#how-it-works"><span class="button-label">See how it works</span></a>
+   </div>
+  </div>
+ </section>
+
+ <section id="principles" class="section site-container ruled" aria-labelledby="principles-title">
+  <div class="section-heading"><h2 id="principles-title">How the work is done</h2><p class="lead">The work happens in public, so anyone can check it.</p></div>
+  <ul class="principles" role="list">
+   {principles.map(item => (
+    <li>
+     <h3>{item.title}</h3>
+     <p>{item.text}</p>
+     <div class="card-actions">{item.actions.map(action => <a class="button text" href={action.href} aria-label={action.name}>{action.logo && <Icon name={action.logo} />}<span class="button-label">{action.label}</span><Icon name="arrow-up-right" /></a>)}</div>
+    </li>
+   ))}
+  </ul>
+ </section>
+</PageLayout>
+<style>
+ .ruled{padding-top:72px}.ruled .section-heading{margin-bottom:48px}
+ .hero-more{max-width:780px;margin-top:16px;font-size:18px;line-height:28px;color:var(--muted-foreground)}
+ /* Mission: the statement is the heading; its reasoning fills the lead column. */
+ .ruled .mission{margin-bottom:0}.mission h2{text-wrap:balance}.mission-copy p:not(.lead){margin-top:20px;font-size:18px;line-height:28px;color:var(--muted-foreground)}
+ .cite{display:inline-flex;align-items:center;gap:4px;min-height:32px;margin-top:4px;font:400 14px/20px var(--font-heading);color:var(--muted-foreground);transition:color 180ms ease-out}
+ .cite:hover{color:var(--foreground)}
+ /* Story: one line through square stops, dashed where years pass between them.
+    Date and title on the left, what happened and its source on the right, both from the row's top. */
+ .timeline{list-style:none;margin:0;padding:0}
+ .event{position:relative;display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);grid-template-areas:"head text" "figure cite";grid-template-rows:auto 1fr;column-gap:80px;padding-bottom:40px}
+ .event-head{grid-area:head}.event-text{grid-area:text}.event-figure{grid-area:figure}.event .cite{grid-area:cite;align-self:start;justify-self:start}
+ .event:last-child{padding-bottom:0}
+ .event.gap-after{padding-bottom:88px}
+ .event:not(:last-child)::after{content:'';position:absolute;left:3.5px;top:24px;bottom:0;width:1px;background:var(--border)}
+ .event.gap-after::after{background:repeating-linear-gradient(to bottom,var(--border) 0 4px,transparent 4px 10px)}
+ .event-head{position:relative;padding-left:40px}
+ .event-head::before{content:'';position:absolute;left:0;top:8px;width:8px;height:8px;background:var(--muted-foreground)}
+ .now .event-head::before{left:-2px;top:6px;width:12px;height:12px;background:var(--primary)}
+ .event-date{display:block;font:600 16px/24px var(--font-heading);color:var(--muted-foreground)}
+ .now .event-date{color:var(--primary)}
+ .event-head h3{margin-top:4px}
+ .event-text{font-size:18px;line-height:28px;color:var(--muted-foreground)}
+ .event-figure{display:grid;align-content:start;gap:4px;max-width:360px;margin:20px 0 0 40px}
+ .event-figure strong{font:600 48px/56px var(--font-heading);letter-spacing:-.02em;color:var(--foreground)}
+ .event-figure span{font-size:15px;line-height:22px;color:var(--muted-foreground)}
+ .timeline-next{margin-top:48px;padding-left:40px}
+ /* Who does what: the three builders, then the one role no organization holds. */
+ .builders{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+ .builders li{display:flex;flex-direction:column}
+ .role-label{font:600 14px/20px var(--font-heading);color:var(--muted-foreground)}
+ .builders h3{margin-top:8px}
+ .builders p:not(.role-label){margin-top:12px;font-size:17px;line-height:26px;color:var(--muted-foreground)}
+ .card-actions{display:flex;flex-wrap:wrap;column-gap:24px;margin-top:auto;padding-top:16px}
+ .decides{display:grid;grid-template-columns:minmax(0,459fr) minmax(0,627fr);gap:80px;margin-top:24px;padding:40px 40px 32px;border:1px solid var(--primary)}
+ .decides .role-label{display:flex;align-items:center;gap:10px;color:var(--foreground)}
+ .decides .role-label::before{content:'';flex:none;width:8px;height:8px;background:var(--primary)}
+ .decides h3{margin-top:12px;max-width:9em;font-size:clamp(26px,2.5vw,36px);line-height:1.2222;letter-spacing:-.01em;text-wrap:balance}
+ .decides-body p{font-size:18px;line-height:28px;color:var(--muted-foreground)}
+ .decides-body .button{margin-top:8px}
+ /* How the work is done: each practice carries the public evidence for it. */
+ .principles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+ .principles li{display:flex;flex-direction:column;padding-inline:40px}
+ .principles li:first-child{padding-left:0}
+ .principles li:last-child{padding-right:0}
+ .principles li+li{border-left:1px solid var(--border-quiet)}
+ .principles p{margin-top:12px;font-size:17px;line-height:26px;color:var(--muted-foreground)}
+ @media(max-width:1200px){.event{column-gap:48px}.decides{gap:48px}.principles li{padding-inline:32px}}
+ @media(max-width:1023px){
+  .event{grid-template-columns:1fr;grid-template-areas:"head" "text" "figure" "cite";grid-template-rows:auto;row-gap:8px}
+  .event-text,.event .cite{margin-left:40px}.event-figure{margin:8px 0 0 40px}
+  .builders{grid-template-columns:1fr;gap:16px}
+  .decides{grid-template-columns:1fr;gap:16px;padding:32px 32px 24px}
+  .principles{grid-template-columns:1fr}
+  .principles li,.principles li:first-child,.principles li:last-child{padding:24px 0 0}
+  .principles li:first-child{padding-top:0}
+  .principles li+li{border-left:0;border-top:1px solid var(--border-quiet);margin-top:24px}
+ }
+ @media(max-width:767px){
+  .event-figure strong{font-size:40px;line-height:48px}
+  .decides{padding:24px 24px 16px}
+  .timeline-next{padding-left:0}
+ }
+ @media(forced-colors:active){.event-head::before,.event:not(:last-child)::after,.decides .role-label::before{forced-color-adjust:none;background:CanvasText}.decides{border-color:CanvasText}}
+</style>

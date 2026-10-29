@@ -5,8 +5,14 @@ import Applications from './sections/Applications.astro';
 import HowItWorks from './sections/HowItWorks.astro';
 import Roadmap from './sections/Roadmap.astro';
 import LearnMore from './sections/LearnMore.astro';
+import {reviewInline} from './scripts/review-inline';
+// Melo's design from the web lab (/melo/ at 1b95a3a). Its sheets scope every rule to `.home-v2` and render
+// after the sections, so they follow every component style and win ties, as in the lab.
 ---
-<Hero/><Tenets/><Applications/><HowItWorks/><Roadmap/><LearnMore/>
+<div class="home-v2">
+ <Hero variant="v2"/><Tenets variant="v2"/><Applications variant="v2"/><HowItWorks variant="v2"/><Roadmap variant="v2"/><LearnMore variant="v2"/>
+</div>
+{reviewInline.v2.styles.map(css=><style is:inline set:html={css}></style>)}
 <script>
  // These sections exist only here, so the page starts them once from one script; each init
  // finds its own sections. One entry instead of five identical ones keeps the JavaScript budget.

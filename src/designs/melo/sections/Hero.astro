@@ -2,25 +2,52 @@
 import Button from '../../../components/primitives/Button.astro';
 import HeritageField from '../art/HeritageField.astro';
 import HeroArt from '../art/HeroArt.astro';
+import FlockArt from '../art/FlockArt.astro';
 import {links} from '../../../data/links';
-import {heroTimeline} from '../../../motion/timelines';
+import {heroTimeline} from '../motion/timelines';
 import heroArrival from '../../../motion/hero-arrival.js?raw';
+import {homeCopy,ownerVersion,type HomeVariant} from '../data/homepage-review';
+import {reviewInline} from '../scripts/review-inline';
+// A review version (v2, v3, v4) renders its own copy (homepage-review.ts); 'v1', the default and every
+// "/" use, stays byte-identical. The review versions change only the body's last clause (Ryan 2); the
+// headline and art stay (Ryan 1).
+// v3 (Ryan 16) also swaps "See how it works" for its three reader links, `hero.paths` (homepage-v3.ts);
+// the whitepaper link stays.
+// The owner's version (/2/) draws the lituus flock (FlockArt.astro, hero-flock.ts) in place of the square
+// field and the heritage field, and renders its driver after the section (review-inline.ts). From 1024 px
+// a background layer fills the hero's right 70% beside the copy and replaces the flock (owner, 22 Oct 2026):
+// the live floor (hero-floor-v2.js draws it on a canvas; "Let's try live first") or the generated video
+// (hero-video-v2.js), chosen by `layer` below. The markup is only a still, which loads from 1024 px alone
+// (a <picture> with a blank fallback); the script lays the canvas or the <video> over it. A <video> in the
+// markup would show the browser's own controls without JavaScript.
+interface Props { variant?:HomeVariant; }
+const layer=('floor' as 'floor'|'video');
+const stills=layer==='floor'?'/images/hero/augur-hero-floor.webp 1920w, /images/hero/augur-hero-floor-2560.webp 2560w':'/images/hero/augur-hero-loop-poster.webp 1920w, /images/hero/augur-hero-loop-poster-2560.webp 2560w';
+const {variant='v1'}=Astro.props;const copy=homeCopy(variant);const own=ownerVersion(variant);
+const paths=copy&&'paths' in copy.hero?copy.hero.paths:undefined;
+// In the review UI the body's last words stay on one line (home-v2-only.css), so it never ends on a widow:
+// five, or the copy's own `keep` where its ending is longer (Ryan's, which five broke early at 1440).
+const bodyEnd=copy?copy.hero.bodyEnd:'lying is designed to cost more than it pays.';const endWords=bodyEnd.split(' ');
+const keep=copy&&'keep' in copy.hero?copy.hero.keep:5;
 const arrivalScript=heroArrival.replace('__DEV__',String(import.meta.env.DEV));
-const style=`--line-duration:${heroTimeline.lines[0].end}ms;--copy-start:${heroTimeline.copy.start}ms;--copy-duration:${heroTimeline.copy.end-heroTimeline.copy.start}ms;--action-start:${heroTimeline.actions.start}ms;--action-duration:${heroTimeline.actions.end-heroTimeline.actions.start}ms;--field-start:${heroTimeline.field.start}ms;--field-duration:${heroTimeline.field.end-heroTimeline.field.start}ms;--underline-start:${heroTimeline.underline.start}ms;--underline-duration:${heroTimeline.underline.end-heroTimeline.underline.start}ms;--underline-out-start:${heroTimeline.underlineOut.start}ms;--underline-out-duration:${heroTimeline.underlineOut.end-heroTimeline.underlineOut.start}ms;--underline-hover:${heroTimeline.underlineHover}ms;--cue-start:${heroTimeline.scrollCue.start}ms;--cue-duration:${heroTimeline.scrollCue.end-heroTimeline.scrollCue.start}ms;--cue-cycle:${heroTimeline.scrollCue.cycle}ms`;
+// On /2/ the underline draws before the actions arrive and retracts sooner (heroTimeline.v2).
+const {underline,underlineOut}=own?heroTimeline.v2:heroTimeline;
+const style=`--line-duration:${heroTimeline.lines[0].end}ms;--copy-start:${heroTimeline.copy.start}ms;--copy-duration:${heroTimeline.copy.end-heroTimeline.copy.start}ms;--action-start:${heroTimeline.actions.start}ms;--action-duration:${heroTimeline.actions.end-heroTimeline.actions.start}ms;--field-start:${heroTimeline.field.start}ms;--field-duration:${heroTimeline.field.end-heroTimeline.field.start}ms;--underline-start:${underline.start}ms;--underline-duration:${underline.end-underline.start}ms;--underline-out-start:${underlineOut.start}ms;--underline-out-duration:${underlineOut.end-underlineOut.start}ms;--underline-hover:${heroTimeline.underlineHover}ms;--cue-start:${heroTimeline.scrollCue.start}ms;--cue-duration:${heroTimeline.scrollCue.end-heroTimeline.scrollCue.start}ms;--cue-cycle:${heroTimeline.scrollCue.cycle}ms`;
 ---
 <section class="home-hero" aria-labelledby="hero-title" data-home-hero style={style}>
  <script is:inline set:html={arrivalScript}></script>
- <HeritageField glow id="hero-field"/>
+ {!own&&<HeritageField glow id="hero-field"/>}
+ {own&&<div class="hero-video" data-hero-video={layer==='video'?'':undefined} data-hero-floor={layer==='floor'?'':undefined} aria-hidden="true"><picture><source media="(min-width:1024px)" srcset={stills} sizes="95vw" width="1920" height="1080"/><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAIBAAA=" alt="" width="1920" height="1080" decoding="async"/></picture></div>}
  <div class="site-container hero-inner">
   <div class="hero-copy">
    <h1 id="hero-title" class="display"><span data-hero-line style={`--line-start:${heroTimeline.lines[0].start}ms`}>The frontier of</span>{' '}<span data-hero-line style={`--line-start:${heroTimeline.lines[1].start}ms`}><span class="hero-emphasis">decentralized</span></span>{' '}<span data-hero-line style={`--line-start:${heroTimeline.lines[2].start}ms`}>truth<span class="hero-dot">.</span></span></h1>
-   <div class="hero-support"><p class="hero-lead">Real-world answers for onchain apps, controlled by no one.</p><p class="hero-body">Augur Lituus is the next generation of Augur's oracle. Anyone can answer, anyone can challenge, and lying is designed to cost more than it pays.</p></div>
-   <div class="hero-actions"><Button href="#how-it-works">See how it works</Button><Button href={links.whitepaper.url} variant="text" external>Read the whitepaper</Button></div>
+   <div class="hero-support"><p class="hero-lead">Real-world answers for onchain apps, {own?<span class="hero-keep">controlled by no one.</span>:'controlled by no one.'}</p><p class="hero-body">Augur Lituus is the next generation of Augur's oracle. Anyone can answer, anyone can challenge, and {own?<>{endWords.slice(0,-keep).join(' ')+' '}<span class="hero-keep">{endWords.slice(-keep).join(' ')}</span></>:bodyEnd}</p></div>
+   <div class="hero-actions">{paths?<nav class="hero-paths" aria-label={paths.label}>{paths.links.map(({label,href},i)=><Button href={href} variant={i?'outline':'primary'}>{label}</Button>)}</nav>:<Button href="#how-it-works">See how it works</Button>}<Button href={links.whitepaper.url} variant="text" external>Read the whitepaper</Button></div>
   </div>
-  <div class="hero-visual"><HeroArt/></div>
+  <div class="hero-visual">{own?<FlockArt/>:<HeroArt/>}</div>
  </div>
  <span class="hero-scroll" aria-hidden="true" data-scroll-cue><span class="hero-scroll-dot"></span></span>
-</section>
+</section>{own&&<script is:inline set:html={reviewInline.v2.scripts.flock}></script>}{own&&<script is:inline set:html={reviewInline.v2.scripts[layer]}></script>}
 <script>import {initHeritageGlow} from '../motion/heritage-glow';document.querySelectorAll<SVGSVGElement>('[data-heritage=interactive]').forEach(initHeritageGlow);
 // The scroll cue has done its job once the page scrolls: it fades out and stops.
 const cue=document.querySelector<HTMLElement>('[data-scroll-cue]');
@@ -29,8 +56,8 @@ if(cue){const done=()=>{if(scrollY<=8)return;cue.dataset.scrolled='';removeEvent
 .home-hero{position:relative;overflow:hidden;min-height:calc(100svh - 96px - var(--announcement-height));display:flex;align-items:center;padding-block:56px 72px}
 .hero-inner{position:relative;display:grid;grid-template-columns:minmax(0,620fr) minmax(0,572fr);align-items:center;gap:56px}
 .hero-copy{position:relative;z-index:1}[data-hero-line]{display:block;white-space:nowrap}.hero-dot{color:var(--primary)}
-.hero-support{margin-top:28px}.hero-lead{font-size:22px;line-height:33px;text-wrap:balance}.hero-body{font-size:18px;line-height:28px;color:var(--muted-foreground);margin-top:12px}
-.hero-actions{display:flex;align-items:center;gap:24px;margin-top:28px}.hero-emphasis{position:relative;font-weight:400}.hero-emphasis::before,.hero-emphasis::after{content:'';position:absolute;left:0;top:1.07em;height:max(2px,.042em);width:100%;background:var(--primary);transform:scaleX(0);transform-origin:left}
+.hero-support{margin-top:28px}.hero-lead{font-size:22px;line-height:33px}.hero-body{font-size:18px;line-height:28px;color:var(--muted-foreground);margin-top:12px}
+.hero-actions{display:flex;align-items:center;gap:24px;margin-top:28px}.hero-emphasis{position:relative}.hero-emphasis::before,.hero-emphasis::after{content:'';position:absolute;left:0;top:1.07em;height:max(2px,.042em);width:100%;background:var(--primary);transform:scaleX(0);transform-origin:left}
 [data-hero-arrival=entering] [data-hero-line]{animation:hero-line calc(var(--line-duration) * var(--hero-motion-factor,1)) var(--ease-hero) calc(var(--line-start) * var(--hero-motion-factor,1)) backwards}
 
 [data-hero-arrival=entering] .hero-support{animation:hero-support calc(var(--copy-duration) * var(--hero-motion-factor,1)) var(--ease-hero) calc(var(--copy-start) * var(--hero-motion-factor,1)) backwards}

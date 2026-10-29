@@ -1,0 +1,81 @@
+---
+import { ladder } from '../../data/rep';
+/** Lying gets more expensive every round. Each round's bond is drawn as Pewter squares, one per
+ * 15 REP, so the area doubles round by round (the bond vocabulary of the How it works panels: a
+ * bond is a Pewter square). Three panels group the rounds by stage (Report, Challenges, Fork) on
+ * one baseline, so heights compare across panels; the challenges trail off into the dashed fork
+ * threshold. The squares are decoration; each round's amount and outcome are text.
+ * Entrance: the rounds rise in turn once per session (playOnce). */
+const shape = (count: number) => 2 ** Math.ceil(Math.log2(count) / 2);
+const rounds = ladder.rounds.map((round, index) => ({ ...round, count: 2 ** index, columns: shape(2 ** index) }));
+const [report, fork] = [ladder.stages[0]!, ladder.stages[2]!], challenges = ladder.stages[1]!;
+---
+<div class="ladder" data-ladder>
+ <div class="ladder-panels">
+  <div class="panel panel-report">
+   <h3>{report.title}</h3>
+   <div class="panel-chart">{rounds.slice(0, 1).map(round => <div class="round" data-round><span class="round-squares" aria-hidden="true" style={`--columns:${round.columns}`}><i></i></span><span class="round-amount">{round.bond} REP</span><span class="round-outcome">on {round.outcome}</span></div>)}</div>
+   <p>{report.text}</p>
+  </div>
+  <div class="panel panel-challenges">
+   <h3>{challenges.title}</h3>
+   <div class="panel-chart">
+    {rounds.slice(1).map(round => <div class="round" data-round><span class="round-squares" aria-hidden="true" style={`--columns:${round.columns}`}>{Array.from({ length: round.count }, () => <i></i>)}</span><span class="round-amount">{round.bond} REP</span><span class="round-outcome">on {round.outcome}</span></div>)}
+    <div class="round round-more" data-round><span class="round-squares more-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="round-amount">…</span><span class="round-outcome">and on</span></div>
+   </div>
+   <p>{challenges.text}</p>
+  </div>
+  <div class="panel panel-fork">
+   <h3>{fork.title}</h3>
+   <div class="panel-chart"><div class="round" data-round><span class="fork-threshold"><span>Fork threshold</span></span><span class="round-amount">A set share</span><span class="round-outcome">of all REP</span></div></div>
+   <p>{fork.text}</p>
+  </div>
+ </div>
+ <p class="ladder-final"><i aria-hidden="true"></i>{ladder.final}</p>
+</div>
+<script>
+ import { playOnce } from '../../motion/play-once';
+ import { easing } from '../../motion/timelines';
+ // Each round rises in after the one before, then the fork threshold (transform and opacity only).
+ const root = document.querySelector('[data-ladder]');
+ if (root) playOnce(root, animate => {
+  root.querySelectorAll('[data-round]').forEach((round, index) => {
+   animate(round.querySelector('.round-squares, .fork-threshold'), [{ opacity: 0, transform: 'translateY(12px) scale(.92)' }, { opacity: 1, transform: 'none' }], { delay: 120 + index * 110, duration: 420, easing: easing.reveal });
+   animate(round.querySelector('.round-amount'), [{ opacity: 0 }, { opacity: 1 }], { delay: 220 + index * 110, duration: 320 });
+  });
+ }, { threshold: .4 });
+</script>
+<style>
+ /* Three panels, widths in proportion to what they hold; the chart area has one height in all
+    three, so every round stands on the same baseline. */
+ .ladder-panels{--square:20px;display:grid;grid-template-columns:minmax(0,260fr) minmax(0,640fr) minmax(0,316fr);gap:16px}
+ .panel{display:flex;flex-direction:column;padding:28px;background:var(--web-quiet);box-shadow:inset 0 0 0 1px var(--web-outline)}
+ .panel h3{font:600 20px/26px var(--font-heading)}
+ .panel-chart{display:flex;align-items:flex-end;gap:16px;height:252px;padding-bottom:24px;border-bottom:1px solid var(--web-outline)}
+ .panel-challenges .panel-chart{justify-content:space-between}
+ .panel p{margin-top:20px;font-size:16px;line-height:24px;color:var(--muted-foreground)}
+ .round{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+ .round-squares{display:grid;grid-template-columns:repeat(var(--columns,1),var(--square));gap:4px;margin-bottom:12px}
+ .round-squares i{width:var(--square);height:var(--square);background:var(--muted-foreground)}
+ .round-amount{font:600 18px/24px var(--font-heading);font-variant-numeric:tabular-nums;white-space:nowrap}
+ .round-outcome{font-size:13px;line-height:18px;color:var(--muted-foreground);white-space:nowrap}
+ .more-dots{grid-template-columns:repeat(3,6px);gap:6px;padding-bottom:7px}.more-dots i{width:6px;height:6px;background:var(--mark-participant)}
+ /* The threshold: a dashed square taller than any bond before it. */
+ .fork-threshold{display:flex;align-items:flex-end;width:148px;height:148px;margin-bottom:12px;padding:12px;border:1.5px dashed var(--mark-participant);font:600 13px/18px var(--font-heading);color:var(--muted-foreground)}
+ .ladder-final{display:flex;align-items:baseline;gap:12px;margin-top:16px;padding:20px 28px;background:var(--background);box-shadow:inset 0 0 0 1px var(--web-outline);font-size:17px;line-height:26px}
+ .ladder-final i{flex:none;width:8px;height:8px;background:var(--primary);transform:translateY(-1px)}
+ @media(max-width:1279px){.ladder-panels{--square:16px;grid-template-columns:minmax(0,220fr) minmax(0,560fr) minmax(0,280fr);gap:12px}.panel{padding:24px}.panel-chart{height:224px;gap:12px}.round-amount{font-size:16px}.fork-threshold{width:124px;height:124px}}
+ /* Below 1024 the panels stack and each chart turns on its side: one round per row, squares
+    beside the amount. */
+ @media(max-width:1023px){
+  .ladder-panels{grid-template-columns:1fr}
+  .panel-chart,.panel-challenges .panel-chart{flex-direction:column;align-items:stretch;justify-content:flex-start;gap:12px;height:auto;padding-top:20px}
+  .round{display:grid;grid-template-columns:76px auto minmax(0,1fr);align-items:center;column-gap:16px}
+  .round-squares{margin:0}
+  .round-more{display:none}
+  .fork-threshold{width:76px;height:76px;margin:0;padding:6px;font-size:11px;line-height:14px}
+  .panel p{margin-top:16px}
+ }
+ @media(max-width:767px){.panel{padding:20px}.ladder-final{padding:16px 20px;font-size:16px;line-height:24px}}
+ @media(forced-colors:active){.ladder-final{border:1px solid CanvasText}.round-squares i{forced-color-adjust:none;background:CanvasText}.ladder-final i{forced-color-adjust:none;background:Highlight}.fork-threshold{border-color:CanvasText}.panel{border:1px solid CanvasText}}
+</style>

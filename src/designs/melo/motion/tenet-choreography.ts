@@ -22,7 +22,7 @@ import { crossAnywhere, peerMesh, noAuthority } from '../data/diagrams';
 export const tenetCycle = 12000;
 export type { Ease, Value, Key, Track } from './choreography';
 import { close as closeOn, pulses as pulsesOn, type Key, type Pulse, type Track, type Value } from './choreography';
-import { easing } from '../../../motion/timelines';
+import { easing } from './timelines';
 const pulses = (list: Pulse[], options?: { base?: number; from?: number }) => pulsesOn(list, tenetCycle, options);
 const close = (keys: Key[]) => closeOn(keys, tenetCycle);
 

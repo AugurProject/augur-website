@@ -8,8 +8,12 @@
  * plays it in. Decorative: the sentence says it. Green marks only where the answer acts.
  * Polish pass (owner, 19 Oct 2026: the plays were "awful, simple and weird"): each picture now tells its
  * own before, answer and after, and one Green ring marks the instant the answer acts. */
-interface Props { kind: 'market' | 'flight' | 'gate' }
-const { kind } = Astro.props;
+// `labels` name the gate's two lanes and its check. The review versions pass their own for the DAO case,
+// where Yes blocks the change: v2 (/2/) and v4 (/4/, v2's case) "This upgrade" / "Another change",
+// "Constitution check"; v3 (/3/) "This change" / "Another change", "Mission check". The Green wall is
+// styled in home-v2.css. v1 passes nothing and keeps "This review" / "A later review", "Review".
+interface Props { kind: 'market' | 'flight' | 'gate'; labels?: { lanes: readonly [string, string]; at: string } }
+const { kind, labels = { lanes: ['This review', 'A later review'], at: 'Review' } } = Astro.props;
 // Market: the Yes price in a 600 × 120 space, where a price of 1 sits at y 8 and 0 at y 112, on the
 // grid's three lines. It trades near even until the rocket reaches orbit at x 300. The market knows at
 // once (owner, 19 Oct 2026), so Yes jumps and climbs to 99%, where it waits for the answer at x 432;
@@ -31,8 +35,8 @@ const area = `M${points(yes).replaceAll(' ', 'L')}L600,120L0,120Z`;
 const limit = 62, arrival = 84;
 const rows = Array.from({ length: 24 }, (_, row) => row);
 const insured = (row: number, seat: number) => (row * 5 + seat * 3) % 7 < 3;
-// The gate's check, the design system's check path (icons/check.svg) as a polyline so it can draw in.
-const check = '4.5 10.5 8.25 14.25 15.5 7';
+// The chips' check, drawn as a stroke on Phosphor Bold's own centreline so it can draw in.
+const check = '40 144 96 200 224 72';
 ---
 <div class:list={['case-graphic', `is-${kind}`]} aria-hidden="true" data-case-graphic={kind}>
  {kind === 'market' && <div class="market">
@@ -71,7 +75,7 @@ const check = '4.5 10.5 8.25 14.25 15.5 7';
  </div>}
  {kind === 'gate' && <div class="gate">
   <div class="gate-lane">
-   <span class="gate-caption">This review</span>
+   <span class="gate-caption">{labels.lanes[0]}</span>
    <div class="g-track">
     <span class="gate-path"></span><span class="gate-ahead"></span>
     <span class="gate-bars"><i data-gate-bar></i><i data-gate-bar></i></span><span class="gate-goal"></span>
@@ -79,15 +83,15 @@ const check = '4.5 10.5 8.25 14.25 15.5 7';
    </div>
   </div>
   <div class="gate-lane is-later" data-gate-later-lane>
-   <span class="gate-caption">A later review</span>
+   <span class="gate-caption">{labels.lanes[1]}</span>
    <div class="g-track">
     <span class="gate-path"></span>
-    <span class="gate-check"><svg viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1" data-gate-check /></svg></span>
+    <span class="gate-check"><svg viewBox="0 0 256 256" focusable="false"><polyline points={check} pathLength="1" data-gate-check /></svg></span>
     <span class="gate-run" data-gate-later><span class="g-item"></span></span>
     <span class="g-pulse gate-pulse" data-graphic-pulse></span>
    </div>
   </div>
-  <div class="g-labels"><span>Proposal</span><span class="at-gate">Review</span><span class="at-end">Live</span></div>
+  <div class="g-labels"><span>Proposal</span><span class="at-gate">{labels.at}</span><span class="at-end">Live</span></div>
  </div>}
 </div>
 <style>
@@ -176,7 +180,7 @@ const check = '4.5 10.5 8.25 14.25 15.5 7';
  .gate-check{position:absolute;left:var(--gate);top:16px;display:grid;place-items:center;width:32px;height:32px;margin-left:-16px;background:var(--web-tile);color:var(--foreground)}
  .gate-check svg{overflow:visible}
  .gate-check svg{width:20px;height:20px}
- .gate-check polyline{fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:square;stroke-linejoin:miter;stroke-dasharray:1 3}
+ .gate-check polyline{fill:none;stroke:currentColor;stroke-width:24;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 3}
  .is-later .gate-run{width:calc(100% - 8px)}
  .gate-pulse{left:calc(100% - 8px);top:32px;border-color:var(--foreground)}
  @media(max-width:1023px){.case-graphic{flex:none;padding-top:28px}.market{flex:none}.market-plot{height:120px}}

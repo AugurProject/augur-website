@@ -1,0 +1,69 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import TokenCard from '../components/rep/TokenCard.astro';
+import BondLadder from '../components/rep/BondLadder.astro';
+import Participation from '../components/rep/Participation.astro';
+import ForkStory from '../components/rep/ForkStory.astro';
+import VersionRail from '../components/rep/VersionRail.astro';
+import FaqItem from '../components/content/FaqItem.astro';
+import Icon from '../components/primitives/Icon.astro';
+import { hero, ladder, participation, fork, versions, repFaq } from '../data/rep';
+import { faqEntries } from '../data/faq';
+import { links } from '../data/links';
+/** REP, rebuilt 19 October 2026. The story runs from what REP is for to
+ * what it asks of the reader: why lying costs more each round, holding against taking part,
+ * what a fork asks of holders, which REP is current, then holders' questions. The hero's token
+ * card keeps the contract-reference job of augur.net/rep. Copy lives in src/data/rep.ts. */
+const questions = repFaq.ids.map(id => { const entry = faqEntries.find(item => item.id === id); if (!entry) throw new Error(`Unknown FAQ entry ${id}`); return entry; });
+---
+<PageLayout title="REP | Augur’s token" description="What REP does, why it makes lying expensive, the current REPv2_Yes_1 contract, which REP you hold and what to do in a fork. Reporting and challenging are optional.">
+ <section class="rep-hero" aria-labelledby="rep-title">
+  <div class="site-container rep-hero-grid">
+   <div class="rep-hero-copy">
+    <h1 id="rep-title">{hero.title}</h1>
+    <p class="lead">{hero.lead}</p>
+    <nav class="actions" aria-label="On this page"><a class="button outline" href="#versions">Which REP do I hold?</a><a class="button outline" href="#fork">If a fork happens</a></nav>
+   </div>
+   <TokenCard />
+  </div>
+ </section>
+ <section class="section site-container" id="how-rep-works" aria-labelledby="ladder-heading">
+  <div class="section-heading"><h2 id="ladder-heading">{ladder.title}</h2><p class="lead">{ladder.lead}</p></div>
+  <BondLadder />
+ </section>
+ <section class="section band" id="taking-part" aria-labelledby="taking-part-heading"><div class="site-container">
+  <div class="section-heading"><h2 id="taking-part-heading">{participation.title}</h2><p class="lead">{participation.lead}</p></div>
+  <Participation />
+ </div></section>
+ <section class="section site-container" id="fork" aria-labelledby="fork-heading">
+  <div class="section-heading"><h2 id="fork-heading">{fork.title}</h2><p class="lead">{fork.lead}</p></div>
+  <ForkStory />
+ </section>
+ <section class="section band" id="versions" aria-labelledby="versions-heading"><div class="site-container">
+  <div class="section-heading"><h2 id="versions-heading">{versions.title}</h2><p class="lead">{versions.lead}</p></div>
+  <VersionRail />
+ </div></section>
+ <section class="section site-container rep-faq" id="questions" aria-labelledby="questions-heading">
+  <h2 id="questions-heading">{repFaq.title}</h2>
+  <div class="faq-accordion">{questions.map((entry, index) => <FaqItem entry={entry} name="rep-faq" open={index === 0} />)}</div>
+  <div class="actions faq-actions"><a class="button outline" href="/faq/#rep">See all questions</a><a class="button text" href={links.discord.url}><Icon name="discord-logo"/><span class="button-label">Ask on Discord</span><Icon name="arrow-up-right"/></a></div>
+ </section>
+</PageLayout>
+<style>
+ /* Hero: the claim on the left, the current token on the right, as a wallet would show it. */
+ .rep-hero{padding-block:112px 104px}
+ .rep-hero-grid{display:grid;grid-template-columns:minmax(0,668fr) minmax(0,500fr);column-gap:80px;align-items:center}
+ .rep-hero h1{font-size:clamp(2.5rem,4.445vw,4rem);line-height:1.125;letter-spacing:-.02em}
+ .rep-hero .lead{margin-top:24px}
+ .rep-hero .actions{gap:12px 16px;margin-top:40px}
+ .rep-faq h2{margin-bottom:32px}
+ .faq-accordion{border:1px solid var(--web-outline);background:var(--web-quiet)}
+ .faq-accordion :global(.faq-item+.faq-item){border-top:1px solid var(--web-outline)}
+ .faq-accordion :global(.faq-answer){max-width:720px;padding-right:56px}
+ .faq-accordion :global(details[open]>summary){padding-bottom:12px}
+ .faq-accordion :global(.faq-answer p){color:var(--foreground);opacity:.86}
+ .faq-actions{gap:16px 32px;margin-top:32px}
+ @media(max-width:1279px){.rep-hero-grid{column-gap:48px}}
+ @media(max-width:1023px){.rep-hero{padding-block:72px}.rep-hero-grid{grid-template-columns:1fr;row-gap:48px}.rep-hero-copy{max-width:720px}}
+ @media(max-width:767px){.rep-hero{padding-block:56px 64px}.rep-hero .actions{margin-top:32px}.faq-accordion :global(.faq-answer){padding-right:0}}
+</style>

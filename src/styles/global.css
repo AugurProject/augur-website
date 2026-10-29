@@ -2,6 +2,9 @@
 @import '@fontsource/sora/600.css';
 @import '@fontsource/schibsted-grotesk/400.css';
 @import 'tailwindcss';
+/* `outline` is the outline button's variant class (Button.astro), not Tailwind's outline-style utility,
+   which would draw a 1 px Paper outline around every outline button. */
+@source not inline('outline');
 @import '@augurproject/design-system/theme.css';
 @import '@augurproject/design-system/tokens.tailwind.css';
 @import './disclosures.css';
@@ -97,6 +100,7 @@
   .button:active { background:var(--primary-active); }
   .button.outline { @apply border-outline bg-transparent text-paper; }
   .button.outline:hover { @apply bg-tile; border-color:var(--brand-hover-edge); }
+  .button.outline:active { @apply bg-raised; border-color:var(--border); }
   .button.text { @apply border-0 bg-transparent px-0 text-paper; }
   .button:disabled { @apply pointer-events-none bg-quiet text-muted; }
   .button-label { @apply relative inline-block; }

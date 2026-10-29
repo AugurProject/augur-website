@@ -1,7 +1,7 @@
 import { heroChoreography, heroCycle } from './hero-choreography';
 import { keyframes } from './choreography';
 import { motionTime } from '../../../motion/debug';
-import { easing } from '../../../motion/timelines';
+import { easing } from './timelines';
 
 /** Hero ambience and response (owner feedback, 6 Oct 2026: more dynamic and
  * more responsive to the cursor).

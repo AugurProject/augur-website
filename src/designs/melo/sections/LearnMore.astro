@@ -1,38 +1,73 @@
 ---
-import {links} from '../../../data/links';
-import {posts} from '../data/home-resources';
+import {getCollection} from 'astro:content';
 import {faqEntries} from '../../../data/faq';
 import FaqItem from '../../../components/content/FaqItem.astro';
 import BlogCover from '../../../components/content/BlogCover.astro';
+import {homeCopy,ownerVersion,type HomeVariant} from '../data/homepage-review';
+import {navigation} from '../../../data/navigation';
+import {doorScenes,doorBox} from '../data/door-scenes';
+import type {SvgNode} from '../data/iso-kit';
+import Icon from '../../../components/primitives/Icon.astro';
+// A review version (v2, v3, v4) renders its own copy (homepage-review.ts); 'v1', the default and every
+// "/" use, stays byte-identical.
+interface Props { variant?:HomeVariant; }
+const {variant='v1'}=Astro.props;
 // One section where the page used to end on two (owner, 19 Oct 2026: Augus found the page too long),
 // trimmed the same day to three questions and the two latest posts, without type or date. The two
 // columns are one system: framed lists with the same 24 px text inset, 18 px titles and row height,
 // and each ends on a button whose label sits on that inset, on one shared line.
 const questions=faqEntries.filter(entry=>entry.homepage);
-const [featured,next]=posts;
+const [featured,next]=(ownerVersion(variant)?[]:await getCollection('blog')).sort((a,b)=>b.data.publishedAt.valueOf()-a.data.publishedAt.valueOf()).slice(0,2);
+// Review versions (/2/ to /4/; Ryan 15): no "From the blog" column, so nothing is left to stand beside the questions.
+// One column on the page's grid: the shared heading row (v1's heading on two lines, the /faq/ lead
+// beside it), the three questions full width, then "View all questions" with a plain "Read the blog"
+// link. All questions start closed: the first was open only so that v1's two columns ended level.
+// Layout and spacing are in home-v2.css; v1's frame and answer rules below style both variants.
+const learn=homeCopy(variant)?.learnMore;
+// /2/ (item 6; owner, 26 Oct 2026: sketch A): no questions, three doors, the FAQ, the blog and Discord.
+// Each door is one link that fills its tile (the title's link stretches over it), so the accessible
+// name stays the title and the door's line describes it. Hrefs come from the navigation directory the
+// header and footer use, so the doors can't drift from those menus. No generic icons (owner): each door
+// is marked by its own object from the iso kit (door-scenes.ts), drawn here at rest like IsoScene.astro's.
+const keep=ownerVersion(variant)&&learn&&'keepGoing' in learn?learn.keepGoing:undefined;
+const discord=navigation.community.find(item=>item.linkKey==='discord')!;
+const doors=keep?([
+ {id:'faq',...keep.faq,href:navigation.resources.find(item=>item.href==='/faq/')!.href,external:false},
+ {id:'blog',...keep.blog,href:navigation.resources.find(item=>item.linkKey==='archive')!.href,external:true},
+ {id:'community',...keep.community,href:discord.href,external:true},
+] as const):[];
 ---
 <section class="home-learn section" id="learn-more" aria-labelledby="learn-heading"><div class="site-container">
+ {learn?<>
+ <div class="section-heading"><h2 id="learn-heading">{keep?keep.heading:<>Learn more<br/>about Augur.</>}</h2><p class="lead">{keep?keep.lead:learn.lead}</p></div>
+ {!keep&&<div class="faq-accordion">{questions.map(entry=><FaqItem entry={entry} name="home-faq"/>)}</div>}
+ {keep?<ul class="doors">{doors.map(door=><li class="door" data-external={door.external?'':undefined}>
+  <svg class="door-art" viewBox={`0 0 ${doorBox.w} ${doorBox.h}`} width={doorBox.w} height={doorBox.h} aria-hidden="true" focusable="false" data-door={door.id}><g transform={doorScenes[door.id].transform}>{(function render(nodes:SvgNode[]):any{return nodes.map(({tag,attrs,children})=>{const Tag=tag as any;return children?<Tag {...attrs}>{render(children)}</Tag>:<Tag {...attrs}/>;});})(doorScenes[door.id].world)}</g></svg><Icon name={door.external?'arrow-up-right':'arrow-right'} class="door-arrow"/>
+  <h3 class="door-title"><a class="door-link" href={door.href} aria-describedby={`door-${door.id}`}>{door.title}</a></h3>
+  <p class="door-line" id={`door-${door.id}`}>{door.line}</p>
+ </li>)}</ul>:<div class="learn-foot"><a class="button outline" href="/faq/">View all questions</a><a class="button text" href={learn.blog.href}><span class="button-label">{learn.blog.label}</span></a></div>}
+ </>:<>
  <h2 id="learn-heading" class="learn-title">Learn more about Augur.</h2>
  <div class="learn-grid">
   <div class="learn-column">
    <h3>Frequently asked questions</h3>
    <div class="faq-accordion">{questions.map((entry,i)=><FaqItem entry={entry} name="home-faq" open={i===0}/>)}</div>
-   <div class="learn-foot"><a class="button outline" href={links.whitepaper.url}>Read the whitepaper</a></div>
+   <div class="learn-foot"><a class="button outline" href="/faq/">View all questions</a></div>
   </div>
   <div class="learn-column">
    <h3>From the blog</h3>
    <div class="post-list">
-    {featured&&<a class="featured-post" href={featured.href}><BlogCover variant={featured.cover}/><div class="featured-text"><h4>{featured.title}</h4><p class="post-description">{featured.description}</p></div></a>}
-    {next&&<a class="post-row" href={next.href}><h4>{next.title}</h4></a>}
+    {featured&&<a class="featured-post" href={`/blog/${featured.id}/`}><BlogCover variant={featured.data.cover}/><div class="featured-text"><h4>{featured.data.title}</h4><p class="post-description">{featured.data.description}</p></div></a>}
+    {next&&<a class="post-row" href={`/blog/${next.id}/`}><h4>{next.data.title}</h4></a>}
    </div>
-   <div class="learn-foot"><a class="button outline" href="https://www.augur.net/blog/">View all posts</a></div>
+   <div class="learn-foot"><a class="button outline" href="/blog/">View all posts</a></div>
   </div>
  </div>
+ </>}
 </div></section>
 <style>
- .home-learn{background:var(--web-band)}
- .learn-title{margin-bottom:var(--heading-gap);text-wrap:balance}
- :global(.faq-item summary>span:first-child){text-wrap:balance}
+ .home-learn{background:var(--web-band);padding-block:72px 96px}
+ .learn-title{margin-bottom:48px;text-wrap:balance}
  /* 704 / 80 / 464 at 1440: answers need the measure (every homepage question on one line), posts the narrower column.
     Subgrid rows give both columns one heading line, one list height and one button line. */
  .learn-grid{display:grid;grid-template-columns:minmax(0,1fr) 464px;grid-template-rows:auto 1fr auto;column-gap:80px}
@@ -78,6 +113,8 @@ const [featured,next]=posts;
   .featured-text{padding:24px}
  }
  @media(max-width:767px){
+  .home-learn{padding-block:64px}
+  .learn-title{margin-bottom:40px}
   .faq-accordion :global(.faq-answer){padding-right:16px}
   .faq-accordion :global(summary),:is(.featured-post,.post-row) h4{font-size:16px;line-height:24px}
   .featured-post{display:block}

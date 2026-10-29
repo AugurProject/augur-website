@@ -3,7 +3,7 @@ import {bindMarketScrub,playCaseGraphic} from './case-graphics';
 import {motionTime} from '../../../motion/debug';
 import {playOnce,type Animate} from '../../../motion/play-once';
 import {bindWalkthroughScroll} from './walkthrough-scroll';
-import {easing,applicationTimeline,roadmapTimeline,outcomeTimeline,timing} from '../../../motion/timelines';
+import {easing,applicationTimeline,roadmapTimeline,outcomeTimeline,timing} from './timelines';
 const enhanced=new WeakSet<HTMLElement>();
 export function initHomeInteractions(){
  setupAllTabs();

@@ -3,12 +3,13 @@ import '../styles/global.css';
 import AnnouncementBar from '../components/layout/AnnouncementBar.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
+import chromeStyle from '../styles/chrome.css?inline';
 import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url';
 // `bare` drops the announcement, header and footer for one-off pages such as the newsletter
 // results. `footer={false}` keeps the announcement and header but drops the footer, whose contact
-// band would repeat the contact page.
-interface Props { title?: string; description?: string; noindex?: boolean; bare?: boolean; footer?: boolean }
-const { title = 'Augur | The frontier of decentralized truth', description = 'Real-world answers for onchain apps, controlled by no one.', noindex = false, bare = false, footer = true } = Astro.props;
+// band would repeat the contact page. `class` sets <main>'s class for the inner pages.
+interface Props { title?: string; description?: string; noindex?: boolean; bare?: boolean; footer?: boolean; class?: string }
+const { title = 'Augur | The frontier of decentralized truth', description = 'Real-world answers for onchain apps, controlled by no one.', noindex = false, bare = false, footer = true, class: className } = Astro.props;
 ---
 <!doctype html>
 <html lang="en" class="dark">
@@ -24,8 +25,8 @@ const { title = 'Augur | The frontier of decentralized truth', description = 'Re
  </head>
  <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  {!bare && <AnnouncementBar />}{!bare && <SiteHeader />}
-  <main id="main" tabindex="-1"><slot /></main>
+  {!bare && <style is:inline set:html={chromeStyle}></style>}{!bare && <AnnouncementBar />}{!bare && <SiteHeader />}
+  <main id="main" class={className} tabindex="-1"><slot /></main>
   {!bare && footer && <SiteFooter />}
   <div class="page-field" data-page-field aria-hidden="true"></div>
   <script>import {initPageField} from '../motion/page-field';initPageField();</script>

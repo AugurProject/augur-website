@@ -1,4 +1,4 @@
-import { easing } from '../../../motion/timelines';
+import { easing } from './timelines';
 
 /** Shared keyframe language for looping scenes that exist both on the website
  * and as Figma keyframes (tenet diagrams, hero ambience). A track is a list of

@@ -1,4 +1,4 @@
-import { easing, caseGraphicTimeline as t, timeAt } from '../../../motion/timelines';
+import { easing, caseGraphicTimeline as t, timeAt } from './timelines';
 import type { Animate } from '../../../motion/play-once';
 
 /** Plays a use case's picture once its answer is in (owner, 19 Oct 2026: "polished, professional").

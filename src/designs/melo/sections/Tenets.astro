@@ -2,8 +2,15 @@
 import CrossAnywhere from '../art/diagrams/CrossAnywhere.astro';
 import PeerMesh from '../art/diagrams/PeerMesh.astro';
 import NoAuthority from '../art/diagrams/NoAuthority.astro';
+import IsoScene from '../art/diagrams/IsoScene.astro';
+import {homeCopy,ownerVersion,type HomeVariant,type ReviewVariant} from '../data/homepage-review';
+import {reviewInline} from '../scripts/review-inline';
+// A review version (v2, v3, v4) renders its own copy (homepage-review.ts); 'v1', the default and every
+// "/" use, stays byte-identical.
+interface Props { variant?:HomeVariant; }
+const {variant='v1'}=Astro.props;const copy=homeCopy(variant);
 // Draft copy (owner, 18 Oct 2026): the claim is new; each body keeps the approved facts, reworded so it
-// no longer repeats the claim. The struck "without" chips were removed on 19 Oct (decisions.md).
+// no longer repeats the claim. The struck "without" chips were removed on 19 Oct.
 const tenets=[
  {title:'Permissionless',diagram:CrossAnywhere,claim:['Any app can ask.','Anyone can answer.'],body:'Ask, answer or push back. No one has to let you in.'},
  {title:'Decentralized',diagram:PeerMesh,claim:['No one in charge.','No one to pressure.'],body:'Answers come from people with something to lose, not from a back room.'},
@@ -18,33 +25,58 @@ const closer={statement:'The answer is nobody’s call.',paths:[
  {who:'For traders',line:['Payouts follow what actually happened,','with no authority deciding alone.']},
  {who:'For integrators',line:['Focus on building and growing your platform.','Leave resolution to Augur Lituus.']},
 ]};
+// Review versions (/2/ to /4/): the version's three cards and reader lines (v2: Augus's cards and Ryan's
+// reader lines, homepage-v2.ts), on the same markup. The heading and the closer statement stay; v1's
+// arrays above stay as they are.
+const diagrams={cross:CrossAnywhere,mesh:PeerMesh,authority:NoAuthority};
+// The owner's version, /2/ only (homepage-review.ts): each card draws an isometric scene instead, which says
+// its claim (IsoScene.astro, tenets-iso.ts): Two roads for Permissionless, Middleman crumbles for Trustless
+// and the Catapult for Robust; tenets-iso-v2.js plays them, rendered after the section.
+const own=ownerVersion(variant);
+const isoKinds={cross:'roads',authority:'middleman',mesh:'catapult'} as const;
+const cards=copy?copy.why.tenets.map(card=>({...card,diagram:diagrams[card.diagram],iso:own?isoKinds[card.diagram]:undefined})):tenets;
+const paths=copy?copy.why.paths:closer.paths;
+// The owner's version (/2/ only, 23 Oct 2026): the statement heads the closer as its <h3>, so heading
+// navigation reaches it, and the readers follow as a list under it, each named by an <h4> (25 Oct 2026),
+// so heading navigation reaches each reader too (home-v2-only.css lays them out).
+// v3 (Ryan 6): a card with a `tip` gets a "?" toggletip beside its title. The title and the button share a
+// head row (a button inside the <h3> would join the heading's name); the definition is a native popover
+// (click, tap, Enter, Space, Esc and click-outside need no script), described by the button, and anchored
+// under the tab (home-v3.css). The version's `tips` script (tenet-tips-v3.js) adds hover and focus.
+const tips=copy&&cards.some(card=>'tip' in card)?reviewInline[variant as ReviewVariant].scripts.tips:undefined;
 ---
 <section class="tenets" id="why-augur" aria-label="Why Augur" data-tenets>
  <div class="site-container">
-  <div class="section-heading"><h2 id="tenets-heading">Smart contracts<br/>can't see the world.</h2><p class="lead">Whoever tells them what happened controls who gets paid.</p></div>
+  <div class="section-heading"><h2 id="tenets-heading">Smart contracts<br/>can't see the world.</h2><p class="lead">{copy?copy.why.lead:'Whoever tells them what happened controls who gets paid.'}</p></div>
  </div>
- <div class="answer-band" data-answer-band><p class="site-container" data-answer>With Augur, users don't rely on parties to control answers.</p></div>
+ <div class="answer-band" data-answer-band>{copy?<p class="site-container" data-answer>{copy.why.answer}</p>:<p class="site-container" data-answer>With Augur, users don't rely on parties to control answers.</p>}</div>
  <div class="site-container tenet-grid">
-  {tenets.map(({title,diagram:Diagram,claim,body})=><article class="tenet-card" data-tenet-card aria-labelledby={`tenet-${title.toLowerCase()}`}>
-   <p class="tenet-tab" id={`tenet-${title.toLowerCase()}`}>{title}</p>
-   <div class="tenet-visual"><Diagram/></div>
+  {cards.map(card=>{const {title,diagram:Diagram,claim,body}=card;const tip='tip' in card?card.tip:undefined;return <article class="tenet-card" data-tenet-card>
+   {tip?<div class="tenet-head" style={`anchor-name:--${tip.id}`}><h3 class="tenet-tab">{title}</h3><button type="button" class="tenet-tip" popovertarget={tip.id} aria-label={tip.label} aria-describedby={tip.id} data-tenet-tip><span class="tenet-tip-mark" aria-hidden="true">?</span></button><p class="tenet-tip-pop" id={tip.id} popover style={`position-anchor:--${tip.id}`}><strong>{title}:</strong> {tip.text}</p></div>:<h3 class="tenet-tab">{title}</h3>}
+   {'iso' in card&&card.iso?<div class="tenet-visual tenet-visual-iso"><IsoScene kind={card.iso}/></div>:<div class="tenet-visual"><Diagram/></div>}
    <div class="tenet-copy">
-    <h3 class="tenet-claim"><span>{claim[0]}</span><span>{claim[1]}</span></h3>
+    <p class="tenet-claim"><span class="setup">{claim[0]}</span><span>{claim[1]}</span></p>
     <p class="tenet-body">{body}</p>
    </div>
-  </article>)}
-  <div class="tenet-closer">
+  </article>;})}
+  {own?<div class="tenet-closer">
+   <h3 class="closer-head">{closer.statement}</h3>
+   <ul class="closer-readers" role="list">{paths.map(({who,line})=><li class="closer-reader">
+    <h4 class="closer-who">{who}</h4>
+    <p class="closer-line"><span class="setup">{line[0]}</span> <span class="payoff">{line[1]}</span></p>
+   </li>)}</ul>
+  </div>:<div class="tenet-closer">
    <p class="closer-statement">{closer.statement}</p>
-   {closer.paths.map(({who,line})=><div class="closer-path">
+   {paths.map(({who,line})=><div class="closer-path">
     <p class="closer-who">{who}</p>
     <p class="closer-line"><span class="setup">{line[0]}</span> <span class="payoff">{line[1]}</span></p>
    </div>)}
-  </div>
+  </div>}
  </div>
-</section>
+</section>{tips&&<script is:inline set:html={tips}></script>}{own&&<script is:inline set:html={reviewInline.v2.scripts.tenets}></script>}
 <style>
- .tenets{padding-block:var(--section-space)}.answer-band{position:relative;overflow:hidden;background:var(--primary);color:var(--background);padding:24px 0 28px}.answer-band p{font-family:var(--font-heading);font-size:clamp(26px,2.5vw,36px);font-weight:600;line-height:44px;letter-spacing:-.01em;text-wrap:balance}
- .tenet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-top:var(--heading-gap)}
+ .tenets{padding-top:64px}.tenets>.site-container:first-child{padding-top:72px;padding-bottom:56px}.section-heading{margin-bottom:0}.answer-band{position:relative;overflow:hidden;background:var(--primary);color:var(--background);padding:24px 0 28px}.answer-band p{font-family:var(--font-heading);font-size:clamp(26px,2.5vw,36px);font-weight:600;line-height:44px;letter-spacing:-.01em;text-wrap:balance}
+ .tenet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-top:48px;padding-bottom:96px}
  /* Folder card: the tab's edge steps down in three 12 px squares (tread = riser), so the notch reads
     as deliberate pixels, never as an aliased diagonal; the answer ribbon's edge steps the same way.
     The fill is an aria-hidden layer behind the content, so the clip never cuts text, glows or focus.
@@ -67,8 +99,8 @@ const closer={statement:'The answer is nobody’s call.',paths:[
  .tenet-visual :global(svg){display:block;width:100%;height:auto;aspect-ratio:2/1;overflow:visible}
  .tenet-card :global(:is(rect,[data-motion])){transform-box:fill-box;transform-origin:center}
  .tenet-copy{flex:1;display:flex;flex-direction:column;padding:28px 32px 32px;border-top:1px solid var(--web-outline)}
- .tenet-claim{font:600 24px/32px var(--font-heading);letter-spacing:-.01em;color:var(--foreground);margin:0}.setup{color:var(--muted-foreground)}.tenet-claim span{display:block;text-wrap:balance}
- .tenet-body{font-size:16px;line-height:24px;color:var(--muted-foreground);margin:12px 0 0;text-wrap:balance}
+ .tenet-claim{font:600 22px/30px var(--font-heading);letter-spacing:-.01em;color:var(--foreground);margin:0}.setup{color:var(--muted-foreground)}.tenet-claim span{display:block;text-wrap:balance}
+ .tenet-body{font-size:16px;line-height:24px;color:var(--muted-foreground);margin:12px 0 0}
  /* Closer: one panel for Augus's two readers, so nothing floats. It is a subgrid of the card columns
     with no gap of its own, so each cell runs to the middle of the card gutter: the cell edges sit
     centred under the gutters and every cell's text starts on its card's text edge (32 px in, plus
@@ -87,11 +119,11 @@ const closer={statement:'The answer is nobody’s call.',paths:[
  @media print{.answer-band :global(:is(.ribbon-fill,.ribbon-overlay,.ribbon-edge)){display:none}.answer-band[data-ribbon]{background:var(--primary);color:var(--background)}}
  @media(forced-colors:active){.tenet-card{border:1px solid CanvasText}.tenet-card::before,.tenet-card::after,.tenet-closer::after{display:none}.tenet-tab::before,.closer-who::before{forced-color-adjust:none;background:CanvasText}}
  /* Tablet: one card per row, the diagram beside the copy under a shared tab. */
- @media(max-width:1023px){.tenet-grid{grid-template-columns:1fr;max-width:760px;gap:20px}
+ @media(max-width:1023px){.tenets>.site-container:first-child{padding-top:48px}.tenet-grid{grid-template-columns:1fr;max-width:760px;gap:20px}
   .tenet-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto 1fr}.tenet-tab{grid-column:1/-1}
   .tenet-visual{display:flex;align-items:center;padding:16px 28px 28px}.tenet-copy{border-top:0;border-left:1px solid var(--web-outline);padding:20px 28px 28px}
   .tenet-closer{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:20px}.closer-statement{grid-column:1/-1;padding:20px 28px}.closer-path{padding:20px 28px}}
- @media(max-width:600px){.answer-band p{line-height:1.3}.answer-band{padding-block:24px}
+ @media(max-width:600px){.tenets{padding-top:40px}.answer-band p{line-height:1.3}.tenet-grid{padding-bottom:64px}.answer-band{padding-block:24px}
   .tenet-card{display:flex;--tab:184px}.tenet-tab{padding:0 24px}.tenet-visual{padding:16px 24px 24px}.tenet-copy{border-left:0;border-top:1px solid var(--web-outline);padding:24px}
-  .tenet-closer{grid-template-columns:1fr}.closer-statement{padding:20px 24px;font-size:22px;line-height:30px}.closer-path{padding:20px 24px}.closer-path+.closer-path::after{bottom:auto;right:0;border-left:0;border-top:1px solid var(--web-outline)}.closer-line{font-size:18px;line-height:27px}}
+  .tenet-claim{font-size:20px;line-height:28px}.tenet-closer{grid-template-columns:1fr}.closer-statement{padding:20px 24px;font-size:22px;line-height:30px}.closer-path{padding:20px 24px}.closer-path+.closer-path::after{bottom:auto;right:0;border-left:0;border-top:1px solid var(--web-outline)}.closer-line{font-size:18px;line-height:27px}}
 </style>

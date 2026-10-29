@@ -1,5 +1,5 @@
 ---
-import { rep, type Square, type Zone } from '../../../data/walkthrough';
+import { rep, type Square, type Zone } from '../data/walkthrough';
 import { links } from '../../../data/links';
 import Icon from '../../../components/primitives/Icon.astro';
 /** “Your REP”: what taking part puts at stake and what comes back, under the
@@ -47,7 +47,7 @@ const outcome = zone.kind === 'meter' ? [] : (() => { let pops = 0; return zone.
     “too noisy”); the label says whose REP and when. */
  .your-rep{--bond:32px;--share:29px;--reward:16px;display:flex;flex-direction:column;gap:14px;height:100%;box-sizing:border-box;padding:20px 20px 22px 18px;background:var(--background);border-left:2px solid var(--primary)}
  /* The headline sells, the diagram under it shows how, on the panel itself rather than in an
-    inset box. It is the size site-container, so the flow picks its layout from its own width
+    inset box. It is the size container, so the flow picks its layout from its own width
     rather than the viewport's. */
  .zone-diagram{container:rep / inline-size;display:flex;flex-direction:column;gap:12px;padding-top:4px}
  .zone-title{margin:0;font:600 16px/22px var(--font-heading);color:var(--foreground)}

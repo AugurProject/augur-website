@@ -4,7 +4,8 @@ import { motionTime } from './debug';
 /** Header disclosures: native details/summary, enhanced for fine pointers.
  * Hover opens a panel after a short intent delay; leaving the navigation closes
  * a hover-opened panel after a grace period. A Green line glides under the
- * label of the item under the pointer (or the open item). Moving between items
+ * item under the pointer (or the open item) and rests under the current
+ * section. Moving between items
  * with a panel open glides the panel from the old item to the new one, resizing
  * its frame while the new links fade in, so there is never a close/reopen flash
  * or gap.
@@ -28,10 +29,32 @@ export function initNavigation() {
   let openTimer=0,closeTimer=0,hovered:HTMLElement|null=null,pendingFrom:DOMRect|null=null;
   root.dataset.navEnhanced='';
 
-  // Highlight line: a 2 px rule under the item's label, moved with translate
-  // and scaleX only. It draws in from the label's left edge, glides between
-  // items and retracts to its left edge when nothing is highlighted. A line
-  // still retracting glides back instead of starting over.
+  // Highlight line: a 2 px rule on the item's bottom edge, moved with translate
+  // and scaleX only. It draws in from its left end, glides between items and
+  // retracts to that end when nothing is highlighted. A line still retracting
+  // glides back instead of starting over.
+  // It spans what the item shows, from the label's first stroke to the
+  // chevron's tip (or the label's last stroke), so it is centred under it: the
+  // label's side bearings come from the font, the chevron's inset from its
+  // glyph inside the icon's box. Layout boxes, so a turning chevron is ignored.
+  const pen=document.createElement('canvas').getContext('2d');
+  const ink=(item:HTMLElement)=>{
+    const rect=item.getBoundingClientRect(),label=item.querySelector<HTMLElement>('.nav-item-label')??item,box=label.getBoundingClientRect();
+    let left=box.left,right=box.right;
+    if(pen){
+      const font=getComputedStyle(label);pen.font=`${font.fontWeight} ${font.fontSize} ${font.fontFamily}`;
+      const text=pen.measureText(label.textContent??'');
+      left-=text.actualBoundingBoxLeft;right+=text.actualBoundingBoxRight-text.width;
+    }
+    // Phosphor's caret is filled; Augur's own (the review copies) is a stroke,
+    // half of which lies outside its path.
+    const glyph=item.querySelector<SVGSVGElement>('.nav-chevron svg'),view=glyph?.viewBox.baseVal;
+    if(glyph&&view?.width){
+      const shape=glyph.getBBox(),paint=getComputedStyle(glyph),stroke=paint.stroke==='none'?0:parseFloat(paint.strokeWidth)/2;
+      right=rect.right-parseFloat(getComputedStyle(item).paddingRight)-(view.x+view.width-shape.x-shape.width-stroke)/view.width*parseFloat(paint.width);
+    }
+    return {left,width:right-left,top:rect.bottom-2};
+  };
   let lineAt='';
   const place=(item:HTMLElement|null)=>{
     if(!highlight||!nav)return;
@@ -39,17 +62,24 @@ export function initNavigation() {
       if(highlight.dataset.visible!==undefined){delete highlight.dataset.visible;highlight.style.transform=`${lineAt} scaleX(0)`;}
       return;
     }
-    const from=nav.getBoundingClientRect(),box=(item.querySelector('.nav-item-label')??item).getBoundingClientRect();
-    lineAt=`translate(${box.left-from.left}px,${box.bottom-from.top}px)`;
-    if(highlight.dataset.visible===undefined&&!highlight.getAnimations().length){
+    const from=nav.getBoundingClientRect(),line=ink(item);
+    lineAt=`translate(${line.left-from.left}px,${line.top-from.top}px)`;
+    // A placement already marked instant (settle) skips the draw-in.
+    if(highlight.dataset.visible===undefined&&highlight.dataset.instant===undefined&&!highlight.getAnimations().length){
       highlight.dataset.instant='';highlight.style.transform=`${lineAt} scaleX(0)`;
       void highlight.offsetWidth;delete highlight.dataset.instant;
     }
-    highlight.style.transform=`${lineAt} scaleX(${box.width/100})`;
+    highlight.style.transform=`${lineAt} scaleX(${line.width/100})`;
     highlight.dataset.visible='';
   };
   const openSummary=()=>disclosures.find(item=>item.open)?.querySelector<HTMLElement>('summary')??null;
-  const syncHighlight=()=>place(hovered??openSummary());
+  // At rest the line marks the current section, if any.
+  const current=nav?.querySelector<HTMLElement>('.nav-link[data-current],.nav-disclosure[data-current]>.nav-item')??null;
+  const syncHighlight=()=>place(hovered??openSummary()??current);
+  // Placed without drawing: on load, resize and font swap the line just sits.
+  const settle=()=>{if(!highlight)return;highlight.dataset.instant='';syncHighlight();requestAnimationFrame(()=>delete highlight.dataset.instant);};
+  settle();
+  document.fonts?.ready.then(settle);
 
   const clearTimers=()=>{clearTimeout(openTimer);clearTimeout(closeTimer);};
   const sync=(item:HTMLDetailsElement)=>item.querySelector('summary')?.setAttribute('aria-expanded',String(item.open));
@@ -127,7 +157,7 @@ export function initNavigation() {
   },options);
   root.addEventListener('keydown',event=>{if(event.key==='Escape'){const current=disclosures.find(item=>item.open);if(current){event.preventDefault();clearTimers();close();current.querySelector('summary')?.focus();}}},options);
   hoverCapable.addEventListener('change',()=>{clearTimers();},options);
-  window.addEventListener('resize',()=>{if(highlight){highlight.dataset.instant='';syncHighlight();requestAnimationFrame(()=>delete highlight.dataset.instant);}},options);
+  window.addEventListener('resize',settle,options);
   const dialog=root.querySelector<HTMLDialogElement>('dialog');
   const trigger=root.querySelector<HTMLButtonElement>('[data-mobile-open]');
   trigger?.addEventListener('click',()=>{dialog?.showModal();trigger.setAttribute('aria-expanded','true');document.documentElement.style.overflow='hidden';},options);

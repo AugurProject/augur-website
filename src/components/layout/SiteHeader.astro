@@ -5,8 +5,12 @@ import Button from '../primitives/Button.astro';
 import {navigation,navigationGroups,pages,type NavigationItem} from '../../data/navigation';
 const groups=[{label:'Products',variant:'products',items:navigation.products},{label:'Resources',variant:'resources',items:navigation.resources},{label:'Community',variant:'community',items:navigation.community}];
 const path=Astro.url.pathname;
+// Melo's chrome (chrome.css): Resources rows take Augur's square mark instead of pictograms (community
+// logos stay), the Products lead card is itself the link with no button inside it, the header hides on the
+// way down and returns on the way up (headroom.ts), and the phone buttons read "Menu" and "Close".
+const own=true;
 // Current section: a page and everything below it (blog posts under /blog/).
-const within=(href:string)=>{const page=href.split('#')[0]!;return !href.startsWith('http')&&!href.startsWith('#')&&page!=='/'&&path.startsWith(page);};
+const within=(href:string)=>{const page=href.split('#')[0]!;return !href.startsWith('http')&&page!=='/'&&path.startsWith(page);};
 const isCurrent=(href:string)=>within(href)&&!href.includes('#');
 ---
 <header class="site-header" data-site-header>
@@ -14,11 +18,16 @@ const isCurrent=(href:string)=>within(href)&&!href.includes('#');
     <a href="/" aria-label="Augur home" class="logo"><Brand /></a>
     <nav class="desktop-nav" aria-label="Main navigation">
       <span class="nav-highlight" aria-hidden="true" data-nav-highlight></span>
-      <a href="/#why-augur" class="nav-item nav-link" aria-current={isCurrent('/#why-augur')?'page':undefined} data-current={within('/#why-augur')?'':undefined}><span class="nav-item-label">Why Augur</span></a>
+      <a href="/about/" class="nav-item nav-link" aria-current={isCurrent('/about/')?'page':undefined} data-current={within('/about/')?'':undefined}><span class="nav-item-label">About</span></a>
       {groups.map((group,index)=><details class="nav-disclosure" name="site-nav" data-nav-disclosure data-current={group.items.some(item=>within(item.href))?'':undefined}>
         <summary class="nav-item" aria-controls={`nav-${index}`} aria-expanded="false"><span class="nav-item-label">{group.label}</span><Icon name="chevron-down" class="nav-chevron"/></summary>
-        <div class="nav-panel" id={`nav-${index}`} data-variant={group.variant}><ul>{group.items.map((entry)=>{const item=entry as NavigationItem;const glyph=item.logo??item.icon;
-          // The lead card's one link is its action; the whole card is its hit area.
+        <div class="nav-panel" id={`nav-${index}`} data-variant={group.variant}><ul>{group.items.map((entry)=>{const item=entry as NavigationItem;const glyph=own?item.logo:item.logo??item.icon;
+          // The lead card's one link is its action; the whole card is its hit area. On /2/ the card itself
+          // is the link: no button inside it, its action a text label at its foot.
+          if(item.cta&&own)return <li class="nav-lead"><a href={item.href} aria-current={isCurrent(item.href)?'page':undefined}>
+            <span class="nav-feature-head"><span class="nav-mark" aria-hidden="true"></span><span class="nav-text"><span class="nav-label">{item.label}</span><span class="nav-description">{item.description}</span></span></span>
+            <span class="nav-lead-action"><span class="nav-lead-label">{item.cta}</span><Icon name="arrow-right" class="nav-lead-arrow"/></span>
+          </a></li>;
           if(item.cta)return <li class="nav-feature">
             <span class="nav-feature-head"><span class="nav-mark" aria-hidden="true"></span><span class="nav-text"><span class="nav-label">{item.label}</span><span class="nav-description">{item.description}</span></span></span>
             <a class="nav-cta" href={item.href} aria-current={isCurrent(item.href)?'page':undefined}>{item.cta}<Icon name="arrow-right" class="nav-cta-arrow"/></a>
@@ -30,15 +39,15 @@ const isCurrent=(href:string)=>within(href)&&!href.includes('#');
         </a></li>;})}</ul></div>
       </details>)}
     </nav>
-    <div class="header-actions"><Button href={pages.contact} variant="outline">Talk to us</Button><button class="mobile-open" type="button" aria-controls="mobile-navigation" aria-expanded="false" data-mobile-open>Menu</button></div>
+    <div class="header-actions"><Button href={pages.contact} variant="outline">Talk to us</Button>{own?<button class="mobile-open" type="button" aria-controls="mobile-navigation" aria-expanded="false" data-mobile-open>Menu</button>:<button class="mobile-open" type="button" aria-label="Open navigation" aria-controls="mobile-navigation" aria-expanded="false" data-mobile-open><Icon name="list" /></button>}</div>
   </div>
   <dialog id="mobile-navigation" class="mobile-navigation" aria-labelledby="mobile-nav-title">
-    <div class="mobile-top"><a href="/" aria-label="Augur home"><Brand/></a><h2 id="mobile-nav-title" class="sr-only">Navigation</h2><button type="button" data-mobile-close>Close</button></div>
+    <div class="mobile-top"><a href="/" aria-label="Augur home"><Brand/></a><h2 id="mobile-nav-title" class="sr-only">Navigation</h2><button type="button" aria-label="Close navigation" data-mobile-close>{own?'Close':<Icon name="x"/>}</button></div>
     <nav aria-label="Mobile navigation">{navigationGroups.map(group=><div class="mobile-group"><h3>{group.label}</h3><ul>{group.items.map(item=><li><a href={item.href}>{(item as NavigationItem).logo&&<Icon name={(item as NavigationItem).logo!} class="social-logo"/>}{item.label}{('external' in item && item.external)&&<Icon name="arrow-up-right"/>}</a></li>)}</ul></div>)}</nav>
   </dialog>
   <noscript><nav class="fallback-nav" aria-label="Navigation">{navigationGroups.flatMap(group=>group.items).map(item=><a href={item.href}>{item.label}{('external' in item && item.external)?' ↗':''}</a>)}</nav></noscript>
 </header>
-<script>import {initNavigation} from '../../motion/disclosure-nav';initNavigation();</script>
+<script>import '../../motion/headroom';import {initNavigation} from '../../motion/disclosure-nav';initNavigation();</script>
 <style>
 .site-header{height:96px;background:var(--background);position:relative;z-index:20}
 /* Logo, centred navigation, actions: the outer columns share the free space. */
@@ -46,27 +55,31 @@ const isCurrent=(href:string)=>within(href)&&!href.includes('#');
 .logo{justify-self:start}.header-actions{justify-self:end}
 .desktop-nav{position:relative;display:flex;gap:4px;align-items:center;font:400 16px/24px var(--font-heading)}
 .nav-item{position:relative;z-index:1;display:flex;gap:6px;align-items:center;height:40px;padding:0 14px;text-decoration:none;cursor:pointer;list-style:none;color:var(--foreground)}
-summary.nav-item{padding-right:10px}
+/* The caret sits 2 px inside its 14 px box, so 12 px here leaves 14 px of
+   space after it, as before the label: every item is centred on what it shows. */
+summary.nav-item{padding-right:12px}
 summary::-webkit-details-marker{display:none}
-/* Hover and the open item: a 2 px Green line under the label draws in from
-   the left and retracts back to it. */
-.nav-item-label{position:relative}
-.nav-item-label::after{content:'';position:absolute;left:0;right:0;top:100%;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform 240ms var(--ease-reveal)}
-.nav-item:hover .nav-item-label::after,.nav-disclosure[open]>.nav-item .nav-item-label::after{transform:none}
+/* Hover and the open item: a 2 px Green line on the item's bottom edge, from
+   the label's first stroke to the chevron's tip, draws in from the left and
+   retracts back to it. */
+.nav-item::after{content:'';position:absolute;left:14px;right:14px;bottom:0;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform 240ms var(--ease-reveal)}
+.nav-item:hover::after,.nav-disclosure[open]>.nav-item::after{transform:none}
 .nav-item:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
-.nav-chevron,.nav-chevron :global(svg){width:14px;height:14px}
-.nav-chevron{color:var(--muted-foreground);transition:transform 200ms var(--ease-reveal),color 180ms ease-out}
-.nav-item:hover .nav-chevron,.nav-disclosure[open] .nav-chevron{color:var(--foreground)}
-.nav-disclosure[open] .nav-chevron{transform:rotate(180deg)}
+/* Icon renders its own spans, which carry no scope attribute: the chevron is
+   reached through its item, and its inner span is sized too. */
+.nav-item :global(.nav-chevron),.nav-item :global(.nav-chevron > span),.nav-item :global(.nav-chevron svg){width:14px;height:14px}
+.nav-item :global(.nav-chevron){color:var(--muted-foreground);transition:transform 200ms var(--ease-reveal),color 180ms ease-out}
+.nav-item:hover :global(.nav-chevron),.nav-disclosure[open] :global(.nav-chevron){color:var(--foreground)}
+.nav-disclosure[open] :global(.nav-chevron){transform:rotate(180deg)}
 /* With the controller running, one line draws in, glides between items and
    retracts instead. */
 .nav-highlight{display:none}
 [data-nav-enhanced] .nav-highlight{display:block;position:absolute;left:0;top:0;width:100px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;pointer-events:none;transition:transform 240ms var(--ease-reveal)}
 [data-nav-enhanced] .nav-highlight[data-instant]{transition:none}
-[data-nav-enhanced] .nav-item-label::after{content:none}
-/* Current section: a 2 px Green rule on the header's bottom edge under the item. */
-.nav-link[data-current]::after,.nav-disclosure[data-current]>.nav-item::after{content:'';position:absolute;left:14px;right:14px;bottom:-29px;height:2px;background:var(--primary)}
-.nav-disclosure[data-current]>.nav-item::after{right:30px}
+[data-nav-enhanced] .nav-item::after{content:none}
+/* Current section: the same line rests under its label. With the controller
+   running, the gliding line rests there instead and returns to it. */
+.nav-link[data-current]::after,.nav-disclosure[data-current]>.nav-item::after{transform:none}
 .nav-disclosure{position:relative}
 /* Panels hang from the header's bottom edge; the 28 px between belongs to the panel. */
 .nav-panel{position:absolute;top:calc(100% + 28px);left:0;width:248px;padding:8px;isolation:isolate;animation:nav-in 200ms var(--ease-reveal)}
@@ -79,7 +92,7 @@ summary::-webkit-details-marker{display:none}
   [data-nav-switching] .nav-disclosure::details-content{transition:none}
   .nav-panel{animation:none}
 }
-[data-nav-switching] .nav-panel{animation:none}[data-nav-switching] .nav-chevron{transition:none}
+[data-nav-switching] .nav-panel{animation:none}[data-nav-switching] :global(.nav-chevron){transition:none}
 ul{list-style:none;padding:0;margin:0}
 .nav-panel a{position:relative;min-height:48px;display:flex;align-items:center;gap:12px;padding:10px 12px;text-decoration:none;color:var(--foreground);transition:background-color 140ms ease-out}
 .nav-text{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -99,7 +112,7 @@ ul{list-style:none;padding:0;margin:0}
 .nav-panel a:hover .nav-external,.nav-panel a:focus-visible .nav-external{color:var(--foreground);transform:translate(2px,-2px)}
 .nav-panel a[aria-current=page]{background:var(--web-quiet)}.nav-panel a[aria-current=page]::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:2px;background:var(--primary)}
 /* Products: Augur Lituus leads as a card with a Green action; Zoltar and Augur
-   Stratoblast stack beside it. The action's ::after stretches over the card. */
+   Statoblast stack beside it. The action's ::after stretches over the card. */
 .nav-panel[data-variant=products] ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px}
 .nav-panel[data-variant=products] li{display:flex}.nav-panel[data-variant=products] li>a{flex:1;padding:20px 16px}
 .nav-panel[data-variant=products] .nav-description{font-size:14px;line-height:20px}
@@ -116,11 +129,11 @@ ul{list-style:none;padding:0;margin:0}
 .nav-panel .nav-feature .nav-cta:focus-visible{outline-offset:2px}
 .nav-feature:hover .nav-cta-arrow,.nav-cta:focus-visible .nav-cta-arrow{transform:translateX(3px)}
 .nav-feature:hover .nav-mark,.nav-feature:focus-within .nav-mark{transform:rotate(45deg) scale(.9)}
-@media(prefers-reduced-motion:reduce){.nav-item-label::after,.nav-chevron,.nav-panel a,.nav-glyph,.nav-mark,.nav-external,.nav-feature,.nav-cta-arrow,[data-nav-enhanced] .nav-highlight{transition:none}.nav-panel{animation:none}}
+@media(prefers-reduced-motion:reduce){.nav-item::after,.nav-item :global(.nav-chevron),.nav-panel a,.nav-glyph,.nav-mark,.nav-external,.nav-feature,.nav-cta-arrow,[data-nav-enhanced] .nav-highlight{transition:none}.nav-panel{animation:none}}
 .header-actions{display:flex;gap:16px;align-items:center}.mobile-open{display:none}
 .mobile-navigation{position:fixed;inset:0;margin:0;width:100%;max-width:none;height:100svh;max-height:none;padding:24px;background:var(--background);color:var(--foreground);border:0;overflow-y:auto}
 .mobile-navigation::backdrop{background:var(--background)}.mobile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
-.mobile-top button,.mobile-open{min-width:44px;height:44px;padding:0 16px;align-items:center;justify-content:center;background:transparent;border:1px solid var(--web-outline);color:var(--foreground);font:600 16px/24px var(--font-heading);white-space:nowrap;cursor:pointer}
+.mobile-top button,.mobile-open{width:44px;height:44px;align-items:center;justify-content:center;background:transparent;border:1px solid var(--web-outline);color:var(--foreground)}
 .mobile-navigation nav{display:grid;grid-template-columns:1fr 1fr;gap:32px 16px}.mobile-group h3{font-size:14px;line-height:20px;color:var(--muted-foreground);margin-bottom:12px}
 .mobile-group a{display:flex;gap:8px;align-items:center;min-height:44px;padding-block:10px;text-decoration:none}
 .mobile-group a :global(.web-icon),.mobile-group a :global(svg){width:16px;height:16px}.mobile-group a :global(.social-logo),.mobile-group a :global(.social-logo svg){width:20px;height:20px}.mobile-group a :global(.social-logo){margin-right:4px}
@@ -128,5 +141,5 @@ ul{list-style:none;padding:0;margin:0}
 @keyframes nav-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media(max-width:1180px){.header-inner{grid-template-columns:auto 1fr auto;gap:24px}.desktop-nav{justify-self:center;gap:0}}
 @media(max-width:1023px){.header-inner{grid-template-columns:1fr auto}.desktop-nav{display:none}.mobile-open{display:flex}.header-actions :global(.button){display:none}.fallback-nav{display:flex;flex-wrap:wrap;background:var(--web-band)}.site-header:has(.fallback-nav){height:auto;min-height:96px}.site-header:has(.fallback-nav) .header-inner{height:96px}}
-@media(forced-colors:active){[data-nav-enhanced] .nav-highlight,.nav-item-label::after,.nav-link[data-current]::after,.nav-disclosure[data-current]>.nav-item::after{forced-color-adjust:none;background:CanvasText}.nav-panel::before{border-color:CanvasText}}
+@media(forced-colors:active){[data-nav-enhanced] .nav-highlight,.nav-item::after{forced-color-adjust:none;background:CanvasText}.nav-panel::before{border-color:CanvasText}}
 </style>
