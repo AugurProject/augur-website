@@ -1,0 +1,181 @@
+---
+import { applications } from '../../../data/applications';
+import Icon from '../../../components/primitives/Icon.astro';
+import Button from '../../../components/primitives/Button.astro';
+import CaseGraphic from '../art/CaseGraphic.astro';
+// The builder's case (owner, 18 Oct 2026, from Augus's notes; draft copy): why a project would hand
+// resolution to Augur Lituus. Plain words, no "trust", no "backstop", no legal promise. Most readers
+// are traders and beginners (owner, 19 Oct 2026), so the lines name "the project" instead of "you".
+// Nobody builds on it yet (owner, 19 Oct 2026), so the title asks why one would, and the ask is for
+// anyone weighing it up or just curious. The lines follow Augus's notes for this section (owner, 19 Oct
+// 2026: "reflect a little better Augus suggestions"): resolution runs outside the project, so there is no
+// one to hire or manage (cheaper); disputes are not the project's to settle, with only a light hint of
+// liability ("defend"); and it is a win for users too. Draft copy, flagged in the launch checklist.
+// Owner, 19 Oct 2026 (later, "lean more heavily on Augus suggestions"): the win-win is now the title, so
+// the project's case reads as the section's second half. A lead stating the problem ("Settling outcomes
+// in-house takes a team, and every dispute lands on it.") was cut the same day: it stacked into four
+// ragged lines in narrow columns, and it only restated the first two reasons. The reasons
+// follow Augus's project reading in his order: cheaper (a query fee, not a team), less risky (a dispute is
+// a challenge to the answer, not to the project; the title is the light liability hint) and value to
+// users (outcomes they can check). No "blame", "liable" or "protect"; no cost comparison we can't source.
+const builderCase={
+ title:['Good for users.','Easier on the project.'],
+ reasons:[
+  {icon:'puzzle-piece',title:'No team to hire.',line:'The project pays a fee per question instead of staffing resolution.'},
+  {icon:'scales',title:'Never the judge.',line:'Anyone who disagrees challenges the answer, not the project.'},
+  {icon:'eye',title:'Proof, not promises.',line:'Every outcome is public, so users can verify it themselves.'},
+ ],
+};
+// The answer's check is the design system's check path (icons/check.svg) as a polyline, so it can draw in.
+const check='4.5 10.5 8.25 14.25 15.5 7';
+---
+<section class="applications section" id="applications" aria-labelledby="applications-heading">
+ <div class="site-container">
+  <div class="section-heading"><h2 id="applications-heading">What can Augur&nbsp;Lituus power?</h2><p class="lead">Any app that needs to know what happened in the world.<br/>It asks a question and acts on the answer.</p></div>
+  <div class="cases" data-tabs data-applications data-panel-swap data-activation="manual" data-active="0">
+   <div class="case-tabs" role="tablist" aria-label="Use cases" aria-orientation="vertical">
+    {applications.map((app,i)=><button type="button" role="tab" id={`application-tab-${app.id}`} aria-controls={`application-panel-${app.id}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} class="case-tab"><span class="case-mark" aria-hidden="true"></span><span class="case-label"><span class="case-name">{app.title}</span><span class="case-blurb" aria-hidden="true">{app.summary}</span></span></button>)}
+   </div>
+   <div class="case-stage">
+    {applications.map((app,i)=><div role="tabpanel" id={`application-panel-${app.id}`} aria-labelledby={`application-tab-${app.id}`} class="case-panel" tabindex="0" hidden={i!==0}>
+     <p class="case-summary">{app.summary}</p>
+     <p class="case-question">{app.question}</p>
+     <p class="case-answer"><span class="sr-only">Possible answers: {app.outcomes.join(' or ')}. Answer: {app.answer}.</span><span class="case-options" aria-hidden="true">{app.outcomes.map(outcome=>outcome===app.answer?<span class="case-option is-answer">{outcome}<span class="case-fill"></span><span class="case-pick">{outcome}<svg class="case-check" viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1"/></svg></span></span>:<span class="case-option is-other">{outcome}</span>)}</span></p>
+     <p class="case-by">Decided in the open, not by {app.notBy}.</p>
+     <div class="case-act">
+      <p class="case-action">{app.action}</p>
+      <p class="case-explanation">{app.explanation}</p>
+      <CaseGraphic kind={app.graphic}/>
+     </div>
+     {'fallback' in app&&<p class="case-fallback"><Icon name="info"/><span>{app.fallback}</span></p>}
+    </div>)}
+   </div>
+  </div>
+  <div class="builder-case">
+   <h3 class="builder-title" id="builder-title">{builderCase.title[0]}<br/>{builderCase.title[1]}</h3>
+   <ul class="builder-reasons" aria-labelledby="builder-title">{builderCase.reasons.map(({icon,title,line})=><li><span class="builder-icon" aria-hidden="true"><Icon name={icon}/></span><strong>{title}</strong> <span class="builder-point">{line}</span></li>)}</ul>
+   <div class="builder-ask"><p><span class="ask-setup">Exploring how it could fit a platform, or just curious?</span> <span class="ask-payoff">Ask the team anything.</span></p><Button href="#contact" variant="outline">Talk to us</Button></div>
+  </div>
+ </div>
+</section>
+<style>
+ /* What can Augur Lituus power? (was "What could you build?"; owner, 18–19 Oct 2026). Written for
+    traders first; the heading names the product and the cases answer it. Organized as a list beside an
+    example (owner, 19 Oct 2026: "make this clear and organized"): on the left the three kinds of app,
+    each with its name and what it covers, so a reader sees every case without clicking; on the right one
+    worked example that reads top to bottom. Research: UMA's builder tabs make a real question the proof;
+    SEDA gives each use case one small live picture; NN/g asks that the selected tab join its panel. */
+ .applications{--case-gap:80px}
+ /* Balanced, with a no-break space in the name: "What can / Augur Lituus power?" never splits the name.
+    The heading is the section's one visible mention of the name; only the Insurance note names it again. */
+ #applications-heading{text-wrap:balance}
+ /* The list is three tiles (web lab /2/, gap item 3.1; owner, 27 Oct 2026: without its Green connector):
+    from 1024 they sit 8 apart in the heading row's 500 column, Dark 1 at rest and Dark 2, the example's
+    colour, once picked. The gutter to the example stays open; the lab draws a 2 px Green line there, and
+    Green is a signal, not decoration. Hover is Dark 3 and no Green edge. An 8 px square mark, centred on
+    the name's first line, replaces the 44 px icon tile: Mist at rest, Green picked, Paper and turned onto
+    its corner on hover. Each tile paints its own colour, so there is no sliding marker or hover copy. */
+ .cases{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);column-gap:var(--case-gap)}
+ .case-tabs{display:grid;grid-auto-rows:1fr;gap:8px}
+ .case-tab{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;align-items:start;column-gap:16px;padding:24px 32px;border:0;background:var(--web-quiet);color:var(--muted-foreground);text-align:left;cursor:pointer;transition:background-color 180ms ease-out,color 180ms ease-out}
+ .case-label{display:grid;gap:8px;min-width:0}
+ .case-name{font:400 clamp(20px,1.67vw,24px)/1.3 var(--font-heading);letter-spacing:-.01em;text-wrap:balance}
+ .case-blurb{font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
+ .case-mark{width:8px;height:8px;margin-top:calc((clamp(20px,1.67vw,24px) * 1.3 - 8px) / 2);background:var(--mark-participant);transition:background-color 240ms ease-out,transform 200ms cubic-bezier(.16,1,.3,1)}
+ .case-tab[aria-selected="true"]{background:var(--web-tile);color:var(--foreground);cursor:default}
+ .case-tab[aria-selected="true"] .case-mark{background:var(--primary);transition-delay:140ms}
+ @media(hover:hover) and (pointer:fine){.case-tab:not([aria-selected="true"]):hover{background:var(--web-raised);color:var(--foreground)}.case-tab:not([aria-selected="true"]):hover .case-mark{background:var(--foreground);transform:rotate(45deg) scale(.9)}}
+ .case-tab:not([aria-selected="true"]):active{background:var(--web-tile)}.case-tab:not([aria-selected="true"]):active .case-mark{transform:rotate(45deg) scale(.75)}
+ .case-tab:focus-visible{outline-offset:-2px}
+ /* The example reads one way, top to bottom: the question, its two answers (the picked one lights up),
+    a rule, then what the app does and a picture of it. Every case stays laid out in the one cell, the
+    unpicked ones invisible, so the stage keeps one height and nothing below it moves. */
+ .case-stage{display:grid;background:var(--web-tile)}
+ .case-panel{grid-area:1/1;display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:48px}
+ .case-panel[hidden]{display:flex!important;visibility:hidden}
+ /* The list carries each case's summary from 1024 up; the example keeps it for screen readers. */
+ .case-summary{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+ /* The question is the case: large Sora with hung quotation marks, so its first letter keeps the edge. */
+ .case-question{position:relative;margin:0;font:400 clamp(26px,2.22vw,32px)/1.25 var(--font-heading);letter-spacing:-.02em;color:var(--foreground);text-wrap:balance}
+ .case-question::before,.case-question::after{color:var(--augur-color-surface-dark-mist)}.case-question::before{content:'“';position:absolute;right:100%;margin-right:.06em}.case-question::after{content:'”'}
+ /* Both answers, as chips: the picked one fills Green with its check and the other steps back (owner,
+    19 Oct 2026: "the option picked … then fade the other one"). The Green fill and the picked label are
+    layers over the chip, so the pick plays on transform and opacity: the fill sweeps across, the label
+    shows and the check draws. Both chips are Paper until the answer is in, so neither gives it away. */
+ .case-answer{margin:24px 0 0}
+ .case-options{display:flex;gap:8px}
+ .case-option{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:96px;height:48px;padding:0 20px;border:1px solid var(--web-outline);font:600 20px/1 var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
+ .case-option.is-other{opacity:.4}
+ .case-fill{position:absolute;inset:-1px;background:var(--primary);transform-origin:left}
+ .case-pick{position:absolute;inset:-1px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--background)}
+ .case-check{width:20px;height:20px;overflow:visible}
+ .case-check polyline{fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:square;stroke-linejoin:miter;stroke-dasharray:1 3}
+ /* Who did not decide the answer (owner, 19 Oct 2026, from Augus's notes): one muted line under the
+    chips, so each case shows the party it keeps out of the decision. */
+ .case-by{margin:12px 0 0;font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
+ /* What the app does: set apart by space (no rule; the owner removed dividers on 19 Oct 2026), so asking and acting read as two halves of one example. The
+    picture takes the rest of the height. */
+ .case-act{flex:1;display:flex;flex-direction:column;align-self:stretch;margin-top:72px}
+ .case-action{margin:0;font:600 clamp(20px,1.67vw,24px)/1.3 var(--font-heading);letter-spacing:-.01em;color:var(--foreground);text-wrap:balance}
+ .case-explanation{margin:4px 0 0;font-size:18px;line-height:28px;color:var(--muted-foreground);text-wrap:pretty}
+ /* Insurance keeps the fallback use (owner, 6 Oct 2026): one app's choice, never Augur Lituus's only use.
+    It is an aside, so it carries the info icon (scales already means Challenge in the REP rows). */
+ .case-fallback{display:flex;align-items:flex-start;gap:10px;max-width:480px;margin:28px 0 0;font-size:14px;line-height:20px;color:var(--muted-foreground);text-wrap:pretty}
+ .case-fallback :global(.web-icon),.case-fallback :global(svg){width:16px;height:16px;flex:none;margin-top:2px;color:var(--foreground)}
+ /* The builder's case (owner, 19 Oct 2026): the title heads the three reasons, which run across the
+    full width as three open columns, each an icon tile over its claim and point; the way in follows them.
+    A title alone in the 500 column beside the reasons left a dead block under it (owner: "the empty space
+    below is pretty weird"), so nothing here sits beside a taller neighbor. No boxes and no rules (owner:
+    rules over the columns didn't work, open columns did): the icon tiles anchor each reason, in the use-case
+    list's tile style (44 px, Dark 3), with a Green glyph that shows the benefit, never the thing the line
+    denies (owner, 19 Oct 2026: user-minus and gavel read as "remove user" and "you judge"): puzzle-piece
+    (it slots in), scales (a dispute, as in the REP rows' Challenge) and eye (anyone can see).
+    Later the same day the win-win became the title, in two lines over the reasons.
+    The ask (owner, 19 Oct 2026: "better place, better structured"): it trailed the reasons as a muted line,
+    a third "Talk to us" after the header's and before the footer's, while the 668 column beside the title
+    stood empty. From 1024 it is now the title's lead: the project's half takes the heading row every section
+    has (title in 500, lead in 668), the invitation stays in view while the reasons are read, and the half
+    ends on its evidence. Its question is muted and its offer Paper, the house setup and payoff, with the
+    button right after the text. In the DOM, and stacked below 1024, the ask still follows the reasons, so
+    reading and focus order end on it. */
+ .builder-case{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);grid-template-areas:"title ask" "reasons reasons";column-gap:var(--case-gap);row-gap:48px;align-items:start;margin-top:var(--block-gap)}
+ .builder-title{grid-area:title;margin:0;font:600 clamp(26px,2.22vw,32px)/1.25 var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
+ .builder-reasons{grid-area:reasons;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--case-gap);list-style:none;margin:0;padding:0}
+ .builder-reasons li{display:grid;align-content:start;font:400 18px/28px var(--font-heading);letter-spacing:-.01em;color:var(--muted-foreground);text-wrap:pretty}
+ .builder-icon{display:grid;place-items:center;width:44px;height:44px;margin-bottom:24px;background:var(--web-raised);color:var(--primary)}.builder-icon :global(.web-icon),.builder-icon :global(svg){width:22px;height:22px}
+ .builder-reasons strong{display:block;margin-bottom:6px;font:600 clamp(20px,1.53vw,22px)/1.4 var(--font-heading);color:var(--foreground)}
+ .builder-point{display:block}
+ .builder-ask{grid-area:ask;align-self:center;display:flex;align-items:center;gap:16px 32px}
+ .builder-ask p{flex:0 1 auto;margin:0;font-size:18px;line-height:28px;color:var(--foreground);text-wrap:pretty}
+ .ask-setup,.ask-payoff{display:block}.ask-setup{color:var(--muted-foreground);text-wrap:balance}
+ .builder-ask :global(.button){flex:none}
+ @media(forced-colors:active){.case-stage{border:1px solid CanvasText}.case-tab{outline:1px solid CanvasText;outline-offset:-1px}.case-mark{forced-color-adjust:none;background:CanvasText}.case-tab[aria-selected="true"] .case-mark{background:Highlight}.case-fill{forced-color-adjust:none;background:Highlight;color:HighlightText}.case-pick{forced-color-adjust:none;color:HighlightText}.case-option{border-color:CanvasText}.builder-icon{border:1px solid CanvasText}}
+ @media(prefers-reduced-motion:reduce){.case-tab,.case-mark{transition:none}}
+ @media(max-width:1200px){.applications{--case-gap:48px}.case-tab{padding:24px}.case-panel{padding:40px}}
+ /* Below 1024 the list becomes rows of names above the example, which shows the summary itself. */
+ @media(max-width:1023px){
+  .cases{grid-template-columns:minmax(0,1fr)}
+  .case-tabs{grid-auto-rows:auto;margin:0 0 4px;gap:4px}
+  .case-tab{align-items:center;min-height:64px;padding:10px 20px;column-gap:14px}.case-mark{margin-top:0}
+  .case-blurb{display:none}
+  .case-panel{padding:36px 32px 44px}
+  /* Stacked, the cases differ in height, so the stage fits the case shown instead of the tallest. */
+  .case-panel[hidden]{display:none!important}
+  .case-summary{position:static;width:auto;height:auto;margin:0 0 20px;overflow:visible;clip:auto;white-space:normal;max-width:34em;font-size:18px;line-height:28px;color:var(--muted-foreground);text-wrap:pretty}
+  .builder-case{display:block}.builder-title{margin-bottom:24px}
+  /* Stacked, each reason is a row: its icon tile beside its claim and point. */
+  .builder-reasons{grid-template-columns:minmax(0,1fr);row-gap:28px}
+  .builder-reasons li{grid-template-columns:44px minmax(0,1fr);column-gap:20px}.builder-icon{grid-row:span 2;margin:0}
+  .builder-ask{flex-wrap:wrap;margin-top:40px}.builder-ask p{max-width:34em}
+ }
+ /* Phones: tighter rows and gutters. */
+ @media(max-width:767px){
+  .case-tab{min-height:56px;padding:8px 16px}
+  .case-panel{padding:28px 20px 36px}
+  .case-summary,.case-explanation,.builder-ask p{font-size:16px;line-height:24px}
+  .builder-ask{flex-direction:column;align-items:flex-start;gap:20px}.builder-reasons li{column-gap:16px;grid-template-columns:40px minmax(0,1fr)}.builder-icon{width:40px;height:40px}
+  .case-act{margin-top:28px;padding-top:24px}
+  .case-option{min-width:88px;height:44px;font-size:18px}
+  .builder-reasons li{font-size:17px;line-height:26px}.builder-reasons strong{font-size:20px}
+ }
+</style>

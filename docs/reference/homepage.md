@@ -6,7 +6,7 @@ This repository is the canonical site. The homepage was ported from the former W
 
 ## Structure
 
-[index.astro](../../src/pages/index.astro) serves `/` with six sections: Hero, Tenets, Applications, How It Works, Roadmap and Learn More. Product pages and local blog or FAQ routes do not exist. The only other pages are the newsletter form's result pages: see [Newsletter interest list](#newsletter-interest-list).
+[index.astro](../../src/pages/index.astro) serves `/` with the live design's [Home.astro](../../src/designs/current/Home.astro): `homeDesign` in [site.ts](../../src/data/site.ts) names it, and the build resolves `virtual:home-design` to it in [astro.config.mjs](../../astro.config.mjs), so only that design is built. Each design in [src/designs](../../src/designs/index.ts) owns its sections, art, data and controllers; layout, chrome, primitives, shared data and the controllers in [src/motion](../../src/motion/) stay shared. The `current` design has six sections: Hero, Tenets, Applications, How It Works, Roadmap and Learn More. The `melo` design is, for now, a copy of `current`. Switching, previewing and retiring designs are in [homepage designs](../guides/homepage-design.md). Product pages and local blog or FAQ routes do not exist. The only other pages are the newsletter form's result pages: see [Newsletter interest list](#newsletter-interest-list).
 
 [PageLayout.astro](../../src/layouts/PageLayout.astro) supplies the announcement, header, footer, skip link and decorative page field. It sets the page title, description, theme color, font preload and REP favicon. Optional props set a different `title`, add `noindex`, or drop the announcement, header and footer (`bare`). Its metadata is narrower than the earlier prototype's layout: apart from that `noindex`, it does not emit canonical, Open Graph, Twitter, robots or structured-data tags, or implement CSP script-hash handling. The `indexable` export in [site.ts](../../src/data/site.ts) is not connected to this layout; do not assume it controls indexing.
 
@@ -24,7 +24,7 @@ The page renders through Astro components; browser scripts enhance the rendered 
 
 [navigation.ts](../../src/data/navigation.ts) links to homepage sections and published resources. Products currently contains only Augur Lituus. This describes the current navigation, not a permanent product-scope decision. External destinations are centralized in [links.ts](../../src/data/links.ts).
 
-[home-resources.ts](../../src/data/home-resources.ts) selects “Augur: Q2 2026 report” and “The Moon Fork report” for Learn More. This selection was an implementation substitution and has not received editorial approval. The earlier draft article choices were “Why disagreement makes an oracle stronger” and “Writing questions an oracle can answer”; neither has a local article route. Learn More currently links to the whitepaper and published Augur blog.
+[home-resources.ts](../../src/designs/current/data/home-resources.ts) selects “Augur: Q2 2026 report” and “The Moon Fork report” for Learn More. This selection was an implementation substitution and has not received editorial approval. The earlier draft article choices were “Why disagreement makes an oracle stronger” and “Writing questions an oracle can answer”; neither has a local article route. Learn More currently links to the whitepaper and published Augur blog.
 
 Review flags in [faq.ts](../../src/data/faq.ts) (`needsReview`) and [walkthrough.ts](../../src/data/walkthrough.ts) (`walkthroughReview`) are unresolved content markers. Code presence and a successful build do not establish content approval.
 
@@ -43,9 +43,9 @@ Deploy, database, export and removal commands are in [deploy](../guides/deploy.m
 
 ## Interactions and assets
 
-The homepage starts its section controllers in [index.astro](../../src/pages/index.astro); shared browser behavior lives in [src/motion](../../src/motion/). The query/REP explanation uses one walkthrough; only earlier completed steps have strikethrough and checks.
+The `current` design starts its section controllers in [Home.astro](../../src/designs/current/Home.astro) from its own [motion](../../src/designs/current/motion/) folder; shared browser behavior lives in [src/motion](../../src/motion/), including the answer band's [answer-ribbon.ts](../../src/motion/answer-ribbon.ts). The query/REP explanation uses one walkthrough; only earlier completed steps have strikethrough and checks.
 
-[timelines.ts](../../src/motion/timelines.ts) holds shared timing; choreography files in [src/motion](../../src/motion/) define the looping artwork. Reuse [play-once.ts](../../src/motion/play-once.ts) and [loop-scene.ts](../../src/motion/loop-scene.ts) to preserve session and visibility behavior. In development, [debug.ts](../../src/motion/debug.ts) supports `?motion=slow` for five-times-longer timings and `?motion=replay` for replay comparisons. Production ignores both controls.
+[timelines.ts](../../src/motion/timelines.ts) holds shared timing; choreography files in the design's [motion](../../src/designs/current/motion/) folder define the looping artwork. Reuse [play-once.ts](../../src/motion/play-once.ts) and [loop-scene.ts](../../src/motion/loop-scene.ts) to preserve session and visibility behavior. In development, [debug.ts](../../src/motion/debug.ts) supports `?motion=slow` for five-times-longer timings and `?motion=replay` for replay comparisons. Production ignores both controls.
 
 [tabs.ts](../../src/motion/tabs.ts) reveals a selected panel after explicit interaction at widths up to 767px. [FaqItem.astro](../../src/components/content/FaqItem.astro) similarly reveals an opened question. Scrolling respects reduced-motion preferences.
 

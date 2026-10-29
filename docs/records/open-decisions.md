@@ -4,7 +4,7 @@ Decisions and owner confirmations still outstanding. When one is settled, delete
 
 ## Homepage
 
-- **Learn More articles.** [home-resources.ts](../../src/data/home-resources.ts) uses an implementation substitution that has no editorial approval. Confirm the article selection and usable destinations before treating it as approved content. Details in [homepage reference](../reference/homepage.md#content-and-destinations).
+- **Learn More articles.** [home-resources.ts](../../src/designs/current/data/home-resources.ts) uses an implementation substitution that has no editorial approval. Confirm the article selection and usable destinations before treating it as approved content. Details in [homepage reference](../reference/homepage.md#content-and-destinations).
 - **Content review flags.** Resolve the flags marked in code: `needsReview: true` entries in [faq.ts](../../src/data/faq.ts) and `walkthroughReview` in [walkthrough.ts](../../src/data/walkthrough.ts). The code is the source of truth for which flags are open.
 - **Product scope.** Confirm whether the one-product navigation (Augur Lituus only) meets the intended scope. Additional pages need an explicit scope decision, not restoration from the earlier prototype.
 - **Metadata, indexing and security.** Review production metadata, indexing and security requirements. The layout emits no canonical, Open Graph, Twitter, robots or structured-data tags and has no CSP script-hash handling, and the `indexable` export does not control the layout.

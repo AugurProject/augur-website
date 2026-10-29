@@ -1,0 +1,88 @@
+---
+import {links} from '../../../data/links';
+import {posts} from '../data/home-resources';
+import {faqEntries} from '../../../data/faq';
+import FaqItem from '../../../components/content/FaqItem.astro';
+import BlogCover from '../../../components/content/BlogCover.astro';
+// One section where the page used to end on two (owner, 19 Oct 2026: Augus found the page too long),
+// trimmed the same day to three questions and the two latest posts, without type or date. The two
+// columns are one system: framed lists with the same 24 px text inset, 18 px titles and row height,
+// and each ends on a button whose label sits on that inset, on one shared line.
+const questions=faqEntries.filter(entry=>entry.homepage);
+const [featured,next]=posts;
+---
+<section class="home-learn section" id="learn-more" aria-labelledby="learn-heading"><div class="site-container">
+ <h2 id="learn-heading" class="learn-title">Learn more about Augur.</h2>
+ <div class="learn-grid">
+  <div class="learn-column">
+   <h3>Frequently asked questions</h3>
+   <div class="faq-accordion">{questions.map((entry,i)=><FaqItem entry={entry} name="home-faq" open={i===0}/>)}</div>
+   <div class="learn-foot"><a class="button outline" href={links.whitepaper.url}>Read the whitepaper</a></div>
+  </div>
+  <div class="learn-column">
+   <h3>From the blog</h3>
+   <div class="post-list">
+    {featured&&<a class="featured-post" href={featured.href}><BlogCover variant={featured.cover}/><div class="featured-text"><h4>{featured.title}</h4><p class="post-description">{featured.description}</p></div></a>}
+    {next&&<a class="post-row" href={next.href}><h4>{next.title}</h4></a>}
+   </div>
+   <div class="learn-foot"><a class="button outline" href="https://www.augur.net/blog/">View all posts</a></div>
+  </div>
+ </div>
+</div></section>
+<style>
+ .home-learn{background:var(--web-band)}
+ .learn-title{margin-bottom:var(--heading-gap);text-wrap:balance}
+ :global(.faq-item summary>span:first-child){text-wrap:balance}
+ /* 704 / 80 / 464 at 1440: answers need the measure (every homepage question on one line), posts the narrower column.
+    Subgrid rows give both columns one heading line, one list height and one button line. */
+ .learn-grid{display:grid;grid-template-columns:minmax(0,1fr) 464px;grid-template-rows:auto 1fr auto;column-gap:80px}
+ .learn-column{display:grid;grid-template-rows:subgrid;grid-row:span 3}
+ /* With a shorter answer open (or none) the questions leave the shared rows, so their button follows them
+    instead of stranding below; the FAQ morph slides it there. */
+ :global(.learn-column:has(>.faq-accordion>details:first-of-type:not([open]))){display:block}
+ .learn-grid h3{font:600 20px/26px var(--font-heading);margin-bottom:20px}
+ .learn-foot{padding-top:32px}
+
+ /* The answers keep their natural height; the post list stretches to the taller column and keeps its
+    last row on the bottom edge, so the last question and the last post share a line. */
+ .faq-accordion{align-self:start}
+ .faq-accordion,.post-list{border:1px solid var(--web-outline);background:var(--web-quiet)}
+ /* General sibling: Astro hoists FaqItem's script after the first question, which broke `+` for the second. */
+ .faq-accordion :global(.faq-item~.faq-item){border-top:1px solid var(--web-outline)}
+ .faq-accordion :global(.faq-answer){max-width:628px;padding-right:56px;padding-bottom:12px}
+ .faq-accordion :global(details[open]>summary){padding-bottom:12px}
+ .faq-accordion :global(.faq-answer p){color:var(--foreground);opacity:.86}
+ .faq-accordion :global(.faq-answer a){margin-top:8px}
+ /* The FAQ morph names each question; the buttons slide with them instead of jumping. */
+ :global(html[data-faq-transition]) .learn-column:first-child .learn-foot{view-transition-name:faq-more;view-transition-class:faq}
+ :global(html[data-faq-transition]) .learn-column:last-child .learn-foot{view-transition-name:posts-more;view-transition-class:faq}
+
+ /* Posts read like the questions beside them: 24 px in from the frame (the question's 2 px edge plus 22), 18 / 26 titles,
+    and the question row's height (its 32 px toggle sets 27 px above and below the title). Buttons hug their label, so it sits on the same inset. */
+ .post-list{display:flex;flex-direction:column}
+ .featured-post,.post-row{display:block;color:var(--foreground);text-decoration:none;transition:background-color 180ms ease-out}
+ .featured-text{padding:16px 24px 20px}
+ .post-row{margin-top:auto;padding:27px 24px;border-top:1px solid var(--web-outline)}
+ :is(.featured-post,.post-row) h4{font:600 18px/26px var(--font-heading);text-wrap:balance}
+ .post-description{margin-top:8px;font-size:16px;line-height:26px;color:var(--muted-foreground);text-wrap:pretty}
+ :is(.featured-post,.post-row):hover{background:var(--web-tile)}
+ :is(.featured-post,.post-row):focus-visible{outline:2px solid var(--ring);outline-offset:-2px}
+ :is(.featured-post,.post-row):is(:hover,:focus-visible) h4{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+
+ @media(max-width:1439px){.learn-grid{grid-template-columns:minmax(0,1fr) 420px;column-gap:64px}}
+ /* Below 1200 the answers would wrap into a tall column beside short posts, so the two stack. */
+ @media(max-width:1199px){
+  .learn-grid{grid-template-columns:1fr;grid-template-rows:none;row-gap:64px}
+  .learn-column{display:block}
+  .featured-post{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}
+  .featured-text{padding:24px}
+ }
+ @media(max-width:767px){
+  .faq-accordion :global(.faq-answer){padding-right:16px}
+  .faq-accordion :global(summary),:is(.featured-post,.post-row) h4{font-size:16px;line-height:24px}
+  .featured-post{display:block}
+  .featured-text{padding:20px 24px 24px}
+ }
+ @media(prefers-reduced-motion:reduce){.featured-post,.post-row{transition:none}}
+ @media(forced-colors:active){:is(.featured-post,.post-row):focus-visible{outline-color:Highlight}}
+</style>

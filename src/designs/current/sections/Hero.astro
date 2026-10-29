@@ -1,0 +1,69 @@
+---
+import Button from '../../../components/primitives/Button.astro';
+import HeritageField from '../art/HeritageField.astro';
+import HeroArt from '../art/HeroArt.astro';
+import {links} from '../../../data/links';
+import {heroTimeline} from '../../../motion/timelines';
+import heroArrival from '../../../motion/hero-arrival.js?raw';
+const arrivalScript=heroArrival.replace('__DEV__',String(import.meta.env.DEV));
+const style=`--line-duration:${heroTimeline.lines[0].end}ms;--copy-start:${heroTimeline.copy.start}ms;--copy-duration:${heroTimeline.copy.end-heroTimeline.copy.start}ms;--action-start:${heroTimeline.actions.start}ms;--action-duration:${heroTimeline.actions.end-heroTimeline.actions.start}ms;--field-start:${heroTimeline.field.start}ms;--field-duration:${heroTimeline.field.end-heroTimeline.field.start}ms;--underline-start:${heroTimeline.underline.start}ms;--underline-duration:${heroTimeline.underline.end-heroTimeline.underline.start}ms;--underline-out-start:${heroTimeline.underlineOut.start}ms;--underline-out-duration:${heroTimeline.underlineOut.end-heroTimeline.underlineOut.start}ms;--underline-hover:${heroTimeline.underlineHover}ms;--cue-start:${heroTimeline.scrollCue.start}ms;--cue-duration:${heroTimeline.scrollCue.end-heroTimeline.scrollCue.start}ms;--cue-cycle:${heroTimeline.scrollCue.cycle}ms`;
+---
+<section class="home-hero" aria-labelledby="hero-title" data-home-hero style={style}>
+ <script is:inline set:html={arrivalScript}></script>
+ <HeritageField glow id="hero-field"/>
+ <div class="site-container hero-inner">
+  <div class="hero-copy">
+   <h1 id="hero-title" class="display"><span data-hero-line style={`--line-start:${heroTimeline.lines[0].start}ms`}>The frontier of</span>{' '}<span data-hero-line style={`--line-start:${heroTimeline.lines[1].start}ms`}><span class="hero-emphasis">decentralized</span></span>{' '}<span data-hero-line style={`--line-start:${heroTimeline.lines[2].start}ms`}>truth<span class="hero-dot">.</span></span></h1>
+   <div class="hero-support"><p class="hero-lead">Real-world answers for onchain apps, controlled by no one.</p><p class="hero-body">Augur Lituus is the next generation of Augur's oracle. Anyone can answer, anyone can challenge, and lying is designed to cost more than it pays.</p></div>
+   <div class="hero-actions"><Button href="#how-it-works">See how it works</Button><Button href={links.whitepaper.url} variant="text" external>Read the whitepaper</Button></div>
+  </div>
+  <div class="hero-visual"><HeroArt/></div>
+ </div>
+ <span class="hero-scroll" aria-hidden="true" data-scroll-cue><span class="hero-scroll-dot"></span></span>
+</section>
+<script>import {initHeritageGlow} from '../motion/heritage-glow';document.querySelectorAll<SVGSVGElement>('[data-heritage=interactive]').forEach(initHeritageGlow);
+// The scroll cue has done its job once the page scrolls: it fades out and stops.
+const cue=document.querySelector<HTMLElement>('[data-scroll-cue]');
+if(cue){const done=()=>{if(scrollY<=8)return;cue.dataset.scrolled='';removeEventListener('scroll',done);};done();addEventListener('scroll',done,{passive:true});}</script>
+<style>
+.home-hero{position:relative;overflow:hidden;min-height:calc(100svh - 96px - var(--announcement-height));display:flex;align-items:center;padding-block:56px 72px}
+.hero-inner{position:relative;display:grid;grid-template-columns:minmax(0,620fr) minmax(0,572fr);align-items:center;gap:56px}
+.hero-copy{position:relative;z-index:1}[data-hero-line]{display:block;white-space:nowrap}.hero-dot{color:var(--primary)}
+.hero-support{margin-top:28px}.hero-lead{font-size:22px;line-height:33px;text-wrap:balance}.hero-body{font-size:18px;line-height:28px;color:var(--muted-foreground);margin-top:12px}
+.hero-actions{display:flex;align-items:center;gap:24px;margin-top:28px}.hero-emphasis{position:relative;font-weight:400}.hero-emphasis::before,.hero-emphasis::after{content:'';position:absolute;left:0;top:1.07em;height:max(2px,.042em);width:100%;background:var(--primary);transform:scaleX(0);transform-origin:left}
+[data-hero-arrival=entering] [data-hero-line]{animation:hero-line calc(var(--line-duration) * var(--hero-motion-factor,1)) var(--ease-hero) calc(var(--line-start) * var(--hero-motion-factor,1)) backwards}
+
+[data-hero-arrival=entering] .hero-support{animation:hero-support calc(var(--copy-duration) * var(--hero-motion-factor,1)) var(--ease-hero) calc(var(--copy-start) * var(--hero-motion-factor,1)) backwards}
+[data-hero-arrival=entering] .hero-actions{animation:hero-actions calc(var(--action-duration) * var(--hero-motion-factor,1)) ease-out calc(var(--action-start) * var(--hero-motion-factor,1)) backwards}
+/* The underline under “decentralized” is temporary (owner, 6 Oct 2026): like the header line it
+   draws in left to right and retracts right to left. ::after sweeps in and out on every load, a
+   reload included (the owner's one exception to settled reloads); ::before answers hover on fine
+   pointers. Both lie in the same place, so where they overlap they read as one line. It sits just
+   under the letters: the baseline is .97em below the top of the text box, the line starts .1em
+   below it. No glow (owner, 6 Oct 2026). */
+.hero-emphasis::after{animation:hero-underline-in calc(var(--underline-duration) * var(--hero-motion-factor,1)) var(--ease-hero) calc(var(--underline-start) * var(--hero-motion-factor,1)) both,hero-underline-out calc(var(--underline-out-duration) * var(--hero-motion-factor,1)) var(--ease-reveal) calc(var(--underline-out-start) * var(--hero-motion-factor,1)) forwards}
+.hero-emphasis::before{transition:transform var(--underline-hover) var(--ease-reveal)}
+@media(hover:hover) and (pointer:fine){.hero-emphasis:hover::before{transform:none}}
+/* Scroll cue: the hero fills the first screen, so a 5 px Green square slides down a short line on a
+   2.4 s cycle (owner, 6 Oct 2026: small, short, subtle). It arrives once the underline has gone,
+   fades out and stops once the page scrolls, and is decorative only. */
+.hero-scroll{position:absolute;left:50%;bottom:24px;width:1px;height:40px;background:var(--web-outline);pointer-events:none;transition:opacity 200ms ease-out}
+.hero-scroll-dot{position:absolute;left:-2px;top:0;width:5px;height:5px;background:var(--primary);opacity:0;animation:hero-scroll var(--cue-cycle) linear infinite}
+.hero-scroll[data-scrolled]{opacity:0}.hero-scroll[data-scrolled] .hero-scroll-dot{animation-play-state:paused}
+[data-hero-arrival=entering] .hero-scroll:not([data-scrolled]){animation:hero-cue calc(var(--cue-duration) * var(--hero-motion-factor,1)) ease-out calc(var(--cue-start) * var(--hero-motion-factor,1)) backwards}
+@keyframes hero-cue{from{opacity:0}to{opacity:1}}
+@keyframes hero-scroll{0%{opacity:0;transform:none}15%{opacity:1;transform:none;animation-timing-function:var(--ease-draw)}65%{opacity:1;transform:translateY(35px)}80%,100%{opacity:0;transform:translateY(35px)}}
+[data-hero-arrival=entering] :global(.heritage-field){animation:hero-field calc(var(--field-duration) * var(--hero-motion-factor,1)) ease-out calc(var(--field-start) * var(--hero-motion-factor,1)) backwards}
+@keyframes hero-line{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes hero-support{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes hero-actions{from{opacity:0;visibility:hidden}to{opacity:1;visibility:visible}}
+@keyframes hero-field{from{opacity:0}to{opacity:1}}
+@keyframes hero-underline-in{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes hero-underline-out{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@media(prefers-reduced-motion:reduce){.hero-emphasis::after{animation:none}.hero-emphasis::before{transition:none}.hero-scroll-dot{animation:none;opacity:1}}
+@media(forced-colors:active){.hero-emphasis::before,.hero-emphasis::after,.hero-scroll-dot{forced-color-adjust:none;background:CanvasText}.hero-scroll{forced-color-adjust:none;background:GrayText}}
+@media print{.hero-scroll{display:none}}
+@media(min-width:768px) and (max-height:800px){.home-hero{padding-block:40px}}
+@media(max-width:1200px){.hero-inner{gap:32px}.hero-lead{font-size:20px;line-height:30px}.hero-body{font-size:16px;line-height:24px}.hero-actions{gap:16px}.hero-actions :global(.button){font-size:14px;padding-inline:16px}.hero-actions :global(.text){padding-inline:0}}
+@media(max-width:767px){.hero-scroll{display:none}.home-hero{min-height:calc(100svh - 96px - var(--announcement-height));padding-block:48px}.hero-inner{grid-template-columns:1fr;gap:48px}.hero-copy{max-width:620px}.hero-visual{width:80%;max-width:420px;margin-inline:auto}.hero-actions{flex-wrap:wrap}.hero-support{margin-top:24px}.display{font-size:clamp(34px,7.5vw,54px)}}
+</style>

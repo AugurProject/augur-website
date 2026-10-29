@@ -1,0 +1,217 @@
+---
+import { walkthrough, query, ledger, holder, stakesAt, amount, rep } from '../../../data/walkthrough';
+import Icon from '../../../components/primitives/Icon.astro';
+import Button from '../../../components/primitives/Button.astro';
+import RepFlow from '../art/RepFlow.astro';
+const { outcomes } = query;
+// One square per bond-sized unit (a report's bond, 15 REP), as in the REP panel: a challenge
+// shows two. Each square remembers the Activity entry that staked it, so a step forward drops
+// in only the bonds that step added.
+const bondSquares = (step: number, outcome: string) => ledger.slice(0, step + 1).flatMap((entry, at) => entry.stake === outcome ? Array.from({ length: entry.amount! / rep.bond }, () => at) : []);
+---
+<section class="how-it-works section" id="how-it-works" aria-labelledby="how-heading"><div class="site-container">
+ <div class="section-heading"><h2 id="how-heading" data-paid-heading>Know what happened?<br/>Get <span class="paid">paid<span class="paid-mark" aria-hidden="true"></span></span> to report it.</h2><p class="lead">Every Augur Lituus answer comes from someone with REP at stake. Report the right outcome first to earn the reward, or challenge a wrong one to win 80% of its bond. A wrong call costs your bond.</p></div>
+ <div class="walkthrough-track" data-walkthrough-track>
+ <div class="walkthrough" data-tabs data-walkthrough data-panel-swap data-active="0">
+  <div class="walkthrough-steps" role="tablist" aria-label="How taking part works" aria-orientation="vertical">
+   {walkthrough.map((step,i)=><button type="button" role="tab" id={`walkthrough-tab-${i}`} aria-label={step.title} aria-controls={`walkthrough-panel-${i} walkthrough-rep-${i}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1}><span class="step-head"><span class="step-title">{step.title}</span><span class="step-done" aria-hidden="true"><Icon name="check"/></span></span><span class="step-description">{step.description}</span></button>)}
+  </div>
+  <div class="rep-panels">
+   {walkthrough.map((step,i)=><div class="rep-panel" role="group" id={`walkthrough-rep-${i}`} aria-label={step.zone.label} hidden={i!==0}><RepFlow zone={step.zone}/></div>)}
+  </div>
+  <div class="query-panels">
+   {walkthrough.map((step,i)=><div class="query-card" role="tabpanel" id={`walkthrough-panel-${i}`} aria-labelledby={`walkthrough-tab-${i}`} hidden={i!==0} tabindex="0" style={`--connector-top:${40+i*70}px`}>
+    <div class="query-header"><strong class="query-name">Augur Lituus</strong><span class:list={["query-status",`is-${step.state}`]}>{step.state==='final'?<Icon name="check"/>:<span class="status-dot" aria-hidden="true"></span>}{step.status}</span></div>
+    <div class="query-body"><h3>{query.title}</h3><p class="query-cutoff">Information cutoff <time datetime={query.cutoffIso}>{query.cutoffDate}</time></p><details class="query-details"><summary class="line-link"><Icon name="list-checks"/><span class="button-label">Question details</span><Icon name="chevron-down"/></summary><div class="details-body"><section class="details-field"><h4 class="details-label">Description</h4>{query.description.map(text=>{const [outcome,...rest]=text.split(" ");return <p><strong>{outcome}</strong> {rest.join(" ")}</p>;})}</section><section class="details-field"><h4 class="details-label">Resolution criteria</h4><ol class="details-criteria" role="list">{query.criteria.map(text=><li>{text}</li>)}</ol></section><p class="details-unix">Cutoff in Unix time <span>{query.cutoffUnix}</span></p></div></details>
+     {(()=>{const stakes=stakesAt(i),total=stakes.reduce((sum,part)=>sum+part.value,0),standing=step.outcome?outcomes.indexOf(step.outcome):-1;return <div class="query-outcomes"><div class="outcomes-head"><p id={`walkthrough-outcomes-${i}`}>{step.answerLabel}</p>{total>0&&<p class="stakes-total"><strong>{amount(total)}</strong> staked</p>}</div>
+      <div class:list={['outcome-board',{'is-final':step.state==='final'}]} style={standing>=0?`--standing:${standing}`:undefined}><ul class="outcome-list" aria-labelledby={`walkthrough-outcomes-${i}`}>{outcomes.map(outcome=>{const picked=step.outcome===outcome,other=!!step.outcome&&!picked,out=other&&step.state==='final',value=stakes.find(part=>part.outcome===outcome)?.value??0,bonds=bondSquares(i,outcome);return <li class:list={['outcome-tile',{'is-selected':picked,'is-other':other&&!out,'is-out':out}]} data-out={out?'':undefined}><span class="outcome-head"><span class="outcome-name">{out?<><s>{outcome}</s><span class="sr-only"> — ruled out</span></>:outcome}{picked&&<span class="sr-only"> — {step.answerLabel.toLowerCase()}</span>}</span>{picked&&<span class="outcome-check" aria-hidden="true"><Icon name="check"/></span>}</span><span class="outcome-bonds" aria-hidden="true">{bonds.length?bonds.map(at=><i data-bond-at={at}></i>):<i class="is-empty"></i>}</span><span class:list={['outcome-stake',{'is-zero':!value}]}>{amount(value)}</span></li>;})}</ul>{standing>=0&&<span class="standing-frame" aria-hidden="true" data-standing={standing}></span>}</div></div>;})()}
+    </div>
+    <div class="query-activity"><h4 class="ledger-label" id={`walkthrough-ledger-${i}`}>Activity</h4><ol class="query-ledger" aria-labelledby={`walkthrough-ledger-${i}`}>{ledger.slice(0,i+1).map((entry,index)=>({entry,index})).reverse().map(({entry,index})=>{const replaced=entry.replacedAt!==undefined&&i>=entry.replacedAt;return <li data-ledger-current={index===i?'':undefined} data-replaced-at={replaced?entry.replacedAt:undefined}><span class="ledger-node" aria-hidden="true"></span><span class="ledger-title">{replaced?<><s>{entry.event}</s><span class="sr-only"> (replaced by the challenge)</span></>:entry.event}{entry.you&&<span class="ledger-you">You</span>}</span>{entry.amount!==undefined&&<span class="ledger-amount"><strong>{amount(entry.amount)}</strong> {entry.stake?'bond':'fee'}</span>}</li>;})}</ol></div>
+   </div>)}
+  </div>
+ </div>
+ <div class="walkthrough-run" aria-hidden="true"></div>
+ </div>
+ <div class="holder">
+  <h3>{holder.title}</h3>
+  <ul class="holder-points">{holder.points.map((point,i)=><li><i class:list={['holder-mark',{'is-action':i===1}]} aria-hidden="true"></i><span><strong>{point.lead}</strong> {point.text}</span></li>)}</ul>
+  <Button href="https://github.com/AugurProject/whitepaper/blob/master/Lituus/English/Augur_Lituus_Whitepaper.pdf" variant="text" external>Learn about REP</Button>
+ </div>
+</div></section>
+<style>
+ /* One section answers “How do I take part, and how do I get paid?” (owner + Augus, 19 Oct 2026).
+    The left column is yours: each step says what you do and its “Your REP” panel, right under
+    the steps, what you get. The right column is only the example query, so the explanation
+    never reads as product UI (owner, 19 Oct 2026). The REP section that repeated steps 2–3 is
+    folded in; its holder note is the row under the walkthrough. */
+ .how-it-works{background:var(--web-band)}
+ /* “paid” is the promise, so it keeps a Green underline; it draws in once per visit as the
+    heading scrolls into view (home-interactions.ts) and is simply there otherwise. */
+ .paid{position:relative;display:inline-block}
+ .paid-mark{position:absolute;left:0;right:0;bottom:.02em;height:.1em;min-height:3px;background:var(--primary);transform-origin:left}
+ .walkthrough{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);grid-template-rows:auto 1fr;grid-template-areas:"steps panels" "rep panels";column-gap:80px;row-gap:24px;position:relative}
+ /* Scrolling steps through it (owner, 19 Oct 2026): where it fits the screen, the walkthrough pins
+    while the page scrolls past a run under it, and the step follows the scroll
+    (walkthrough-scroll.ts sets the run, the pin and is-pinned). Elsewhere the run is empty. */
+ .walkthrough-run{height:0}
+ .walkthrough-track.is-pinned .walkthrough{position:sticky;top:var(--pin-top,24px)}
+ .walkthrough-track.is-pinned .walkthrough-run{height:var(--pin-run,0)}
+ @media print{.walkthrough-track.is-pinned .walkthrough{position:relative}.walkthrough-track.is-pinned .walkthrough-run{height:0}}
+ /* A step's tab controls its card and its REP panel together (aria-controls lists both). The
+    four panels share one grid cell like the cards, so the panel keeps one height. */
+ .rep-panels{grid-area:rep;display:grid;align-self:start;min-width:0}.rep-panel{grid-area:1/1;min-width:0}.rep-panel[hidden]{display:block!important;visibility:hidden}
+ .walkthrough-steps{grid-area:steps;display:flex;flex-direction:column;gap:8px}.walkthrough-steps button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;background:var(--background);color:var(--foreground);border:0;padding:18px 24px;min-height:62px;cursor:pointer;transition:background 180ms ease-out,color 180ms ease-out}.step-title{font:600 20px/26px var(--font-heading)}.step-description{display:grid;grid-template-rows:0fr;max-height:0;opacity:0;overflow:hidden;font:400 16px/24px var(--font-body);transition:max-height calc(320ms * var(--motion-factor,1)),opacity calc(320ms * var(--motion-factor,1)),margin calc(320ms * var(--motion-factor,1))}.walkthrough-steps button[aria-selected="true"]{background:var(--primary);color:var(--background);padding-block:24px}.walkthrough-steps button[aria-selected="true"] .step-title{font-size:24px;line-height:32px}.walkthrough-steps button[aria-selected="true"] .step-description{max-height:150px;opacity:1;margin-top:12px}.walkthrough-steps button:hover:not([aria-selected="true"]){background:var(--web-raised)}.walkthrough-steps button:hover:not([aria-selected="true"]):not(:focus-visible){outline:1px solid var(--brand-hover-edge);outline-offset:-1px}
+ /* Every step's card shares one grid cell, hidden ones kept in layout but invisible, and each
+    card is a subgrid of the same three rows (header, question with outcomes, Activity), so every
+    row is as tall as its tallest step at any width: switching never moves the page, and spare
+    room falls under the Activity list at the card's foot
+    (overrides the global [hidden] rule for these cards only).
+    Each fact has one home (owner, 19 Oct 2026: “too noisy”): the steps say where we are, so the
+    card has no progress bar; the status chip says what is happening now, so Activity is only
+    history; the outcome rows carry the stakes, so there is no separate Stakes block. */
+ .query-panels{grid-area:panels;display:grid;grid-template-rows:auto auto 1fr;min-width:0}
+ .query-card{grid-row:1/-1;grid-column:1;display:grid;grid-template-rows:subgrid;background:var(--background);min-width:0;position:relative}.query-card[hidden]{display:grid!important;visibility:hidden}
+ .query-header{min-height:68px;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;border-bottom:1px solid var(--web-outline)}
+ .query-name{font:600 14px/20px var(--font-heading)}
+ /* The status carries the card (owner, 19 Oct 2026: more emphasis on it): a larger chip with a
+    live dot while the query is open, Green with a check once the answer is final. The dot's
+    slow opacity pulse runs only on the shown card and not with reduced motion or in print. */
+ .query-status{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;background:var(--web-tile);box-shadow:inset 0 0 0 1px var(--web-outline);font:600 15px/20px var(--font-heading);white-space:nowrap}
+ .status-dot{width:8px;height:8px;flex:none;background:var(--primary)}
+ .query-status.is-pending .status-dot{background:transparent;box-shadow:inset 0 0 0 2px var(--primary)}
+ .query-card:not([hidden]) .status-dot{animation:status-live 1.6s ease-in-out infinite}
+ @keyframes status-live{50%{opacity:.25}}
+ .query-status.is-final{background:var(--primary);box-shadow:none;color:var(--background)}
+ .query-status :global(.web-icon),.query-status :global(svg){width:16px;height:16px}
+ .query-header::before{content:'';position:absolute;width:80px;height:2px;left:-80px;top:var(--connector-top,43px);background:var(--primary)}
+ .query-body{padding:24px 24px 0}.query-body h3{font:400 22px/31px var(--font-heading);margin:0 0 6px;letter-spacing:-.01em}
+ /* The five question fields (owner, 19 Oct 2026), each in one place. The title is the heading.
+    The information cutoff sits under it at a glance, because it decides which evidence counts.
+    The description (how each outcome connects to the question) and the resolution criteria
+    (the exact process for verifying the outcome) are long, so they share one disclosure; the
+    criteria are a numbered list because they are a process. The outcome list is the board
+    below, one tile per outcome. Every card opens and closes together (home-interactions.ts), so
+    the shared row never leaves a gap on another step. */
+ .query-cutoff{margin:0 0 2px;font-size:13px;line-height:20px;color:var(--muted-foreground)}
+ .query-cutoff time{margin-left:6px;font:600 13px/20px var(--font-heading);font-variant-numeric:tabular-nums;color:var(--foreground)}
+ .query-details summary{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;list-style:none;font:600 13px/18px var(--font-heading);text-underline-offset:4px}
+ .query-details summary::-webkit-details-marker{display:none}
+ .query-details summary :global(.web-icon),.query-details summary :global(svg){width:14px;height:14px}
+ .query-details summary :global(.web-icon:last-child){transition:transform 180ms var(--ease-reveal)}
+ .query-details[open] summary :global(.web-icon:last-child){transform:rotate(180deg)}
+ .details-body{display:grid;gap:18px;margin:0 0 12px;padding:16px 18px;background:var(--web-quiet);border-left:2px solid var(--web-outline)}
+ .details-field{display:grid;gap:6px}
+ .details-field p strong{font-weight:600;color:var(--foreground)}
+ .details-label{font:600 12px/16px var(--font-heading);color:var(--muted-foreground);margin:0}
+ .details-body p{font-size:14px;line-height:22px;margin:0;max-width:64ch}
+ .details-criteria{display:grid;gap:8px;margin:2px 0 0;padding:0;list-style:none;counter-reset:criteria}
+ .details-criteria li{display:grid;grid-template-columns:20px minmax(0,1fr);column-gap:12px;max-width:64ch;font-size:14px;line-height:22px;counter-increment:criteria}
+ .details-criteria li::before{content:counter(criteria);display:grid;place-items:center;width:20px;height:20px;margin-top:1px;box-shadow:inset 0 0 0 1px var(--web-outline);font:600 11px/1 var(--font-heading);font-variant-numeric:tabular-nums;color:var(--muted-foreground)}
+ .details-body .details-unix{font-size:12px;line-height:16px;color:var(--muted-foreground)}
+ .details-unix span{margin-left:6px;font:600 12px/16px var(--font-heading);font-variant-numeric:tabular-nums;color:var(--foreground)}
+ /* The outcome board (owner, 19 Oct 2026: “rethink … something great”). Answers are not votes:
+    each challenge doubles the bond, so the board shows bonds, not shares. Each outcome is a tile
+    (name, its bonds as REP squares, the amount); a square is one bond-sized unit, Pewter like the
+    REP panel's bonds, Green on the answer that stands, and an empty outline where nothing is
+    staked. One Green frame marks the standing answer; it is a single element over the tiles, so
+    it can glide from YES to NO when the challenge lands (home-interactions.ts). The label row
+    carries the total. */
+ .query-outcomes{border-top:1px solid var(--web-outline);margin-top:8px;padding:20px 0 24px}
+ .outcomes-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:12px}
+ .outcomes-head p{margin:0;font-size:13px;line-height:18px;color:var(--muted-foreground)}
+ .stakes-total strong{font:600 16px/22px var(--font-heading);font-variant-numeric:tabular-nums;color:var(--foreground)}
+ .outcome-board{--tile-gap:8px;--square:24px;position:relative}
+ .outcome-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--tile-gap);list-style:none;margin:0;padding:0}
+ .outcome-tile{display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-width:0;padding:14px 16px 16px;background:var(--web-tile)}
+ .outcome-head{display:flex;align-items:center;justify-content:space-between;gap:8px;align-self:stretch;min-height:24px}
+ .outcome-name{font:600 16px/24px var(--font-heading);color:var(--foreground)}
+ .outcome-check{display:flex;color:var(--primary)}.outcome-check :global(.web-icon),.outcome-check :global(svg){width:18px;height:18px}
+ .outcome-bonds{display:flex;gap:4px;height:var(--square)}
+ .outcome-bonds i{flex:none;width:var(--square);height:var(--square);background:var(--muted-foreground)}
+ .outcome-tile.is-selected .outcome-bonds i{background:var(--primary)}
+ .outcome-bonds i.is-empty{background:transparent;box-shadow:inset 0 0 0 1px var(--web-outline)}
+ .outcome-stake{font:600 15px/20px var(--font-heading);font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--foreground)}
+ .outcome-stake.is-zero{color:var(--muted-foreground)}
+ /* Once an outcome is picked, the others step back alike: muted while the answer can still
+    change, struck through once it is final. Faded or struck, never both (owner, 19 Oct 2026). */
+ .outcome-tile.is-other :is(.outcome-name,.outcome-stake){color:var(--muted-foreground)}
+ .standing-frame{position:absolute;top:0;bottom:0;left:0;width:calc((100% - 2 * var(--tile-gap)) / 3);transform:translateX(calc(var(--standing,0) * (100% + var(--tile-gap))));background:color-mix(in srgb,var(--primary) 8%,transparent);box-shadow:inset 0 0 0 1.5px var(--primary);pointer-events:none}
+ /* Final (owner, 19 Oct 2026: “take them out of focus”): the answer takes the board. Its tile
+    spans the board but a narrow side column, its name grows, and the ruled-out outcomes shrink
+    to two struck chips stacked in that column (name and amount, no squares). Struck, not faded.
+    The board keeps its height, so the card never moves. The change plays as a FLIP: the
+    ruled-out tiles switch off where they stood and return small, and the frame widens. */
+ .outcome-board.is-final{--side:9.5rem}
+ .outcome-board.is-final .outcome-list{grid-template-columns:minmax(0,1fr) var(--side);grid-template-rows:repeat(2,minmax(0,1fr))}
+ .outcome-board.is-final .outcome-tile{transform-origin:0 0}
+ .outcome-board.is-final .outcome-tile.is-selected{grid-column:1;grid-row:1 / 3;padding-top:12px;background:transparent}
+ .outcome-board.is-final .outcome-tile.is-selected .outcome-head{justify-content:flex-start;gap:10px}
+ .outcome-board.is-final .outcome-tile.is-selected .outcome-name{font-size:24px;line-height:28px;transform-origin:0 50%}
+ .outcome-board.is-final .outcome-tile.is-selected .outcome-check :global(svg),.outcome-board.is-final .outcome-tile.is-selected .outcome-check :global(.web-icon){width:22px;height:22px}
+ .outcome-board.is-final .outcome-tile.is-out{grid-column:2;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;padding:0 12px}
+ .outcome-board.is-final .outcome-tile.is-out .outcome-head{align-self:auto;min-height:0}
+ .outcome-board.is-final .outcome-tile.is-out .outcome-name{font-size:14px;line-height:20px}
+ .outcome-board.is-final .outcome-tile.is-out .outcome-bonds{display:none}
+ .outcome-board.is-final .outcome-tile.is-out .outcome-stake{font-size:13px;line-height:18px;color:var(--muted-foreground)}
+ .outcome-board.is-final .standing-frame{width:auto;right:calc(var(--side) + var(--tile-gap));transform:none}
+ .query-activity{padding:20px 24px 24px;border-top:1px solid var(--web-outline)}
+ /* Earlier stages recede (owner feedback, 5 Oct 2026): completed steps are crossed
+    off with a Green check, the answer a challenge replaced is struck through,
+    and older activity and progress dim behind the current stage. */
+ .step-head{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%}
+ .step-title{position:relative}
+ .step-title::after{content:'';position:absolute;left:0;right:0;top:52%;height:1.5px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform calc(320ms * var(--motion-factor,1)) cubic-bezier(.45,0,.2,1)}
+ .step-done{display:flex;color:var(--primary);opacity:0;transform:scale(.6);transition:opacity 180ms ease-out,transform calc(320ms * var(--motion-factor,1)) cubic-bezier(.45,1.45,.8,1)}.step-done :global(.web-icon),.step-done :global(svg){width:18px;height:18px}
+ /* Struck or faded, never both (owner, 19 Oct 2026): a completed step keeps Paper text with its
+    strike and Green check. */
+ .walkthrough-steps button:has(~[aria-selected="true"]) .step-title::after{transform:scaleX(1)}
+ .walkthrough-steps button:has(~[aria-selected="true"]) .step-done{opacity:1;transform:none}
+ :is(.outcome-name,.ledger-title) s{position:relative;text-decoration:none}
+ :is(.outcome-name,.ledger-title) s::after{content:'';position:absolute;left:-2px;right:-2px;top:52%;height:1.5px;background:currentColor;transform-origin:left}
+ .ledger-title s{white-space:nowrap}
+ /* Activity (owner, 19 Oct 2026): newest first, tiny Green squares, no icons, one line per event
+    (what happened, then the REP and what it is). The latest event leads as a tinted block with a
+    Green rule, a larger title and a full square. Older entries step back to Pewter (colour, not
+    opacity, so small text keeps AA contrast); the report a challenge replaced is struck through
+    instead of faded, never both. No addresses or times: the card is an illustration and those
+    would be invented. */
+ .ledger-label{font:400 13px/18px var(--font-body);color:var(--muted-foreground);margin:0 0 4px}
+ .query-ledger{position:relative;list-style:none;padding:0;margin:0}
+ .query-ledger::before{content:'';position:absolute;left:3.5px;top:24px;bottom:18px;width:1px;background:var(--web-outline)}
+ .query-ledger li{position:relative;display:grid;grid-template-columns:8px minmax(0,1fr) auto;align-items:center;column-gap:16px;padding-block:8px;color:var(--muted-foreground)}
+ .ledger-node{width:8px;height:8px;background:var(--primary);opacity:.45}
+ /* The latest row leads (owner, 19 Oct 2026: “should be more highlighted”): a Green-tinted fill
+    inside a Green outline with a 3 px Green edge, a larger title and amount, and a full square. */
+ .query-ledger [data-ledger-current]{column-gap:14px;margin:0 -12px 6px;padding:12px 12px 12px 15px;background:color-mix(in srgb,var(--primary) 9%,var(--background));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--primary) 40%,transparent),inset 3px 0 0 var(--primary)}
+ .query-ledger [data-ledger-current] .ledger-node{width:10px;height:10px;opacity:1;margin-left:-1px}
+ .query-ledger [data-ledger-current] .ledger-title{font-size:16px;line-height:24px}
+ .query-ledger [data-ledger-current] .ledger-amount{color:var(--foreground)}
+ .query-ledger [data-ledger-current] .ledger-amount strong{font-size:17px}
+ .query-ledger :is([data-ledger-current],[data-replaced-at]) :is(.ledger-title,.ledger-amount strong){color:var(--foreground)}
+ .query-ledger [data-replaced-at] .ledger-node{opacity:1;background:var(--background);box-shadow:inset 0 0 0 1.5px var(--primary)}
+ .ledger-title{display:flex;align-items:center;gap:8px;min-width:0;font:600 14px/20px var(--font-heading)}
+ .ledger-you{padding:0 6px;font:600 11px/16px var(--font-heading);color:var(--primary);box-shadow:inset 0 0 0 1px var(--primary)}
+ .ledger-amount{font-size:13px;line-height:20px;white-space:nowrap;text-align:right}
+ .ledger-amount strong{font:600 15px/20px var(--font-heading);font-variant-numeric:tabular-nums}
+ /* Holding REP? A compact note bar under the walkthrough (owner, 19 Oct 2026: the one-line version
+    read as a wall of text). A Navy tile like the steps: the question, two short points with the
+    Activity squares as markers (solid: nothing to do; hollow: act in a fork), and the link. */
+ .holder{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;column-gap:40px;row-gap:12px;margin-top:var(--block-gap);padding:20px 24px;background:var(--background)}
+ .holder h3{font:600 18px/26px var(--font-heading);margin:0;white-space:nowrap}
+ .holder-points{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+ .holder-points li{display:flex;align-items:baseline;gap:12px;font-size:15px;line-height:23px;color:var(--muted-foreground)}
+ .holder-points strong{font-weight:600;color:var(--foreground)}
+ .holder-mark{flex:none;width:8px;height:8px;background:var(--primary);transform:translateY(-1px)}
+ .holder-mark.is-action{background:transparent;box-shadow:inset 0 0 0 1.5px var(--primary)}
+ .holder>:global(a){justify-self:end}
+ @media(forced-colors:active){.holder{border:1px solid CanvasText}.holder-mark{forced-color-adjust:none;background:Highlight}.holder-mark.is-action{background:transparent;box-shadow:inset 0 0 0 1.5px Highlight}.query-ledger [data-ledger-current]{border:2px solid Highlight}.outcome-tile{border:1px solid CanvasText}.outcome-bonds i{forced-color-adjust:none;background:GrayText}.outcome-bonds i.is-empty{background:transparent;box-shadow:inset 0 0 0 1px GrayText}.standing-frame{forced-color-adjust:none;box-shadow:inset 0 0 0 3px Highlight;background:transparent}.query-ledger [data-ledger-current] .ledger-node,.outcome-tile.is-selected .outcome-bonds i,.status-dot{forced-color-adjust:none;background:Highlight}}
+ @media(max-width:1279px){.walkthrough{column-gap:40px}.query-header::before{width:40px;left:-40px}.query-header{padding-inline:20px}.query-body{padding:20px 20px 0}.query-activity{padding:20px}.query-body h3{font-size:20px}.walkthrough-steps button{padding-inline:20px}}
+ @media(max-width:1023px){.walkthrough{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:24px;row-gap:24px}.query-header::before{display:none}.query-header{flex-wrap:wrap;gap:8px}.step-title{font-size:18px}.walkthrough-steps button[aria-selected="true"] .step-title{font-size:20px;line-height:28px}.step-description{font-size:15px;line-height:23px}}
+ @media(max-width:767px){.walkthrough{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"steps" "rep" "panels";row-gap:24px}.holder{grid-template-columns:minmax(0,1fr);padding:20px}.holder>:global(a){justify-self:start}.holder h3{white-space:normal}.walkthrough-steps button[aria-selected="true"] .step-description{min-height:69px;max-height:200px}.query-status{font-size:14px;padding:6px 12px}.query-body h3{font-size:20px;line-height:29px}.outcome-board{--tile-gap:6px;--square:20px}.outcome-board.is-final{--side:7.25rem}.outcome-tile{padding:12px;gap:10px}.outcome-stake{font-size:14px}.outcome-board.is-final .outcome-tile.is-out{padding:0 10px;gap:6px}.outcome-board.is-final .outcome-tile.is-out .outcome-name{font-size:13px}.outcome-board.is-final .outcome-tile.is-out .outcome-stake{font-size:12px}.outcome-board.is-final .outcome-tile.is-selected .outcome-name{font-size:22px}.query-ledger li{column-gap:12px}.ledger-amount strong{font-size:14px}}
+ @media(prefers-reduced-motion:reduce),print{.status-dot{animation:none!important}}
+ /* Phones: the open step keeps room for the longest description (2–3 lines, 5 below 480), so the card under the steps barely moves. */
+ @media(max-width:480px){.walkthrough-steps button[aria-selected="true"] .step-description{min-height:115px}}
+ .walkthrough-steps.is-measuring :is(button,.step-description,.step-title::after,.step-done){transition:none!important}
+ @media(prefers-reduced-motion:reduce){.walkthrough-steps button,.step-description,.query-details summary :global(.web-icon:last-child),.step-title::after,.step-done{transition:none}}
+ @media(forced-colors:active){:is(.outcome-name,.ledger-title) s{text-decoration:line-through}:is(.outcome-name,.ledger-title) s::after{display:none}}
+</style>

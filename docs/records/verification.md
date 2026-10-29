@@ -14,6 +14,21 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - `mailto:contact@augur.net`; its inbox is unconfirmed.
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
 
+## 29 October 2026: homepage design structure
+
+Checked against `main` at `8e929c2` (before) and the change that moves the homepage into `src/designs/current/`, adds `src/designs/melo/` as a copy, the `homeDesign` switch, `HOME_DESIGN` and `npm run check:designs`. Builds only; nothing was checked in a browser, because the rendered output is unchanged.
+
+- Built output for `current`: `dist/` before and after have the same files except two renamed by the move: the page script is now `Home.astro_astro_type_script_index_0_lang.*.js` (was `index.astro_…`), and `index.*.css` has a new hash. Every other file, including `dist/server/`, is byte-identical. `index.html` and the CSS differ only in the 16 `data-astro-cid-*` scoped-style ids, which Astro derives from each component's file path; mapped one to one, both files are byte-identical. The page script has the same length (33,964 bytes) but a different module order. Built unminified, before and after have the same 2,351 lines once `//#region` path comments and chunk hashes are removed; the only move is the answer-ribbon block (now `src/motion/answer-ribbon.ts`, first in the bundle) and one import line.
+- Only the live design ships: a dynamic `import()` per design was tried first and rejected, because the build then emitted both designs' chunks and `/` linked both designs' CSS. The build now resolves `virtual:home-design` to the live design's `Home.astro` in `astro.config.mjs`, so the other design never enters the build: `dist/` for `current` has the same file list as before.
+- `HOME_DESIGN=melo` builds; its `index.html` carries `melo`'s own scoped ids, and is otherwise identical to `current`'s. `HOME_DESIGN=melo` in `astro dev` serves `src/designs/melo/Home.astro`. An unknown name stops the build with `Unknown HOME_DESIGN`.
+- `npm run check:designs` builds `current` and `melo`. With a broken import in `melo` it reports `melo: build failed` and exits 1.
+- With `src/designs/melo/` deleted and its entry removed from `src/designs/index.ts`, `npm run build` and `npm run check:designs` pass, and `current`'s output is as above.
+- Preview command: `HOME_DESIGN=melo npm run build`, then `npx wrangler versions upload --dry-run` compiles the upload with no errors (Wrangler 4.151.2). `npx wrangler preview --name home-melo` itself was not run: it needs Cloudflare access to the account.
+
+- Rebased onto `main` at `f740422` (the newsletter change): `npm run build` and `npm run check:designs` pass, and against that revision's build the result is the same as above. The three `/newsletter/` pages are byte-identical, and `dist/client/wrangler.json` differs only in the absolute path of the folder it was built in.
+
+Not checked: a real Cloudflare preview deployment, `astro check` (not installed), and the rendered page in a browser.
+
 ## 29 October 2026: newsletter interest list
 
 Run against the newsletter change on its task branch, with the forms Worker under `wrangler dev` on port 8790 (local D1, `SITE_URL` and `ALLOWED_ORIGINS` set to `http://localhost:4335`) and the site under `astro dev` on port 4335 with `PUBLIC_FORMS_URL=http://localhost:8790`, in the Claude desktop app's built-in browser and with `curl`. `npm run build` passed with and without `PUBLIC_FORMS_URL`; `tsc` passed for the Worker; `wrangler deploy --dry-run` bundled it. No remote database existed; nothing was sent to production.
