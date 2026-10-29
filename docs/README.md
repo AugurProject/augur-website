@@ -8,7 +8,7 @@ Documents are grouped by type. What each type is for, and how to tell them apart
 
 ## Guides
 
-- [Deploy](guides/deploy.md): Build, preview and deploy to Cloudflare Workers.
+- [Deploy](guides/deploy.md): Build, preview and deploy to Cloudflare Workers, including the `augur-forms` Worker behind the newsletter form.
 - [Update the design system](guides/update-design-system.md): Upgrade the `@augurproject/design-system` package, or change a shared token or control.
 
 ## Reference

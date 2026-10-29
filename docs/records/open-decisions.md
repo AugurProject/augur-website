@@ -8,7 +8,6 @@ Decisions and owner confirmations still outstanding. When one is settled, delete
 - **Content review flags.** Resolve the flags marked in code: `needsReview: true` entries in [faq.ts](../../src/data/faq.ts) and `walkthroughReview` in [walkthrough.ts](../../src/data/walkthrough.ts). The code is the source of truth for which flags are open.
 - **Product scope.** Confirm whether the one-product navigation (Augur Lituus only) meets the intended scope. Additional pages need an explicit scope decision, not restoration from the earlier prototype.
 - **Metadata, indexing and security.** Review production metadata, indexing and security requirements. The layout emits no canonical, Open Graph, Twitter, robots or structured-data tags and has no CSP script-hash handling, and the `indexable` export does not control the layout.
-- **Newsletter.** Decide whether to keep the newsletter demonstration or scope a real provider. The current form does not subscribe users.
 - **Browser findings from 26 October.** Mobile menu focus after choosing a link, tab-reveal overshoot, small link targets, hidden tab panels without JavaScript and possible light-on-white print colours are filed on Track task #7. Details in [verification](verification.md#26-october-2026-homepage-browser-checks).
 
 ## Deployment

@@ -1,0 +1,36 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	// Form endpoints for the static site. The site posts here; see README.md.
+	"name": "augur-forms",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-10-12",
+	"workers_dev": true,
+	"preview_urls": false,
+	"observability": {
+		"enabled": true
+	},
+	"vars": {
+		// Where no-JavaScript submits are redirected, and which pages may post here.
+		"SITE_URL": "https://augur.net",
+		"ALLOWED_ORIGINS": "https://augur.net,https://www.augur.net"
+	},
+	// Newsletter interest list. Create it with `npx wrangler d1 create augur-website-signups`
+	// and put its id here; see ../../docs/guides/deploy.md.
+	"d1_databases": [
+		{
+			"binding": "SIGNUPS",
+			"database_name": "augur-website-signups",
+			"database_id": "REPLACE_WITH_ID_FROM_WRANGLER_D1_CREATE",
+			"migrations_dir": "migrations"
+		}
+	],
+	// One limiter per form, keyed `<form>:<IP>`. Approximate and per Cloudflare location.
+	// Namespace ids: 1001 newsletter, 1002 contact.
+	"ratelimits": [
+		{
+			"name": "SUBSCRIBE_RATE_LIMITER",
+			"namespace_id": "1001",
+			"simple": { "limit": 5, "period": 60 }
+		}
+	]
+}

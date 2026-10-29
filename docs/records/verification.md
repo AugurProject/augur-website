@@ -9,9 +9,24 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - How each motion scene looks under reduced motion, and animation playback in other browsers.
 - Print preview, page breaks and print colours.
 - Full accessibility: text over images or gradients, hover and focus states, non-text contrast, screen readers, forced colors, 200% zoom and light scheme; the full keyboard tab order below the first section.
-- Page performance, and the newsletter form (no form has been submitted).
+- Page performance.
+- The newsletter form against a deployed `augur-forms` Worker and remote D1 database; it has been checked only locally (29 October 2026).
 - `mailto:contact@augur.net`; its inbox is unconfirmed.
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
+
+## 29 October 2026: newsletter interest list
+
+Run against the newsletter change on its task branch, with the forms Worker under `wrangler dev` on port 8790 (local D1, `SITE_URL` and `ALLOWED_ORIGINS` set to `http://localhost:4335`) and the site under `astro dev` on port 4335 with `PUBLIC_FORMS_URL=http://localhost:8790`, in the Claude desktop app's built-in browser and with `curl`. `npm run build` passed with and without `PUBLIC_FORMS_URL`; `tsc` passed for the Worker; `wrangler deploy --dry-run` bundled it. No remote database existed; nothing was sent to production.
+
+- Worker, JSON (`Accept: application/json`, allowed Origin): a new address returned 200 `accepted` and was stored lowercased with `created_at`, `consent_version` `2026-10-29` and `source` `footer`; the same address again returned 200 `accepted` and no second row; `nope` and an empty address returned 422 `invalid` with an `email` field error; a filled `nickname` honeypot returned 400 `rejected` and stored nothing; a JSON body and a 20 KB body returned 400 `rejected`; responses carried `Access-Control-Allow-Origin` for the allowed origin and `Vary: Origin`, and `OPTIONS` answered 204 with the same origin.
+- Worker, refusals: a foreign Origin and a missing Origin returned 403; `GET` returned 405; an unknown path returned 404.
+- Worker, without JavaScript: valid and invalid addresses redirected 303 to `/newsletter/subscribed/` and `/newsletter/invalid/` on `SITE_URL`. With the table renamed to simulate a database failure, JSON returned 503 `unavailable`, the form POST redirected to `/newsletter/error/`, and the log line held only the D1 error text.
+- Rate limit: the sixth request from one IP within a minute (invalid attempts count) was answered as rate-limited, redirecting to `/newsletter/error/`.
+- Browser, with JavaScript: the form posted cross-origin from `localhost:4335` to `localhost:8790` as one `POST` with no preflight. Typing an address, Tab to Subscribe and Enter showed the thanks message in the `role="status"` element, cleared the field and left focus on the button. The field kept its visible label, `autocomplete="email"` and `aria-describedby` (error and consent); the honeypot had `tabindex="-1"`. Earlier the same day, against the first build, the invalid-address error kept focus in the field and the layout had no overflow at 375px; those parts are unchanged.
+- Browser, no-JavaScript path: simulated by submitting with `HTMLFormElement.prototype.submit`, which bypasses the script; it landed on `localhost:4335/newsletter/subscribed/` with title "Interest noted | Augur", `noindex` and the message. JavaScript was not turned off in the browser.
+- Offline build (no `PUBLIC_FORMS_URL`, `astro preview` on port 4336): the form had `method="dialog"`, no `action`, no consent line and no honeypot; submitting said "Email sign-up isn’t connected yet, so nothing was sent or saved." and stayed on the page.
+
+Not checked: a browser with JavaScript turned off, a real screen reader, Safari and Firefox, a deployed Worker or remote D1 database, the rate limit across Cloudflare locations, and the JavaScript path's server-side error messages in the browser (checked only as JSON).
 
 ## 26 October 2026: homepage browser checks
 

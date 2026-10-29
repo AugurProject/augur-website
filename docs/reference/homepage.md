@@ -6,9 +6,9 @@ This repository is the canonical site. The homepage was ported from the former W
 
 ## Structure
 
-[index.astro](../../src/pages/index.astro) serves `/` with six sections: Hero, Tenets, Applications, How It Works, Roadmap and Learn More. Product pages and local blog or FAQ routes do not exist.
+[index.astro](../../src/pages/index.astro) serves `/` with six sections: Hero, Tenets, Applications, How It Works, Roadmap and Learn More. Product pages and local blog or FAQ routes do not exist. The only other pages are the newsletter form's result pages: see [Newsletter interest list](#newsletter-interest-list).
 
-[PageLayout.astro](../../src/layouts/PageLayout.astro) supplies the announcement, header, footer, skip link and decorative page field. It sets the page title, description, theme color, font preload and REP favicon. Its metadata is narrower than the earlier prototype's layout: it does not emit canonical, Open Graph, Twitter, robots or structured-data tags, or implement CSP script-hash handling. The `indexable` export in [site.ts](../../src/data/site.ts) is not connected to this layout; do not assume it controls indexing.
+[PageLayout.astro](../../src/layouts/PageLayout.astro) supplies the announcement, header, footer, skip link and decorative page field. It sets the page title, description, theme color, font preload and REP favicon. Optional props set a different `title`, add `noindex`, or drop the announcement, header and footer (`bare`). Its metadata is narrower than the earlier prototype's layout: apart from that `noindex`, it does not emit canonical, Open Graph, Twitter, robots or structured-data tags, or implement CSP script-hash handling. The `indexable` export in [site.ts](../../src/data/site.ts) is not connected to this layout; do not assume it controls indexing.
 
 [astro.config.mjs](../../astro.config.mjs) configures the Cloudflare adapter and Tailwind Vite plugin; the comment there explains the adapter's `session: false`. [global.css](../../src/styles/global.css) defines Tailwind v4 shared tokens, controls and utilities; specialized artwork and section styles remain scoped. Fonts are Sora and Schibsted Grotesk from Fontsource packages. Controls are native Astro components, such as [Button.astro](../../src/components/primitives/Button.astro), not framework button primitives.
 
@@ -28,7 +28,18 @@ The page renders through Astro components; browser scripts enhance the rendered 
 
 Review flags in [faq.ts](../../src/data/faq.ts) (`needsReview`) and [walkthrough.ts](../../src/data/walkthrough.ts) (`walkthroughReview`) are unresolved content markers. Code presence and a successful build do not establish content approval.
 
-[site.ts](../../src/data/site.ts) sets the newsletter provider to `null`. [SiteFooter.astro](../../src/components/layout/SiteFooter.astro) validates the form locally and reports that no email was sent or saved. It does not subscribe users.
+## Newsletter interest list
+
+The footer form collects addresses for a later newsletter; the site sends no email and uses no newsletter service. The site stays static: the form posts to the separate `augur-forms` Worker in [workers/forms](../../workers/forms/). Wording, the consent version and the shared address check are in [newsletter.ts](../../src/data/newsletter.ts); the Worker's address and the honeypot field name are in [forms.ts](../../src/data/forms.ts). The Worker imports both files.
+
+- [SiteFooter.astro](../../src/components/layout/SiteFooter.astro) posts `email`, plus an off-screen honeypot field `nickname`, to `PUBLIC_FORMS_URL` + `/subscribe`. With JavaScript, its script validates first, posts form-urlencoded with `Accept: application/json` (a simple cross-origin request, no preflight) and shows the returned message in the status or error element.
+- Without `PUBLIC_FORMS_URL` in a production build, the form is offline: `method="dialog"`, no consent line, and the script says nothing was sent or saved. Development defaults to `http://localhost:8788`.
+- The Worker checks the `Origin` against `ALLOWED_ORIGINS` (403 otherwise), accepts only form bodies up to 16 KB, rejects a filled honeypot with the generic failure (never the thanks message), rate-limits, validates, then inserts into the `signups` table, ignoring duplicates. New and duplicate addresses get the same answer. Responses: JSON `{ ok, status, message, fieldErrors? }` with 200, 422 invalid, 400 rejected, 429 rate-limited or 503 unavailable; or, without JavaScript, a 303 to `SITE_URL` + `/newsletter/subscribed/`, `/newsletter/invalid/` or `/newsletter/error/`.
+- Those result pages are prerendered by [[result].astro](../../src/pages/newsletter/[result].astro) as `bare`, `noindex` pages.
+- A row holds `email`, `created_at`, `consent_version` and `source` only; the table is defined in [0001_signups.sql](../../workers/forms/migrations/0001_signups.sql). No IP or user agent is stored, and logs carry only the error text, never the address.
+- Nobody is mailed or confirmed. A later newsletter service's double opt-in is the confirmation step.
+
+Deploy, database, export and removal commands are in [deploy](../guides/deploy.md#forms-worker-augur-forms).
 
 ## Interactions and assets
 

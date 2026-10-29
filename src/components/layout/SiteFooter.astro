@@ -4,7 +4,8 @@ import Icon from '../primitives/Icon.astro';
 import Button from '../primitives/Button.astro';
 import {navigationGroups,type NavigationItem} from '../../data/navigation';
 import {links} from '../../data/links';
-import {site} from '../../data/site';
+import {newsletter} from '../../data/newsletter';
+import {forms} from '../../data/forms';
 const email=links.contact.url.replace(/^mailto:/,'');
 // Both rows sit on the site's 500 / 80 / 668 heading grid, so the newsletter and the first
 // link column share one edge with every section above. One footer nav landmark; every
@@ -15,10 +16,12 @@ const email=links.contact.url.replace(/^mailto:/,'');
     <div class="site-container footer-grid">
       <div class="contact-copy"><h2 id="contact-title">Talk to the Augur team.</h2><p>Ask about the protocol or share feedback. Building on it? Tell us what your project needs.</p><div class="contact-actions"><Button href={links.contact.url}>Talk to us</Button><a class="contact-email" href={links.contact.url}>{email}</a></div></div>
       <div class="newsletter"><h2 id="newsletter-title">Follow Augur's progress</h2><p>Research, development and product updates.</p>
-        <form class="newsletter-form" action={site.newsletter.provider ?? undefined} method={site.newsletter.provider ? 'post' : 'dialog'} aria-labelledby="newsletter-title" data-newsletter={site.newsletter.provider ? undefined : 'prototype'}>
-          <div class="newsletter-row"><div class="field"><label for="newsletter-email">Email address</label><input type="email" id="newsletter-email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required maxlength="254" aria-describedby="newsletter-email-error" /></div><Button type="submit" variant="outline">Subscribe</Button></div>
+        <form class="newsletter-form" action={forms.url ? forms.url+newsletter.path : undefined} method={forms.url ? 'post' : 'dialog'} aria-labelledby="newsletter-title" data-newsletter={forms.url ? 'live' : 'offline'}>
+          <div class="newsletter-row"><div class="field"><label for="newsletter-email">Email address</label><input type="email" id="newsletter-email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required maxlength="254" aria-describedby={forms.url ? 'newsletter-email-error newsletter-consent' : 'newsletter-email-error'} /></div><Button type="submit" variant="outline">Subscribe</Button></div>
+          {forms.url && <div class="newsletter-trap" aria-hidden="true"><label for="newsletter-nickname">Leave this empty</label><input type="text" id="newsletter-nickname" name={forms.honeypot} tabindex="-1" autocomplete="off" /></div>}
           <p class="field-error" id="newsletter-email-error" hidden></p>
           <p class="newsletter-status" role="status" aria-live="polite" data-newsletter-status></p>
+          {forms.url && <p class="newsletter-consent" id="newsletter-consent">{newsletter.consent} <a href={links.contact.url}>{email}</a>.</p>}
         </form></div>
     </div>
   </div>
@@ -28,28 +31,46 @@ const email=links.contact.url.replace(/^mailto:/,'');
   </div>
 </footer>
 <script>
- // Visual prototype: no subscription provider is configured, so the form validates
- // locally and says plainly that nothing was sent. method="dialog" keeps the
- // no-JavaScript submission local as well.
- const form=document.querySelector<HTMLFormElement>('[data-newsletter=prototype]');
+ // Without JavaScript the form posts to the augur-forms Worker, which redirects to a result page.
+ // Here it validates first, posts in place and shows the Worker's message: only `ok` means stored.
+ // A form-urlencoded body keeps the cross-origin POST a simple request, with no CORS preflight.
+ // Offline (no PUBLIC_FORMS_URL in the build), method="dialog" keeps submits local and the
+ // script says plainly that nothing was sent.
+ import {isEmail,newsletter} from '../../data/newsletter';
+ const form=document.querySelector<HTMLFormElement>('[data-newsletter]');
  if(form){
   form.noValidate=true;
   const input=form.querySelector<HTMLInputElement>('input[type=email]')!;
   const error=form.querySelector<HTMLElement>('#newsletter-email-error')!;
   const status=form.querySelector<HTMLElement>('[data-newsletter-status]')!;
+  // A flag, not button.disabled: disabling the focused button would drop keyboard focus.
+  let sending=false;
+  const showError=(message:string)=>{error.textContent=message;error.hidden=!message;input.setAttribute('aria-invalid',String(Boolean(message)));};
   const validate=()=>{
    const value=input.value.trim();
-   const message=!value?'Enter your email address.':input.validity.typeMismatch||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)?'Enter a valid email address, like you@example.com.':'';
-   error.textContent=message;error.hidden=!message;input.setAttribute('aria-invalid',String(Boolean(message)));
+   const message=!value?'Enter your email address.':input.validity.typeMismatch||!isEmail(value)?newsletter.messages.invalid:'';
+   showError(message);
    return !message;
   };
   input.addEventListener('blur',()=>{if(input.value.trim()||input.getAttribute('aria-invalid')==='true')validate();});
   input.addEventListener('input',()=>{status.replaceChildren();if(input.getAttribute('aria-invalid')==='true')validate();});
-  form.addEventListener('submit',event=>{
-   event.preventDefault();status.replaceChildren();
+  form.addEventListener('submit',async event=>{
+   event.preventDefault();if(sending)return;status.replaceChildren();
    if(!validate()){input.focus();return;}
-   const blog=document.createElement('a');blog.href='https://www.augur.net/blog/';blog.textContent='Follow the blog';
-   status.append('Email sign-up isn’t connected yet, so nothing was sent or saved. ',blog,' for updates in the meantime.');
+   if(form.dataset.newsletter==='offline'){
+    const blog=document.createElement('a');blog.href='https://www.augur.net/blog/';blog.textContent='Follow the blog';
+    status.append('Email sign-up isn’t connected yet, so nothing was sent or saved. ',blog,' for updates in the meantime.');
+    return;
+   }
+   sending=true;form.setAttribute('aria-busy','true');
+   try{
+    const body=new URLSearchParams([...new FormData(form)].map(([key,value])=>[key,String(value)]));
+    const response=await fetch(form.action,{method:'POST',body,headers:{accept:'application/json'}});
+    const result=await response.json() as {ok:boolean;status:string;message:string;fieldErrors?:Record<string,string>};
+    if(result.status==='invalid'){showError(result.fieldErrors?.email??result.message);input.focus();}
+    else{status.textContent=result.message;if(result.ok)form.reset();}
+   }catch{status.textContent=newsletter.messages.error;}
+   finally{sending=false;form.removeAttribute('aria-busy');}
   });
  }
 </script>
@@ -62,6 +83,9 @@ const email=links.contact.url.replace(/^mailto:/,'');
 .newsletter h2{font-size:20px;line-height:26px;letter-spacing:0;margin-bottom:12px}.newsletter>p{color:var(--muted-foreground);margin-bottom:24px}
 .newsletter-row{display:flex;align-items:flex-end;gap:12px}.newsletter .field{flex:1;min-width:0;gap:12px}.newsletter .field>label{font-weight:400}.newsletter .field input{background:var(--web-tile)}
 .newsletter .field-error{margin-top:12px}.newsletter-status{margin-top:12px;font-size:14px;line-height:20px;color:var(--muted-foreground)}.newsletter-status:empty{display:none}.newsletter-status a{color:var(--foreground)}
+.newsletter-consent{margin-top:12px;font-size:14px;line-height:20px;color:var(--muted-foreground)}.newsletter-consent a{color:var(--foreground)}
+/* Off-screen rather than display:none, so form-filling bots still see the trap field. */
+.newsletter-trap{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 .directory{padding-block:48px 64px;border-top:1px solid var(--web-outline)}
 /* A hairline opens the directory, so the contact band and the links read as two groups. The logo heads the
    first column level with the link headings, and the funding line sits 16 under it. */

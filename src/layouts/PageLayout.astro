@@ -4,6 +4,10 @@ import AnnouncementBar from '../components/layout/AnnouncementBar.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url';
+// `bare` drops the announcement, header and footer for one-off pages such as the newsletter
+// results: their navigation is homepage hash links, which don't work from other routes.
+interface Props { title?: string; noindex?: boolean; bare?: boolean }
+const { title = 'Augur | The frontier of decentralized truth', noindex = false, bare = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="en" class="dark">
@@ -11,7 +15,7 @@ import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0e0e21" />
-  <title>Augur | The frontier of decentralized truth</title>
+  <title>{title}</title>{noindex && <meta name="robots" content="noindex" />}
   <meta name="description" content="Real-world answers for onchain apps, controlled by no one." />
   <link rel="icon" href="/brand/kit/rep-token/rep-token-icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/brand/kit/rep-token/rep-token-icon.png" />
@@ -19,9 +23,9 @@ import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url
  </head>
  <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <AnnouncementBar /><SiteHeader />
+  {!bare && <AnnouncementBar />}{!bare && <SiteHeader />}
   <main id="main" tabindex="-1"><slot /></main>
-  <SiteFooter />
+  {!bare && <SiteFooter />}
   <div class="page-field" data-page-field aria-hidden="true"></div>
   <script>import {initPageField} from '../motion/page-field';initPageField();</script>
  </body>
