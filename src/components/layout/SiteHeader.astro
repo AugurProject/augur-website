@@ -2,7 +2,7 @@
 import Brand from '../primitives/Brand.astro';
 import Icon from '../primitives/Icon.astro';
 import Button from '../primitives/Button.astro';
-import {navigation,navigationGroups,type NavigationItem} from '../../data/navigation';
+import {navigation,navigationGroups,pages,type NavigationItem} from '../../data/navigation';
 const groups=[{label:'Products',variant:'products',items:navigation.products},{label:'Resources',variant:'resources',items:navigation.resources},{label:'Community',variant:'community',items:navigation.community}];
 const path=Astro.url.pathname;
 // Current section: a page and everything below it (blog posts under /blog/).
@@ -14,7 +14,7 @@ const isCurrent=(href:string)=>within(href)&&!href.includes('#');
     <a href="/" aria-label="Augur home" class="logo"><Brand /></a>
     <nav class="desktop-nav" aria-label="Main navigation">
       <span class="nav-highlight" aria-hidden="true" data-nav-highlight></span>
-      <a href="#why-augur" class="nav-item nav-link" aria-current={isCurrent('#why-augur')?'page':undefined} data-current={within('#why-augur')?'':undefined}><span class="nav-item-label">Why Augur</span></a>
+      <a href="/#why-augur" class="nav-item nav-link" aria-current={isCurrent('/#why-augur')?'page':undefined} data-current={within('/#why-augur')?'':undefined}><span class="nav-item-label">Why Augur</span></a>
       {groups.map((group,index)=><details class="nav-disclosure" name="site-nav" data-nav-disclosure data-current={group.items.some(item=>within(item.href))?'':undefined}>
         <summary class="nav-item" aria-controls={`nav-${index}`} aria-expanded="false"><span class="nav-item-label">{group.label}</span><Icon name="chevron-down" class="nav-chevron"/></summary>
         <div class="nav-panel" id={`nav-${index}`} data-variant={group.variant}><ul>{group.items.map((entry)=>{const item=entry as NavigationItem;const glyph=item.logo??item.icon;
@@ -30,7 +30,7 @@ const isCurrent=(href:string)=>within(href)&&!href.includes('#');
         </a></li>;})}</ul></div>
       </details>)}
     </nav>
-    <div class="header-actions"><Button href="#contact" variant="outline">Talk to us</Button><button class="mobile-open" type="button" aria-controls="mobile-navigation" aria-expanded="false" data-mobile-open>Menu</button></div>
+    <div class="header-actions"><Button href={pages.contact} variant="outline">Talk to us</Button><button class="mobile-open" type="button" aria-controls="mobile-navigation" aria-expanded="false" data-mobile-open>Menu</button></div>
   </div>
   <dialog id="mobile-navigation" class="mobile-navigation" aria-labelledby="mobile-nav-title">
     <div class="mobile-top"><a href="/" aria-label="Augur home"><Brand/></a><h2 id="mobile-nav-title" class="sr-only">Navigation</h2><button type="button" data-mobile-close>Close</button></div>

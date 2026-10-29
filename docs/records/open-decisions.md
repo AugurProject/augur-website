@@ -10,6 +10,12 @@ Decisions and owner confirmations still outstanding. When one is settled, delete
 - **Metadata, indexing and security.** Review production metadata, indexing and security requirements. The layout emits no canonical, Open Graph, Twitter, robots or structured-data tags and has no CSP script-hash handling, and the `indexable` export does not control the layout.
 - **Browser findings from 26 October.** Mobile menu focus after choosing a link, tab-reveal overshoot, small link targets, hidden tab panels without JavaScript and possible light-on-white print colours are filed on Track task #7. Details in [verification](verification.md#26-october-2026-homepage-browser-checks).
 
+## Contact page
+
+- **Recipient inbox.** Messages go to `contact@augur.net` (`CONTACT_TO`). Confirm that inbox exists and is read; [links.ts](../../src/data/links.ts) still marks it unverified.
+- **Proton plan and sender.** Sending needs a paid Proton plan with the augur.net domain, the address `contact-form@augur.net` and an SMTP token for it. None of these is confirmed or created yet.
+- **`melo` design link.** `melo`'s Applications section still links “Talk to us” to `#contact` (the footer band); the port tasks own that folder.
+
 ## Deployment
 
 Before going public:

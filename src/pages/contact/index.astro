@@ -1,0 +1,135 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Icon from '../../components/primitives/Icon.astro';
+import Button from '../../components/primitives/Button.astro';
+import { links } from '../../data/links';
+import { forms } from '../../data/forms';
+import { contact } from '../../data/contact';
+// Layout, fields and copy follow the lab's contact page (augur-web-lab 1b95a3a), approved by jubalm
+// on 29 October 2026. The form posts to the augur-forms Worker, which emails the team and redirects
+// to /contact/<result>/; without PUBLIC_FORMS_URL in a production build the form is offline.
+const socials = [{ key: 'telegram', label: 'Telegram', icon: 'telegram-logo' }, { key: 'github', label: 'GitHub', icon: 'github-logo' }, { key: 'x', label: 'X', icon: 'x-logo' }] as const;
+const email = links.contact.url.replace(/^mailto:/, '');
+const live = Boolean(forms.url);
+const max = (field: keyof typeof contact.fields) => contact.fields[field].maxLength;
+const describedBy = (field: string) => `contact-${field}-error${live ? ' contact-notice' : ''}`;
+---
+<PageLayout title="Contact Augur | Let’s talk" description="Ask the Augur team anything, or share a project and the answers it depends on." footer={false}>
+ <div class="site-container contact-layout">
+  <section class="contact-intro" aria-labelledby="contact-title">
+   <h1 id="contact-title">Let’s talk!</h1>
+   <p class="contact-lead">Ask us anything about Augur. If you’re building on it, tell us what your project needs to resolve.</p>
+   <div class="community-invitation"><h2><Icon name="discord-logo"/>Talk with the community.</h2><p>Compare notes with builders, ask technical questions and follow the discussion on Discord.</p><Button href={links.discord.url} variant="outline" external>Join the conversation</Button></div>
+   <div class="socials"><h2>Find us elsewhere</h2><ul>{socials.map(social => <li><a href={links[social.key].url}><Icon name={social.icon}/><span>{social.label}</span><Icon name="arrow-up-right"/></a></li>)}</ul></div>
+   <p class="email-direct">Prefer email? <a class="line-link" href={links.contact.url}><span class="button-label">{email}</span></a></p>
+  </section>
+  <section class="contact-message" aria-labelledby="message-title"><h2 id="message-title">Send us a message</h2><p>Ask a question, or share a project and the answers it depends on.</p>
+   <form action={live ? forms.url + contact.path : undefined} method={live ? 'post' : 'dialog'} data-contact-form={live ? 'live' : 'offline'} aria-labelledby="message-title">
+    <div class="error-summary" data-error-summary role="alert" tabindex="-1"></div>
+    <div class="form-grid">
+     <div class="field"><label for="contact-name">Name</label><input id="contact-name" name="name" autocomplete="name" required maxlength={max('name')} pattern={String.raw`.*\S.*`} placeholder="Your name" aria-describedby={describedBy('name')}/><p class="field-error" id="contact-name-error" hidden></p></div>
+     <div class="field"><label for="contact-email">Email</label><input id="contact-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength={max('email')} pattern={String.raw`[^\s@]+@[^\s@]+\.[^\s@]+`} placeholder="you@example.com" aria-describedby={describedBy('email')}/><p class="field-error" id="contact-email-error" hidden></p></div>
+     <div class="field"><label for="contact-company">Company / project <span>(optional)</span></label><input id="contact-company" name="company" autocomplete="organization" maxlength={max('company')} placeholder="Your company or project" aria-describedby="contact-company-error"/><p class="field-error" id="contact-company-error" hidden></p></div>
+     <div class="field"><label for="contact-website">Website <span>(optional)</span></label><input id="contact-website" name="website" type="url" autocomplete="url" maxlength={max('website')} pattern="https?://.+" placeholder="https://your-project.com" aria-describedby="contact-website-error"/><p class="field-error" id="contact-website-error" hidden></p></div>
+     <div class="field message-field"><label for="contact-message">Message</label><textarea id="contact-message" name="message" required maxlength={max('message')} rows="4" placeholder="Your question, or what a project needs to resolve" aria-describedby={describedBy('message')}></textarea><p class="field-error" id="contact-message-error" hidden></p></div>
+    </div>
+    {live && <div class="contact-trap" aria-hidden="true"><label for="contact-nickname">Leave this empty</label><input type="text" id="contact-nickname" name={forms.honeypot} tabindex="-1" autocomplete="off" /></div>}
+    {live ? <p class="contact-notice" id="contact-notice">{contact.notice}</p> : <p class="contact-notice">This form isn’t connected yet, so it can’t send anything. Email <a href={links.contact.url}>{email}</a> instead.</p>}
+    <Button type="submit">Send message</Button>
+    <p class="contact-status" role="status" aria-live="polite" data-contact-status></p>
+   </form>
+  </section>
+ </div>
+</PageLayout>
+<script>
+ // Without JavaScript the browser checks the fields and the form posts to the Worker, which redirects
+ // to a result page. Here the script checks each field with the Worker's own rules, posts in place and
+ // shows the Worker's answer: only `ok` means the message was accepted for delivery.
+ import { contact, contactError, type ContactField } from '../../data/contact';
+ const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+ if (form) {
+  form.noValidate = true;
+  const fields = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('.field input, .field textarea'));
+  const summary = form.querySelector<HTMLElement>('[data-error-summary]')!;
+  const status = form.querySelector<HTMLElement>('[data-contact-status]')!;
+  const email = form.closest('.contact-layout')!.querySelector<HTMLAnchorElement>('.email-direct a')!;
+  let sending = false;
+  const show = (field: HTMLInputElement | HTMLTextAreaElement, error: string) => {
+   const message = document.getElementById(`${field.id}-error`)!;
+   message.textContent = error; message.hidden = !error;
+   field.setAttribute('aria-invalid', String(Boolean(error)));
+  };
+  const validate = (field: HTMLInputElement | HTMLTextAreaElement) => {
+   const error = contactError(field.name as ContactField, field.value.trim());
+   show(field, error);
+   return !error;
+  };
+  const report = (invalid: (HTMLInputElement | HTMLTextAreaElement)[]) => {
+   summary.textContent = `Please correct ${invalid.length === 1 ? 'the highlighted field' : `the ${invalid.length} highlighted fields`}.`;
+   invalid[0]?.focus();
+  };
+  const say = (message: string, fallback: boolean) => {
+   status.replaceChildren(message);
+   if (fallback) { const link = document.createElement('a'); link.href = email.href; link.textContent = email.textContent; status.append(' ', link); }
+  };
+  for (const field of fields) {
+   field.addEventListener('blur', () => { if (field.value.trim() || field.getAttribute('aria-invalid') === 'true') validate(field); });
+   field.addEventListener('input', () => { if (field.getAttribute('aria-invalid') === 'true') validate(field); });
+  }
+  form.addEventListener('submit', async event => {
+   event.preventDefault(); if (sending) return;
+   summary.replaceChildren(); status.replaceChildren();
+   const invalid = fields.filter(field => !validate(field));
+   if (invalid.length) { report(invalid); return; }
+   if (form.dataset.contactForm === 'offline') { say('This form isn’t connected yet, so nothing was sent. Email us at', true); return; }
+   sending = true; form.setAttribute('aria-busy', 'true');
+   try {
+    const body = new URLSearchParams([...new FormData(form)].map(([key, value]) => [key, String(value)]));
+    const response = await fetch(form.action, { method: 'POST', body, headers: { accept: 'application/json' } });
+    const result = await response.json() as { ok: boolean; status: string; message: string; fieldErrors?: Record<string, string> };
+    if (result.status === 'invalid' && result.fieldErrors) {
+     for (const field of fields) show(field, result.fieldErrors[field.name] ?? '');
+     report(fields.filter(field => result.fieldErrors![field.name]));
+    } else {
+     say(result.message, !result.ok);
+     if (result.ok) form.reset();
+    }
+   } catch { say(contact.messages.error, true); }
+   finally { sending = false; form.removeAttribute('aria-busy'); }
+  });
+ }
+</script>
+<style>
+.contact-layout{display:grid;grid-template-columns:minmax(0,536fr) minmax(0,644fr);gap:68px;align-items:center;padding-block:64px 96px}
+.contact-intro h1{font-size:clamp(40px,4.445vw,64px);line-height:72px;letter-spacing:-.02em}
+.contact-lead{max-width:490px;font-size:18px;line-height:28px;color:var(--muted-foreground);margin-top:16px}
+.community-invitation{padding:24px;border:1px solid var(--web-outline);background:var(--web-quiet);margin-top:32px}
+.community-invitation h2{display:flex;align-items:center;gap:12px;font-size:20px;line-height:26px}
+.community-invitation p{color:var(--muted-foreground);margin:14px 0}
+.socials{margin-top:32px}
+.socials h2,.contact-message h2{font-size:20px;line-height:26px}
+.socials ul{display:flex;flex-wrap:wrap;gap:24px;list-style:none;margin:12px 0 0;padding:0}
+.socials a{display:inline-flex;align-items:center;gap:8px;min-height:44px;font:600 14px/20px var(--font-heading);text-decoration:none}
+.socials a :global(.web-icon:last-child){width:14px;height:14px}
+.email-direct{color:var(--muted-foreground);margin-top:16px}
+.email-direct a{transition:color 180ms ease-out}.email-direct a:hover{color:var(--foreground)}
+.contact-message{padding-left:52px;border-left:1px solid var(--web-outline)}
+.contact-message>p{color:var(--muted-foreground);margin-top:12px}
+.contact-message form{margin-top:24px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}
+.message-field{grid-column:1/-1}
+.field label{font-weight:400}.field label span{color:var(--muted-foreground)}
+.field textarea{min-height:132px;resize:vertical}
+.field :is(input,textarea){background:var(--web-tile)}
+.contact-notice{font-size:14px;line-height:20px;color:var(--muted-foreground);margin:20px 0 24px;max-width:560px}
+.contact-notice a{color:var(--foreground)}
+.contact-status{margin-top:16px;font-size:14px;line-height:20px}.contact-status:empty{display:none}
+.contact-status :global(a){color:var(--foreground)}
+.error-summary:empty{display:none}
+.error-summary{margin-bottom:16px;font-size:14px;line-height:20px}
+/* Off-screen rather than display:none, so form-filling bots still see the trap field. */
+.contact-trap{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+@media(max-width:1100px){.contact-layout{gap:40px}.contact-message{padding-left:32px}}
+@media(max-width:900px){.contact-layout{grid-template-columns:1fr;gap:48px;padding-block:48px 64px}.contact-message{border-left:0;padding:40px 0 0;border-top:1px solid var(--web-outline)}.contact-intro h1{line-height:1.15}.contact-lead{max-width:600px}}
+@media(max-width:480px){.form-grid{grid-template-columns:1fr}.socials ul{gap:16px}.community-invitation{padding:20px}.community-invitation h2{align-items:start}}
+</style>

@@ -2,6 +2,7 @@
 import { applications } from '../../../data/applications';
 import Icon from '../../../components/primitives/Icon.astro';
 import Button from '../../../components/primitives/Button.astro';
+import { pages } from '../../../data/navigation';
 import CaseGraphic from '../art/CaseGraphic.astro';
 // The builder's case (owner, 18 Oct 2026, from Augus's notes; draft copy): why a project would hand
 // resolution to Augur Lituus. Plain words, no "trust", no "backstop", no legal promise. Most readers
@@ -54,7 +55,7 @@ const check='4.5 10.5 8.25 14.25 15.5 7';
   <div class="builder-case">
    <h3 class="builder-title" id="builder-title">{builderCase.title[0]}<br/>{builderCase.title[1]}</h3>
    <ul class="builder-reasons" aria-labelledby="builder-title">{builderCase.reasons.map(({icon,title,line})=><li><span class="builder-icon" aria-hidden="true"><Icon name={icon}/></span><strong>{title}</strong> <span class="builder-point">{line}</span></li>)}</ul>
-   <div class="builder-ask"><p><span class="ask-setup">Exploring how it could fit a platform, or just curious?</span> <span class="ask-payoff">Ask the team anything.</span></p><Button href="#contact" variant="outline">Talk to us</Button></div>
+   <div class="builder-ask"><p><span class="ask-setup">Exploring how it could fit a platform, or just curious?</span> <span class="ask-payoff">Ask the team anything.</span></p><Button href={pages.contact} variant="outline">Talk to us</Button></div>
   </div>
  </div>
 </section>

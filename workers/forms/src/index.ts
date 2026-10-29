@@ -1,9 +1,11 @@
 import { handleForm, preflight, type FormSpec } from './form';
 import { subscribe } from './subscribe';
+import { contactForm } from './contact';
 
 // One route per form. Each route builds its spec from the environment; form.ts does the rest.
 const routes: Record<string, (env: Env) => FormSpec> = {
 	'/subscribe': subscribe,
+	'/contact': contactForm,
 };
 
 export default {

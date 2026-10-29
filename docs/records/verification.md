@@ -12,7 +12,33 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - Page performance.
 - The newsletter form against a deployed `augur-forms` Worker and remote D1 database; it has been checked only locally (29 October 2026).
 - `mailto:contact@augur.net`; its inbox is unconfirmed.
+- The contact form against Proton's real SMTP server and a deployed `augur-forms` Worker; it has been checked only locally, with the `log` provider and a fake SMTP server (29 October 2026).
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
+
+## 29 October 2026: contact form sending through a real SMTP server
+
+Checked against the #35 branch after `36862df`, with the SMTP timeout raised to 25 seconds. The forms Worker ran under `wrangler dev` with `MAIL_PROVIDER=proton`, pointed by `PROTON_SMTP_HOST` and `PROTON_SMTP_PORT` at Ethereal (`smtp.ethereal.email:587`), a free test SMTP service that accepts and keeps mail without delivering it, using a throwaway account the owner created. This exercises the same path Proton will use: STARTTLS on 587, `AUTH PLAIN`, `MAIL FROM`, `RCPT TO`, `DATA`.
+
+- Three JSON submits returned 200 `accepted` in 4.4 to 6.3 seconds; a form post 303'd to `/contact/sent/` in 8 seconds; a submit from the `/contact/` page in the browser showed "Message sent. We’ll reply to the email you gave." after 4 seconds and cleared the form.
+- With the earlier 15-second limit, four of five submits returned 503 `unavailable` ("timed out"), and one of those was a form post that still reached `/contact/sent/` only because it happened to finish in 8 seconds. Ethereal pauses 2 to 4 seconds before some replies (a direct session took 8.5 seconds from greeting to `QUIT` without logging in), so the limit is now 25 seconds. A timeout reports "not sent" even if the server got the message, never the reverse.
+
+Not checked: the messages' arrival in the Ethereal mailbox (the owner can see it there), Proton itself, and how long Proton takes.
+
+## 29 October 2026: contact page and `POST /contact`
+
+Checked against the #35 branch on top of `main` at `41e9317`. Local only: the forms Worker under `wrangler dev` (Wrangler 4.155) and the static build served by a plain static file server, in the desktop app's Chromium-based browser.
+
+- `npm run build`, `npm run check:designs` (both designs) and the Worker's `npm run check` (`tsc`) pass. The build emits `/contact/` and the four result pages.
+- Worker, `log` provider, with curl: valid submit 200 `accepted` (JSON) and 303 to `/contact/sent/` (form post); blank name, `a@b` and an `ftp://` website give 422 with one message per field; a name with a line break gives 422 "Keep this to one line."; an invalid form post 303s to `/contact/invalid/`; a filled honeypot 400 `rejected`; a JSON body 400; a 20 KB body 400; a foreign `Origin` 403; the fourth post in a minute from one IP 429, and as a form post 303 to `/contact/rate-limited/`; `OPTIONS` 204 with the allowed origin; `/subscribe` still routed.
+- Delivery failure, `proton` provider pointed at a local fake SMTP server without TLS: the Worker's real socket sent EHLO and STARTTLS, the TLS upgrade failed, and the route answered 503 `unavailable` (JSON) and 303 to `/contact/error/` (form post). The log line was `contact unavailable connection failed: Error`, with no submitted values.
+- SMTP dialogue against a scripted fake server, in Node with the same `smtp.ts`: STARTTLS before `AUTH`, then `MAIL FROM`, `RCPT TO`, `DATA` and `QUIT`; a 535 login, a 554 after `DATA`, a server that never greets (timeout) and a refused connection each throw. The built message decodes back to the original UTF-8 subject, names and body, and encoded words stay under 75 characters.
+- Browser, with JavaScript: an empty submit shows three field errors, the summary "Please correct the 3 highlighted fields." and focuses Name; an `ftp://` website shows its error; a valid submit shows "Message sent. We’ll reply to the email you gave." and clears the form.
+- Browser, native form post (the page script's handler bypassed with `HTMLFormElement.prototype.submit`, JavaScript still on): lands on `/contact/sent/`. With browser validation on, `pattern` rejects a blank name, `a@b` and an `ftp://` website, matching the server.
+- Labels: each of the five fields has a visible label tied to its input. Keyboard: five Tabs from Name reach "Send message", skipping the honeypot; the focused button shows its outline.
+- Phone width (375 px): one-column form, no horizontal overflow.
+- Homepage: every “Talk to us” links to `/contact/`; clicking “Why Augur” (now `/#why-augur`) scrolls to the section without reloading.
+
+Not checked: real Proton delivery (no token yet), a deployed Worker, JavaScript actually turned off, reduced motion (the page adds no motion of its own), screen readers, Safari and Firefox.
 
 ## 29 October 2026: homepage design structure
 

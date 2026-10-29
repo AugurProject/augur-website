@@ -12,7 +12,14 @@
 	"vars": {
 		// Where no-JavaScript submits are redirected, and which pages may post here.
 		"SITE_URL": "https://augur.net",
-		"ALLOWED_ORIGINS": "https://augur.net,https://www.augur.net"
+		"ALLOWED_ORIGINS": "https://augur.net,https://www.augur.net",
+		// Contact form mail (src/mail/). `proton` sends through PROTON_SMTP_USER's SMTP token, a
+		// secret: `npx wrangler secret put PROTON_SMTP_TOKEN --config wrangler.jsonc`. `log` sends
+		// nothing and is refused when ENVIRONMENT is production.
+		"ENVIRONMENT": "production",
+		"MAIL_PROVIDER": "proton",
+		"PROTON_SMTP_USER": "contact-form@augur.net",
+		"CONTACT_TO": "contact@augur.net"
 	},
 	// Newsletter interest list. Create it with `npx wrangler d1 create augur-website-signups`
 	// and put its id here; see ../../docs/guides/deploy.md.
@@ -31,6 +38,11 @@
 			"name": "SUBSCRIBE_RATE_LIMITER",
 			"namespace_id": "1001",
 			"simple": { "limit": 5, "period": 60 }
+		},
+		{
+			"name": "CONTACT_RATE_LIMITER",
+			"namespace_id": "1002",
+			"simple": { "limit": 3, "period": 60 }
 		}
 	]
 }

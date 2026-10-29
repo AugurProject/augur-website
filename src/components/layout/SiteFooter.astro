@@ -2,7 +2,7 @@
 import Brand from '../primitives/Brand.astro';
 import Icon from '../primitives/Icon.astro';
 import Button from '../primitives/Button.astro';
-import {navigationGroups,type NavigationItem} from '../../data/navigation';
+import {navigationGroups,pages,type NavigationItem} from '../../data/navigation';
 import {links} from '../../data/links';
 import {newsletter} from '../../data/newsletter';
 import {forms} from '../../data/forms';
@@ -14,7 +14,7 @@ const email=links.contact.url.replace(/^mailto:/,'');
 <footer class="site-footer">
   <div id="contact" class="contact-band">
     <div class="site-container footer-grid">
-      <div class="contact-copy"><h2 id="contact-title">Talk to the Augur team.</h2><p>Ask about the protocol or share feedback. Building on it? Tell us what your project needs.</p><div class="contact-actions"><Button href={links.contact.url}>Talk to us</Button><a class="contact-email" href={links.contact.url}>{email}</a></div></div>
+      <div class="contact-copy"><h2 id="contact-title">Talk to the Augur team.</h2><p>Ask about the protocol or share feedback. Building on it? Tell us what your project needs.</p><div class="contact-actions"><Button href={pages.contact}>Talk to us</Button><a class="contact-email" href={links.contact.url}>{email}</a></div></div>
       <div class="newsletter"><h2 id="newsletter-title">Follow Augur's progress</h2><p>Research, development and product updates.</p>
         <form class="newsletter-form" action={forms.url ? forms.url+newsletter.path : undefined} method={forms.url ? 'post' : 'dialog'} aria-labelledby="newsletter-title" data-newsletter={forms.url ? 'live' : 'offline'}>
           <div class="newsletter-row"><div class="field"><label for="newsletter-email">Email address</label><input type="email" id="newsletter-email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required maxlength="254" aria-describedby={forms.url ? 'newsletter-email-error newsletter-consent' : 'newsletter-email-error'} /></div><Button type="submit" variant="outline">Subscribe</Button></div>

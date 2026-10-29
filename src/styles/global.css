@@ -106,11 +106,11 @@
   :is(.button.text,.line-link):is(:hover,:active) .button-label::after { transform:none; }
   .field { @apply flex flex-col gap-2; }
   .field>label { @apply font-heading text-sm font-semibold; }
-  .field input { @apply block min-h-12 w-full min-w-0 border-0 border-b border-mist bg-quiet px-4 py-3 text-paper; border-radius:0; caret-color:var(--primary); }
-  .field input::placeholder { @apply text-muted; opacity:1; }
-  .field input:hover { @apply bg-raised; }
-  .field input:focus { @apply border-signal; }
-  .field input[aria-invalid=true] { border-bottom:2px solid #cf294e; }
+  .field :is(input,textarea) { @apply block min-h-12 w-full min-w-0 border-0 border-b border-mist bg-quiet px-4 py-3 text-paper; border-radius:0; caret-color:var(--primary); }
+  .field :is(input,textarea)::placeholder { @apply text-muted; opacity:1; }
+  .field :is(input,textarea):hover { @apply bg-raised; }
+  .field :is(input,textarea):focus { @apply border-signal; }
+  .field :is(input,textarea)[aria-invalid=true] { border-bottom:2px solid #cf294e; }
   .field-error { @apply text-sm text-paper; }
   .page-field { @apply pointer-events-none absolute top-0 left-0 z-10 overflow-hidden; }
   .page-field svg { @apply block; }
