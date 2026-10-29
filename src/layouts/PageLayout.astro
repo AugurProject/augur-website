@@ -10,6 +10,11 @@ import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url
 // band would repeat the contact page. `class` sets <main>'s class for the inner pages.
 interface Props { title?: string; description?: string; noindex?: boolean; bare?: boolean; footer?: boolean; class?: string }
 const { title = 'Augur | The frontier of decentralized truth', description = 'Real-world answers for onchain apps, controlled by no one.', noindex = false, bare = false, footer = true, class: className } = Astro.props;
+// A page's plain Markdown copy sits in public/ at its path plus `.md` (home: /index.md). The link is
+// added only when that file exists, so pages without one (placeholder guides, result pages) get none.
+const mdFiles = new Set(Object.keys(import.meta.glob('/public/**/*.md')).map(file => file.slice('/public'.length)));
+const mdPath = `${Astro.url.pathname.replace(/\/$/, '') || '/index'}.md`;
+const markdown = !bare && !noindex && mdFiles.has(mdPath) ? mdPath : undefined;
 ---
 <!doctype html>
 <html lang="en" class="dark">
@@ -19,6 +24,7 @@ const { title = 'Augur | The frontier of decentralized truth', description = 'Re
   <meta name="theme-color" content="#0e0e21" />
   <title>{title}</title>{noindex && <meta name="robots" content="noindex" />}
   <meta name="description" content={description} />
+  {markdown && <link rel="alternate" type="text/markdown" href={markdown} />}
   <link rel="icon" href="/brand/kit/rep-token/rep-token-icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/brand/kit/rep-token/rep-token-icon.png" />
   <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />

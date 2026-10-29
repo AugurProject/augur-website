@@ -16,6 +16,7 @@ Documents are grouped by type. What each type is for, and how to tell them apart
 
 - [Homepage](reference/homepage.md): Homepage structure, build inputs, content sources, interactions and assets.
 - [Contact page](reference/contact.md): The contact page, its fields and result pages, the Worker's `POST /contact` route and the swappable mail sender.
+- [Markdown pages](reference/markdown-pages.md): Where the hand-written `.md` copy of each page and `/llms.txt` live, and keeping them in step with the page.
 - [Design](reference/design.md): Read before changing identity, controls or geometry. Design references, the design-system package and the website's adaptations.
 
 ## Explanation
