@@ -1,0 +1,17 @@
+---
+import Hero from './sections/Hero.astro';
+import Tenets from './sections/Tenets.astro';
+import Applications from './sections/Applications.astro';
+import HowItWorks from './sections/HowItWorks.astro';
+import Roadmap from './sections/Roadmap.astro';
+import LearnMore from './sections/LearnMore.astro';
+---
+<Hero/><Tenets/><Applications/><HowItWorks/><Roadmap/><LearnMore/>
+<script>
+ // These sections exist only here, so the page starts them once from one script; each init
+ // finds its own sections. One entry instead of five identical ones keeps the JavaScript budget.
+ import {initAnswerRibbon} from '../../motion/answer-ribbon';
+ import {initTenets,initRepZone} from './motion/home-art';
+ import {initHomeInteractions} from './motion/home-interactions';
+ initAnswerRibbon();initTenets();initHomeInteractions();initRepZone();
+</script>

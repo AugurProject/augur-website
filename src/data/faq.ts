@@ -1,6 +1,9 @@
-import {links} from './links';
+import { links } from './links';
+import { currentRep } from './rep';
 export type FaqCategory = 'Getting started' | 'How it works' | 'REP' | 'Building with Augur';
 export interface FaqEntry { id: string; question: string; pageQuestion?: string; answer: string; category: FaqCategory; homepage: boolean; needsReview: boolean; link: { href: string; label: string }; }
+export const faqCategories: FaqCategory[] = ['Getting started', 'How it works', 'REP', 'Building with Augur'];
+/** Homepage 28:7 is canonical. Additional answers use only approved Figma facts and require review. */
 export const faqEntries: FaqEntry[] = [
   { id: 'augur-today', category: 'Getting started', homepage: true, needsReview: false,
     question: "How does today's Augur relate to its earlier prediction markets?", pageQuestion: 'Is Augur still a prediction market?',
@@ -8,8 +11,45 @@ export const faqEntries: FaqEntry[] = [
     link: { href: links.moonFork.url, label: 'Moon Fork report ↗' } },
   { id: 'rep-role', category: 'REP', homepage: true, needsReview: false, question: 'What role does REP play?',
     answer: "REP secures Augur's oracle. Participants back answers and challenges with REP bonds, and if a dispute reaches a fork, holders migrate their REP to the universe they believe reflects reality. Augur Lituus is being built around REPv2_Yes_1, the REP that migrated to the winning universe in the Moon Fork.",
-    link: { href: links.whitepaper.url, label: 'More about REP ↗' } },
+    link: { href: '/rep/', label: 'More about REP' } },
+  { id: 'build-today', category: 'Building with Augur', homepage: false, needsReview: false, question: 'Can I build with Augur today?',
+    answer: 'Not yet. ChainSafe is implementing Augur Lituus in the public Lituus-CS repository, and it still needs testing, audits and documentation before applications can depend on it.',
+    link: { href: links.lituusCode.url, label: 'Follow the build ↗' } },
   { id: 'invalid', category: 'How it works', homepage: true, needsReview: true, question: 'What if the question cannot be answered?',
     answer: 'It resolves as Invalid. In the January 2026 design, Invalid covers malformed or unresolvable questions. A query also resolves as Invalid if no report arrives within its three-day reporting window.',
     link: { href: links.whitepaper.url, label: 'Read the whitepaper ↗' } },
+  { id: 'honest-fork', category: 'REP', homepage: false, needsReview: true, question: 'Why would REP holders choose the honest fork?',
+    answer: "Because the design ties REP's value to demand for truthful answers. If applications and users keep choosing an honest oracle, REP on a dishonest fork loses that demand. This is an assumption of the design, not a guarantee.",
+    link: { href: links.whitepaper.url, label: 'Read the whitepaper ↗' } },
+  { id: 'augur-lituus', category: 'Getting started', homepage: false, needsReview: true, question: 'What is Augur Lituus?',
+    answer: "Augur Lituus is the next generation of Augur's oracle. Anyone can answer, anyone can challenge, and lying is designed to cost more than it pays.",
+    link: { href: '/products/#augur-lituus', label: 'Explore Augur Lituus' } },
+  { id: 'trading', category: 'Getting started', homepage: false, needsReview: true, question: 'Where can I trade on Augur?',
+    answer: 'Augur v2 still runs today. Augur Statoblast is a prediction-market layer on Zoltar, and Statoblast Trading is its trading interface. These products are in development.',
+    link: { href: '/products/#augur-statoblast', label: 'See product status' } },
+  { id: 'who-decides', category: 'How it works', homepage: false, needsReview: true, question: 'Who decides whether an outcome is true?',
+    answer: 'No committee, multisig or veto picks the answer. Anyone can report an answer or challenge one. Every report is backed by a bond. A fork is the last resort.',
+    link: { href: '/learn/how-augur-answers-a-question/', label: 'How Augur answers a question' } },
+  { id: 'disagreement', category: 'How it works', homepage: false, needsReview: true, question: 'What if people disagree about the result?',
+    answer: 'Anyone can back a different outcome with double the REP bond. A completed challenge opens another appeal period. When an appeal period ends without a new challenge, the latest outcome becomes final.',
+    link: { href: '/learn/disputes-bonds-and-forks/', label: 'Disputes, bonds and forks' } },
+  { id: 'rep-actions', category: 'REP', homepage: false, needsReview: true, question: 'What can I do with REP?',
+    answer: 'Reporting and challenging are optional. Each one puts a bond at stake: being right pays, being wrong costs. If a dispute reaches a fork, holders need to move their REP to a universe they believe reflects reality; REP that isn’t moved loses its value.',
+    link: { href: '/rep/', label: 'More about REP' } },
+  // REP holders' questions (19 Oct 2026), after the Lituus Foundation's FAQ on augur.net and the whitepaper.
+  { id: 'rep-holding', category: 'REP', homepage: false, needsReview: true, question: 'Do I earn anything just for holding REP?',
+    answer: 'No. Rewards go to people who report or challenge, and only when their answer holds. Holding asks nothing of you, except in a fork: then you need to move your REP to a new universe, or it loses its value.',
+    link: { href: '/rep/#taking-part', label: 'Compare holding and taking part' } },
+  { id: 'rep-augur-ticker', category: 'REP', homepage: false, needsReview: true, question: `Is ${currentRep.listing} the same token as ${currentRep.symbol}?`,
+    answer: `Yes. ${currentRep.symbol} is the token's symbol on Ethereum and ${currentRep.name} its on-chain name. Some exchanges list the same token as ${currentRep.listing}. The contract address is what identifies it.`,
+    link: { href: '/rep/#contract', label: 'See the contract' } },
+  { id: 'rep-wallet', category: 'REP', homepage: false, needsReview: true, question: "Why doesn't my wallet show my REP?",
+    answer: `Many wallets don't detect ${currentRep.symbol} on their own yet. You can add it as a custom token with its contract address, ${currentRep.address}, and check your balance on Etherscan.`,
+    link: { href: links.repToken.url, label: `${currentRep.symbol} on Etherscan ↗` } },
+  { id: 'rep-missed-migration', category: 'REP', homepage: false, needsReview: true, question: "I didn't move my REP in the Moon Fork. Can I still?",
+    answer: "No. The fork contract enforced the deadline of 3 August 2026, so the window can't be reopened or extended, and no one can migrate for you. Anyone who offers to is running a scam.",
+    link: { href: links.moonFork.url, label: 'Moon Fork report ↗' } },
+  { id: 'talk-to-team', category: 'Building with Augur', homepage: false, needsReview: true, question: 'How do I talk to the team about a project?',
+    answer: 'Share your project, the answers it depends on, and your questions. Compare notes with builders, ask technical questions and follow the discussion on Discord.',
+    link: { href: '/contact/', label: 'Talk to us' } },
 ];

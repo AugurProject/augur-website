@@ -1,0 +1,29 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Button from '../../components/primitives/Button.astro';
+import { links } from '../../data/links';
+import { pages } from '../../data/navigation';
+import { contact, type ContactResult } from '../../data/contact';
+// Where the contact form lands without JavaScript; the augur-forms Worker redirects here with its result.
+export function getStaticPaths() {
+  return (Object.keys(contact.messages) as ContactResult[]).map(result => ({ params: { result } }));
+}
+const result = Astro.params.result as ContactResult;
+const email = links.contact.url.replace(/^mailto:/, '');
+const heading = { sent: 'Message sent', invalid: 'Check the form', 'rate-limited': 'Not sent yet', error: 'Not sent' }[result];
+---
+<PageLayout title={`${heading} | Augur`} noindex footer={false}>
+ <section class="contact-result site-container">
+  <h1>{heading}</h1>
+  <p role={result === 'sent' ? 'status' : 'alert'}>{contact.messages[result]}{result === 'invalid' && ' Your browser’s Back button usually returns you to the form with what you wrote.'}</p>
+  {result !== 'sent' && <p>You can also email us at <a href={links.contact.url}>{email}</a>.</p>}
+  <Button href={result === 'sent' ? '/' : pages.contact} variant="outline">{result === 'sent' ? 'Back to the homepage' : 'Back to the form'}</Button>
+ </section>
+</PageLayout>
+<style>
+.contact-result{padding-block:96px}
+.contact-result h1{margin-bottom:16px}
+.contact-result p{font-size:18px;line-height:28px;color:var(--muted-foreground);max-width:560px;margin-bottom:24px}
+.contact-result p a{color:var(--foreground)}
+.contact-result :global(.button){margin-top:8px}
+</style>

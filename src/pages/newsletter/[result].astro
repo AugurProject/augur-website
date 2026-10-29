@@ -1,0 +1,26 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Button from '../../components/primitives/Button.astro';
+import Brand from '../../components/primitives/Brand.astro';
+import { newsletter, type NewsletterResult } from '../../data/newsletter';
+// Where the footer form lands without JavaScript; the augur-forms Worker redirects here with its result.
+export function getStaticPaths() {
+  return (Object.keys(newsletter.messages) as NewsletterResult[]).map(result => ({ params: { result } }));
+}
+const result = Astro.params.result as NewsletterResult;
+const heading = { subscribed: 'Interest noted', invalid: 'Check your email address', error: 'Not saved' }[result];
+---
+<PageLayout title={`${heading} | Augur`} noindex bare>
+ <section class="newsletter-result site-container">
+  <a class="newsletter-home" href="/" aria-label="Augur home"><Brand /></a>
+  <h1>{heading}</h1>
+  <p role={result === 'subscribed' ? 'status' : 'alert'}>{newsletter.messages[result]}</p>
+  <Button href={result === 'subscribed' ? '/' : '/#newsletter-title'} variant="outline">{result === 'subscribed' ? 'Back to the homepage' : 'Back to the form'}</Button>
+ </section>
+</PageLayout>
+<style>
+.newsletter-result{padding-block:48px 96px}
+.newsletter-home{display:inline-block;margin-bottom:96px}
+.newsletter-result h1{margin-bottom:16px}
+.newsletter-result p{font-size:18px;line-height:28px;color:var(--muted-foreground);max-width:540px;margin-bottom:32px}
+</style>

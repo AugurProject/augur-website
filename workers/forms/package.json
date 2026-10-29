@@ -1,0 +1,18 @@
+{
+  "name": "augur-forms",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --config wrangler.jsonc --port 8788 --var SITE_URL:http://localhost:4321 --var ALLOWED_ORIGINS:http://localhost:4321 --var ENVIRONMENT:development --var MAIL_PROVIDER:log",
+    "dev:proton": "wrangler dev --config wrangler.jsonc --port 8788 --var SITE_URL:http://localhost:4321 --var ALLOWED_ORIGINS:http://localhost:4321 --var ENVIRONMENT:development",
+    "db:migrate:local": "wrangler d1 migrations apply augur-website-signups --config wrangler.jsonc --local",
+    "db:migrate": "wrangler d1 migrations apply augur-website-signups --config wrangler.jsonc --remote",
+    "deploy": "wrangler deploy --config wrangler.jsonc",
+    "types": "wrangler types --config wrangler.jsonc",
+    "check": "tsc -p ."
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "wrangler": "^4.155.0"
+  }
+}

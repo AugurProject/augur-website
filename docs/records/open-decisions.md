@@ -4,12 +4,18 @@ Decisions and owner confirmations still outstanding. When one is settled, delete
 
 ## Homepage
 
-- **Learn More articles.** [home-resources.ts](../../src/data/home-resources.ts) uses an implementation substitution that has no editorial approval. Confirm the article selection and usable destinations before treating it as approved content. Details in [homepage reference](../reference/homepage.md#content-and-destinations).
-- **Content review flags.** Resolve the flags marked in code: `needsReview: true` entries in [faq.ts](../../src/data/faq.ts) and `walkthroughReview` in [walkthrough.ts](../../src/data/walkthrough.ts). The code is the source of truth for which flags are open.
-- **Product scope.** Confirm whether the one-product navigation (Augur Lituus only) meets the intended scope. Additional pages need an explicit scope decision, not restoration from the earlier prototype.
+- **Unsourced claims in the live design.** `melo`'s copy ([homepage-v2.ts](../../src/designs/melo/data/homepage-v2.ts)) is approved as written (owner, 29 October 2026), but four claims still need a source: “Not even Augur’s creators can override an answer.” (Trustless card); “Designed to cost attackers more than almost any other oracle.” (Robust card, against whitepaper Abstract p1, §3 p3 and §8 p20); “Win user trust.” (builder reasons); and the use-case card values (64¢→99¢, flight AB123, 71%, “Goes live in 2 days”), which are illustrative and carry no visible “Example” marker.
+- **Placeholder Learn guides.** Seven of the eight guides in [src/content/learn](../../src/content/learn/) are `placeholder: true`, and all carry `needsReview: true`. Nothing on the page marks them.
+- **Learn More articles.** [home-resources.ts](../../src/designs/current/data/home-resources.ts) uses an implementation substitution that has no editorial approval. Confirm the article selection and usable destinations before treating it as approved content. Details in [homepage reference](../reference/homepage.md#content-and-destinations).
+- **Content review flags.** Resolve the flags marked in code: `needsReview: true` entries in [faq.ts](../../src/data/faq.ts), [products.ts](../../src/data/products.ts) and the Learn guides, and `walkthroughReview` in [walkthrough.ts](../../src/data/walkthrough.ts). The code is the source of truth for which flags are open.
+- **Product details.** Products, the header and the FAQ describe Augur Lituus, Zoltar and Augur Statoblast; their descriptions and statuses in [products.ts](../../src/data/products.ts) need maintainer review.
 - **Metadata, indexing and security.** Review production metadata, indexing and security requirements. The layout emits no canonical, Open Graph, Twitter, robots or structured-data tags and has no CSP script-hash handling, and the `indexable` export does not control the layout.
-- **Newsletter.** Decide whether to keep the newsletter demonstration or scope a real provider. The current form does not subscribe users.
 - **Browser findings from 26 October.** Mobile menu focus after choosing a link, tab-reveal overshoot, small link targets, hidden tab panels without JavaScript and possible light-on-white print colours are filed on Track task #7. Details in [verification](verification.md#26-october-2026-homepage-browser-checks).
+
+## Contact page
+
+- **Recipient inbox.** Messages go to `contact@augur.net` (`CONTACT_TO`). Confirm that inbox exists and is read; [links.ts](../../src/data/links.ts) still marks it unverified.
+- **Proton plan and sender.** Sending needs a paid Proton plan with the augur.net domain, the address `contact-form@augur.net` and an SMTP token for it. None of these is confirmed or created yet.
 
 ## Deployment
 

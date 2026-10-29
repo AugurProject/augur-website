@@ -1,0 +1,20 @@
+# Augur Lituus
+
+> Real-world answers for onchain apps, controlled by no one.
+
+Augur Lituus is the next generation of Augur's oracle. Anyone can answer, anyone can challenge, and every challenge doubles the cost of a lie. Each page has a plain Markdown version, listed below.
+
+## Pages
+
+- [Home](/index.md): What Augur Lituus is, what it can power, how reporting and challenging work, and the roadmap.
+- [About](/about.md): What Augur is, its history from 2015, and who does what: the Lituus Foundation, ChainSafe, Dark Florist and REP holders.
+- [Products](/products.md): Augur Lituus, Zoltar and Augur Statoblast, how they fit together, and their status (all in development).
+- [REP](/rep.md): The REP token: which version is current, the contract address, how bonds and forks work, and what holders can do.
+- [FAQ](/faq.md): Short answers about Augur, how questions get settled, REP and building with Augur.
+- [Learn](/learn.md): The guide list (only one guide is written so far) and key terms.
+- [Brand](/brand.md): Logo, color and typeface guidance, and the brand asset download.
+- [Contact](/contact.md): A form page: the fields it asks for, the notice about how messages are used, and other ways to reach the team.
+
+## Guides
+
+- [How Augur answers a question](/learn/how-augur-answers-a-question.md): Ask, report, challenge, final answer: one example from start to finish.

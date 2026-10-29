@@ -19,4 +19,4 @@ See `npm run astro -- dev --help` for server management options.
 
 ## Build
 
-`npm run build`
+`npm run build`, then `npm run check:designs` to build every homepage design.

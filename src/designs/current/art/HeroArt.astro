@@ -1,0 +1,36 @@
+---
+import {heroSquares} from '../data/hero-art';
+import {heroTimeline} from '../../../motion/timelines';
+// Exact canonical geometry (Figma 283:3403), drawn as HTML boxes so the ambient
+// loop runs on the compositor (hero-ambient.ts). Each square holds its base
+// colour, a Green light (reports, the agreed answer, the tap ripple) and a
+// Paper light (the pointer lens). Positions are fractions of the 572 × 457
+// artwork; arrival offsets scale with it through site-container units.
+---
+<div class="hero-art" data-hero-art aria-hidden="true">
+ <span class="orbit" style={`--start:${heroTimeline.orbit.start}ms;--duration:${heroTimeline.orbit.end-heroTimeline.orbit.start}ms`}></span>
+ {heroSquares.map(s=><span class="hero-sq" data-ring={s.ring} style={`--x:${s.x};--y:${s.y};--s:${s.size};--fill:${s.fill};--alpha:${s.opacity};--dx:${s.dx};--dy:${s.dy};--start:${s.start*1000}ms;--move:${heroTimeline.squareMove}ms;--fade:${heroTimeline.squareFade}ms`}><i class="sq"></i><i class="glow"></i><i class="lit"></i></span>)}
+ <span class="empty-centre" data-hero-centre style={`--start:${heroTimeline.centre.start}ms;--duration:${heroTimeline.centre.end-heroTimeline.centre.start}ms`}><svg viewBox="0 0 34 34" width="34" height="34" focusable="false"><rect x="1" y="1" width="32" height="32" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="4 4"/></svg></span>
+</div>
+<script>import {initHeroAmbient} from '../motion/hero-ambient';document.querySelectorAll<HTMLElement>('[data-hero-art]').forEach(initHeroAmbient);</script>
+<style>
+.hero-art{position:relative;display:block;width:100%;aspect-ratio:572/457;container-type:inline-size}
+.hero-sq,.orbit,.empty-centre{position:absolute;display:block}
+.hero-sq{left:calc(var(--x) / 572 * 100%);top:calc(var(--y) / 457 * 100%);width:calc(var(--s) / 572 * 100%);aspect-ratio:1;translate:0 0;scale:1;transition:transform 280ms cubic-bezier(.22,.61,.36,1)}
+.hero-sq>i{position:absolute;inset:0;display:block}
+.hero-sq>.sq{background:var(--fill);opacity:var(--alpha)}
+.hero-sq>.glow{background:var(--primary);opacity:0}
+.hero-sq>.lit{background:var(--foreground);opacity:0;transition:opacity 240ms ease-out}
+.orbit{left:calc(243.5 / 572 * 100%);top:calc(186 / 457 * 100%);width:calc(85 / 572 * 100%);aspect-ratio:1;border:1px solid var(--web-outline)}
+.empty-centre{left:calc(269 / 572 * 100%);top:calc(211.5 / 457 * 100%);width:calc(34 / 572 * 100%);aspect-ratio:1;scale:1}
+.empty-centre svg{display:block;width:100%;height:100%;overflow:visible}
+/* Tap or click: a square ripple leaves the point and lights the field as it passes. */
+.hero-art :global(.hero-ripple){position:absolute;width:28px;height:28px;margin:-14px 0 0 -14px;border:1px solid var(--primary);pointer-events:none}
+:global([data-hero-arrival=entering]) .hero-sq{animation:arrive-square calc(var(--move) * var(--hero-motion-factor,1)) var(--ease-reveal) calc(var(--start) * var(--hero-motion-factor,1)) backwards,fade-square calc(var(--fade) * var(--hero-motion-factor,1)) var(--ease-reveal) calc(var(--start) * var(--hero-motion-factor,1)) backwards}
+:global([data-hero-arrival=entering]) :is(.orbit,.empty-centre){animation:reveal-art calc(var(--duration) * var(--hero-motion-factor,1)) var(--ease-reveal) calc(var(--start) * var(--hero-motion-factor,1)) backwards}
+@keyframes arrive-square{from{translate:calc(var(--dx) * 100cqw / 572) calc(var(--dy) * 100cqw / 572)}to{translate:0 0}}
+@keyframes fade-square{from{opacity:.2}to{opacity:1}}
+@keyframes reveal-art{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.hero-sq,.hero-sq>.lit{transition:none}}
+@media(forced-colors:active){.hero-sq>.sq{background:CanvasText;forced-color-adjust:none}.hero-sq>:is(.glow,.lit){display:none}.orbit{border-color:GrayText}}
+</style>

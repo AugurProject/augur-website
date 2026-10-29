@@ -1,11 +1,37 @@
-import {links, type LinkKey} from './links';
-export type NavigationItem = {label:string;href:string;external?:boolean;icon?:string;logo?:string;description?:string;cta?:string};
-const external=(label:string,key:LinkKey,logo?:string):NavigationItem=>({label,href:links[key].url,external:true,logo});
-// This port owns one route. Navigation points to its sections or published resources.
+import { links, type LinkKey } from './links';
+import { products } from './products';
+
+/** `logo` marks a community destination wherever it is listed; `icon`,
+ * `description` and `cta` only enrich the header panels. An item with a `cta`
+ * leads its panel as a card whose action carries that label. */
+export type NavigationItem = { label: string; href: string; external?: boolean; linkKey?: LinkKey; icon?: string; logo?: string; description?: string; cta?: string };
+const external = (label: string, linkKey: LinkKey, extra: Partial<NavigationItem> = {}): NavigationItem => ({ label, href: links[linkKey].url, external: true, linkKey, ...extra });
+/** Local pages other than the homepage. */
+export const pages = { contact: '/contact/' } as const;
+const tagline = (id: (typeof products)[number]['id']) => products.find(product => product.id === id)!.tagline;
+
+/** Header and footer consume this same directory. The blog is Augur's published blog on augur.net. */
 export const navigation = {
- augur:[{label:'Why Augur',href:'#why-augur'},{label:'Contact',href:'#contact'}],
- products:[{label:'Augur Lituus',href:'#applications',description:'Resolution for real-world outcomes.',cta:'Explore the use cases'}],
- resources:[{label:'How it works',href:'#how-it-works',icon:'list-checks'},{label:'Roadmap',href:'#roadmap',icon:'clock'},{label:'Learn more',href:'#learn-more',icon:'book-open'},external('Whitepaper','whitepaper')],
- community:[external('Discord','discord','discord-logo'),external('Telegram','telegram','telegram-logo'),external('X','x','x-logo'),external('GitHub','github','github-logo')],
-};
-export const navigationGroups=[{label:'Augur',items:navigation.augur},{label:'Products',items:navigation.products},{label:'Resources',items:navigation.resources},{label:'Community',items:navigation.community}];
+  augur: [{ label: 'About', href: '/about/' }, { label: 'Contact', href: pages.contact }, { label: 'Brand assets', href: '/brand/' }],
+  // Product taglines come from the products directory (Figma 219:81).
+  // Augur Lituus leads the panel; Zoltar and Augur Statoblast follow it.
+  products: [
+    { label: 'Augur Lituus', href: '/products/#augur-lituus', description: tagline('augur-lituus'), cta: 'Explore Augur Lituus' },
+    { label: 'Zoltar', href: '/products/#zoltar', description: tagline('zoltar') },
+    { label: 'Augur Statoblast', href: '/products/#augur-statoblast', description: tagline('augur-statoblast') },
+  ],
+  resources: [
+    external('Blog', 'archive', { icon: 'newspaper' }), { label: 'FAQ', href: '/faq/', icon: 'question' },
+    { label: 'Learn', href: '/learn/', icon: 'book-open' }, { label: 'REP', href: '/rep/', icon: 'coins' },
+    external('Whitepaper', 'whitepaper', { icon: 'file-text' }),
+  ],
+  // Community logos identify each destination wherever it is listed (Figma 43:153).
+  community: [external('Discord', 'discord', { logo: 'discord-logo' }), external('Telegram', 'telegram', { logo: 'telegram-logo' }), external('X', 'x', { logo: 'x-logo' }), external('GitHub', 'github', { logo: 'github-logo' })],
+} satisfies Record<string, NavigationItem[]>;
+
+export const navigationGroups = [
+  { label: 'Augur', items: navigation.augur },
+  { label: 'Products', items: navigation.products },
+  { label: 'Resources', items: navigation.resources },
+  { label: 'Community', items: navigation.community },
+];

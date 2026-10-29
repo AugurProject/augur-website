@@ -1,0 +1,18 @@
+---
+interface Props { title: string; lead: string; }
+const { title, lead } = Astro.props;
+---
+<section class="page-hero">
+  <div class="site-container page-hero-content">
+    <h1>{title}</h1>
+    <p class="lead">{lead}</p>
+    <slot />
+  </div>
+</section>
+<style>
+  .page-hero { position:relative; overflow:hidden; padding-block:120px 112px; }
+  .page-hero-content { position:relative; }
+  h1 { margin:0; font-size:clamp(2.5rem,4.445vw,4rem); line-height:1.125; letter-spacing:-.02em; }
+  .lead { max-width:780px; margin:24px 0 0; }
+  @media(max-width:767px) { .page-hero { padding-block:64px; } }
+</style>

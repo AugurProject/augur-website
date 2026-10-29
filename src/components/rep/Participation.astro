@@ -1,0 +1,49 @@
+---
+import { participation, type Cell } from '../../data/rep';
+import { links } from '../../data/links';
+/** Hold, report or challenge, side by side, ordered by commitment (after ethereum.org's staking
+ * comparison): each option is a column with the same three rows, so what you stake, get and risk
+ * line up across options (a subgrid). Gains are the only Green figures. Below 768 each option is a
+ * card with its own labels. Each column is an article with a definition list, so screen readers
+ * hear every label without a data-table's semantics. */
+---
+<div class="options">
+ <div class="option-labels" aria-hidden="true"><span></span>{participation.fields.map(field => <span>{field.label}</span>)}</div>
+ {participation.options.map(option => <article class:list={['option', `option-${option.id}`]} aria-labelledby={`option-${option.id}`}>
+  <header><h3 id={`option-${option.id}`}>{option.title}</h3><p>{option.summary}</p></header>
+  {participation.fields.map(field => { const cell: Cell = option[field.key]; return <dl class="option-cell"><dt>{field.label}</dt><dd><strong class:list={{ gain: cell.gain }}>{cell.figure}</strong><span>{cell.note}</span>{option.id === 'hold' && field.key === 'risk' && <a class="line-link" href="#fork"><span class="button-label">What happens in a fork</span></a>}</dd></dl>; })}
+ </article>)}
+</div>
+<div class="options-foot">
+ <p>{participation.note} <a href={links.whitepaper.url}>Augur Lituus whitepaper <span aria-hidden="true">↗</span></a></p>
+ <a class="button outline" href="/#how-it-works">See how taking part works</a>
+</div>
+<style>
+ /* Four columns: the row labels, then Hold, Report, Challenge. Every option spans the four rows
+    (header, stake, get, risk) as a subgrid, so each row is as tall as its tallest cell. */
+ .options{display:grid;grid-template-columns:minmax(0,180fr) repeat(3,minmax(0,356fr));grid-template-rows:repeat(4,auto);column-gap:16px}
+ .option-labels,.option{grid-row:1/-1;display:grid;grid-template-rows:subgrid}
+ .option-labels>span{display:flex;align-items:flex-start;padding:24px 0;border-top:1px solid var(--border-quiet);font:600 14px/20px var(--font-heading);color:var(--muted-foreground)}
+ .option-labels>span:first-child{border-top:0}
+ .option{background:var(--background);box-shadow:inset 0 0 0 1px var(--web-outline)}
+ .option header{padding:24px 24px 20px}
+ .option h3{font:600 24px/32px var(--font-heading)}
+ .option header p{margin-top:4px;font-size:15px;line-height:22px;color:var(--muted-foreground)}
+ .option-cell{margin:0;padding:24px;border-top:1px solid var(--web-outline)}
+ .option-cell dt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+ .option-cell dd{margin:0;display:flex;flex-direction:column;gap:6px}
+ .option-cell strong{font:600 26px/32px var(--font-heading);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+ .option-cell strong.gain{color:var(--primary)}
+ .option-cell dd>span{font-size:15px;line-height:22px;color:var(--muted-foreground)}
+ .option-cell a{align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;margin-bottom:-12px;font:600 14px/20px var(--font-heading);color:var(--foreground);text-underline-offset:5px}
+ /* Holding is where most readers stand: the column is marked with the Green rule of “yours”. */
+ .option-hold{box-shadow:inset 0 0 0 1px var(--web-outline),inset 0 2px 0 var(--primary)}
+ .options-foot{display:flex;align-items:center;justify-content:space-between;gap:24px 48px;margin-top:32px}
+ .options-foot p{max-width:760px;font-size:15px;line-height:23px;color:var(--muted-foreground)}
+ .options-foot p a{color:var(--foreground);white-space:nowrap}
+ .options-foot .button{flex:none}
+ @media(max-width:1279px){.options{grid-template-columns:minmax(0,130fr) repeat(3,minmax(0,356fr));column-gap:12px}.option header,.option-cell{padding-inline:20px}.option-cell strong{font-size:22px;line-height:28px}}
+ @media(max-width:1023px){.options{grid-template-columns:repeat(3,minmax(0,1fr))}.option-labels{display:none}.option-cell dt{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;margin-bottom:8px;font:600 13px/18px var(--font-heading);color:var(--muted-foreground)}.options-foot{flex-direction:column;align-items:flex-start}}
+ @media(max-width:767px){.options{grid-template-columns:1fr;grid-template-rows:none;row-gap:16px}.option{grid-row:auto;grid-template-rows:none}.option header,.option-cell{padding:16px 20px}.option-cell{display:grid;grid-template-columns:96px minmax(0,1fr);column-gap:16px}.option-cell dt{margin:4px 0 0}.option-cell strong{font-size:20px;line-height:28px}}
+ @media(forced-colors:active){.option{border:1px solid CanvasText}.option-cell strong.gain{color:Highlight}}
+</style>

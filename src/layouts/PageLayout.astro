@@ -3,7 +3,18 @@ import '../styles/global.css';
 import AnnouncementBar from '../components/layout/AnnouncementBar.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
+import chromeStyle from '../styles/chrome.css?inline';
 import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url';
+// `bare` drops the announcement, header and footer for one-off pages such as the newsletter
+// results. `footer={false}` keeps the announcement and header but drops the footer, whose contact
+// band would repeat the contact page. `class` sets <main>'s class for the inner pages.
+interface Props { title?: string; description?: string; noindex?: boolean; bare?: boolean; footer?: boolean; class?: string }
+const { title = 'Augur | The frontier of decentralized truth', description = 'Real-world answers for onchain apps, controlled by no one.', noindex = false, bare = false, footer = true, class: className } = Astro.props;
+// A page's plain Markdown copy sits in public/ at its path plus `.md` (home: /index.md). The link is
+// added only when that file exists, so pages without one (placeholder guides, result pages) get none.
+const mdFiles = new Set(Object.keys(import.meta.glob('/public/**/*.md')).map(file => file.slice('/public'.length)));
+const mdPath = `${Astro.url.pathname.replace(/\/$/, '') || '/index'}.md`;
+const markdown = !bare && !noindex && mdFiles.has(mdPath) ? mdPath : undefined;
 ---
 <!doctype html>
 <html lang="en" class="dark">
@@ -11,17 +22,18 @@ import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0e0e21" />
-  <title>Augur | The frontier of decentralized truth</title>
-  <meta name="description" content="Real-world answers for onchain apps, controlled by no one." />
+  <title>{title}</title>{noindex && <meta name="robots" content="noindex" />}
+  <meta name="description" content={description} />
+  {markdown && <link rel="alternate" type="text/markdown" href={markdown} />}
   <link rel="icon" href="/brand/kit/rep-token/rep-token-icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/brand/kit/rep-token/rep-token-icon.png" />
   <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
  </head>
  <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <AnnouncementBar /><SiteHeader />
-  <main id="main" tabindex="-1"><slot /></main>
-  <SiteFooter />
+  {!bare && <style is:inline set:html={chromeStyle}></style>}{!bare && <AnnouncementBar />}{!bare && <SiteHeader />}
+  <main id="main" class={className} tabindex="-1"><slot /></main>
+  {!bare && footer && <SiteFooter />}
   <div class="page-field" data-page-field aria-hidden="true"></div>
   <script>import {initPageField} from '../motion/page-field';initPageField();</script>
  </body>

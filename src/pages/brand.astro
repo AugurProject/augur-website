@@ -1,0 +1,275 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import PageHero from '../components/pages/PageHero.astro';
+import Icon from '../components/primitives/Icon.astro';
+import reversedMaster from '../../public/brand/kit/horizontal/augur-horizontal-reversed.svg?raw';
+import colorMaster from '../../public/brand/kit/horizontal/augur-horizontal-color.svg?raw';
+import { brandKit, logoVariants, logoCompositions, logoFile, tokenIcon, clearspace as c, palette, pairings, typefaces, misuse, moreMisuse, goodUse } from '../data/brand';
+const size = { horizontal: [360, 121], vertical: [224, 222], glyph: [108, 121] } as const;
+// The supplied paths, nested unchanged inside the clearspace diagram.
+const reversedPaths = reversedMaster.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+// The recolor misuse example: brand values in the wrong places (Figma P8 matches).
+const recolored = colorMaster.replace('#2AE7A8', '#A1A1B8').replaceAll('#0E0E21', '#095E42');
+const pad = 36;
+const view = `${-c.aWidth - pad} ${-c.aHeight - pad} ${c.width + 2 * (c.aWidth + pad)} ${c.height + 2 * (c.aHeight + pad)}`;
+---
+<PageLayout title="Brand assets" description="Download the Augur logo, colors and typefaces, with the rules for using them.">
+ <PageHero title="Brand assets" lead="The Augur logo, colors and typefaces, ready to download. Use the supplied files as they are, so Augur looks the same wherever it appears.">
+  <div class="hero-actions"><a class="button primary" href={brandKit.href} download><Icon name="download-simple" />Download all assets</a><span class="kit-meta">{brandKit.label}, SVG and PNG</span></div>
+ </PageHero>
+
+ <section class="section site-container ruled" aria-labelledby="logo-title">
+  <div class="section-heading"><h2 id="logo-title">Logo</h2><p class="lead">Three compositions, each in four variants. Choose the composition for the space, then the variant for the background.</p></div>
+  {logoCompositions.map(composition => (
+   <div class="composition">
+    <div class="composition-head"><h3>{composition.name}</h3><div class="composition-notes"><p>{composition.summary}</p><p class="minimum">{composition.minimum}</p></div></div>
+    <ul class="logo-grid" role="list">
+     {logoVariants.map(variant => (
+      <li class="logo-tile">
+       <div class:list={['logo-stage', `surface-${variant.surface}`]}><img class:list={['logo', composition.id]} src={logoFile(composition.id, variant.id, 'svg')} alt="" width={size[composition.id][0]} height={size[composition.id][1]} loading="lazy" decoding="async" /></div>
+       <div class="logo-caption">
+        <strong>{variant.name}</strong>
+        <div class="downloads">{(['svg', 'png'] as const).map(format => <a href={logoFile(composition.id, variant.id, format)} download aria-label={`Download ${composition.name.toLowerCase()} ${variant.name} logo as ${format.toUpperCase()}`}><Icon name="download-simple" />{format.toUpperCase()}</a>)}</div>
+        <p>{variant.use}</p>
+       </div>
+      </li>
+     ))}
+    </ul>
+   </div>
+  ))}
+  <div class="composition token">
+   <div class="logo-tile token-tile">
+    <div class="logo-stage surface-raised"><img class="logo rep" src={tokenIcon.svg} alt="" width="96" height="96" loading="lazy" decoding="async" /></div>
+   </div>
+   <div class="token-copy"><h3>{tokenIcon.name}</h3><p>{tokenIcon.summary}</p>
+    <div class="downloads"><a href={tokenIcon.svg} download aria-label="Download REP token icon as SVG"><Icon name="download-simple" />SVG</a><a href={tokenIcon.png} download aria-label="Download REP token icon as PNG"><Icon name="download-simple" />PNG</a></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="section site-container ruled" aria-labelledby="space-title">
+  <div class="section-heading"><h2 id="space-title">Space and size</h2><p class="lead">The lowercase a of the wordmark sets the clearspace, so the rule scales with the logo. Below its minimum the gap in the glyph starts to close.</p></div>
+  <div class="space-grid">
+   <figure class="clearspace">
+    <svg viewBox={view} role="img" aria-labelledby="clearspace-caption">
+     <defs><pattern id="clearspace-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" class="hatch" /></pattern></defs>
+     <path class="band" fill-rule="evenodd" d={`M${-c.aWidth} ${-c.aHeight}h${c.width + 2 * c.aWidth}v${c.height + 2 * c.aHeight}h${-(c.width + 2 * c.aWidth)}Z M0 0v${c.height}h${c.width}v${-c.height}Z`} />
+     <rect class="outer" x={-c.aWidth} y={-c.aHeight} width={c.width + 2 * c.aWidth} height={c.height + 2 * c.aHeight} />
+     <rect class="bounds" x="0" y="0" width={c.width} height={c.height} />
+     <svg x="0" y="0" width={c.width} height={c.height} viewBox={`0 0 ${c.width} ${c.height}`} set:html={reversedPaths} />
+     <rect class="unit" x={c.aX} y={c.aY} width={c.aWidth} height={c.aHeight} />
+     <rect class="unit" x={-c.aWidth} y={c.aY} width={c.aWidth} height={c.aHeight} />
+     <rect class="unit" x={c.aX} y={-c.aHeight} width={c.aWidth} height={c.aHeight} />
+     <text x={-c.aWidth / 2} y={c.aY + c.aHeight / 2}>1a</text>
+     <text x={c.aX + c.aWidth / 2} y={-c.aHeight / 2}>1a</text>
+    </svg>
+    <figcaption id="clearspace-caption">Keep one a-width clear on the left and right, and one a-height above and below. Nothing enters the shaded band.</figcaption>
+   </figure>
+   <div class="minimums">
+    <h3>Minimum sizes, shown at actual size</h3>
+    <ul role="list">
+     <li><div class="minimum-art"><img src={logoFile('horizontal', 'reversed', 'svg')} alt="" width="150" height="50" /><span class="dimension horizontal-dimension">150 px</span></div><p><strong>Horizontal</strong><span>150 × 50 px</span></p></li>
+     <li><div class="minimum-art"><img src={logoFile('vertical', 'reversed', 'svg')} alt="" width="94" height="93" /><span class="dimension vertical-dimension">93 px</span></div><p><strong>Vertical</strong><span>94 × 93 px</span></p></li>
+     <li><div class="minimum-art"><img src={logoFile('glyph', 'reversed', 'svg')} alt="" width="45" height="50" /><span class="dimension vertical-dimension">50 px</span></div><p><strong>Glyph</strong><span>50 px tall</span></p></li>
+    </ul>
+   </div>
+  </div>
+ </section>
+
+ <section class="section site-container ruled" aria-labelledby="color-title">
+  <div class="section-heading"><h2 id="color-title">Color</h2><p class="lead">Five fixed values make up the core palette. Navy grounds it, and Green marks the one thing to act on.</p></div>
+  <ul class="palette" role="list">
+   {palette.map(color => (
+    <li class:list={['swatch', `ink-${color.ink}`]} style={`--swatch:${color.hex}`}>
+     <div><h3>{color.name}</h3><p>{color.role}</p></div>
+     <div class="swatch-values"><span class="hex">{color.hex}</span><span>RGB {color.rgb}</span>
+      <button type="button" class="copy" data-copy={color.hex} aria-label={`Copy ${color.name} hex ${color.hex}`} hidden><span class="copy-icon"><Icon name="copy" /></span><span class="copied-icon"><Icon name="check" /></span><span class="copy-label">Copy</span></button>
+     </div>
+    </li>
+   ))}
+  </ul>
+  <p class="sr-only" role="status" aria-live="polite" data-copy-status></p>
+  <ul class="pairings" role="list">
+   {pairings.map(pair => (
+    <li><span class="sample" style={`color:${pair.fg};background:${pair.bg}`} aria-hidden="true">Aa</span><p><strong>{pair.label}</strong><span>{pair.ratio} contrast</span>{'note' in pair && <span class="note">{pair.note}</span>}</p></li>
+   ))}
+  </ul>
+ </section>
+
+ <section class="section site-container ruled" aria-labelledby="type-title">
+  <div class="section-heading"><h2 id="type-title">Typography</h2><p class="lead">Sora carries the identity. Schibsted Grotesk brings a warmer reading rhythm. Both are free under the SIL Open Font License.</p></div>
+  <div class="typefaces">
+   {typefaces.map(face => (
+    <article class:list={['typeface', `face-${face.family}`]}>
+     <p class="face-role">{face.role}</p>
+     <p class="specimen">{face.specimen}</p>
+     <div class="face-meta">
+      <h3>{face.name}</h3>
+      <p>{face.use}</p>
+      <ul class="weights" role="list">{face.weights.map(weight => <li class:list={[{ semibold: weight.includes('600') }]}>{weight}</li>)}</ul>
+      <a class="button text" href={face.href}><span class="button-label">{face.name} on Google Fonts</span><Icon name="arrow-up-right" /></a>
+     </div>
+    </article>
+   ))}
+  </div>
+ </section>
+
+ <section class="section site-container ruled" aria-labelledby="usage-title">
+  <div class="section-heading"><h2 id="usage-title">Using the logo</h2><p class="lead">Start from a supplied file every time. If something looks off, go back to the file rather than correcting it by eye.</p></div>
+  <div class="usage">
+   <div class="do"><h3>Do</h3><ul role="list">{goodUse.map(rule => <li><Icon name="check" />{rule}</li>)}</ul></div>
+   <div class="dont"><h3>Don’t</h3>
+    <ul class="misuse" role="list">{misuse.map(item => <li><div class="logo-stage surface-paper">{item.id === 'recolor' ? <span class="logo horizontal recolored" aria-hidden="true" set:html={recolored} /> : <img class:list={['logo', 'horizontal', `misuse-${item.id}`]} src={logoFile('horizontal', item.id === 'contrast' ? 'white' : 'color', 'svg')} alt="" width="360" height="121" loading="lazy" decoding="async" />}</div><p><Icon name="x" />{item.label}</p></li>)}</ul>
+    <ul class="more-misuse" role="list">{moreMisuse.map(rule => <li><Icon name="x" />{rule}</li>)}</ul>
+   </div>
+  </div>
+ </section>
+
+ <section class="section site-container"><div class="closing"><h2 class="heading-2">Need something else?</h2><p>For other formats, co-branding or questions about using the Augur name, talk to the team.</p><div class="actions"><a class="button primary" href="/contact/">Talk to us</a><a class="button outline" href={brandKit.href} download><Icon name="download-simple" />Download all assets</a></div></div></section>
+</PageLayout>
+<script>
+ // Copy buttons appear only with JavaScript; the hex values stay selectable text.
+ const status = document.querySelector<HTMLElement>('[data-copy-status]');
+ for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+  const label = button.querySelector<HTMLElement>('.copy-label')!;
+  let reset = 0;
+  button.hidden = false;
+  button.addEventListener('click', async () => {
+   const hex = button.dataset.copy!;
+   try {
+    await navigator.clipboard.writeText(hex);
+    button.dataset.copied = '';
+    label.textContent = 'Copied';
+    if (status) status.textContent = `Copied ${hex}`;
+    clearTimeout(reset);
+    reset = window.setTimeout(() => { delete button.dataset.copied; label.textContent = 'Copy'; }, 1800);
+   } catch {
+    // Clipboard access can be denied; select the value so it is one keystroke away.
+    const value = button.parentElement?.querySelector('.hex');
+    if (value) { const range = document.createRange(); range.selectNodeContents(value); getSelection()?.removeAllRanges(); getSelection()?.addRange(range); }
+    if (status) status.textContent = `${hex} is selected, ready to copy.`;
+   }
+  });
+ }
+</script>
+<style>
+ .ruled{padding-top:72px}.ruled .section-heading{margin-bottom:48px}
+ .hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;margin-top:40px}.hero-actions :global(.web-icon),.closing :global(.web-icon){width:20px;height:20px}.kit-meta{font-size:14px;line-height:20px;color:var(--muted-foreground)}
+
+ /* Logo grid: each variant on its approved surface. */
+ .composition+.composition{margin-top:56px}
+ .composition-head{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);gap:80px;align-items:baseline;padding-bottom:20px}
+ .composition-notes{display:flex;justify-content:space-between;align-items:baseline;gap:8px 24px;flex-wrap:wrap}.composition-notes p{color:var(--muted-foreground);font-size:18px;line-height:28px}.composition-notes .minimum{font-size:14px;line-height:20px}
+ .logo-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+ .logo-tile{display:flex;flex-direction:column;border:1px solid var(--web-outline);background:var(--web-quiet)}
+ .logo-stage{display:grid;place-items:center;height:208px;padding:24px}
+ .surface-paper{background:var(--augur-color-neutral)}.surface-white{background:var(--augur-color-surface-light-raised)}.surface-navy{background:var(--augur-color-primary)}.surface-raised{background:var(--augur-color-surface-dark-3)}
+ .logo{display:block;max-width:100%;height:auto}.logo.horizontal{width:180px}.logo.vertical{width:auto;height:112px}.logo.glyph{width:auto;height:80px}.logo.rep{width:96px}
+ .logo-caption{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 12px;padding:16px;border-top:1px solid var(--web-outline);flex:1}
+ .logo-caption>p{grid-column:1/-1;font-size:14px;line-height:20px;color:var(--muted-foreground)}
+ .minimums p,.pairings p{display:flex;flex-direction:column;gap:2px}.logo-caption strong,.minimums strong,.pairings strong{font:600 16px/24px var(--font-heading)}.minimums span,.pairings span{font-size:14px;line-height:20px;color:var(--muted-foreground)}
+ .downloads{display:flex;gap:8px;flex:none}
+ .downloads a{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 10px;border:1px solid var(--web-outline);font:600 14px/20px var(--font-heading);text-decoration:none;color:var(--foreground);transition:background-color 180ms ease-out,border-color 180ms ease-out}
+ .downloads a:hover{background:var(--web-raised);border-color:var(--brand-hover-edge)}.downloads a:active{background:var(--web-tile)}.downloads :global(.web-icon),.downloads :global(.web-icon svg){width:14px;height:14px}
+ .token{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);gap:80px;align-items:center;padding-top:56px}
+ .token-tile .logo-stage{height:240px}.token-copy h3{margin-bottom:12px}.token-copy p{color:var(--muted-foreground);font-size:18px;line-height:28px;max-width:560px;margin-bottom:24px}
+
+ /* Clearspace and minimum sizes. */
+ .space-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:24px}
+ .clearspace,.minimums{border:1px solid var(--web-outline);background:var(--web-quiet);padding:40px}
+ .clearspace svg{display:block;width:100%;height:auto;overflow:visible}
+ .clearspace .band{fill:url(#clearspace-hatch)}.clearspace .hatch{stroke:var(--web-outline);stroke-width:2}
+ .clearspace .outer{fill:none;stroke:var(--border);stroke-width:1;vector-effect:non-scaling-stroke}
+ .clearspace .bounds{fill:none;stroke:var(--muted-foreground);stroke-width:1;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+ .clearspace .unit{fill:none;stroke:var(--primary);stroke-width:1.5;vector-effect:non-scaling-stroke}
+ .clearspace text{fill:var(--primary);font:600 14px var(--font-heading);text-anchor:middle;dominant-baseline:central}
+ .clearspace figcaption{margin-top:32px;font-size:14px;line-height:20px;color:var(--muted-foreground);max-width:520px}
+ .minimums h3{font-size:20px;line-height:26px;margin-bottom:8px}.minimums ul{list-style:none;margin:0;padding:0}
+ .minimums li{display:grid;grid-template-columns:200px 1fr;align-items:center;gap:24px;padding-block:24px;border-bottom:1px solid var(--web-outline)}.minimums li:last-child{border-bottom:0;padding-bottom:0}
+ .minimum-art{position:relative;display:flex;align-items:flex-start;gap:12px;min-height:93px}.minimum-art img{display:block;flex:none}
+ .dimension{font:600 14px/20px var(--font-heading);color:var(--primary);position:relative;display:flex;align-items:center}
+ .horizontal-dimension{position:absolute;left:0;top:58px;width:150px;justify-content:center;border-top:1px solid var(--primary);padding-top:6px}
+ .horizontal-dimension::before,.horizontal-dimension::after{content:'';position:absolute;top:-5px;width:1px;height:9px;background:var(--primary)}.horizontal-dimension::before{left:0}.horizontal-dimension::after{right:0}
+ .vertical-dimension{align-self:stretch;border-left:1px solid var(--primary);padding-left:8px}
+ .vertical-dimension::before,.vertical-dimension::after{content:'';position:absolute;left:-5px;width:9px;height:1px;background:var(--primary)}.vertical-dimension::before{top:0}.vertical-dimension::after{bottom:0}
+ .minimum-art:has(.vertical-dimension){min-height:0}
+
+ /* Palette strip: Navy anchors it at twice the width of the others. */
+ .palette{list-style:none;margin:0;padding:0;display:flex;border:1px solid var(--web-outline)}
+ .swatch{flex:1 1 0;min-width:0;min-height:360px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;padding:24px;background:var(--swatch)}
+ .swatch:first-child{flex-grow:2}
+ .ink-light{color:var(--augur-color-neutral)}.ink-dark{color:var(--augur-color-primary)}
+ .swatch h3{font-size:20px;line-height:26px}.swatch p{margin-top:6px;font-size:14px;line-height:20px;opacity:.78}
+ .swatch-values{display:flex;flex-direction:column;align-items:flex-start;gap:2px;font-size:14px;line-height:20px}
+ .swatch-values .hex{font:600 24px/32px var(--font-heading)}
+ .copy{display:inline-flex;align-items:center;gap:6px;margin-top:14px;min-height:36px;padding:0 12px;border:1px solid currentColor;background:transparent;color:inherit;font:600 14px/20px var(--font-heading);cursor:pointer;transition:background-color 180ms ease-out}
+ .copy[hidden]{display:none}
+ .ink-light .copy:hover{background:rgb(245 245 248 / .1)}.ink-dark .copy:hover{background:rgb(14 14 33 / .08)}
+ .copy :global(.web-icon),.copy :global(.web-icon svg){width:14px;height:14px}
+ .copy-icon,.copied-icon{display:inline-flex;transition:opacity 160ms ease-out}.copied-icon{position:absolute;opacity:0}.copy>span:first-child{position:relative}
+ .copy[data-copied] .copy-icon{opacity:0}.copy[data-copied] .copied-icon{opacity:1}
+ .copy{position:relative}.copied-icon{left:12px}
+ .pairings{list-style:none;margin:24px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+ .pairings li{display:flex;align-items:flex-start;gap:16px;padding:16px;border:1px solid var(--web-outline);background:var(--web-quiet)}
+ .pairings .sample{display:grid;place-items:center;flex:none;width:64px;height:64px;font:600 24px/32px var(--font-heading);border:1px solid var(--web-outline)}
+ .pairings .note{margin-top:6px}
+ /* Hover edge (owner, 19 Oct 2026): specimen cards light their border in the shared hover Green. */
+ @media(hover:hover) and (pointer:fine){.logo-tile:hover,.pairings li:hover,.typeface:hover,.misuse li:hover{border-color:var(--brand-hover-edge)}}
+
+ /* Typography specimens. */
+ .typefaces{display:grid;grid-template-columns:minmax(0,668fr) minmax(0,500fr);gap:24px}
+ .typeface{display:flex;flex-direction:column;border:1px solid var(--web-outline);background:var(--web-quiet);padding:40px;min-height:520px}
+ .face-role{font:600 14px/20px var(--font-heading);color:var(--muted-foreground)}
+ .specimen{margin:24px 0 48px}
+ .face-heading .specimen{font:600 clamp(40px,5vw,72px)/1.083333 var(--font-heading);letter-spacing:-.02em;max-width:560px}
+ .face-body .specimen{font:400 22px/33px var(--font-body)}
+ .face-meta{margin-top:auto;border-top:1px solid var(--web-outline);padding-top:24px}
+ .face-meta h3{margin-bottom:8px}.face-meta>p{color:var(--muted-foreground);font-size:18px;line-height:28px;max-width:460px}
+ .face-body .face-meta h3{font-family:var(--font-heading)}
+ .weights{list-style:none;margin:20px 0 16px;padding:0;display:flex;flex-wrap:wrap;gap:8px 24px;font:400 14px/20px var(--font-heading)}
+ .weights .semibold{font-weight:600}.face-body .weights{font-family:var(--font-body)}
+ .typeface .button.text{align-self:flex-start;justify-content:flex-start}.typeface .button.text :global(.web-icon){width:16px;height:16px}
+
+ /* Usage. */
+ .usage{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);gap:80px}
+ .usage h3{font-size:20px;line-height:26px;margin-bottom:24px}
+ .do ul,.misuse,.more-misuse{list-style:none;margin:0;padding:0}
+ .do li{display:flex;gap:14px;padding-block:18px;border-top:1px solid var(--web-outline);font-size:18px;line-height:28px}
+ .do li:last-child{border-bottom:1px solid var(--web-outline)}
+ .do :global(.web-icon){flex:none;width:20px;height:20px;margin-top:4px;color:var(--primary)}
+ .misuse{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+ .misuse li{border:1px solid var(--web-outline);background:var(--web-quiet)}
+ .misuse .logo-stage{height:168px;overflow:hidden}.misuse .logo{width:150px}
+ .misuse p{display:flex;align-items:center;gap:10px;padding:14px 16px;border-top:1px solid var(--web-outline);font:600 16px/24px var(--font-heading)}
+ .misuse :global(.web-icon),.more-misuse :global(.web-icon){flex:none;width:16px;height:16px;color:var(--muted-foreground)}
+ .misuse-rotate{transform:rotate(-14deg)}.misuse-stretch{transform:scaleX(1.5) scaleY(.8)}.recolored :global(svg){display:block;width:100%;height:auto}
+ .more-misuse{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;margin-top:16px}
+ .more-misuse li{display:flex;align-items:flex-start;gap:10px;padding-block:12px;font-size:16px;line-height:24px;color:var(--muted-foreground)}
+ .more-misuse :global(.web-icon){margin-top:4px}
+
+ .closing{padding:48px;background:var(--web-quiet);border:1px solid var(--web-outline)}.closing p{font-size:20px;line-height:30px;max-width:760px;color:var(--muted-foreground);margin:24px 0}
+
+ @media(max-width:1200px){.composition-head,.token,.usage{gap:48px}}
+ @media(max-width:1023px){
+  .composition-head{grid-template-columns:1fr;gap:8px}
+  .logo-grid,.pairings{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .token,.space-grid,.typefaces,.usage{grid-template-columns:1fr;gap:24px}.usage{gap:48px}
+  .palette{flex-direction:column}.swatch{flex:none;min-height:0;flex-direction:row;align-items:flex-end;padding:20px 24px}.swatch:first-child{min-height:160px}
+  .swatch-values{align-items:flex-end;text-align:right;flex:none}
+  .typeface{min-height:0}
+ }
+ @media(max-width:767px){
+  .ruled{padding-top:56px}.composition+.composition{margin-top:40px}
+  .logo-stage{height:176px}.clearspace,.minimums,.typeface{padding:24px}.closing{padding:24px}
+  .downloads a,.copy{min-height:44px}
+  .minimums li{grid-template-columns:1fr;gap:12px}
+  .clearspace text{font-size:20px}
+  .more-misuse{grid-template-columns:1fr}
+ }
+ @media(max-width:599px){
+  .logo-grid,.pairings,.misuse{grid-template-columns:1fr}
+  .swatch{flex-direction:column;align-items:flex-start}.swatch-values{align-items:flex-start;text-align:left}
+ }
+ @media(forced-colors:active){.logo-stage{forced-color-adjust:none}.palette .swatch,.pairings .sample{forced-color-adjust:none}}
+ @media print{.downloads,.copy,.hero-actions,.closing .actions{display:none}}
+</style>

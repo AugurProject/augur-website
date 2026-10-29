@@ -1,19 +1,8 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
-import Hero from '../components/home/Hero.astro';
-import Tenets from '../components/home/Tenets.astro';
-import Applications from '../components/home/Applications.astro';
-import HowItWorks from '../components/home/HowItWorks.astro';
-import Roadmap from '../components/home/Roadmap.astro';
-import LearnMore from '../components/home/LearnMore.astro';
+// The live design's Home.astro (src/designs/index.ts).
+import Home from 'virtual:home-design';
 ---
 <PageLayout>
- <Hero/><Tenets/><Applications/><HowItWorks/><Roadmap/><LearnMore/>
- <script>
-  // These sections exist only here, so the page starts them once from one script; each init
-  // finds its own sections. One entry instead of five identical ones keeps the JavaScript budget.
-  import {initAnswerRibbon,initTenets,initRepZone} from '../motion/home-art';
-  import {initHomeInteractions} from '../motion/home-interactions';
-  initAnswerRibbon();initTenets();initHomeInteractions();initRepZone();
- </script>
+ <Home/>
 </PageLayout>
