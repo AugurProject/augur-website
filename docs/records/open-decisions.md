@@ -9,16 +9,13 @@ Decisions and owner confirmations still outstanding. When one is settled, delete
 - **Learn More articles.** [home-resources.ts](../../src/designs/current/data/home-resources.ts) uses an implementation substitution that has no editorial approval. Confirm the article selection and usable destinations before treating it as approved content. Details in [homepage reference](../reference/homepage.md#content-and-destinations).
 - **Content review flags.** Resolve the flags marked in code: `needsReview: true` entries in [faq.ts](../../src/data/faq.ts), [products.ts](../../src/data/products.ts) and the Learn guides, and `walkthroughReview` in [walkthrough.ts](../../src/data/walkthrough.ts). The code is the source of truth for which flags are open.
 - **Product details.** Products, the header and the FAQ describe Augur Lituus, Zoltar and Augur Statoblast; their descriptions and statuses in [products.ts](../../src/data/products.ts) need maintainer review.
-- **Metadata, indexing and security.** Review production metadata, indexing and security requirements. The layout emits no canonical, Open Graph, Twitter, robots or structured-data tags and has no CSP script-hash handling, and the `indexable` export does not control the layout.
 - **Browser findings from 26 October.** Mobile menu focus after choosing a link, tab-reveal overshoot, small link targets, hidden tab panels without JavaScript and possible light-on-white print colours are filed on Track task #7. Details in [verification](verification.md#26-october-2026-homepage-browser-checks).
 
 ## Ported content
 
 From the old augur.net port ([ported content](../reference/ported-content.md)).
 
-- **Privacy and terms text.** Ported word for word and awaiting a legal rewrite (owner decision, 30 October 2026). The privacy text says the site collects no personal data; the site now stores newsletter addresses (D1), sends contact messages through Proton and, per the launch brief, runs GA4 (no GA4 code is on this branch). Both pages refer to a "Last Updated" date that neither shows, as on the old site.
-- **Blog link still marked off-site in the menus.** [navigation.ts](../../src/data/navigation.ts) builds Blog with `external()`, which sets `external: true`, so the header panel, mobile menu, no-JavaScript fallback and footer show ↗ on `/blog/`. Building that entry as a local item (keeping `linkKey: 'archive'`) fixes it.
-- **Footer offline message.** With no forms URL, the newsletter script in [SiteFooter.astro](../../src/components/layout/SiteFooter.astro) links "Follow the blog" to `https://www.augur.net/blog/` rather than `/blog/`.
+- **Privacy and terms text.** Ported word for word and awaiting a legal rewrite (owner decision, 30 October 2026). The privacy text says the site collects no personal data; the site now stores newsletter addresses (D1), sends contact messages through Proton and runs GA4 without a consent banner. Both pages refer to a "Last Updated" date that neither shows, as on the old site.
 - **Unused `melo` blog column.** The `v1` branch of `melo`'s [LearnMore.astro](../../src/designs/melo/sections/LearnMore.astro), not used on `/`, reads `publishedAt` and `cover` from the `blog` collection, which has `publishDate` and no `cover`. It would fail if switched on, and would list posts on the homepage against the owner's decision.
 
 ## Contact page
@@ -32,7 +29,6 @@ Before going public:
 
 - Choose the production deployment target.
 - Configure the custom domain and routes.
-- Set the public hostname and response-header policy.
 - Review external destinations and production deployment before claiming readiness.
 
 ## Design

@@ -1,0 +1,6 @@
+# Workers static assets redirects (docs/guides/deploy.md). The build appends a permanent
+# trailing-slash rule for every page after these lines (astro.config.mjs).
+/mission /about/ 301
+/mission/ /about/ 301
+/team /about/ 301
+/team/ /about/ 301

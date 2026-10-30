@@ -1,0 +1,23 @@
+# Workers static assets response headers (docs/guides/deploy.md). A header set by two matching rules is
+# joined with a comma, so no two rules below may set the same header for one path.
+/*
+  Strict-Transport-Security: max-age=86400
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.workers.dev; form-action 'self' https://*.workers.dev; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+
+# Only www.augur.net is indexed: keep the workers.dev and preview hosts out of search results.
+https://:worker.:account.workers.dev/*
+  X-Robots-Tag: noindex
+
+/images/*
+  Cache-Control: public, max-age=86400
+
+# Files only: /brand/ itself is the brand page, whose HTML stays revalidated.
+/brand/:file
+  Cache-Control: public, max-age=86400
+
+/brand/kit/*
+  Cache-Control: public, max-age=86400

@@ -5,11 +5,22 @@ import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import chromeStyle from '../styles/chrome.css?inline';
 import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url';
+import { site } from '../data/site';
+import { links } from '../data/links';
 // `bare` drops the announcement, header and footer for one-off pages such as the newsletter
 // results. `footer={false}` keeps the announcement and header but drops the footer, whose contact
-// band would repeat the contact page. `class` sets <main>'s class for the inner pages.
-interface Props { title?: string; description?: string; noindex?: boolean; bare?: boolean; footer?: boolean; class?: string }
-const { title = 'Augur | The frontier of decentralized truth', description = 'Real-world answers for onchain apps, controlled by no one.', noindex = false, bare = false, footer = true, class: className } = Astro.props;
+// band would repeat the contact page. `class` sets <main>'s class for the inner pages. `canonical={false}`
+// drops the canonical link and og:url, for the 404 page, which answers every unknown path.
+interface Props { title?: string; description?: string; noindex?: boolean; bare?: boolean; footer?: boolean; canonical?: boolean; class?: string }
+const { title = 'Augur | The frontier of decentralized truth', description = 'Real-world answers for onchain apps, controlled by no one.', noindex = false, bare = false, footer = true, canonical = true, class: className } = Astro.props;
+// Canonical and share URLs use `site` in astro.config.mjs (https://www.augur.net) on every host, so a
+// workers.dev preview points search engines and share cards at the canonical page.
+const canonicalUrl = canonical ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const shareImage = new URL(site.shareImage.path, Astro.site).href;
+const xHandle = `@${new URL(links.x.url).pathname.slice(1)}`;
+// GA4 runs on the canonical host only, so workers.dev, previews and local builds are not counted. No consent
+// banner (jubalm, 30 October 2026). The configuration matches the old site's gtag snippet.
+const analytics = { id: site.analyticsId, host: Astro.site!.hostname };
 // A page's plain Markdown copy sits in public/ at its path plus `.md` (home: /index.md). The link is
 // added only when that file exists, so pages without one (placeholder guides, result pages) get none.
 const mdFiles = new Set(Object.keys(import.meta.glob('/public/**/*.md')).map(file => file.slice('/public'.length)));
@@ -24,10 +35,27 @@ const markdown = !bare && !noindex && mdFiles.has(mdPath) ? mdPath : undefined;
   <meta name="theme-color" content="#0e0e21" />
   <title>{title}</title>{noindex && <meta name="robots" content="noindex" />}
   <meta name="description" content={description} />
+  {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={site.name} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+  <meta property="og:image" content={shareImage} />
+  <meta property="og:image:width" content={String(site.shareImage.width)} />
+  <meta property="og:image:height" content={String(site.shareImage.height)} />
+  <meta property="og:image:alt" content={site.shareImage.alt} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content={xHandle} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={shareImage} />
+  <meta name="twitter:image:alt" content={site.shareImage.alt} />
   {markdown && <link rel="alternate" type="text/markdown" href={markdown} />}
   <link rel="icon" href="/brand/kit/rep-token/rep-token-icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/brand/kit/rep-token/rep-token-icon.png" />
   <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
+  <script is:inline define:vars={analytics}>if(location.hostname===host){const tag=document.createElement('script');tag.async=true;tag.src='https://www.googletagmanager.com/gtag/js?id='+id;document.head.append(tag);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};gtag('js',new Date());gtag('config',id,{allow_google_signals:true,allow_ad_personalization_signals:true});}</script>
  </head>
  <body>
   <a class="skip-link" href="#main">Skip to content</a>

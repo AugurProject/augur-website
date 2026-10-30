@@ -1,0 +1,13 @@
+{
+	"generatedAt": "2026-10-30T09:23:09.030Z",
+	"blockNumber": 26304643,
+	"note": "Circulating equals total: no locked, reserved, or treasury allocations.",
+	"token": {
+		"address": "0xCf6A0A7826fa124B7705d6f3c675eAD76f1e540D",
+		"symbol": "REPv2_Yes_1",
+		"role": "Current REP, the token of the winning/canonical child universe of the Moon Fork.",
+		"totalSupplyWei": "6546099870765873711645614",
+		"totalSupply": "6546099.870765873711645614",
+		"circulatingSupply": "6546099.870765873711645614"
+	}
+}
