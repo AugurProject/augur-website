@@ -27,4 +27,15 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { learn, blog };
+// The fork guides: /learn/fork/ (index.mdx) and /learn/fork/<file>/, ordered by `order`.
+const forkGuides = defineCollection({
+  loader: glob({ pattern: '*.mdx', base: './src/content/fork-guides' }),
+  schema: z.object({
+    title: z.string(), description: z.string(), topic: z.literal('fork'), order: z.number().int().nonnegative(),
+    contentType: z.enum(['topic', 'lesson', 'guide', 'reference', 'case-study', 'historical-record']),
+    label: z.string(), historical: z.boolean(), status: z.enum(['available', 'archived', 'planned']),
+    presentation: z.enum(['standard', 'reference', 'case-study', 'historical-record']),
+  }),
+});
+
+export const collections = { learn, blog, forkGuides };

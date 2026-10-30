@@ -10,33 +10,13 @@ status: available
 presentation: standard
 ---
 
-import ProseCard from '../../../components/content/prose-card.astro'
-
-# What To Do Around Fork Risk
-
 This is a preparedness guide, not a live migration checklist. No current fork or migration deadline is implied here. The goal is to help you understand what to verify if a future fork condition is reported, while keeping historical Moon Fork instructions in their archived context.
-
-## Use the monitor as a signal
-
-The monitor describes observed dispute escalation. Its round-progress percentage is not a probability, a prediction, or a statement about which outcome is true.
-
-<ProseCard>
-| Display | What it describes | Prepared response |
-|---|---|---|
-| None / 0% | No funded dispute progress is being reported for the tracked market. | Learn the market's resolution source and check the monitor periodically. |
-| Low | Early observed escalation. | Identify the disputed market and read the underlying outcome evidence. |
-| Moderate | Escalation has progressed, but a fork is not established by this label. | Review your exposure and the protocol mechanics; do not infer a deadline from the gauge. |
-| High | Late observed escalation. | Verify the market and bond data from maintained sources and understand the possible fork states. |
-| Critical | The observed projection is near its configured fork threshold. | Treat this as a reason to verify protocol state, not as an instruction to migrate or trade. |
-| Unknown | A defensible round projection is unavailable. | Avoid guessing; use the underlying data and maintained project guidance. |
-</ProseCard>
 
 ## Always be prepared
 
 - Know the market's resolution source and what evidence would distinguish its possible outcomes.
 - Keep track of which network, wallet, exchange, and REP version a record refers to. Historical token addresses are not automatically current recommendations.
 - Treat external links, screenshots, and old announcements as dated evidence. Confirm consequential information against the deployed contracts and maintained project records.
-- Do not treat a monitoring label as financial advice or as a guarantee that a fork will occur.
 - Read the general **[dispute and bond mechanics](/learn/fork/disputes-and-bonds/)** before interpreting escalation.
 
 ## If a future fork is confirmed

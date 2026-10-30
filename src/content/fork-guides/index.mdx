@@ -10,9 +10,7 @@ status: available
 presentation: standard
 ---
 
-import ProseCard from '../../../components/content/prose-card.astro'
-
-# What Is a Fork?
+import ProseCard from '../../components/content/ProseCard.astro'
 
 A fork is Augur's resolution method of last resort. It begins when a market disagreement survives the ordinary reporting and dispute process and a dispute bond reaches the protocol's fork threshold. The protocol then makes outcome-specific child universes available so REP holders can commit to the outcome they believe is correct; each child is created only when migration first targets that outcome.
 
@@ -26,8 +24,7 @@ By the end of this path, you should be able to:
 
 - distinguish an initial report, a dispute, and a fork;
 - explain why dispute bonds escalate and what the fork threshold means;
-- describe one-way REP migration without treating it as a current action;
-- read the site's fork monitor as a measurement of protocol state, not a probability forecast; and
+- describe one-way REP migration without treating it as a current action; and
 - separate reusable mechanics from facts about the completed Moon Fork.
 
 ## The Fork learning path
@@ -54,16 +51,6 @@ The lessons are ordered so each one supplies context for the next:
 
 **Theoretical REP** — The supply basis used by the protocol for percentage thresholds. The genesis-universe reference is 11,000,000 REP, so 2.5% is 275,000 REP; a live deployment's configured value is authoritative.
 </ProseCard>
-
-## What the monitor means
-
-The fork monitor measures progress through an observed dispute escalation path:
-
-<ProseCard class="text-center">
-**(Current funded dispute round ÷ Estimated total rounds) × 100 = Round progress**
-</ProseCard>
-
-The estimate is derived from the observed bond trajectory. It is a display signal for how far escalation has progressed; it is not a probability that a fork will happen, a judgment about which outcome is true, or evidence that migration is open.
 
 ## Fork lifecycle in brief
 

@@ -1,6 +1,6 @@
 ---
 title: "How Disputes & Bonds Work"
-description: "Learn how Augur v2 dispute rounds escalate and how the fork monitor measures progress."
+description: "Learn how Augur v2 dispute rounds escalate."
 topic: fork
 order: 2
 contentType: lesson
@@ -10,9 +10,7 @@ status: available
 presentation: standard
 ---
 
-import ProseCard from '../../../components/content/prose-card.astro'
-
-# How Disputes & Bonds Work
+import ProseCard from '../../components/content/ProseCard.astro'
 
 A fork is the end of an escalation path, not the first response to disagreement. Augur first gives reporters and REP holders a sequence of reporting and dispute rounds in which a tentative outcome can be challenged.
 
@@ -51,20 +49,6 @@ The 2.5% threshold is a proportion of theoretical REP, not a promise that every 
 During a dispute round, stake is held in escrow. Unsuccessful dispute stake is returned when the round ends. When a market finalizes without a fork, stake on an incorrect outcome is forfeited: the protocol burns 20% and redistributes the remainder to REP staked on the final outcome. The bond design targets a 40% return for successful disputers.
 
 These are protocol incentive rules, not financial advice or a forecast of any individual result.
-
-## How to read fork progress
-
-The site's monitor uses the funded dispute round and the observed bond trajectory:
-
-<ProseCard class="text-center">
-**(Current funded dispute round ÷ Estimated total rounds) × 100 = Round progress**
-</ProseCard>
-
-- **Current funded dispute round** is the highest non-zero dispute participant observed for the market.
-- **Estimated total rounds** is projected from recent bond growth until the configured fork threshold would be reached.
-- **Round progress** is a measurement of escalation, not a probability of a fork and not a claim about the correct outcome.
-
-If there are too few rounds or the trajectory cannot support a defensible projection, the monitor preserves an unknown value rather than inventing precision.
 
 ## Why this leads to migration mechanics
 
