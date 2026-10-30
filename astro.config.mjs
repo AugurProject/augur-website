@@ -3,7 +3,11 @@ import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'node:url';
 
 import cloudflare from '@astrojs/cloudflare';
+import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 
 import { site } from './src/data/site.ts';
 import { designs } from './src/designs/index.ts';
@@ -24,9 +28,14 @@ const homeDesignPlugin = {
 
 // https://astro.build/config
 export default defineConfig({
+  // Canonical origin (www stays canonical; the apex redirects to it). Used for canonical URLs, the sitemap and RSS.
+  site: 'https://www.augur.net',
   adapter: cloudflare(),
   // Keep false. Otherwise the Cloudflare adapter enables a KV session binding,
   // which fails the Workers preview build with error 10021 (missing namespace_id).
   session: false,
+  // Ported content from the old augur.net: MDX for the blog and fork guides, KaTeX math for the whitepaper.
+  markdown: { remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex] },
+  integrations: [mdx(), sitemap()],
   vite: { plugins: [homeDesignPlugin, tailwindcss()] }
 });
