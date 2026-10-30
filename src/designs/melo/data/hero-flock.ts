@@ -1,4 +1,8 @@
-import { heroRandom } from '../motion/hero-choreography';
+/** Deterministic variety: the same on every load, in every browser and in Figma. */
+const heroRandom = (index: number, salt: number) => {
+  const x = Math.sin((index + 1) * 12.9898 + salt * 78.233) * 43758.5453;
+  return x - Math.floor(x);
+};
 
 /** The /2/ hero flock (owner, 22 Oct 2026: the hero "looks awful and weird", make it "more fancy").
  * A Roman augur read the flight of birds and carried a curved staff, the lituus; the spiral named after

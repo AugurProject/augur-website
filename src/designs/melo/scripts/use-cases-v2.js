@@ -14,8 +14,7 @@
 // while it's in the air, the next stretch fills while the report is open to challenge, and the line runs Green
 // to the cover as it pays. The DAO card is the same query as a switch (owner, 29 Oct 2026, "implement the Switch
 // into /melo"): the vote turns the upgrade's go-live switch on, Augur Lituus's larger part answers Yes on the
-// DAO's written rules, and the switch goes back off. Ryan's and Augus's DAO card, a proposal, loops on the same
-// cycle: its check runs and its answers come in.
+// DAO's written rules, and the switch goes back off.
 // The loop starts once 60% of the stage is in view and runs while any of it is on screen; off screen or in a
 // hidden tab it pauses and resumes where it was. A pick starts the picked case from the top, and pressing the
 // case already shown restarts it (owner, 26 Oct 2026), its card dipping out and back in; a pick also draws the
@@ -167,23 +166,7 @@ light(q('no'), [[0, 1, L.fade, E.crossfade], [L.final, S.other]], S.other);
 states(q('answer-note'), [0, L.reported, L.final], () => true);
 waiting(q('wait'));
 };
-// Ryan's and Augus's DAO card, a proposal: its pending words show from the reset, a Mist line runs under its
-// pending check, and at the answer each pending word goes and its answer comes in; then the footer.
-const proposal = card => {
-const q = name => card.querySelector(`[data-card="${name}"]`), qa = name => [...card.querySelectorAll(`[data-card="${name}"]`)], at = L.reported;
-// Two looks of one value: `was` shows from the reset until the answer, and the resting `now` is back after it.
-const swap = (was, now, from) => {
-track(was, [{ opacity: 0, at: 0 }, { opacity: 0, at: back, easing: E.crossfade }, { opacity: 1, at: back + L.resetIn }, { opacity: 1, at }, { opacity: 0, at: at + U.swapOut }]);
-track(now, [{ opacity: 1, transform: 'none', at: 0 }, { opacity: 1, transform: 'none', at: L.reset, easing: E.crossfade }, { opacity: 0, transform: 'none', at: back }, { opacity: 0, transform: from, at: at + U.swapIn, easing: E.settle }, { opacity: 1, transform: 'none', at: at + U.swapIn + U.swap }]);
-};
-swap(q('status-wait'), q('status-done'), `scale(${U.statusFrom})`);
-const now = qa('now');
-qa('was').forEach((el, k) => swap(el, now[k], `translateY(${U.rise}px)`));
-track(q('scan'), [{ opacity: 0, transform: 'scaleX(0)', at: 0 }, { opacity: 1, transform: 'scaleX(0)', at: L.focus, easing: E.travel }, { opacity: 1, transform: 'none', at: L.focus + U.scan }, { opacity: 1, transform: 'none', at }, { opacity: 0, transform: 'none', at: at + U.swapOut }]);
-track(q('foot'), [{ opacity: 1, transform: 'none', at: 0 }, { opacity: 1, transform: 'none', at: L.reset, easing: E.crossfade }, { opacity: 0, transform: 'none', at: back }, { opacity: 0, transform: `translateY(${U.footRise}px)`, at: at + U.footAt, easing: E.settle }, { opacity: 1, transform: 'none', at: at + U.footAt + U.foot }]);
-track(q('result'), [{ opacity: 1, at: 0 }, { opacity: 1, at: back }, { opacity: 0, at: back + 1 }, { opacity: 0, at: at + U.resultAt }, { opacity: 1, at: at + U.resultAt + U.result }]);
-};
-const kinds = { query, relay, switch: switchCard, proposal };
+const kinds = { query, relay, switch: switchCard };
 const clear = () => { loop.forEach(a => a.cancel()); loop = []; };
 const settle = () => { once.forEach(a => a.cancel()); once = []; };
 // Builds the shown case's loop at `at` on the cycle: playing while the stage is on screen, else paused there.
@@ -203,13 +186,21 @@ else { frozen = phase(); loop.forEach(a => { a.pause(); a.currentTime = frozen; 
 playing = running();
 };
 const halt = () => { on = false; settle(); clear(); };
+// The loop starts once the section reveal (reveal-v2.js) has brought the stage in, so a reveal and a loop never start
+// together.
+let ratio = 0;
+const begin = () => {
+const group = root.closest('[data-armed]');
+if (group) { group.addEventListener('revealed', begin, { once: true }); return; }
+if (!on && !held && !reduced.matches && visible && ratio >= U.threshold) { on = true; start(0); }
+else sync();
+};
 const observer = new IntersectionObserver(entries => {
 const entry = entries[entries.length - 1];
-visible = entry.isIntersecting;
+visible = entry.isIntersecting; ratio = entry.intersectionRatio;
 // Leaving the screen ends a reader's stop: back in view, the case plays again.
 if (!visible) held = false;
-if (!on && !held && !reduced.matches && entry.intersectionRatio >= U.threshold) { on = true; start(0); }
-else sync();
+begin();
 }, { threshold: [0, U.threshold] });
 observer.observe(stage);
 root.addEventListener('tabsbeforechange', () => { settle(); clear(); });

@@ -2,16 +2,19 @@
 import { roadmap, roadmapHref, roadmapPaperSquares } from '../data/roadmap';
 import { links, isExternal } from '../../../data/links';
 import Icon from '../../../components/primitives/Icon.astro';
-import {homeCopy,type HomeVariant} from '../data/homepage-review';
-// A review version may set its own two-line heading (`roadmap.heading`; Augus's "Coming soon?",
-// homepage-v5.ts). Every other page keeps the literal one, so "/" is unchanged.
-interface Props { variant?:HomeVariant; }
-const {variant='v1'}=Astro.props;const copy=homeCopy(variant);
-const heading=copy&&'roadmap' in copy?copy.roadmap.heading:undefined;
+import {homeCopy,type ReviewVariant} from '../data/homepage-review';
+import {reviewInline} from '../scripts/review-inline';
+// A version may set its own two-line heading (`roadmap.heading`; Augus's "Coming soon?", homepage-v4.ts);
+// the others keep the literal one.
+// The section reveal (reveal-v2.js) settles in the heading and the lead, and the track's entrance follows the
+// lead: roadmap-v2.js plays it and the picker's motion (the track carries data-roadmap-v2).
+interface Props { variant:ReviewVariant; }
+const {variant}=Astro.props;const copy=homeCopy(variant);
+const heading='roadmap' in copy?copy.roadmap.heading:undefined;
 ---
 <section class="roadmap section" id="roadmap" aria-labelledby="roadmap-heading"><div class="site-container">
- <div class="section-heading"><h2 id="roadmap-heading">{heading?<>{heading[0]}<br/>{heading[1]}</>:<>The road to<br/>Augur Lituus.</>}</h2><p class="lead">The research is published and the build is underway.</p></div>
- <div class="roadmap-track" data-tabs data-roadmap data-activation="manual" data-active="3" style="--selected:3">
+ <div class="section-heading"><h2 id="roadmap-heading" data-reveal>{heading?<>{heading[0]}<br/>{heading[1]}</>:<>The road to<br/>Augur Lituus.</>}</h2><p class="lead" data-reveal>The research is published and the build is underway.</p></div>
+ <div class="roadmap-track" data-tabs data-roadmap-v2 data-activation="manual" data-active="3" style="--selected:3">
   <div class="roadmap-phases" aria-hidden="true"><span>Completed</span><span>In progress</span><span>Up next</span></div>
   <div class="roadmap-tabs" role="tablist" aria-label="Augur roadmap">
    <div class="selected-tab" aria-hidden="true"></div><div class="roadmap-done" data-track-done aria-hidden="true"></div><div class="roadmap-live" data-track-live aria-hidden="true"></div><div class="roadmap-ahead" data-track-ahead aria-hidden="true"></div>
@@ -29,7 +32,7 @@ const heading=copy&&'roadmap' in copy?copy.roadmap.heading:undefined;
    </div>
   </div>)}</div>
  </div>
-</div></section>
+</div></section><script is:inline set:html={reviewInline.v2.scripts.roadmap}></script>
 <style>
 /* Phase brackets span their columns exactly, so their ticks meet the selected stop's box edges and the track's ends; the current phase's bracket is Green like the box's top (owner, 19 Oct 2026). */
  .roadmap{padding-top:64px;padding-bottom:96px}.roadmap>.site-container{padding-top:72px}.section-heading{margin-bottom:48px}.roadmap-phases{display:grid;grid-template-columns:3fr 1fr 2fr;gap:0;padding-right:0;margin-bottom:12px;font:600 14px/20px var(--font-heading);color:var(--muted-foreground)}.roadmap-phases>span{padding-right:0}.roadmap-phases>span::after{display:block;content:'';height:6px;margin-top:10px;border-top:1px solid var(--web-outline);border-left:1px solid var(--web-outline)}.roadmap-phases>span:last-child::after{border-right:1px solid var(--web-outline)}.roadmap-phases>span:nth-child(2)::after{border-color:var(--primary);border-right:1px solid var(--primary)}.roadmap-phases>span:nth-child(3)::after{border-left:0}.roadmap-phases>span:nth-child(2){color:var(--primary)}.roadmap-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:relative}.roadmap-tabs button{position:relative;z-index:1;min-width:0;height:144px;padding:32px 20px 28px;border:0;background:transparent;color:var(--foreground);text-align:left;display:flex;flex-direction:column;align-items:flex-start;cursor:pointer}.roadmap-stop{display:block;width:12px;height:12px;border:1.5px solid var(--mark-participant,#71728A);background:var(--background);margin:2px 0 24px 2px;flex-shrink:0}.roadmap-stop.is-completed{border-color:var(--primary);background:var(--primary)}.roadmap-stop.is-now{width:16px;height:16px;margin:0 0 22px;background:var(--primary);border:0;outline:1px solid color-mix(in srgb,var(--primary),transparent 65%);outline-offset:8px}.roadmap-date{font:400 14px/20px var(--font-body);color:var(--muted-foreground);white-space:nowrap}.roadmap-tabs button:nth-of-type(4) .roadmap-date{color:var(--primary)}.roadmap-label{font:600 16px/22px var(--font-heading);margin-top:4px;padding-right:25px;white-space:nowrap}.roadmap-plus{position:absolute;right:20px;top:96px;display:grid;place-items:center;width:20px;height:20px;border:1px solid var(--web-outline)}.roadmap-plus :global(.web-icon),.roadmap-plus :global(svg){width:12px;height:12px}

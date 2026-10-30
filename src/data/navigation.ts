@@ -22,7 +22,7 @@ export const navigation = {
   ],
   resources: [
     { label: 'Blog', href: links.archive.url, linkKey: 'archive', icon: 'newspaper' }, { label: 'FAQ', href: '/faq/', icon: 'question' },
-    { label: 'Learn', href: pages.learn, icon: 'book-open' }, { label: 'REP', href: '/rep/', icon: 'coins' },
+    { label: 'Learn', href: pages.learn, icon: 'book-open' }, { label: 'REP token', href: '/rep/', icon: 'coins' },
     external('Whitepaper', 'whitepaper', { icon: 'file-text' }),
   ],
   // Community logos identify each destination wherever it is listed (Figma 43:153).

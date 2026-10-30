@@ -8,7 +8,7 @@
  * Not changed in v2: the hero headline and art (Ryan 1), "?" tooltips (Ryan 6, X), the roadmap
  * (Ryan 14) and an intent split of the page (Ryan 16, X).
  * Guardrails: no ranking claim without a source (the whitepaper's own modelled estimate backs one,
- * said once and hedged, in the Robust card; Augus to confirm); a fork has a
+ * hedged, in the hero's "more than ever before" and the Robust card; Augus to confirm); a fork has a
  * two-week one-way migration window (whitepaper §4.2, docs/sources.md); unmigrated REP loses its
  * value, the fork never takes it; REP is optional, never a duty to report or challenge.
  * Draft copy for review, not approved. Deliberately not flagged `needsReview`: /2/ is a review route
@@ -19,87 +19,90 @@ import { stakedBehind } from '../../../data/rep';
 
 export const homeV2 = {
   hero: {
-    // Ryan 2: the attack cost, stressed through the mechanism: each challenge doubles the bond
-    // (whitepaper §2.1 p2, §4.1 p5), so keeping a lie standing costs twice as much every round.
-    // Hero.astro keeps the v1 sentence literal up to "and " (its straight apostrophe would be escaped
-    // in an expression) and swaps in this ending. The ranking itself is said once, in the Robust card.
-    bodyEnd: 'every challenge doubles the cost of a lie.',
+    // Owner, 29 Oct 2026: Augus's ideas, each said once. The opening sentence points back at the lead ("those
+    // answers": real-world answers for onchain apps), so it defines "oracle" without saying the lead again.
+    intro: 'Augur Lituus is Augur’s next-generation oracle: it tells blockchain apps what happened in the real world.',
+    // Owner, 29 Oct 2026: Ryan 2's ending, as on /ryan/ and /ryan-augus/, with "ask" added ("add an ask
+    // there and we're golden"), now in Augus's three verbs, so the sentence names the moves before the cost
+    // of lying. The whitepaper's modelled estimate (Abstract p1; §7.5 p20, 46% costlier to attack than Augur's
+    // previous design), hedged by "designed to"; the Robust card says the ranking against other oracles.
+    // Anyone may ask for a fee (§2 p2, §4.4.1 p7). Hero.astro renders `bodyStart` after the opening sentence,
+    // in place of the shared second sentence's opening; the ending's last two words stay on one line.
+    bodyStart: 'Anyone can answer, anyone can challenge, and ',
+    keep: 2,
+    bodyEnd: 'lying is designed to cost more than ever before.',
+    // Ryan 16, on Melo's too (owner, 29 Oct 2026): the page split into three intents on the first screen,
+    // in the hero's action area (Hero.astro, home-v2-only.css), in place of "See how it works". Traders
+    // first, so theirs is the one Green action. Each link lands on its section's heading; the REP link
+    // targets the How it works heading, not #how-it-works, which would open the example (how-path-v2.js).
+    // Ryan's copy reads these.
+    paths: {
+      label: 'Jump to',
+      links: [
+        { label: 'For traders', href: '#tenets-heading' },
+        { label: 'For REP holders', href: '#how-heading' },
+        { label: 'For builders', href: '#applications-heading' },
+      ],
+    },
+    // No whitepaper link under the three (owner, 29 Oct 2026: "doesn't really make much sense there"); the
+    // roadmap's paper milestone still links it. Ryan's keeps its own (Ryan 16).
+    whitepaper: false,
   },
   why: {
-    lead: 'Whoever controls the oracle decides who gets paid.', // Ryan 3, verbatim
-    // Ryan 4: no "parties". It answers the lead in its own words: whoever controls it / no one does.
-    // Design intent (Abstract p1; §2 p2: no backstops or vetoes).
-    answer: 'With Augur, no one controls the oracle.',
+    // Owner, 29 Oct 2026: Augus's point (apps need to know what happened before they pay out or act) in half
+    // his words, with "blockchain", which readers know before "oracle". "Real-world answers" stay the hero's.
+    lead: 'Blockchain apps need to know what happened before they pay out or act.',
+    // Augus's band, cut to what the lead asks for: "tells them", then his "in charge of the truth", which
+    // echoes the headline. One line from 1024 up (measured). Design intent (Abstract p1; §2 p2: no backstops
+    // or vetoes).
+    answer: 'With Augur, no middleman controls the answers.',
     // Augus 3: his three cards (titles, order and the facts in each), in plain words, with the jargon
     // kept to the small lines (Augus's worry). Ryan 5: "Anyone can ask" over Augus's "Any app can ask"
     // (§2 p2 "Anyone may pay a fee", §4.4.1 p7). Ryan 17: the differentiators said plainly: no
-    // governance, no multisigs, the attack cost. Every claim line fits one line in H3 (24 px) and
-    // every body two lines from 1024 up, so the three cards stay level (home-v2.css).
+    // governance, no multisigs, the attack cost. Every claim line fits one line in H3 (24 px). The bodies
+    // are Augus's 29 Oct lines (owner, same day), trimmed so all three switch together: two lines from
+    // 1300 up and three from 1024 to 1280 (measured; they differ only in about 15 px around 1290).
     tenets: [
-      // Augus's "Report, challenge, or build" is a rule of three. The claim already covers asking and
-      // answering, so the body adds projects (§2 p2 "permissionless use by third parties").
-      // "On their own" (review fix, 21 Oct 2026): "without asking" reused the claim's "ask" in the other
-      // sense (permission, not a question) and said "No approvals" twice. Not "freely": a question
-      // costs a fee (§4.4.2 p7).
-      { title: 'Permissionless', diagram: 'cross', claim: ['Anyone can ask.', 'Anyone can answer.'], body: 'Projects plug in on their own. No approvals, no gatekeepers.' },
-      // Abstract p1: truth "is not decided by token holders, governance, multisigs, or anyone else";
-      // §2 p2: "without any centralized backstops or vetoes". Augus's "no admin keys" is left out: the
-      // whitepaper never mentions admin keys, and Lituus-CS isn't shipped (open question for Augus).
-      // "Augur's creators" and "override" are his ("or anyone else" in the paper). The No authority
-      // lanes (a signal crossing an empty middle, the scene first drawn for "Trustless") show the claim:
-      // no one stands between question and answer.
-      { title: 'Trustless', diagram: 'authority', claim: ['No governance.', 'No one has a veto.'], body: 'No multisigs. Not even Augur’s creators can override an answer.' },
-      // Augus's claim ("Harder to game. Costlier to manipulate.") in plain words, without "money" or
-      // "bond" in this section (house rule: nothing may suggest money buys the answer). The ranking is
-      // the whitepaper's own estimate: Abstract p1 "significantly more resistant to attack than all
-      // current offerings"; §3 p3, the most expensive to attack of the designs surveyed (134% of FDV);
-      // §8 p20. "Designed to" and "almost any" hedge a modelled figure for an undeployed design. The
-      // peer mesh (no centre, a relay running every link) shows why: there is no one point to corrupt.
-      { title: 'Robust', diagram: 'mesh', claim: ['Hard to corrupt.', 'Lies get expensive fast.'], body: 'Designed to cost attackers more than almost any other oracle.' },
+      // Augus's body, "Ask" for "Submit" (the claim's verb and How it works' first step) and "a question" for
+      // "a question about a real-world event". Anyone may ask, report or challenge (§2 p2, §4.4.1 p7).
+      { title: 'Permissionless', diagram: 'cross', claim: ['Anyone can ask.', 'Anyone can answer.'], body: 'Ask a question, report what happened or challenge an answer you believe is wrong.' },
+      // Augus's body ("i like", the owner), "a dispute" for "Augur's dispute process", which took it to four
+      // lines at 1024. "No multisigs." sits in the claim. Abstract p1: truth "is not decided by token holders,
+      // governance, multisigs, or anyone else"; §2 p2: "without any centralized backstops or vetoes". Augus's
+      // "no admin keys" stays out: the whitepaper never mentions admin keys (open question for Augus). The
+      // middleman who falls away shows it.
+      { title: 'Trustless', diagram: 'authority', claim: ['No governance.', 'No multisigs.'], body: 'No company, developer or governing body can overrule the outcome of a dispute.' },
+      // Owner, 29 Oct 2026: Augus's claim, verbatim (as on /ryan-augus/), and his body with "Designed with" for
+      // "Built with", since the design isn't deployed, and "that set a new bar" for his "some of the strongest …
+      // of any oracle" (the owner turned down "that few can match"): the paper's "unprecedented security"
+      // (Abstract p1), whose own estimate ranks it above all current offerings (Abstract p1; §3 p3, 134% of
+      // FDV; §8 p20). "False outcomes" is the paper's "fraudulent outcome" (Abstract p1). No "money" or "bond"
+      // in this section (house rule: nothing may suggest money buys the answer).
+      { title: 'Robust', diagram: 'mesh', claim: ['Harder to game.', 'Costlier to manipulate.'], body: 'Designed with economic defenses against false outcomes that set a new bar.' },
     ],
     // The statement stays v1's: "The answer is nobody’s call." On /2/ it heads the closer, above a panel of
     // the two readers (owner, 23 and 25 Oct 2026; Tenets.astro, home-v2-only.css), so each payoff says what
     // it means for that reader instead of a fifth "no one". Both setups name the same risk, a wrong answer.
+    // Owner, 29 Oct 2026: both readers take /ryan/'s lines. Both setups and payoffs fit one line wherever the
+    // readers sit side by side (the closer steps their sizes down below 1280, home-v2-only.css).
     paths: [
-      // Ryan 7: say plainly that markets misresolve. A question, since nothing sources "many traders".
-      // The payoff answers it with recourse: a report can be challenged while its window runs (whitepaper
-      // §2.1 p2, §4.1 p5). "Anyone" echoes the Permissionless claim; it never says REP holders must
-      // challenge. Since 26 Oct 2026 (owner: the team's notes where they fit) it also carries Augus's 18 Oct
-      // point, why a trader wants the market they use on this oracle: "Trade where …" makes the recourse a
-      // reason to choose that market, without promising anything ("it" is the wrong settlement). Was "Here,
-      // anyone can challenge a wrong answer." and before that "Here, no one decides alone."
-      { who: 'For traders', line: ['Seen a market settle the wrong way?', 'Trade where anyone can challenge it.'] },
-      // Ryan 8 + Augus 1: liability first, then hand it off. "For builders" (was "For integrators"): the
-      // site's name for them (the For builders guides, the footer's "Building on it?"), and plain for
-      // beginners. v1's approved "Leave resolution to Augur Lituus." returns: it was dropped only for the
-      // 323 px three-column cell, and it names a process where "Let Augur Lituus answer." cast the oracle
-      // as the one who decides, beside "nobody’s call". "Resolution" moves out of the setup so it isn't
-      // said twice. Both setups and payoffs fit one line wherever the readers sit side by side: the
-      // closer steps their sizes down below 1280 (home-v2-only.css, measured 25 Oct). v4 keeps the 21 Oct
-      // lines (homepage-v4.ts).
-      { who: 'For builders', line: ['A wrong answer can cost a platform its users.', 'Leave resolution to Augur Lituus.'] },
+      // Ryan 7: misresolution said outright ("misresolve" is his word). "Probably" keeps the unsourced "many
+      // traders" a guess about the reader, never a statistic; the payoff says no authority decides at all
+      // (Abstract p1: not "token holders, governance, multisigs, or anyone else").
+      { who: 'For traders', line: ['You’ve probably seen a market misresolve.', 'Here, no authority decides the outcome.'] },
+      // Ryan 8: liability first (his PR disasters from bad resolutions), then why it goes away: the builder's
+      // team never rules on the outcome. "Your team" is scoped by "For builders" (AGENTS.md).
+      { who: 'For builders', line: ['One bad resolution can turn into a PR disaster.', 'With Augur Lituus, your team isn’t the judge.'] },
     ],
   },
   applications: {
     // Ryan 9, verbatim: one sentence; "It asks a question and acts on the answer." goes (the cases show it).
     lead: 'Any protocol or app that needs to know what happened in the world.',
     // Ryan 10: the DAO case checks an upgrade against the DAO's own rules, so the DAO stays open-ended
-    // and its developers can't push through a change that breaks them (a rug). Spread over v1's case in
-    // Applications.astro (id, icon, title, outcomes and the gate picture keep one source). The paper
-    // frames questions as checkable facts (§5 p12 "objective ground truth"; an unresolvable one resolves
-    // Invalid, §4.0.1 p3), so the question points at a written rule, not at a reading of the mission.
-    // Yes now blocks: the picked Green chip comes first, as in the other two cases. `labels` relabel the
-    // gate picture to match (this upgrade stops at the check; another change passes it and goes live).
+    // and its developers can't push through a change that breaks them (a rug). Spread over the shared case in
+    // Applications.astro (id and title keep one source); the card itself is `cards.governance` below.
     governance: {
       summary: 'Upgrades and proposals checked against a DAO’s written rules: its constitution and mission.',
-      question: 'Does this upgrade break a rule in the DAO’s constitution?', answer: 'Yes',
-      // Reads "Decided in the open, not by the upgrade’s own developers." (as "the market’s own team").
-      notBy: 'the upgrade’s own developers',
-      action: 'Block the upgrade.',
-      // The second lane of the picture, and Ryan's "DAOs stay open-ended", in one plain line (one line from
-      // 1024 up; "Changes that follow the constitution…" left "go live." alone at 1024).
-      explanation: 'Changes within the constitution can still go live.',
-      labels: { lanes: ['This upgrade', 'Another change'], at: 'Constitution check' },
     },
     // Ryan 11 (X) + Augus 1: the builder block stays, rewritten from Augus's note. Reasons in Ryan 8's
     // order: less liability first (the backlash over a bad resolution lands on whoever decided it), less
@@ -261,6 +264,11 @@ export const homeV2 = {
       // for an overturned report isn't in §4.4.3, so it has no figure; it goes to the first to back the final
       // answer, you here. The reporter's 15 REP splits into your 12 and 3 burned. `label` names the card for
       // screen readers.
+      // The fee isn't the reward (review, 29 Oct 2026): it splits into Reporter Pay, a clock auction from 0, and a
+      // burned rest the protocol keeps as large as it can (§4.4.2–4.4.4; §4.5 pays 2.5 of 15 REP and burns
+      // 12.5), so Ask says part of it pays. Reporter Pay goes to the first to stake on the final answer (§4.3.1),
+      // hence "backs", which covers your challenge. Get paid lists each gain on its own, both Green, so 12 REP
+      // never reads as the total.
       // Facts behind the wording: a question comes with rules for judging it (walkthrough.ts's fields); the fee
       // isn't fixed, so 15 REP is "in this example" (the whitepaper's §4.5 figure; who sets its size isn't
       // claimed); anyone can report (§2, rep.ts), so the reporter never reads as the team; a report stakes the
@@ -269,10 +277,10 @@ export const homeV2 = {
       example: {
         label: 'An example, step by step',
         story: [
-          'Say someone asks, “{question}” They set the rules for judging it and pay a fee in REP, which funds a reward for the right answer. In this example, the fee is **{fee}**.',
+          'Say someone asks, “{question}” They set the rules for judging it and pay a fee in REP. Part of it pays whoever first backs the right answer; the rest is burned. In this example, the fee is **{fee}**.',
           'Anyone can report. Here, someone reports **{reported}** and stakes **{bond}** on it, the same as the fee.',
           'You think the reporter is wrong, so you challenge with **{challenged}** and stake **{challenge}** on it, double theirs. The time to challenge starts again, and now anyone can challenge you.',
-          'No one challenges you in time, so the final answer is **{final}**. You get your {challenge} back, plus {+share} of the reporter’s stake and the reward. The other {burned} of theirs is burned.',
+          'No one challenges you in time, so the final answer is **{final}**. You get your {challenge} back, plus {+share} from the reporter’s stake, plus {+the reward}. The other {burned} of their stake is burned.',
         ],
       },
     },

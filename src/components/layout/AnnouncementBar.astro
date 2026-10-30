@@ -9,7 +9,7 @@ const enabled=site.announcement.enabled&&(!site.announcement.until||Date.parse(s
 <script>
 // Dismissal is remembered per browser; the header slides up over the fading bar (transform and
 // opacity only), or the bar simply goes with reduced motion.
-const bar=document.querySelector<HTMLElement>('[data-announcement]');
+const bar=document.querySelector<HTMLElement>('aside[data-announcement]');
 bar?.querySelector('[data-announcement-dismiss]')?.addEventListener('click',()=>{
   try{localStorage.setItem('augur:announcement-dismissed',bar.dataset.announcement!);}catch{}
   const followers:HTMLElement[]=[];
@@ -26,6 +26,26 @@ bar?.querySelector('[data-announcement-dismiss]')?.addEventListener('click',()=>
   const slides=followers.map(el=>el.animate([{transform:`translateY(${delta}px)`},{transform:'none'}],timing));
   slides[0]?.finished.finally(()=>bar.remove());
 });
+// The drop-in, armed by announcement-state.js. Every moving element runs the same CSS animation, started
+// together here. Anything the reader does first settles it in place instead: the lift goes and the page
+// scrolls by the bar's height in the same frame, so nothing moves under the pointer or the eye, and the bar
+// is there above. Focus arriving in the bar itself (a screen reader, say) brings it down at once.
+const root=document.documentElement;
+if(bar&&root.dataset.announcement==='arriving'){
+  const drops=(document.getAnimations?.()??[]).filter((a):a is CSSAnimation=>a instanceof CSSAnimation&&a.animationName.startsWith('announcement-drop'));
+  const start=Math.min(...drops.map(a=>a.startTime===null?Infinity:Number(a.startTime)));
+  if(Number.isFinite(start))for(const a of drops)a.startTime=start;
+  const delay=(a:CSSAnimation)=>Number(a.effect?.getTiming().delay??0);
+  const waiting=()=>drops.some(a=>Number(a.currentTime??0)<delay(a));
+  const lifecycle=new AbortController(),signal=lifecycle.signal;
+  const done=()=>{lifecycle.abort();if(root.dataset.announcement==='arriving')delete root.dataset.announcement;};
+  const settle=()=>{if(!waiting())return;const lift=bar.offsetHeight;done();scrollBy({top:lift,behavior:'instant'});};
+  addEventListener('scroll',settle,{passive:true,signal});
+  for(const type of ['pointerdown','keydown'])addEventListener(type,settle,{capture:true,passive:true,signal});
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',settle,{signal});
+  bar.addEventListener('focusin',()=>{if(waiting())for(const a of drops)a.currentTime=delay(a);},{signal});
+  bar.addEventListener('animationend',event=>{if(event.target===bar)done();},{signal});
+}
 </script>
 <style>
 .announcement{min-height:40px;background:var(--web-raised);font:400 14px/20px var(--font-body)}
@@ -42,6 +62,16 @@ strong{font:600 14px/20px var(--font-heading);white-space:nowrap}strong::before{
 .announcement-dismiss :global(.web-icon),.announcement-dismiss :global(svg){width:12px;height:12px}
 /* Below 900 px the one-line message would run under the ×, so it takes the stacked layout. */
 @media(max-width:899px){.announcement-inner{justify-content:flex-start}.announcement-message{flex:1;padding:10px 32px 10px 0;flex-wrap:wrap;gap:4px 10px}.announcement-message>span{order:3;text-align:center;width:100%}a{margin-left:0}}
+/* The drop-in (owner, 29 Oct 2026; announcement-state.js arms it on a fresh visit). Until it plays the
+   bar waits above the page and every element after it is lifted by the bar's height: translates only, so
+   the layout is final from the first paint and nothing reflows. Three seconds in, once the hero has
+   landed, they slide down together and the bar fades in as it comes. Print never sees the lift. */
+@media screen{
+  :global(:root[data-announcement=arriving]) .announcement{animation:announcement-drop-bar 640ms var(--ease-reveal) 3s backwards}
+  :global(:root[data-announcement=arriving] .announcement ~ *){animation:announcement-drop 640ms var(--ease-reveal) 3s backwards}
+}
+@keyframes announcement-drop-bar{from{translate:0 calc(-1 * var(--announcement-lift,var(--announcement-height)));opacity:0}}
+@keyframes announcement-drop{from{translate:0 calc(-1 * var(--announcement-lift,var(--announcement-height)))}}
 @media(prefers-reduced-motion:reduce){.announcement-dismiss{transition:none}}
 @media(forced-colors:active){.announcement-dismiss{color:ButtonText}}
 </style>

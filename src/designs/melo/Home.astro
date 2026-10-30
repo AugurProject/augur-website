@@ -6,18 +6,19 @@ import HowItWorks from './sections/HowItWorks.astro';
 import Roadmap from './sections/Roadmap.astro';
 import LearnMore from './sections/LearnMore.astro';
 import {reviewInline} from './scripts/review-inline';
-// Melo's design from the web lab (/melo/ at 1b95a3a). Its sheets scope every rule to `.home-v2` and render
-// after the sections, so they follow every component style and win ties, as in the lab.
+// Melo's design from the web lab (the lab's homepage, "/", at 795ca0c). Its sheets scope every rule to
+// `.home-v2` and render after the sections, so they follow every component style and win ties, as in the lab.
+// The section reveal (reveal-v2.js) must see every section and the footer; the lab renders it after the footer
+// through its layout's "end" slot. Here it is an inline module, which runs once the whole document is parsed.
 ---
 <div class="home-v2">
  <Hero variant="v2"/><Tenets variant="v2"/><Applications variant="v2"/><HowItWorks variant="v2"/><Roadmap variant="v2"/><LearnMore variant="v2"/>
 </div>
 {reviewInline.v2.styles.map(css=><style is:inline set:html={css}></style>)}
+<script is:inline type="module" set:html={reviewInline.v2.scripts.reveal}></script>
 <script>
- // These sections exist only here, so the page starts them once from one script; each init
- // finds its own sections. One entry instead of five identical ones keeps the JavaScript budget.
- import {initAnswerRibbon} from '../../motion/answer-ribbon';
- import {initTenets,initRepZone} from './motion/home-art';
- import {initHomeInteractions} from './motion/home-interactions';
- initAnswerRibbon();initTenets();initHomeInteractions();initRepZone();
+ // The shared tabs controller binds the use cases, How it works' steps and the roadmap once; each section's own
+ // motion is its inline script (review-inline.ts).
+ import {setupAllTabs} from '../../motion/tabs';
+ setupAllTabs();
 </script>
