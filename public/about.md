@@ -18,13 +18,13 @@ Augur was built on that position from the start, and Augur Lituus is too.
 
 Over a decade on Ethereum, from a prediction market to an oracle for any app.
 
-- **2015, The crowdsale.** Augur holds one of Ethereum's first crowdsales to fund a decentralized prediction market. [Augur blog, July 2026 ↗](https://www.augur.net/blog/augur-testing-past-building-future/)
-- **2018, Live on Ethereum.** Augur launches on mainnet. REP holders settle disputed outcomes, and a fork is the last resort. [Augur blog, July 2026 ↗](https://www.augur.net/blog/augur-testing-past-building-future/)
-- **March 2025, The restart.** Long-time Augur community members restart the project in public as the Lituus Foundation, stewards of Augur's treasury. [Reboot roadmap, April 2025 ↗](https://www.augur.net/blog/augur-reboot-2025/)
-- **May 2025, Generalized Augur.** A draft proposal, shared for comment, for a universal and permissionless oracle that any application can ask. [Generalized Augur, May 2025 ↗](https://www.augur.net/blog/generalized-augur/)
+- **2015, The crowdsale.** Augur holds one of Ethereum's first crowdsales to fund a decentralized prediction market. [Augur blog, July 2026](/blog/augur-testing-past-building-future/)
+- **2018, Live on Ethereum.** Augur launches on mainnet. REP holders settle disputed outcomes, and a fork is the last resort. [Augur blog, July 2026](/blog/augur-testing-past-building-future/)
+- **March 2025, The restart.** Long-time Augur community members restart the project in public as the Lituus Foundation, stewards of Augur's treasury. [Reboot roadmap, April 2025](/blog/augur-reboot-2025/)
+- **May 2025, Generalized Augur.** A draft proposal, shared for comment, for a universal and permissionless oracle that any application can ask. [Generalized Augur, May 2025](/blog/generalized-augur/)
 - **January 2026, The whitepaper.** The Augur Lituus whitepaper sets out how the oracle works, with a comparative analysis of oracle security. [Augur Lituus whitepaper ↗](https://github.com/AugurProject/whitepaper/blob/master/Lituus/English/Augur_Lituus_Whitepaper.pdf)
-- **August 2026, The Moon Fork.** A dispute over whether NASA's Artemis II lifted off escalated all the way to a fork: the first full run of Augur v2's fork on Ethereum mainnet. When migration closed on 3 August, Yes had won. 99.97% of migrated REP moved to Yes, the answer that matched what happened. [Moon Fork report ↗](https://www.augur.net/blog/post-fork-announcements/)
-- **Now, Building Augur Lituus.** The core question flow is in place, and the work now focuses on disputes and forking. [Q2 2026 report ↗](https://www.augur.net/blog/q2-2026-progress-report/)
+- **August 2026, The Moon Fork.** A dispute over whether NASA's Artemis II lifted off escalated all the way to a fork: the first full run of Augur v2's fork on Ethereum mainnet. When migration closed on 3 August, Yes had won. 99.97% of migrated REP moved to Yes, the answer that matched what happened. [Moon Fork report](/blog/post-fork-announcements/)
+- **Now, Building Augur Lituus.** The core question flow is in place, and the work now focuses on disputes and forking. [Q2 2026 report](/blog/q2-2026-progress-report/)
 
 See [what comes next](/index.md#roadmap).
 
@@ -43,4 +43,4 @@ The work happens in public, so anyone can check it.
 
 - **Open source.** Augur Lituus and Zoltar are developed in public repositories, where anyone can follow or audit the work. [Augur Lituus code ↗](https://github.com/AugurProject/Lituus-CS) · [Zoltar code ↗](https://github.com/AugurProject/zoltar)
 - **Research first.** Each design is published for review before it is built. The whitepaper came out six months before the first implementation milestones. [Read the whitepaper ↗](https://github.com/AugurProject/whitepaper/blob/master/Lituus/English/Augur_Lituus_Whitepaper.pdf)
-- **Clear about status.** Quarterly reports say what is done and what is still open, including the parts still being worked out. [Q2 2026 report ↗](https://www.augur.net/blog/q2-2026-progress-report/)
+- **Clear about status.** Quarterly reports say what is done and what is still open, including the parts still being worked out. [Q2 2026 report](/blog/q2-2026-progress-report/)

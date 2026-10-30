@@ -5,6 +5,7 @@ import FaqItem from '../../../components/content/FaqItem.astro';
 import BlogCover from '../../../components/content/BlogCover.astro';
 import {homeCopy,ownerVersion,type HomeVariant} from '../data/homepage-review';
 import {navigation} from '../../../data/navigation';
+import {links,isExternal} from '../../../data/links';
 import {doorScenes,doorBox} from '../data/door-scenes';
 import type {SvgNode} from '../data/iso-kit';
 import Icon from '../../../components/primitives/Icon.astro';
@@ -30,10 +31,13 @@ const learn=homeCopy(variant)?.learnMore;
 // header and footer use, so the doors can't drift from those menus. No generic icons (owner): each door
 // is marked by its own object from the iso kit (door-scenes.ts), drawn here at rest like IsoScene.astro's.
 const keep=ownerVersion(variant)&&learn&&'keepGoing' in learn?learn.keepGoing:undefined;
+// The blog is a page of this site again (ported from the old augur.net), so its door takes → like the FAQ's.
+// It is found by key or by path, whichever the navigation entry uses.
 const discord=navigation.community.find(item=>item.linkKey==='discord')!;
+const blog=navigation.resources.find(item=>item.linkKey==='archive'||item.href===links.archive.url)!;
 const doors=keep?([
  {id:'faq',...keep.faq,href:navigation.resources.find(item=>item.href==='/faq/')!.href,external:false},
- {id:'blog',...keep.blog,href:navigation.resources.find(item=>item.linkKey==='archive')!.href,external:true},
+ {id:'blog',...keep.blog,href:blog.href,external:isExternal(blog.href)},
  {id:'community',...keep.community,href:discord.href,external:true},
 ] as const):[];
 ---

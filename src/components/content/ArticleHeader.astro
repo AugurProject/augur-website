@@ -1,0 +1,35 @@
+---
+// Header for the ported article pages (blog posts, whitepaper sections, fork guides, privacy, terms),
+// after the Learn guide header: breadcrumb trail, title, lead, and a slot for dates or actions.
+// `title` is optional because a whitepaper section brings its own h1 in the Markdown.
+import HeritageField from '../art/HeritageField.astro';
+export interface Crumb { label: string; href?: string }
+interface Props { crumbs?: Crumb[]; title?: string; subtitle?: string; lead?: string; eyebrow?: string }
+const { crumbs = [], title, subtitle, lead, eyebrow } = Astro.props;
+---
+<header class="article-header">
+ <HeritageField seed={2020} width={1440} height={804} />
+ <div class="site-container article-header-content">
+  {crumbs.length > 0 && <nav aria-label="Breadcrumb"><ol class="crumbs">{crumbs.map(crumb => <li>{crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span aria-current="page">{crumb.label}</span>}</li>)}</ol></nav>}
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  {title && <h1>{title}{subtitle && <span class="subtitle">{subtitle}</span>}</h1>}
+  {lead && <p class="lead">{lead}</p>}
+  <slot />
+ </div>
+</header>
+<style>
+ .article-header{position:relative;overflow:hidden;padding:56px 0 72px}
+ .article-header-content{position:relative}
+ .crumbs{display:flex;flex-wrap:wrap;gap:4px 0;list-style:none;margin:0;padding:0;font-size:15px;line-height:22px;color:var(--muted-foreground)}
+ .crumbs li+li::before{content:'/';margin-inline:10px;color:var(--web-outline)}
+ .crumbs a{display:inline-flex;align-items:center;min-height:44px;margin-block:-11px;color:var(--muted-foreground);text-decoration:none}
+ .crumbs a:hover{color:var(--foreground);text-decoration:underline;text-underline-offset:5px}
+ .crumbs [aria-current]{color:var(--foreground)}
+ .eyebrow{margin-top:32px;font:600 14px/20px var(--font-heading);color:var(--primary)}
+ h1{font-size:clamp(36px,4.167vw,56px);line-height:1.15;max-width:1040px;margin-top:24px;letter-spacing:-.02em}
+ .eyebrow+h1{margin-top:12px}
+ .article-header-content>:first-child{margin-top:0}
+ .subtitle{display:block;margin-top:12px;font-size:clamp(22px,2vw,28px);line-height:1.3;letter-spacing:0;color:var(--muted-foreground)}
+ .lead{max-width:780px;margin-top:24px;color:var(--muted-foreground)}
+ @media(max-width:600px){.article-header{padding:40px 0 56px}}
+</style>

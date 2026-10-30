@@ -12,6 +12,15 @@ Decisions and owner confirmations still outstanding. When one is settled, delete
 - **Metadata, indexing and security.** Review production metadata, indexing and security requirements. The layout emits no canonical, Open Graph, Twitter, robots or structured-data tags and has no CSP script-hash handling, and the `indexable` export does not control the layout.
 - **Browser findings from 26 October.** Mobile menu focus after choosing a link, tab-reveal overshoot, small link targets, hidden tab panels without JavaScript and possible light-on-white print colours are filed on Track task #7. Details in [verification](verification.md#26-october-2026-homepage-browser-checks).
 
+## Ported content
+
+From the old augur.net port ([ported content](../reference/ported-content.md)).
+
+- **Privacy and terms text.** Ported word for word and awaiting a legal rewrite (owner decision, 30 October 2026). The privacy text says the site collects no personal data; the site now stores newsletter addresses (D1), sends contact messages through Proton and, per the launch brief, runs GA4 (no GA4 code is on this branch). Both pages refer to a "Last Updated" date that neither shows, as on the old site.
+- **Blog link still marked off-site in the menus.** [navigation.ts](../../src/data/navigation.ts) builds Blog with `external()`, which sets `external: true`, so the header panel, mobile menu, no-JavaScript fallback and footer show ↗ on `/blog/`. Building that entry as a local item (keeping `linkKey: 'archive'`) fixes it.
+- **Footer offline message.** With no forms URL, the newsletter script in [SiteFooter.astro](../../src/components/layout/SiteFooter.astro) links "Follow the blog" to `https://www.augur.net/blog/` rather than `/blog/`.
+- **Unused `melo` blog column.** The `v1` branch of `melo`'s [LearnMore.astro](../../src/designs/melo/sections/LearnMore.astro), not used on `/`, reads `publishedAt` and `cover` from the `blog` collection, which has `publishDate` and no `cover`. It would fail if switched on, and would list posts on the homepage against the owner's decision.
+
 ## Contact page
 
 - **Recipient inbox.** Messages go to `contact@augur.net` (`CONTACT_TO`). Confirm that inbox exists and is read; [links.ts](../../src/data/links.ts) still marks it unverified.

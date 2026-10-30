@@ -1,0 +1,63 @@
+---
+// KaTeX styles load on whitepaper pages only; the appendices are mostly math.
+import 'katex/dist/katex.min.css';
+import { render } from 'astro:content';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import ArticleHeader from '../../../components/content/ArticleHeader.astro';
+import Prose from '../../../components/content/Prose.astro';
+import SectionRail from '../../../components/content/SectionRail.astro';
+import PagerNav from '../../../components/content/PagerNav.astro';
+import Icon from '../../../components/primitives/Icon.astro';
+import { augurV2, getSections, sectionHeading, sectionLabel, sectionMarkdownPath, sectionPath, sectionTitle, type Section } from '../../../data/whitepapers';
+// The Augur v2 whitepaper web edition at its old URLs: /whitepapers/augur-v2/ (contents, index.md) and
+// /whitepapers/augur-v2/<file>/. Each file's Markdown source is also served at <file>.md ([slug].md.ts).
+
+export async function getStaticPaths() {
+  const sections = await getSections();
+  const reading = sections.filter(section => section.id !== 'index');
+  return sections.map(section => {
+    const at = reading.indexOf(section);
+    return { params: { slug: section.id === 'index' ? undefined : section.id }, props: { section, reading, previous: at > 0 ? reading[at - 1] : undefined, next: at >= 0 ? reading[at + 1] : undefined } };
+  });
+}
+interface Props { section: Section; reading: Section[]; previous?: Section; next?: Section }
+const { section, reading, previous, next } = Astro.props;
+const { Content } = await render(section);
+const isContents = section.id === 'index';
+const title = sectionTitle(section);
+const crumbs = [{ label: 'Whitepapers', href: '/whitepapers/' }, ...(isContents ? [{ label: augurV2.shortTitle }] : [{ label: augurV2.shortTitle, href: augurV2.path }, { label: sectionLabel(section) }])];
+const items = reading.map(item => ({ href: sectionPath(item), label: sectionLabel(item), current: item.id === section.id }));
+const pagerLink = (item: Section | undefined, kicker: string) => item && { href: sectionPath(item), kicker, title: sectionTitle(item) };
+---
+<PageLayout title={`${title} | ${augurV2.shortTitle}`} description={augurV2.description}>
+ <ArticleHeader crumbs={crumbs}>
+  <div class="edition">
+   <p>{augurV2.shortTitle} · Release {augurV2.release} (<code>{augurV2.sourceRevision.slice(0, 7)}</code>)</p>
+   <ul class="edition-actions">
+    <li><a class="line-link" href={sectionMarkdownPath(section)}><span class="button-label">View as Markdown</span></a></li>
+    <li><a class="line-link" href={augurV2.pdf}><span class="button-label">Download PDF</span><Icon name="arrow-up-right" /></a></li>
+    <li><a class="line-link" href={augurV2.source}><span class="button-label">View source</span><Icon name="arrow-up-right" /></a></li>
+   </ul>
+  </div>
+ </ArticleHeader>
+ <div class:list={['site-container', 'article-body', { contents: isContents }]}>
+  {!isContents && <SectionRail heading="Sections" items={items} />}
+  <article class="reading-column">
+   <Prose>{!sectionHeading(section) && <h1>{title}</h1>}<Content /></Prose>
+   <PagerNav label="Whitepaper sections" previous={pagerLink(previous, 'Previous')} next={pagerLink(next, 'Next')} />
+  </article>
+ </div>
+</PageLayout>
+<style>
+ .edition{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 32px;margin-top:32px;padding-block:16px;border-block:1px solid var(--web-outline);font-size:15px;line-height:22px;color:var(--muted-foreground)}
+ .edition code{font-size:14px}
+ .edition-actions{display:flex;flex-wrap:wrap;gap:8px 24px;list-style:none;margin:0;padding:0}
+ .edition-actions a{display:inline-flex;align-items:center;gap:4px;min-height:44px;color:var(--foreground)}
+ .edition-actions :global(.web-icon),.edition-actions :global(.web-icon svg){width:14px;height:14px}
+ .article-body{display:grid;grid-template-columns:264px minmax(0,720px);gap:120px;padding-block:72px 96px}
+ .article-body.contents{grid-template-columns:minmax(0,720px)}
+ .reading-column{min-width:0}
+ @media(max-width:1200px){.article-body{grid-template-columns:220px minmax(0,720px);gap:64px}}
+ @media(max-width:1023px){.article-body{grid-template-columns:1fr;gap:48px}}
+ @media(max-width:600px){.article-body{padding-block:40px 64px}}
+</style>

@@ -6,7 +6,7 @@ Short answers, each with a link to go deeper. Answers marked "Review flag" still
 
 ### Is Augur still a prediction market?
 
-Augur launched on Ethereum in 2018 as a decentralized prediction market protocol, with REP holders settling disputed outcomes. Augur v2 still runs today, and in August 2026 its fork mechanism completed its first live run. Augur Lituus, the next generation of Augur's oracle, is designed to resolve questions for other prediction markets and applications, not only Augur's own. [Moon Fork report ↗](https://www.augur.net/blog/post-fork-announcements/)
+Augur launched on Ethereum in 2018 as a decentralized prediction market protocol, with REP holders settling disputed outcomes. Augur v2 still runs today, and in August 2026 its fork mechanism completed its first live run. Augur Lituus, the next generation of Augur's oracle, is designed to resolve questions for other prediction markets and applications, not only Augur's own. [Moon Fork report](/blog/post-fork-announcements/)
 
 ### What is Augur Lituus?
 
@@ -72,7 +72,7 @@ Review flag: this answer still needs review.
 
 ### I didn't move my REP in the Moon Fork. Can I still?
 
-No. The fork contract enforced the deadline of 3 August 2026, so the window can't be reopened or extended, and no one can migrate for you. Anyone who offers to is running a scam. [Moon Fork report ↗](https://www.augur.net/blog/post-fork-announcements/)
+No. The fork contract enforced the deadline of 3 August 2026, so the window can't be reopened or extended, and no one can migrate for you. Anyone who offers to is running a scam. [Moon Fork report](/blog/post-fork-announcements/)
 
 Review flag: this answer still needs review.
 

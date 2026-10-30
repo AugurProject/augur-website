@@ -57,7 +57,7 @@ A fork is the last resort, and the one time holding REP asks something of you: m
 
 ### The Moon Fork
 
-Augur v2's fork mechanism had its first live run over whether Artemis II had lifted off. It had: REP holders migrated to the universe they backed, and Yes won. Challenges ran from about 8 April for about 8 weeks, and the migration window ran from early June to 3 August, 60 days. Augur v2's rules differ from the proposed Augur Lituus rules: its window was 60 days. [Read the Moon Fork report ↗](https://www.augur.net/blog/post-fork-announcements/)
+Augur v2's fork mechanism had its first live run over whether Artemis II had lifted off. It had: REP holders migrated to the universe they backed, and Yes won. Challenges ran from about 8 April for about 8 weeks, and the migration window ran from early June to 3 August, 60 days. Augur v2's rules differ from the proposed Augur Lituus rules: its window was 60 days. [Read the Moon Fork report](/blog/post-fork-announcements/)
 
 ## Questions about REP
 
@@ -65,7 +65,7 @@ Augur v2's fork mechanism had its first live run over whether Artemis II had lif
 - **Do I earn anything just for holding REP?** No. Rewards go to people who report or challenge, and only when their answer holds. Holding asks nothing of you, except in a fork: then you need to move your REP to a new universe, or it loses its value.
 - **Is AUGUR the same token as REPv2_Yes_1?** Yes. REPv2_Yes_1 is the token's symbol on Ethereum and Reputation its on-chain name. Some exchanges list the same token as AUGUR. The contract address is what identifies it.
 - **Why doesn't my wallet show my REP?** Many wallets don't detect REPv2_Yes_1 on their own yet. You can add it as a custom token with its contract address, 0xCf6A0A7826fa124B7705d6f3c675eAD76f1e540D, and check your balance on [Etherscan ↗](https://etherscan.io/token/0xCf6A0A7826fa124B7705d6f3c675eAD76f1e540D).
-- **I didn't move my REP in the Moon Fork. Can I still?** No. The fork contract enforced the deadline of 3 August 2026, so the window can't be reopened or extended, and no one can migrate for you. Anyone who offers to is running a scam. [Moon Fork report ↗](https://www.augur.net/blog/post-fork-announcements/)
+- **I didn't move my REP in the Moon Fork. Can I still?** No. The fork contract enforced the deadline of 3 August 2026, so the window can't be reopened or extended, and no one can migrate for you. Anyone who offers to is running a scam. [Moon Fork report](/blog/post-fork-announcements/)
 - **Why would REP holders choose the honest fork?** Because the design ties REP's value to demand for truthful answers. If applications and users keep choosing an honest oracle, REP on a dishonest fork loses that demand. This is an assumption of the design, not a guarantee. [Read the whitepaper ↗](https://github.com/AugurProject/whitepaper/blob/master/Lituus/English/Augur_Lituus_Whitepaper.pdf)
 
 See [all questions](/faq.md), or [ask on Discord ↗](https://discord.gg/Y3tCZsSmz3).

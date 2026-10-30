@@ -1,0 +1,37 @@
+---
+import { render } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import ArticleHeader from '../../components/content/ArticleHeader.astro';
+import Prose from '../../components/content/Prose.astro';
+import PagerNav from '../../components/content/PagerNav.astro';
+import { getPosts, postPath, formatPostDate, isoDate, type Post } from '../../data/blog';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  // Newest first: the post after this one in the list is the previous (older) post.
+  return posts.map((post, index) => ({ params: { slug: post.id }, props: { post, older: posts[index + 1], newer: posts[index - 1] } }));
+}
+interface Props { post: Post; older?: Post; newer?: Post }
+const { post, older, newer } = Astro.props;
+const { Content } = await render(post);
+const { title, description, author, publishDate } = post.data;
+---
+<PageLayout title={`${title} | Augur blog`} description={description}>
+ <ArticleHeader crumbs={[{ label: 'Blog', href: '/blog/' }, { label: title }]} title={title}>
+  <p class="post-meta">By {author} · <time datetime={isoDate(publishDate)}>{formatPostDate(publishDate)}</time></p>
+ </ArticleHeader>
+ <div class="site-container article-body">
+  <article class="reading-column">
+   <Prose><Content /></Prose>
+   <PagerNav label="More posts"
+    previous={older && { href: postPath(older), kicker: 'Previous post', title: older.data.title }}
+    next={newer && { href: postPath(newer), kicker: 'Next post', title: newer.data.title }} />
+  </article>
+ </div>
+</PageLayout>
+<style>
+ .post-meta{margin-top:24px;color:var(--muted-foreground)}
+ .article-body{padding-block:64px 96px}
+ .reading-column{max-width:720px}
+ @media(max-width:600px){.article-body{padding-block:40px 64px}}
+</style>
