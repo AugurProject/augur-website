@@ -17,6 +17,13 @@ When writing markdown, write each paragraph as a single line. Do not hard-wrap p
 
 Docs are organized by type (guides, reference, explanation, records); see [docs/AGENTS.md](docs/AGENTS.md#document-types).
 
+## Pull requests
+
+- Title: Conventional Commits, `type(scope): what changes`, for example `docs: log decisions`. Commit messages stay plain imperative sentences.
+- Use [the template](.github/pull_request_template.md), and link any decision the change relies on in [docs/records/decisions.md](docs/records/decisions.md).
+- Merge with a merge commit, not a squash or rebase.
+- One deploy at a time: merge one pull request, wait until its deploy is live and `npm run check:launch` passes against production, then merge the next. Steps and recovery are in [deploy](docs/guides/deploy.md#one-deploy-at-a-time).
+
 ## Working with Astro
 
 Use the official Astro Docs MCP at `https://mcp.docs.astro.build/mcp` for task-specific Astro documentation.

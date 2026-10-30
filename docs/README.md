@@ -27,7 +27,8 @@ Documents are grouped by type. What each type is for, and how to tell them apart
 
 ## Records
 
-- [Open decisions](records/open-decisions.md): Unresolved homepage, deployment and design decisions, and pending design assets.
+- [Decisions](records/decisions.md): Dated log of closed decisions, who made each one and where it was recorded. Append-only.
+- [Open decisions](records/open-decisions.md): Questions and owner actions still open: content, analytics and headers, the forms Worker and cutover, and design.
 - [Verification](records/verification.md): Dated checks and what is not yet checked.
 
 ## Content and organization
