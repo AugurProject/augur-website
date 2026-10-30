@@ -1,11 +1,13 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import PageHero from '../components/pages/PageHero.astro';
+import AboutScene from '../components/pages/AboutScene.astro';
 import Icon from '../components/primitives/Icon.astro';
 import { history } from '../data/history';
 import { links, isExternal } from '../data/links';
 
 // Website first (19 October 2026); Figma About 218:45 follows on "update figma" (figma-workflow.md).
+// The hero's stack fills the space beside its words (owner, 30 Oct 2026: about-scene.ts).
 // Roles: Augur blog 21 July 2026 and Q2 2026 report. No backstop or veto: whitepaper §2.
 type Action = { label: string; href: string; logo?: string; name?: string };
 const roles: { role: string; name: string; text: string; actions: Action[] }[] = [
@@ -24,6 +26,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
 <PageLayout title="About Augur" description="Why Augur exists, how it got from a 2018 prediction market to Augur Lituus, and who builds it today.">
  <PageHero title="About Augur" lead="Augur is a decentralized oracle. It tells apps on the blockchain what happened in the real world.">
   <p class="hero-more">It launched on Ethereum in 2018 as a prediction market. Since 2025 the Lituus Foundation has led its restart, and the work now centers on Augur Lituus, one of the next versions of Augur’s oracle.</p>
+  <AboutScene slot="art" />
  </PageHero>
 
  <section id="mission" class="section site-container ruled" aria-labelledby="mission-title">

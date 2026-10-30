@@ -1,90 +1,56 @@
 ---
 import { applications } from '../../../data/applications';
-import Icon from '../../../components/primitives/Icon.astro';
 import Button from '../../../components/primitives/Button.astro';
-import CaseGraphic from '../art/CaseGraphic.astro';
-import {homeCopy,ownerVersion,type HomeVariant} from '../data/homepage-review';
+import {homeCopy,type ReviewVariant} from '../data/homepage-review';
 import {reviewInline} from '../scripts/review-inline';
-// A review version (v2, v3, v4) renders its own copy (homepage-review.ts); 'v1', the default and every
-// "/" use, stays byte-identical.
-interface Props { variant?:HomeVariant; }
-const {variant='v1'}=Astro.props;const copy=homeCopy(variant);
-// The icon trial, /2/ only (homepage-review.ts): Augur's square mark for the icon tiles, no builder or
-// fallback icons, and the check glyph's own path in the answer chip. Its styles are home-v2-only.css.
-const signals=ownerVersion(variant);
-// The builder's case (owner, 18 Oct 2026, from Augus's notes; draft copy): why a project would hand
-// resolution to Augur Lituus. Plain words, no "trust", no "backstop", no legal promise. Most readers
-// are traders and beginners (owner, 19 Oct 2026), so the lines name "the project" instead of "you".
-// Nobody builds on it yet (owner, 19 Oct 2026), so the title asks why one would, and the ask is for
-// anyone weighing it up or just curious. The lines follow Augus's notes for this section (owner, 19 Oct
-// 2026: "reflect a little better Augus suggestions"): resolution runs outside the project, so there is no
-// one to hire or manage (cheaper); disputes are not the project's to settle, with only a light hint of
-// liability ("defend"); and it is a win for users too. Draft copy, flagged in the launch checklist.
-// Owner, 19 Oct 2026 (later, "lean more heavily on Augus suggestions"): the win-win is now the title, so
-// the project's case reads as the section's second half. A lead stating the problem ("Settling outcomes
-// in-house takes a team, and every dispute lands on it.") was cut the same day: it stacked into four
-// ragged lines in narrow columns, and it only restated the first two reasons. The reasons
-// follow Augus's project reading in his order: cheaper (a query fee, not a team), less risky (a dispute is
-// a challenge to the answer, not to the project; the title is the light liability hint) and value to
-// users (outcomes they can check). No "blame", "liable" or "protect"; no cost comparison we can't source.
-const builderCase={
- title:['Good for users.','Easier on the project.'],
- reasons:[
-  {icon:'puzzle-piece',title:'No team to hire.',line:'The project pays a fee per question instead of staffing resolution.'},
-  {icon:'scales',title:'Never the judge.',line:'Anyone who disagrees challenges the answer, not the project.'},
-  {icon:'eye',title:'Proof, not promises.',line:'Every outcome is public, so users can verify it themselves.'},
- ],
- ask:['Exploring how it could fit a platform, or just curious?','Ask the team anything.'],
-};
-// Review versions (/2/ to /4/) read their copy here. v2 (Ryan 8–11, Augus 1): the one-sentence lead, the DAO case spread over v1's (same id, icon,
-// title, outcomes and picture; its own question, Yes → "Block the upgrade." and the gate's labels) and
-// Augus's builder block, liability first, on the same markup (title over the reasons; the ask closes the
-// reasons panel in home-v2-only.css, where v1 makes it the title's lead from 1024). The lead's balance,
-// the gate's wall and the phone spacing are in home-v2.css. v1's lead stays a literal element, so "/" is
-// unchanged.
-// v3 (Ryan 9–11) has the same lead, its own DAO case on the same picture, and no builder block. v4
-// keeps v2's case and its own builder copy.
-const cases=copy?applications.map(app=>app.id==='governance'?{...app,...copy.applications.governance}:app):applications;
+// Each homepage version renders its own copy (homepage-review.ts). Augur's square mark stands in the case
+// tiles, with no builder icons, and the check glyph's own path in the answer chip. Its styles are
+// home-v2-only.css.
+interface Props { variant:ReviewVariant; }
+const {variant}=Astro.props;const copy=homeCopy(variant);
+// v2 (Ryan 8–11, Augus 1): the one-sentence lead, the DAO case's summary spread over the shared one (same
+// id and title) and Augus's builder block, liability first (title over
+// the reasons; the ask closes the reasons panel in home-v2-only.css). The lead's balance and the phone
+// spacing are in home-v2.css.
+// v3 (Ryan 9–11) has the same lead, its own DAO case, and no builder block. v4 keeps v2's case and its own
+// builder copy.
+const cases=applications.map(app=>app.id==='governance'?{...app,...copy.applications.governance}:app);
 // v3 (Ryan 11) removes the builder block: its copy has no `builder`, so the block isn't rendered and the
-// section ends on the use-case example. v1's builderCase stays literal.
-const builder=copy?('builder' in copy.applications?copy.applications.builder:undefined):builderCase;
-// On the review copies the ask is the reasons panel's foot, and its "Talk to us" a text action, as Holding
-// REP's "Learn about REP" (home-v2-only.css). v1 keeps the outline button.
-const askVariant=signals?'text':'outline';
-// The answer's check is the check glyph's own centreline drawn as a stroke, so it can draw in: Phosphor
-// Bold's, or on /2/ Augur's (assets/icons/augur/check.svg).
-const check=signals?'4.5 10.5 8.25 14.25 15.5 7':'40 144 96 200 224 72';
-// /2/'s right box (owner, 25 Oct 2026, from the item 3 mock): each case is a product card that waits, gets
+// section ends on the use-case example.
+const builder='builder' in copy.applications?copy.applications.builder:undefined;
+// The answer's check is Augur's check glyph's own centreline (assets/icons/augur/check.svg) drawn as a
+// stroke, so it can draw in.
+const check='4.5 10.5 8.25 14.25 15.5 7';
+// The right box (owner, 25 Oct 2026, from the item 3 mock): each case is a product card that waits, gets
 // its answer and acts, then a paragraph for builders (homepage-v2.ts `cards`, home-v2-only.css,
-// use-cases-v2.js). The question card, chips, picture and Insurance note give way to it, the sliding marker
-// and its hover copy aren't rendered, and arrow keys pick a tab (automatic activation). The section's
-// shared motion (home-interactions.ts) looks for data-applications, so /2/'s root carries data-use-cases
-// for its own script instead. Every other version renders the markup below unchanged.
+// use-cases-v2.js). Arrow keys pick a tab (automatic activation); the root carries data-use-cases for its
+// script.
 // The market card is a query split in two (owner, 26 Oct 2026, "Split it is"): the market's price beside
 // Augur Lituus's status and answer. The insurance card is the same query as a relay (owner, 28 Oct 2026,
 // "Relay it is"): one line through the flight, Augur Lituus and the cover, an ordered list of three steps
-// under it. The DAO card is the same query as a vote bar (owner, 28 Oct 2026, "polish vote bar"): the DAO's
-// vote passes the majority, then Augur Lituus's answer on its written rules holds it. Copies whose DAO card
-// still has the proposal rows (Ryan's and Augus's) keep that card. All three share the head and Augur Lituus's
-// words (`cards.query`). Each value that changes keeps every
-// state in one cell, the resting one last and the others hidden from screen readers, so no JavaScript,
-// reduced motion and print show the end. Before the report Augur Lituus's value is empty, never a dash (owner,
-// 28 Oct 2026); on the DAO card the note "Waiting for a report" stands in its place.
-const cards=signals&&copy&&'cards' in copy.applications?copy.applications.cards:undefined;
+// under it. The DAO card is the same query as a switch (owner, 29 Oct 2026, "implement the Switch into
+// /melo"): one row for the upgrade and its go-live switch, then Augur Lituus's larger part, both answers as
+// chips over the line for the day it's open to challenge. Every review copy's DAO card is the switch (29 Oct
+// 2026: Ryan's had kept a proposal card). All three share the head and Augur Lituus's words (`cards.query`).
+// Each value that changes keeps every state in one cell, the resting one last and the others hidden from
+// screen readers, so no JavaScript, reduced motion and print show the end. Before the report Augur Lituus's
+// value is empty, never a dash (owner, 28 Oct 2026).
+const cards=copy.applications.cards;
+// The section reveal (reveal-v2.js): the heading, the lead, the picker and the card stage as one group, then
+// the builder block. The card's loop starts once the group has landed.
 ---
 <section class="applications section" aria-labelledby="applications-heading">
  <div class="site-container">
-  <div class="section-heading"><h2 id="applications-heading">What can Augur&nbsp;Lituus power?</h2>{copy?<p class="lead">{copy.applications.lead}</p>:<p class="lead">Any app that needs to know what happened in the world.<br/>It asks a question and acts on the answer.</p>}</div>
-  <div class="cases" data-tabs data-applications={cards?undefined:''} data-use-cases={cards?'':undefined} data-panel-swap data-activation={cards?'automatic':'manual'} data-active="0">
+  <div class="section-heading"><h2 id="applications-heading" data-reveal>What can Augur&nbsp;Lituus power?</h2><p class="lead" data-reveal>{copy.applications.lead}</p></div>
+  <div class="cases" data-tabs data-use-cases data-panel-swap data-activation="automatic" data-active="0" data-reveal>
    <div class="case-tabs" role="tablist" aria-label="Use cases" aria-orientation="vertical" style={`--count:${cases.length}`}>
-    {cases.map((app,i)=><button type="button" role="tab" id={`application-tab-${app.id}`} aria-controls={`application-panel-${app.id}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} class="case-tab">{signals?<span class="case-mark" aria-hidden="true">{cards&&<span class="case-link"></span>}</span>:<span class="case-icon" aria-hidden="true"><Icon name={app.icon}/></span>}<span class="case-label"><span class="case-name">{app.title}</span><span class="case-blurb" aria-hidden="true">{app.summary}</span></span></button>)}
-    {!cards&&<Fragment><span class="case-hover" aria-hidden="true"></span><span class="case-marker" aria-hidden="true"></span></Fragment>}
+    {cases.map((app,i)=><button type="button" role="tab" id={`application-tab-${app.id}`} aria-controls={`application-panel-${app.id}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} class="case-tab"><span class="case-mark" aria-hidden="true"><span class="case-link"></span></span><span class="case-label"><span class="case-name">{app.title}</span><span class="case-blurb" aria-hidden="true">{app.summary}</span></span></button>)}
    </div>
    <div class="case-stage">
     {cases.map((app,i)=><div role="tabpanel" id={`application-panel-${app.id}`} aria-labelledby={`application-tab-${app.id}`} class="case-panel" tabindex="0" hidden={i!==0}>
      <p class="case-summary">{app.summary}</p>
-     {cards?<Fragment>{(card=>card&&<Fragment>
-      {'oracle' in card?<div class="case-card" data-card-kind={'market' in card?'query':'flight' in card?'relay':'vote'}>
+     {(card=>card&&<Fragment>
+      <div class="case-card" data-card-kind={'market' in card?'query':'flight' in card?'relay':'switch'}>
        <div class="card-head"><span class="card-label">{card.label}<span class="sr-only">.</span></span><span class="split-states split-status" data-card="status"><span class="st-ask" aria-hidden="true"><i></i>{cards.query.statuses[0]}<b class="st-glow"></b></span><span class="st-rep" aria-hidden="true"><i></i>{cards.query.statuses[1]}</span><span class="st-fin"><span class="sr-only">Status: </span><i></i>{cards.query.statuses[2]}<span class="sr-only">.</span></span></span></div>
        <p class="card-title">{card.title}</p>
        {'market' in card?<div class="card-split">
@@ -106,45 +72,30 @@ const cards=signals&&copy&&'cards' in copy.applications?copy.applications.cards:
          <li class="relay-step is-oracle" data-card="oracle"><span class="relay-name split-by">{cards.query.name}<span class="sr-only">:</span></span> <span class="relay-value"><span class="split-states" data-card="answer"><span aria-hidden="true"></span><span aria-hidden="true">{card.oracle.answer}</span><span class="split-win">{card.oracle.answer}<span class="sr-only">.</span></span></span></span> <span class="relay-note"><span class="split-states" data-card="answer-note"><span aria-hidden="true">{cards.query.notes[0]}</span><span aria-hidden="true">{cards.query.notes[1]}</span><span>{cards.query.notes[2]}<span class="sr-only">.</span></span></span></span></li>
          <li class="relay-step is-cover" data-card="leg-cover"><span class="relay-name">{card.cover.name}<span class="sr-only">:</span></span> <span class="relay-value"><span class="split-states" data-card="cover"><span aria-hidden="true"></span><span class="split-win">{card.cover.paid}<span class="sr-only">,</span></span></span></span> <span class="relay-note"><span class="split-states" data-card="cover-note"><span aria-hidden="true">{card.cover.notes[0]}</span><span>{card.cover.notes[1]}<span class="sr-only">.</span></span></span></span></li>
         </ol>
-       </div>:<div class="card-vote">
-        <div class="vote-poll" data-card="poll">
-        <div class="vote-head"><span class="vote-name">{card.vote.name}<span class="sr-only">:</span></span><span class="vote-status"><span class="vote-word"><span class="split-states" data-card="status-word"><span aria-hidden="true">{card.vote.states[0]}</span><span aria-hidden="true">{card.vote.states[1]}</span><span class="split-win">{card.outcome.status}<span class="sr-only">,</span></span></span></span> <span class="vote-note"><span class="split-states" data-card="status-note"><span aria-hidden="true"></span><span aria-hidden="true">{card.vote.live}</span><span>{card.outcome.note}<span class="sr-only">.</span></span></span></span></span></div>
-        <div class="vote-bar" data-card="bar" data-share={card.vote.share} style={`--for:${card.vote.share}%`} aria-hidden="true"><span class="vote-track"></span><span class="vote-for" data-card="for"></span><span class="vote-against" data-card="against"></span><span class="vote-tick" data-card="tick"></span></div>
-        <p class="vote-scale"><span class="split-states" data-card="for-label"><span aria-hidden="true">{card.vote.for}</span><span>{card.vote.for} {card.vote.share}%<span class="sr-only">,</span></span></span> <span class="vote-majority">{card.vote.majority}<span class="sr-only"> 50%,</span></span> <span class="split-states" data-card="against-label"><span aria-hidden="true">{card.vote.against}</span><span>{card.vote.against} {100-card.vote.share}%<span class="sr-only">.</span></span></span></p>
+       </div>:<div class="card-switch">
+        <div class="switch-row" data-card="app">
+         <span class="switch-track" aria-hidden="true"><i class="switch-on" data-card="switch-on"></i><i class="switch-knob" data-card="knob"><b></b><b data-card="knob-on"></b><b data-card="knob-win"></b></i></span>
+         <span class="switch-text"><span class="switch-name">{card.upgrade.name}<span class="sr-only">:</span></span><span class="switch-line"><span class="switch-value"><span class="split-states" data-card="app-value"><span aria-hidden="true">{card.upgrade.states[0]}</span><span aria-hidden="true">{card.upgrade.states[1]}</span><span class="split-win">{card.outcome.status}<span class="sr-only">,</span></span></span></span><span class="switch-note"><span class="split-states" data-card="app-note"><span aria-hidden="true">{card.upgrade.notes[0]}</span><span aria-hidden="true">{card.upgrade.notes[1]}</span><span>{card.outcome.note}<span class="sr-only">.</span></span></span></span></span></span>
         </div>
-        <p class="vote-answer" data-card="oracle"><span class="split-by">{cards.query.name}<span class="sr-only">:</span></span> <span class="vote-yes"><span class="split-states" data-card="answer"><span class="vote-why" aria-hidden="true">{cards.query.notes[0]}</span><span aria-hidden="true">{card.oracle.answer}<span class="vote-why">{cards.query.notes[1]}</span></span><span class="split-win">{card.oracle.answer}<span class="split-seal vote-seal" aria-hidden="true"><svg class="card-check" viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1"/></svg></span><span class="sr-only">.</span><span class="vote-why">{cards.query.notes[2]}<span class="sr-only">.</span></span></span></span></span></p>
-        <span class="split-wait vote-wait" data-card="wait" aria-hidden="true"><i></i></span>
+        <div class="choice" data-card="oracle">
+         <p class="choice-by"><span class="split-by">{cards.query.name}<span class="sr-only">: {card.oracle.answer}.</span></span></p>
+         <div class="choice-row"><span class="choice-opt" aria-hidden="true">{card.oracle.answer}<i class="choice-ring" data-card="yes-ring"></i><i class="choice-fill" data-card="yes-fill"></i><span class="choice-pick" data-card="yes-pick">{card.oracle.answer}<svg class="card-check" viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1"/></svg></span></span><span class="choice-opt is-other" data-card="no" aria-hidden="true">{card.oracle.other}</span><span class="choice-note"><span class="split-states" data-card="answer-note"><span aria-hidden="true">{cards.query.notes[0]}</span><span aria-hidden="true">{cards.query.notes[1]}</span><span>{cards.query.notes[2]}<span class="sr-only">.</span></span></span></span></div>
+         <span class="split-wait choice-wait" data-card="wait" aria-hidden="true"><i></i></span>
+        </div>
        </div>}
-      </div>:<div class="case-card" data-card-kind="proposal">
-       <div class="card-head"><span class="card-label">{card.label}<span class="sr-only">.</span></span><span class="card-status"><span class="status-wait" data-card="status-wait" aria-hidden="true"><i></i>{card.pending}</span><span class="status-done" data-card="status-done">{card.resolved}</span></span></div>
-       <p class="card-title">{card.title}</p>
-       <div class="card-body">
-        {'details' in card&&<dl class="card-details">{card.details.map(detail=><div class="card-detail"><dt>{detail.name}</dt><dd>{'pending' in detail?<Fragment><span class="value-was" data-card="was" aria-hidden="true">{detail.pending}</span><span class="value-now" data-card="now">{detail.value}</span><span class="detail-scan" data-card="scan" aria-hidden="true"></span></Fragment>:detail.value}</dd></div>)}</dl>}
-       </div>
-       <p class="card-foot" data-card="foot"><span class="card-by">{cards.answeredBy}<span class="sr-only">.</span></span> <span class="card-result" data-card="result">{card.result}</span></p>
-      </div>}
+      </div>
       <div class="case-builders"><p class="builders-cue">{cards.cue}</p><p class="builders-line">{card.builders}</p></div>
-     </Fragment>)(cards[app.id])}</Fragment>:<Fragment>
-     <p class="case-question">{app.question}</p>
-     <p class="case-answer"><span class="sr-only">Possible answers: {app.outcomes.join(' or ')}. Answer: {app.answer}.</span><span class="case-options" aria-hidden="true">{app.outcomes.map(outcome=>outcome===app.answer?<span class="case-option is-answer">{outcome}<span class="case-fill"></span><span class="case-pick">{outcome}<svg class="case-check" viewBox={signals?"0 0 20 20":"0 0 256 256"} focusable="false"><polyline points={check} pathLength="1"/></svg></span></span>:<span class="case-option is-other">{outcome}</span>)}</span></p>
-     <p class="case-by">Decided in the open, not by {app.notBy}.</p>
-     <div class="case-act">
-      <p class="case-action">{app.action}</p>
-      <p class="case-explanation">{app.explanation}</p>
-      <CaseGraphic kind={app.graphic} labels={'labels' in app?app.labels:undefined}/>
-     </div>
-     {'fallback' in app&&<p class="case-fallback">{!signals&&<Icon name="info"/>}<span>{app.fallback}</span></p>}
-     </Fragment>}
+     </Fragment>)(cards[app.id])}
     </div>)}
    </div>
   </div>
-  {builder&&<div class="builder-case">
+  {builder&&<div class="builder-case" data-reveal>
    <h3 class="builder-title" id="builder-title">{builder.title[0]}<br/>{builder.title[1]}</h3>
-   <ul class="builder-reasons" aria-labelledby="builder-title">{builder.reasons.map(reason=><li>{!signals&&'icon' in reason&&<span class="builder-icon" aria-hidden="true"><Icon name={reason.icon}/></span>}<strong>{reason.title}</strong> <span class="builder-point">{reason.line}</span></li>)}</ul>
-   <div class="builder-ask"><p><span class="ask-setup">{builder.ask[0]}</span> <span class="ask-payoff">{builder.ask[1]}</span></p><Button href="/contact/" variant={askVariant}>Talk to us</Button></div>
+   <ul class="builder-reasons" aria-labelledby="builder-title">{builder.reasons.map(reason=><li><strong>{reason.title}</strong> <span class="builder-point">{reason.line}</span></li>)}</ul>
+   <div class="builder-ask"><p><span class="ask-setup">{builder.ask[0]}</span> <span class="ask-payoff">{builder.ask[1]}</span></p><Button href="/contact/" variant="text">Talk to us</Button></div>
   </div>}
  </div>
-</section>{cards&&<script is:inline set:html={reviewInline.v2.scripts.useCases}></script>}
+</section><script is:inline set:html={reviewInline.v2.scripts.useCases}></script>
 <style>
  /* What can Augur Lituus power? (was "What could you build?"; owner, 18–19 Oct 2026). Written for
     traders first; the heading names the product and the cases answer it. Organized as a list beside an
@@ -161,70 +112,24 @@ const cards=signals&&copy&&'cards' in copy.applications?copy.applications.cards:
  .cases{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);column-gap:var(--case-gap)}
  .case-tabs{position:relative;isolation:isolate;display:grid;grid-auto-rows:1fr;margin-right:calc(-1 * var(--case-gap));background:var(--web-quiet)}
  .case-tab{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;align-items:start;column-gap:20px;padding:24px calc(var(--case-gap) + 24px) 24px 32px;border:0;border-top:1px solid var(--web-outline);background:transparent;color:var(--muted-foreground);text-align:left;cursor:pointer;transition:border-color 240ms ease-out 280ms,color 240ms ease-out}
- /* A hairline gives way at once to the arriving marker, and shows again only once the marker has passed. */
+ /* No hairline above the first case, the picked one or the case under it. */
  .case-tab:first-child,.case-tab[aria-selected="true"],.case-tab[aria-selected="true"]+.case-tab{border-top-color:transparent;transition-delay:0ms}
- /* The picked row's surface is one marker that glides to the row picked (owner, 19 Oct 2026: polished
-    motion), so the list and the example read as one object that moves together. The rows share one
-    height, so the marker moves by whole rows; the picked row's name and Green tile catch up as it lands.
-    Below 1024, where rows stack apart, each row carries its own surface instead. */
- .case-marker{position:absolute;z-index:-1;inset:0 0 auto;height:calc(100% / var(--count));background:var(--web-tile);transition:transform 560ms cubic-bezier(.16,1,.3,1);pointer-events:none}
- [data-active="1"]>.case-tabs>.case-marker{transform:translateY(100%)}[data-active="2"]>.case-tabs>.case-marker{transform:translateY(200%)}
- /* Hover (owner, 19 Oct 2026: "a little interactive when hovering … more professional"): a faint copy
-    of the marker follows the pointer, or keyboard focus, across the unpicked rows. It glides between
-    rows and fades in where it first appears (home-interactions.ts sets --hover), so the list answers
-    before a click. Transform and opacity only. */
- .case-hover{position:absolute;z-index:-1;inset:0 0 auto;height:calc(100% / var(--count));background:var(--web-tile);opacity:0;transform:translateY(calc(var(--hover,0) * 100%));transition:transform 420ms cubic-bezier(.16,1,.3,1),opacity 200ms ease-out;pointer-events:none}
- .case-hover.is-shown{opacity:.45}
- /* The name's first line centers on the 44 px icon tile. */
+ /* The name's first line centers on the case's mark. */
  .case-label{display:grid;gap:8px;min-width:0;padding-top:6px}
  .case-name{font:400 clamp(20px,1.67vw,24px)/1.3 var(--font-heading);letter-spacing:-.01em;text-wrap:balance}
  .case-blurb{font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
- .case-icon{display:grid;place-items:center;width:44px;height:44px;background:var(--web-raised);color:var(--muted-foreground);transition:background-color 240ms ease-out,color 240ms ease-out,transform 120ms ease-out}.case-icon :global(.web-icon),.case-icon :global(svg){width:22px;height:22px}
- /* The picked case is the example's surface and its icon tile fills Green (owner, 6 Oct 2026: never a
-    side edge). Unpicked cases brighten their name and take the hover edge. */
+ /* The picked case is the example's surface (owner, 6 Oct 2026: never a side edge). Unpicked cases
+    brighten their name and take the hover edge. */
  .case-tab[aria-selected="true"]{color:var(--foreground);cursor:default;transition-delay:0ms,120ms}
- .case-tab[aria-selected="true"] .case-icon{background:var(--primary);color:var(--background);transition-delay:140ms}
- /* An unpicked row under the pointer brightens its name and its glyph lifts a little; the surface
-    behind it is the hover copy above, so there is no outline. */
- .case-icon :global(svg){transition:transform 320ms cubic-bezier(.16,1,.3,1)}
- @media(hover:hover) and (pointer:fine){.case-tab:not([aria-selected="true"]):hover{color:var(--foreground)}.case-tab:not([aria-selected="true"]):hover .case-icon{color:var(--foreground)}.case-tab:not([aria-selected="true"]):hover .case-icon :global(svg){transform:scale(1.1)}}
- .case-tab:not([aria-selected="true"]):active .case-icon{transform:scale(.94)}
+ @media(hover:hover) and (pointer:fine){.case-tab:not([aria-selected="true"]):hover{color:var(--foreground)}}
  .case-tab:focus-visible{outline-offset:-2px}
- /* The example reads one way, top to bottom: the question, its two answers (the picked one lights up),
-    a rule, then what the app does and a picture of it. Every case stays laid out in the one cell, the
-    unpicked ones invisible, so the stage keeps one height and nothing below it moves. */
+ /* Every case stays laid out in the one cell, the unpicked ones invisible, so the stage keeps one height
+    and nothing below it moves. */
  .case-stage{display:grid;background:var(--web-tile)}
  .case-panel{grid-area:1/1;display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:48px}
  .case-panel[hidden]{display:flex!important;visibility:hidden}
  /* The list carries each case's summary from 1024 up; the example keeps it for screen readers. */
  .case-summary{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
- /* The question is the case: large Sora with hung quotation marks, so its first letter keeps the edge. */
- .case-question{position:relative;margin:0;font:400 clamp(26px,2.22vw,32px)/1.25 var(--font-heading);letter-spacing:-.02em;color:var(--foreground);text-wrap:balance}
- .case-question::before,.case-question::after{color:var(--augur-color-surface-dark-mist)}.case-question::before{content:'“';position:absolute;right:100%;margin-right:.06em}.case-question::after{content:'”'}
- /* Both answers, as chips: the picked one fills Green with its check and the other steps back (owner,
-    19 Oct 2026: "the option picked … then fade the other one"). The Green fill and the picked label are
-    layers over the chip, so the pick plays on transform and opacity: the fill sweeps across, the label
-    shows and the check draws. Both chips are Paper until the answer is in, so neither gives it away. */
- .case-answer{margin:24px 0 0}
- .case-options{display:flex;gap:8px}
- .case-option{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:96px;height:48px;padding:0 20px;border:1px solid var(--web-outline);font:600 20px/1 var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
- .case-option.is-other{opacity:.4}
- .case-fill{position:absolute;inset:-1px;background:var(--primary);transform-origin:left}
- .case-pick{position:absolute;inset:-1px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--background)}
- .case-check{width:20px;height:20px;overflow:visible}
- .case-check polyline{fill:none;stroke:currentColor;stroke-width:24;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 3}
- /* Who did not decide the answer (owner, 19 Oct 2026, from Augus's notes): one muted line under the
-    chips, so each case shows the party it keeps out of the decision. */
- .case-by{margin:12px 0 0;font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
- /* What the app does: set apart by space (no rule; the owner removed dividers on 19 Oct 2026), so asking and acting read as two halves of one example. The
-    picture takes the rest of the height. */
- .case-act{flex:1;display:flex;flex-direction:column;align-self:stretch;margin-top:72px}
- .case-action{margin:0;font:600 clamp(20px,1.67vw,24px)/1.3 var(--font-heading);letter-spacing:-.01em;color:var(--foreground);text-wrap:balance}
- .case-explanation{margin:4px 0 0;font-size:18px;line-height:28px;color:var(--muted-foreground);text-wrap:pretty}
- /* Insurance keeps the fallback use (owner, 6 Oct 2026): one app's choice, never Augur Lituus's only use.
-    It is an aside, so it carries the info icon (scales already means Challenge in the REP rows). */
- .case-fallback{display:flex;align-items:flex-start;gap:10px;max-width:480px;margin:28px 0 0;font-size:14px;line-height:20px;color:var(--muted-foreground);text-wrap:pretty}
- .case-fallback :global(.web-icon),.case-fallback :global(svg){width:16px;height:16px;flex:none;margin-top:2px;color:var(--foreground)}
  /* The builder's case (owner, 19 Oct 2026): the title heads the three reasons, which run across the
     full width as three open columns, each an icon tile over its claim and point; the way in follows them.
     A title alone in the 500 column beside the reasons left a dead block under it (owner: "the empty space
@@ -245,22 +150,21 @@ const cards=signals&&copy&&'cards' in copy.applications?copy.applications.cards:
  .builder-title{grid-area:title;margin:0;font:600 clamp(26px,2.22vw,32px)/1.25 var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
  .builder-reasons{grid-area:reasons;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--case-gap);list-style:none;margin:0;padding:0}
  .builder-reasons li{display:grid;align-content:start;font:400 18px/28px var(--font-heading);letter-spacing:-.01em;color:var(--muted-foreground);text-wrap:pretty}
- .builder-icon{display:grid;place-items:center;width:44px;height:44px;margin-bottom:24px;background:var(--web-raised);color:var(--primary)}.builder-icon :global(.web-icon),.builder-icon :global(svg){width:22px;height:22px}
  .builder-reasons strong{display:block;margin-bottom:6px;font:600 clamp(20px,1.53vw,22px)/1.4 var(--font-heading);color:var(--foreground)}
  .builder-point{display:block}
  .builder-ask{grid-area:ask;align-self:center;display:flex;align-items:center;gap:16px 32px}
  .builder-ask p{flex:0 1 auto;margin:0;font-size:18px;line-height:28px;color:var(--foreground);text-wrap:pretty}
  .ask-setup,.ask-payoff{display:block}.ask-setup{color:var(--muted-foreground);text-wrap:balance}
  .builder-ask :global(.button){flex:none}
- @media(forced-colors:active){.case-stage{border:1px solid CanvasText}.case-marker,.case-hover{display:none}.case-tab:not([aria-selected="true"]):hover{outline:1px solid CanvasText;outline-offset:-1px}.case-tab[aria-selected="true"]{outline:1px solid CanvasText;outline-offset:-1px}.case-tab[aria-selected="true"] .case-icon,.case-fill{forced-color-adjust:none;background:Highlight;color:HighlightText}.case-pick{forced-color-adjust:none;color:HighlightText}.case-option{border-color:CanvasText}.builder-icon{border:1px solid CanvasText}}
- @media(prefers-reduced-motion:reduce){.case-tab,.case-icon,.case-icon :global(svg),.case-marker,.case-hover{transition:none}}
+ @media(forced-colors:active){.case-stage{border:1px solid CanvasText}.case-tab:not([aria-selected="true"]):hover{outline:1px solid CanvasText;outline-offset:-1px}.case-tab[aria-selected="true"]{outline:1px solid CanvasText;outline-offset:-1px}}
+ @media(prefers-reduced-motion:reduce){.case-tab{transition:none}}
  @media(max-width:1200px){.applications{--case-gap:48px}.case-tab{column-gap:16px;padding-left:24px}.case-panel{padding:40px}}
  /* Below 1024 the list becomes rows of names above the example, which shows the summary itself. */
  @media(max-width:1023px){
   .cases{grid-template-columns:minmax(0,1fr)}
   .case-tabs{grid-auto-rows:auto;margin:0 0 4px;gap:4px;background:none}
-  .case-tab{align-items:center;min-height:64px;padding:10px 20px;column-gap:14px;border-top:0;background:var(--web-quiet);transition-property:background-color,color;transition-delay:0ms}.case-icon{width:40px;height:40px}.case-label{padding-top:0}
-  .case-tab[aria-selected="true"]{background:var(--web-tile)}.case-marker,.case-hover{display:none}
+  .case-tab{align-items:center;min-height:64px;padding:10px 20px;column-gap:14px;border-top:0;background:var(--web-quiet);transition-property:background-color,color;transition-delay:0ms}.case-label{padding-top:0}
+  .case-tab[aria-selected="true"]{background:var(--web-tile)}
   .case-blurb{display:none}
   .case-panel{padding:36px 32px 44px}
   /* Stacked, the cases differ in height, so the stage fits the case shown instead of the tallest. */
@@ -269,17 +173,15 @@ const cards=signals&&copy&&'cards' in copy.applications?copy.applications.cards:
   .builder-case{display:block;margin-top:56px}.builder-title{margin-bottom:24px}
   /* Stacked, each reason is a row: its icon tile beside its claim and point. */
   .builder-reasons{grid-template-columns:minmax(0,1fr);row-gap:28px}
-  .builder-reasons li{grid-template-columns:44px minmax(0,1fr);column-gap:20px}.builder-icon{grid-row:span 2;margin:0}
+  .builder-reasons li{grid-template-columns:44px minmax(0,1fr);column-gap:20px}
   .builder-ask{flex-wrap:wrap;margin-top:40px}.builder-ask p{max-width:34em}
  }
  /* Phones: tighter rows and gutters. */
  @media(max-width:767px){
-  .case-tab{min-height:56px;padding:8px 16px}.case-icon{width:36px;height:36px}
+  .case-tab{min-height:56px;padding:8px 16px}
   .case-panel{padding:28px 20px 36px}
-  .case-summary,.case-explanation,.builder-ask p{font-size:16px;line-height:24px}
-  .builder-ask{flex-direction:column;align-items:flex-start;gap:20px}.builder-reasons li{column-gap:16px;grid-template-columns:40px minmax(0,1fr)}.builder-icon{width:40px;height:40px}
-  .case-act{margin-top:28px;padding-top:24px}
-  .case-option{min-width:88px;height:44px;font-size:18px}
+  .case-summary,.builder-ask p{font-size:16px;line-height:24px}
+  .builder-ask{flex-direction:column;align-items:flex-start;gap:20px}.builder-reasons li{column-gap:16px;grid-template-columns:40px minmax(0,1fr)}
   .builder-reasons li{font-size:17px;line-height:26px}.builder-reasons strong{font-size:20px}
  }
 </style>

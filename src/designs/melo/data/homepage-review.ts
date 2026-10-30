@@ -1,14 +1,12 @@
-/** The web lab's homepage-version helpers, pinned to Melo's version (`v2`). The ported sections keep the
- * lab's markup and branch on these: Home.astro passes `variant="v2"`, and the `v1` branches are what the
- * sections looked like before the port (left for cleanup). */
+/** The web lab's homepage-version helpers, pinned to Melo's version (`v2`), the lab's homepage since
+ * 29 Oct 2026. The lab's other versions (Ryan's, Ryan + Augus's) and its version switch are review-only and
+ * not ported. The ported sections keep the lab's markup and read Melo's copy through `homeCopy`; Home.astro
+ * passes `variant="v2"`. */
 import {homeV2} from './homepage-v2';
 
-export type HomeVariant = 'v1' | 'v2';
-export type ReviewVariant = Exclude<HomeVariant, 'v1'>;
+export type ReviewVariant = 'v2';
 
-/** Melo's copy, or undefined for v1 (which keeps its copy in the components). */
-export const homeCopy = (variant: HomeVariant) => variant === 'v2' ? homeV2 : undefined;
+/** Melo's copy. */
+export const homeCopy = (_variant: ReviewVariant) => homeV2;
 /** The wrapper's class: Melo's sheets scope every rule to `.home-v2`. */
-export const pageClass = (variant: HomeVariant) => variant === 'v2' ? 'home-v2' : undefined;
-/** Melo's design: scenes, product cards, four steps and doors. */
-export const ownerVersion = (variant: HomeVariant) => variant !== 'v1';
+export const pageClass = (_variant: ReviewVariant) => 'home-v2';

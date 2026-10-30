@@ -30,7 +30,7 @@ Never set `HOME_DESIGN` in the Cloudflare dashboard's build variables: it would 
 3. Delete the preview when the review is done: `npx wrangler preview delete` (see `npx wrangler preview delete --help`).
 4. Run `npm run build` again before any other deploy, so `dist/` holds the live design.
 
-Where production runs is still open ([open decisions](../records/open-decisions.md#deployment)); this preview applies to the Cloudflare Worker.
+Production is the Cloudflare Worker `augur-website-next` ([deploy](deploy.md)); a preview never changes it.
 
 ## Retire a design
 

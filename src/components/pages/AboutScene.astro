@@ -1,0 +1,47 @@
+---
+import { aboutScene } from '../../data/about-scene';
+import type { SvgNode } from '../../designs/melo/data/iso-kit';
+// The About hero's stack (about-scene.ts), drawn at rest, so no JavaScript, reduced motion and print show the
+// finished stack. The script plays its track; the lift rises above the box, so the svg lets it show.
+const { world, motion, width, height, transform } = aboutScene;
+---
+<svg class="about-scene" viewBox={`0 0 ${width} ${height}`} width={width} height={height} data-about-scene={JSON.stringify(motion)} aria-hidden="true">
+  <g transform={transform}>{(function render(nodes: SvgNode[]): any { return nodes.map(({ tag, attrs, children }) => {
+    const Tag = tag as any;
+    return children ? <Tag {...attrs}>{render(children)}</Tag> : <Tag {...attrs}/>;
+  }); })(world)}</g>
+</svg>
+<script>
+// Loops like the Why Augur scenes: while the stack is on screen and the tab is visible it plays on the 12 s cycle,
+// otherwise it pauses and later resumes where it was. Reduced motion never starts it, and print shows the rest.
+const svg = document.querySelector<SVGSVGElement>('svg[data-about-scene]');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+if (svg && !reduced.matches && 'IntersectionObserver' in window && typeof svg.animate === 'function') {
+  const { cycle, tracks } = JSON.parse(svg.dataset.aboutScene!) as { cycle: number; tracks: [string, Keyframe[]][] };
+  let animations: Animation[] = [], visible = false, printing = false;
+  const running = () => visible && !document.hidden && !printing && !reduced.matches;
+  const sync = () => {
+    if (!animations.length) {
+      if (!running()) return;
+      const start = document.timeline.currentTime;
+      tracks.forEach(([id, keyframes]) => svg.querySelectorAll(`[data-iso="${id}"]`).forEach(el => {
+        const animation = el.animate(keyframes, { duration: cycle, iterations: Infinity });
+        animation.startTime = start;
+        animations.push(animation);
+      }));
+      return;
+    }
+    animations.forEach(a => running() ? a.play() : a.pause());
+  };
+  const reset = () => { animations.forEach(a => a.cancel()); animations = []; };
+  new IntersectionObserver(entries => { visible = entries[entries.length - 1].isIntersecting; sync(); }).observe(svg);
+  document.addEventListener('visibilitychange', sync);
+  reduced.addEventListener('change', () => reduced.matches ? reset() : sync());
+  addEventListener('beforeprint', () => { printing = true; reset(); });
+  addEventListener('afterprint', () => { printing = false; sync(); });
+}
+</script>
+<style>
+  .about-scene { display:block; max-width:100%; height:auto; overflow:visible }
+  @media(max-width:767px) { .about-scene { width:180px } }
+</style>

@@ -6,22 +6,26 @@ import {navigation,navigationGroups,pages,type NavigationItem} from '../../data/
 import {links} from '../../data/links';
 import {newsletter} from '../../data/newsletter';
 import {forms} from '../../data/forms';
-const email=links.contact.url.replace(/^mailto:/,'');
+import {site} from '../../data/site';
+// The address stays for the newsletter's consent line; the contact band no longer shows it.
 // Both rows sit on the site's 500 / 80 / 668 heading grid, so the newsletter and the first
 // link column share one edge with every section above. One footer nav landmark; every
 // footer heading is an h2, a peer of the contact title rather than nested under it.
+// On the homepage the footer settles in as one group, with no stagger (reveal-v2.js); every other page renders
+// it unchanged.
+const reveal=Astro.url.pathname==='/'&&site.homeDesign==='melo'?'':undefined;
 ---
-<footer class="site-footer">
+<footer class="site-footer" data-reveal={reveal}>
   <div id="contact" class="contact-band">
     <div class="site-container footer-grid">
-      <div class="contact-copy"><h2 id="contact-title">Talk to the Augur team.</h2><p>Ask about the protocol or share feedback. Building on it? Tell us what your project needs.</p><div class="contact-actions"><Button href={pages.contact}>Talk to us</Button><a class="contact-email" href={links.contact.url}>{email}</a></div></div>
+      <div class="contact-copy"><h2 id="contact-title">Talk to the Augur team.</h2><p>Ask about the protocol or share feedback. Building on it? Tell us what your project needs.</p><div class="contact-actions"><Button href={pages.contact}>Talk to us</Button></div></div>
       <div class="newsletter"><h2 id="newsletter-title">Follow Augur's progress</h2><p>Research, development and product updates.</p>
         <form class="newsletter-form" action={forms.url ? forms.url+newsletter.path : undefined} method={forms.url ? 'post' : 'dialog'} aria-labelledby="newsletter-title" data-newsletter={forms.url ? 'live' : 'offline'}>
           <div class="newsletter-row"><div class="field"><label for="newsletter-email">Email address</label><input type="email" id="newsletter-email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required maxlength="254" aria-describedby={forms.url ? 'newsletter-email-error newsletter-consent' : 'newsletter-email-error'} /></div><Button type="submit" variant="outline">Subscribe</Button></div>
           {forms.url && <div class="newsletter-trap" aria-hidden="true"><label for="newsletter-nickname">Leave this empty</label><input type="text" id="newsletter-nickname" name={forms.honeypot} tabindex="-1" autocomplete="off" /></div>}
           <p class="field-error" id="newsletter-email-error" hidden></p>
           <p class="newsletter-status" role="status" aria-live="polite" data-newsletter-status></p>
-          {forms.url && <p class="newsletter-consent" id="newsletter-consent">{newsletter.consent} <a href={links.contact.url}>{email}</a>.</p>}
+          {forms.url && <p class="newsletter-consent" id="newsletter-consent">{newsletter.consent} <a href={pages.contact}>contact us</a>.</p>}
         </form></div>
     </div>
   </div>
@@ -78,8 +82,8 @@ const email=links.contact.url.replace(/^mailto:/,'');
 .footer-grid{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);gap:80px}
 .contact-band{padding-block:96px}
 .contact-copy h2{margin-bottom:16px;text-wrap:balance}.contact-copy p{font-size:18px;line-height:28px;color:var(--muted-foreground);max-width:540px;margin-bottom:24px}
-/* Both ways to reach the team sit together: the contact page, and the inbox beside it. */
-.contact-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px}.contact-email{line-height:24px}.contact-email:hover{text-decoration-thickness:2px}
+/* The footer, consent line included, points to the contact page alone; the page gives the email address (owner, 30 Oct 2026; consent line 31 Oct 2026). */
+.contact-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px}
 .newsletter h2{font-size:20px;line-height:26px;letter-spacing:0;margin-bottom:12px}.newsletter>p{color:var(--muted-foreground);margin-bottom:24px}
 .newsletter-row{display:flex;align-items:flex-end;gap:12px}.newsletter .field{flex:1;min-width:0;gap:12px}.newsletter .field>label{font-weight:400}.newsletter .field input{background:var(--web-tile)}
 .newsletter .field-error{margin-top:12px}.newsletter-status{margin-top:12px;font-size:14px;line-height:20px;color:var(--muted-foreground)}.newsletter-status:empty{display:none}.newsletter-status a{color:var(--foreground)}

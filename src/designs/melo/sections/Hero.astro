@@ -1,54 +1,60 @@
 ---
 import Button from '../../../components/primitives/Button.astro';
-import HeritageField from '../art/HeritageField.astro';
-import HeroArt from '../art/HeroArt.astro';
 import FlockArt from '../art/FlockArt.astro';
 import {links} from '../../../data/links';
 import {heroTimeline} from '../motion/timelines';
 import heroArrival from '../../../motion/hero-arrival.js?raw';
-import {homeCopy,ownerVersion,type HomeVariant} from '../data/homepage-review';
+import {homeCopy,type ReviewVariant} from '../data/homepage-review';
 import {reviewInline} from '../scripts/review-inline';
-// A review version (v2, v3, v4) renders its own copy (homepage-review.ts); 'v1', the default and every
-// "/" use, stays byte-identical. The review versions change only the body's last clause (Ryan 2); the
-// headline and art stay (Ryan 1).
-// v3 (Ryan 16) also swaps "See how it works" for its three reader links, `hero.paths` (homepage-v3.ts);
-// the whitepaper link stays.
-// The owner's version (/2/) draws the lituus flock (FlockArt.astro, hero-flock.ts) in place of the square
-// field and the heritage field, and renders its driver after the section (review-inline.ts). From 1024 px
-// a background layer fills the hero's right 70% beside the copy and replaces the flock (owner, 22 Oct 2026):
-// the live floor (hero-floor-v2.js draws it on a canvas; "Let's try live first") or the generated video
-// (hero-video-v2.js), chosen by `layer` below. The markup is only a still, which loads from 1024 px alone
-// (a <picture> with a blank fallback); the script lays the canvas or the <video> over it. A <video> in the
-// markup would show the browser's own controls without JavaScript.
-interface Props { variant?:HomeVariant; }
+// Each homepage version renders its own copy (homepage-review.ts). The versions change only the body's
+// last clause (Ryan 2); the headline and art stay (Ryan 1).
+// Ryan 16 swaps "See how it works" for three reader links, `hero.paths` (Ryan's and Melo's); on Ryan's
+// the whitepaper link stays. A copy with `whitepaper: false` drops it (Melo's, owner, 29 Oct 2026).
+// The hero draws the lituus flock (FlockArt.astro, hero-flock.ts) and renders its driver after the section
+// (review-inline.ts). From 1024 px a background layer fills the hero's right 70% beside the copy and
+// replaces the flock (owner, 22 Oct 2026): the live floor (hero-floor-v2.js draws it on a canvas; "Let's
+// try live first") or the generated video (hero-video-v2.js), chosen by `layer` below. The markup is only a
+// still, which loads from 1024 px alone (a <picture> with a blank fallback); the script lays the canvas or
+// the <video> over it. A <video> in the markup would show the browser's own controls without JavaScript.
+interface Props { variant:ReviewVariant; }
 const layer=('floor' as 'floor'|'video');
 const stills=layer==='floor'?'/images/hero/augur-hero-floor.webp 1920w, /images/hero/augur-hero-floor-2560.webp 2560w':'/images/hero/augur-hero-loop-poster.webp 1920w, /images/hero/augur-hero-loop-poster-2560.webp 2560w';
-const {variant='v1'}=Astro.props;const copy=homeCopy(variant);const own=ownerVersion(variant);
-const paths=copy&&'paths' in copy.hero?copy.hero.paths:undefined;
-// In the review UI the body's last words stay on one line (home-v2-only.css), so it never ends on a widow:
-// five, or the copy's own `keep` where its ending is longer (Ryan's, which five broke early at 1440).
-const bodyEnd=copy?copy.hero.bodyEnd:'lying is designed to cost more than it pays.';const endWords=bodyEnd.split(' ');
-const keep=copy&&'keep' in copy.hero?copy.hero.keep:5;
+const {variant}=Astro.props;const copy=homeCopy(variant);
+const paths='paths' in copy.hero?copy.hero.paths:undefined;
+const whitepaper='whitepaper' in copy.hero?copy.hero.whitepaper:true;
+// The body's last words stay on one line (home-v2-only.css), so it never ends on a widow: five, or the
+// copy's own `keep` where its ending is longer (Ryan's, which five broke early at 1440).
+const endWords=copy.hero.bodyEnd.split(' ');
+const keep='keep' in copy.hero?copy.hero.keep:5;
+// The body opens by saying what an oracle is, before the page leans on the word (owner, 29 Oct 2026: "define
+// oracle in the hero, so that people know what it is before they keep reading"), on every version. The
+// ranking is hedged as the Robust card hedges it ("more than almost any other oracle", "one of the costliest
+// oracles to attack"); the owner's draft said "the most robust way". A copy may set its own sentence (Melo's
+// points back at the lead; Ryan + Augus's says what Augur Lituus does, Augus's line).
+const intro='intro' in copy.hero?copy.hero.intro:'Augur Lituus is the next generation of Augur’s oracle, one of the most robust ways to put data onchain.';
+// A copy may also set the second sentence's opening (Melo's adds "Anyone can ask").
+const bodyStart='bodyStart' in copy.hero?copy.hero.bodyStart:'Anyone can answer, anyone can challenge, and ';
 const arrivalScript=heroArrival.replace('__DEV__',String(import.meta.env.DEV));
-// On /2/ the underline draws before the actions arrive and retracts sooner (heroTimeline.v2).
-const {underline,underlineOut}=own?heroTimeline.v2:heroTimeline;
-const style=`--line-duration:${heroTimeline.lines[0].end}ms;--copy-start:${heroTimeline.copy.start}ms;--copy-duration:${heroTimeline.copy.end-heroTimeline.copy.start}ms;--action-start:${heroTimeline.actions.start}ms;--action-duration:${heroTimeline.actions.end-heroTimeline.actions.start}ms;--field-start:${heroTimeline.field.start}ms;--field-duration:${heroTimeline.field.end-heroTimeline.field.start}ms;--underline-start:${underline.start}ms;--underline-duration:${underline.end-underline.start}ms;--underline-out-start:${underlineOut.start}ms;--underline-out-duration:${underlineOut.end-underlineOut.start}ms;--underline-hover:${heroTimeline.underlineHover}ms;--cue-start:${heroTimeline.scrollCue.start}ms;--cue-duration:${heroTimeline.scrollCue.end-heroTimeline.scrollCue.start}ms;--cue-cycle:${heroTimeline.scrollCue.cycle}ms`;
+// The arrival (heroTimeline): the headline and the support line only rise, under 300 ms, so they paint at
+// once (home-v2-only.css swaps their keyframes); the underline draws before the actions arrive and retracts
+// sooner; the art fades in once the text has landed.
+const t=heroTimeline;const {lines,underline,underlineOut}=t;
+const style=`--line-duration:${lines[0].end}ms;--copy-start:${t.copy.start}ms;--copy-duration:${t.copy.end-t.copy.start}ms;--action-start:${t.actions.start}ms;--action-duration:${t.actions.end-t.actions.start}ms;--field-start:${t.field.start}ms;--field-duration:${t.field.end-t.field.start}ms;--underline-start:${underline.start}ms;--underline-duration:${underline.end-underline.start}ms;--underline-out-start:${underlineOut.start}ms;--underline-out-duration:${underlineOut.end-underlineOut.start}ms;--underline-hover:${heroTimeline.underlineHover}ms;--cue-start:${heroTimeline.scrollCue.start}ms;--cue-duration:${heroTimeline.scrollCue.end-heroTimeline.scrollCue.start}ms;--cue-cycle:${heroTimeline.scrollCue.cycle}ms`;
 ---
 <section class="home-hero" aria-labelledby="hero-title" data-home-hero style={style}>
  <script is:inline set:html={arrivalScript}></script>
- {!own&&<HeritageField glow id="hero-field"/>}
- {own&&<div class="hero-video" data-hero-video={layer==='video'?'':undefined} data-hero-floor={layer==='floor'?'':undefined} aria-hidden="true"><picture><source media="(min-width:1024px)" srcset={stills} sizes="95vw" width="1920" height="1080"/><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAIBAAA=" alt="" width="1920" height="1080" decoding="async"/></picture></div>}
+ <div class="hero-video" data-hero-video={layer==='video'?'':undefined} data-hero-floor={layer==='floor'?'':undefined} aria-hidden="true"><picture><source media="(min-width:1024px)" srcset={stills} sizes="95vw" width="1920" height="1080"/><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAIBAAA=" alt="" width="1920" height="1080" decoding="async"/></picture></div>
  <div class="site-container hero-inner">
   <div class="hero-copy">
-   <h1 id="hero-title" class="display"><span data-hero-line style={`--line-start:${heroTimeline.lines[0].start}ms`}>The frontier of</span>{' '}<span data-hero-line style={`--line-start:${heroTimeline.lines[1].start}ms`}><span class="hero-emphasis">decentralized</span></span>{' '}<span data-hero-line style={`--line-start:${heroTimeline.lines[2].start}ms`}>truth<span class="hero-dot">.</span></span></h1>
-   <div class="hero-support"><p class="hero-lead">Real-world answers for onchain apps, {own?<span class="hero-keep">controlled by no one.</span>:'controlled by no one.'}</p><p class="hero-body">Augur Lituus is the next generation of Augur's oracle. Anyone can answer, anyone can challenge, and {own?<>{endWords.slice(0,-keep).join(' ')+' '}<span class="hero-keep">{endWords.slice(-keep).join(' ')}</span></>:bodyEnd}</p></div>
-   <div class="hero-actions">{paths?<nav class="hero-paths" aria-label={paths.label}>{paths.links.map(({label,href},i)=><Button href={href} variant={i?'outline':'primary'}>{label}</Button>)}</nav>:<Button href="#how-it-works">See how it works</Button>}<Button href={links.whitepaper.url} variant="text" external>Read the whitepaper</Button></div>
+   <h1 id="hero-title" class="display"><span data-hero-line style={`--line-start:${lines[0].start}ms`}>The frontier of</span>{' '}<span data-hero-line style={`--line-start:${lines[1].start}ms`}><span class="hero-emphasis">decentralized</span></span>{' '}<span data-hero-line style={`--line-start:${lines[2].start}ms`}>truth<span class="hero-dot">.</span></span></h1>
+   <div class="hero-support"><p class="hero-lead">Real-world answers for onchain apps, <span class="hero-keep">controlled by no one.</span></p><p class="hero-body">{intro} {bodyStart}{endWords.slice(0,-keep).join(' ')+' '}<span class="hero-keep">{endWords.slice(-keep).join(' ')}</span></p></div>
+   <div class="hero-actions">{paths?<nav class="hero-paths" aria-label={paths.label}>{paths.links.map(({label,href},i)=><Button href={href} variant={i?'outline':'primary'}>{label}</Button>)}</nav>:<Button href="#how-it-works">See how it works</Button>}{whitepaper&&<Button href={links.whitepaper.url} variant="text" external>Read the whitepaper</Button>}</div>
   </div>
-  <div class="hero-visual">{own?<FlockArt/>:<HeroArt/>}</div>
+  <div class="hero-visual"><FlockArt/></div>
  </div>
  <span class="hero-scroll" aria-hidden="true" data-scroll-cue><span class="hero-scroll-dot"></span></span>
-</section>{own&&<script is:inline set:html={reviewInline.v2.scripts.flock}></script>}{own&&<script is:inline set:html={reviewInline.v2.scripts[layer]}></script>}
-<script>import {initHeritageGlow} from '../motion/heritage-glow';document.querySelectorAll<SVGSVGElement>('[data-heritage=interactive]').forEach(initHeritageGlow);
+</section><script is:inline set:html={reviewInline.v2.scripts.flock}></script><script is:inline set:html={reviewInline.v2.scripts[layer]}></script>
+<script>
 // The scroll cue has done its job once the page scrolls: it fades out and stops.
 const cue=document.querySelector<HTMLElement>('[data-scroll-cue]');
 if(cue){const done=()=>{if(scrollY<=8)return;cue.dataset.scrolled='';removeEventListener('scroll',done);};done();addEventListener('scroll',done,{passive:true});}</script>
@@ -80,11 +86,9 @@ if(cue){const done=()=>{if(scrollY<=8)return;cue.dataset.scrolled='';removeEvent
 [data-hero-arrival=entering] .hero-scroll:not([data-scrolled]){animation:hero-cue calc(var(--cue-duration) * var(--hero-motion-factor,1)) ease-out calc(var(--cue-start) * var(--hero-motion-factor,1)) backwards}
 @keyframes hero-cue{from{opacity:0}to{opacity:1}}
 @keyframes hero-scroll{0%{opacity:0;transform:none}15%{opacity:1;transform:none;animation-timing-function:var(--ease-draw)}65%{opacity:1;transform:translateY(35px)}80%,100%{opacity:0;transform:translateY(35px)}}
-[data-hero-arrival=entering] :global(.heritage-field){animation:hero-field calc(var(--field-duration) * var(--hero-motion-factor,1)) ease-out calc(var(--field-start) * var(--hero-motion-factor,1)) backwards}
 @keyframes hero-line{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes hero-support{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes hero-actions{from{opacity:0;visibility:hidden}to{opacity:1;visibility:visible}}
-@keyframes hero-field{from{opacity:0}to{opacity:1}}
 @keyframes hero-underline-in{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes hero-underline-out{from{transform:scaleX(1)}to{transform:scaleX(0)}}
 @media(prefers-reduced-motion:reduce){.hero-emphasis::after{animation:none}.hero-emphasis::before{transition:none}.hero-scroll-dot{animation:none;opacity:1}}

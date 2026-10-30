@@ -11,9 +11,9 @@ Each document has one type and lives in that type's folder. Use these terms in d
 | Guide | `guides/` | How do I…? | Numbered steps toward a goal | the procedure changes |
 | Reference | `reference/` | What is…? | Current facts, looked up, not read through | the code or config changes |
 | Explanation | `explanation/` | Why…? | Reasons, trade-offs, how parts fit together | the reasoning changes |
-| Record | `records/` | What's open? What was checked? | Dated open decisions and verification results | a decision is made or a check is run |
+| Record | `records/` | What's open? What was decided? What was checked? | Open decisions, the decision log and verification results, dated | a decision is made or a check is run |
 
-Guide, reference and explanation follow Diátaxis; "guide" is Diátaxis's "how-to guide". Record is this project's addition for status that goes stale on purpose. Test: if a sentence becomes false or irrelevant once someone acts on it, it belongs in a record. When a decision is made, delete its record entry and update the reference it affects. Tutorials are not used.
+Guide, reference and explanation follow Diátaxis; "guide" is Diátaxis's "how-to guide". Record is this project's addition for status that goes stale on purpose. Test: if a sentence becomes false or irrelevant once someone acts on it, it belongs in a record. When a decision is made, delete its entry from `records/open-decisions.md`, append it to `records/decisions.md` with who decided and the source, and update the reference it affects. Never edit a past entry in `records/decisions.md`. Tutorials are not used.
 
 Do not mix steps, facts, reasons and status in one document. Link to the other type instead.
 

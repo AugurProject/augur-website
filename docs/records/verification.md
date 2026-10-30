@@ -15,15 +15,44 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - The contact form against Proton's real SMTP server and a deployed `augur-forms` Worker; it has been checked only locally, with the `log` provider and a fake SMTP server (29 October 2026).
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
 
+## 31 October 2026: production after the deploy race
+
+PR #1 (merge `e4939a0`) and PR #2 (merge `1cd2034`) were merged into `main` seconds apart, and Workers Builds built each merge. The two builds raced: PR #1's build, which did not contain PR #2, finished last and its deploy replaced production with the old site. Production was restored by deploying the already-built version `8824ad7a-d85a-4ef2-b6db-1562feeb4917` to 100% with `cf workers deployments create`; nothing was rebuilt. The recovery steps and the one-at-a-time merge rule are in [deploy](../guides/deploy.md#one-deploy-at-a-time).
+
+After the fix, `node scripts/check-launch.mjs https://augur-website-next.bytebros.workers.dev`: 68 passed, 0 failed, 1 warning (the supply `meta.json` block is older than www.augur.net's; the supply is the same), 1 skipped (the apex redirect). Run again later the same day with the same result.
+
+With curl against the production host, the same day:
+
+- **404.** An unknown path returns status 404 with the 404 page (about 60 KB of HTML) and the `_headers` headers, both as a browser navigation (`sec-fetch-mode: navigate`, as in `check-launch.mjs`'s `navigate` helper) and as a plain curl. Production does not show the preview build's split, where a non-navigation request gets the Worker's plain 9-byte `Not found` ([hosting](../reference/hosting.md#serving)). The preview host still shows that split.
+- **X-Robots-Tag.** Every response from the production host carries `X-Robots-Tag: noindex` together with the other `_headers` headers: pages, the supply files, the `/mission` redirect, the 404 page and a `POST` answered 405. No path escapes the `/*` rule, so there is no unmatched path to compare. Cloudflare's own `/cdn-cgi/trace` on the same host has no `X-Robots-Tag`, so Cloudflare does not add it to everything on this host. On the preview host, the Worker's 9-byte 404, which carries no `_headers` headers, does have `X-Robots-Tag: noindex`, so Cloudflare adds it to preview responses itself. Inference: on production the header comes from the `_headers` rule; it cannot be shown directly, because every production response passes through that rule.
+
+Not checked: the forms (offline on production), a real browser on production, www.augur.net (still the old site), and everything listed under Not yet checked.
+
+## 31 October 2026: Melo's homepage at lab `795ca0c`
+
+Checked against `launch/melo-latest`: augur-web-lab `abfb3b5..795ca0c` merged into the `melo` design, the shared footer, PageHero, About, the announcement bar and the page field. Every ported file was compared with the lab at `795ca0c` after rewriting the lab's import paths, `.container` and `--web-hover-edge` to the site's; what remains is the site's own: the roadmap's and Learn more's `isExternal` checks and blog door, the footer's newsletter consent, Privacy and Terms links and `pages.contact`, the local Blog nav item, the tabs controller's phone scroll, and the section reveal rendering as an inline module instead of in the lab layout's "end" slot. `npm run build` (59 pages) and `npm run check:designs` (`current`, `melo`) pass. Served by `npx wrangler dev`, `node scripts/check-launch.mjs http://127.0.0.1:8813`: 67 passed, 0 failed, 1 warning (the supply snapshot is byte-identical to www.augur.net's), 2 skipped.
+
+Headless Chromium (Playwright) at 1440×900 and 390×844, fresh context each, the built site against a built `git worktree` of the lab at `795ca0c` (its own fonts): on `/` every section (hero, Why Augur, Applications, How It Works with Holding REP, Roadmap, Learn more) has identical text and identical height; the footer differs only by the site's Privacy and Terms links and its "Statoblast" spelling, and neither shows contact@augur.net. `/about/`'s hero has identical text and height, with the stack at the same box (1112, 306, 232×162 at 1440; under the text, 180 wide, at 390). The announcement bar waits above the page, then bar and header land together between 3.0 and 3.6 s on both. The section reveal arms 21 groups below the fold on both and leaves none armed after a scroll through. All four How It Works steps and all three use cases select on click; the example button stays 290 px wide open and closed. Neither logged console errors or failed requests.
+
+Not checked: pixel diffs (screenshots compared by eye); reduced motion, print and no-JavaScript for the reveal and the drop-in; a reload or `#section` arrival skipping them; the `current` design beyond its build; everything listed under Not yet checked.
+
+## 31 October 2026: Melo's homepage at lab `abfb3b5`
+
+Checked against `launch/melo-latest`: `melo`'s Applications and How It Works files merged from augur-web-lab `1b95a3a..abfb3b5`. Each of the seven files differs from the lab at `abfb3b5` only as it differed from `1b95a3a` (import paths, `.site-container`, `--brand-hover-edge`); the lab's dropped `rep` import is dropped here too, and every module the new code imports exists. `npm run build` (59 pages) and `npm run check:designs` (`current`, `melo`) pass. Served by `npx wrangler dev`, `node scripts/check-launch.mjs http://127.0.0.1:8812`: 67 passed, 0 failed, 1 warning (the supply snapshot's block is behind www.augur.net's), 2 skipped.
+
+Headless Chromium (Playwright) at 1440×900 and 390×844, the built site against the lab's `/melo/` at `abfb3b5` under `astro dev`: Applications, How It Works and Holding REP have identical text and identical section sizes, and screenshots match. All four How It Works steps and all three use cases (DAOs & governance shows the switch card) select on click. The site logged no console errors.
+
+Not checked: the lab rendered with fallback fonts (its dev server refused the font files from a copied checkout), so line wraps were compared by eye only; no pixel diff; the other sections, which this change does not touch; everything listed under Not yet checked.
+
 ## 30 October 2026: Workers Builds preview of the launch branch
 
-`node scripts/check-launch.mjs https://launch-replace-augur-net-augur-website-next.bytebros.workers.dev` against the preview build (`npx wrangler preview`): 69 passed, 0 failed, 1 skipped (the apex redirect). The preview carries Astro's Worker script: a browser navigation to an unknown path gets the 404 page, while a non-navigation request gets the Worker's plain 9-byte `Not found` with status 404 and without the `_headers` headers ([hosting](../reference/hosting.md#serving)). `X-Robots-Tag: noindex` is present on the preview host, but it also appears on the Worker's own 404, so Cloudflare may add it to preview URLs itself; the `_headers` rule for the production workers.dev host is confirmed only under `wrangler dev`.
+`node scripts/check-launch.mjs https://launch-replace-augur-net-augur-website-next.bytebros.workers.dev` against the preview build (`npx wrangler preview`): 69 passed, 0 failed, 1 skipped (the apex redirect). The preview carries Astro's Worker script: a browser navigation to an unknown path gets the 404 page, while a non-navigation request gets the Worker's plain 9-byte `Not found` with status 404 and without the `_headers` headers ([hosting](../reference/hosting.md#serving)). `X-Robots-Tag: noindex` is present on the preview host, but it also appears on the Worker's own 404, so Cloudflare may add it to preview URLs itself; the `_headers` rule for the production workers.dev host was confirmed only under `wrangler dev` at this point (production: see [31 October](#31-october-2026-production-after-the-deploy-race)).
 
 ## 30 October 2026: merged launch branch under `wrangler dev`
 
 Checked against `launch/replace-augur-net` after merging the content port and the launch plumbing, with the Blog navigation item made local. `npm run build` (59 pages) and `npm run check:designs` (`current`, `melo`) pass. The build was served by `npx wrangler dev` and checked with `node scripts/check-launch.mjs http://127.0.0.1:8811`: 67 passed, 0 failed, 2 skipped (the workers.dev `X-Robots-Tag` and the apex redirect, which need the real hosts). Every URL in the old sitemap answers 200, or 301 to `/about/` for `/mission/` and `/team/`; the supply endpoints are byte-identical to www.augur.net; the sitemap lists 51 pages and no form result pages; the header Blog link points to `/blog/` without ↗.
 
-Not checked: everything listed as not checked in the two entries below, and a deploy to Cloudflare.
+Not checked: everything listed as not checked in the two entries below, and a deploy to Cloudflare (production was checked on 31 October 2026; see [production after the deploy race](#31-october-2026-production-after-the-deploy-race)).
 
 ## 30 October 2026: launch plumbing under `wrangler dev`
 
@@ -47,7 +76,7 @@ Checked against `launch/port-content` at `c0355d9` ([ported content](../referenc
 - `dist/client/rss.xml` is byte-identical to the live `https://www.augur.net/rss.xml` (16 items).
 - Text of the 16 posts, 6 fork guides and 9 whitepaper pages, tags removed, matches the live pages except for the listed differences: the monitor removals, the guide titles moved to the header, the "References" heading, and two posts where the old site had turned `$…$` into math. Privacy and terms match word for word apart from the case of the three community links.
 - In the ported pages, 2,003 internal links and fragments resolve to built files and ids, and all 84 image URLs exist in `dist/client`. The appendices carry KaTeX markup, and the KaTeX stylesheet is linked from the whitepaper pages only.
-- No `↗` or arrow icon on any `/blog/` link except the navigation's Blog entry (see [open decisions](open-decisions.md#ported-content)). `fork-risk`, `/data/fork`, "fork monitor" and "gauge" appear nowhere in `src/` or `dist/client/`.
+- No `↗` or arrow icon on any `/blog/` link except the navigation's Blog entry, which was made local later the same day ([decisions](decisions.md#30-october-2026)). `fork-risk`, `/data/fork`, "fork monitor" and "gauge" appear nowhere in `src/` or `dist/client/`.
 - `wrangler dev` on the build: the ported pages, `/rss.xml`, the whitepaper `.md` files and a figure answer 200 with HTML, XML, Markdown and JPEG types; `/blog` and `/learn/fork` 307 to the trailing slash.
 - Headless Chrome screenshots at 1440 px (blog index and post, a fork guide, the migration record, whitepaper appendix and index, privacy) and at 390 px through an iframe (blog index, a fork guide, a whitepaper appendix): layout holds, wide tables scroll inside their box, and inline and display math render.
 

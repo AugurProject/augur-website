@@ -12,9 +12,9 @@
 // climbs to 99¢, then the report, open to challenge while a line fills, then Final, then the market pays. The
 // insurance card is the same query as a relay (owner, 28 Oct 2026, "Relay it is"): the flight's stretch runs
 // while it's in the air, the next stretch fills while the report is open to challenge, and the line runs Green
-// to the cover as it pays. The DAO card is the same query as a vote bar (owner, 28 Oct 2026, "polish vote
-// bar"): the vote passes, then the answer on the DAO's written rules blocks the upgrade. Ryan's and Augus's DAO
-// card, a proposal, loops on the same cycle: its check runs and its answers come in.
+// to the cover as it pays. The DAO card is the same query as a switch (owner, 29 Oct 2026, "implement the Switch
+// into /melo"): the vote turns the upgrade's go-live switch on, Augur Lituus's larger part answers Yes on the
+// DAO's written rules, and the switch goes back off.
 // The loop starts once 60% of the stage is in view and runs while any of it is on screen; off screen or in a
 // hidden tab it pauses and resumes where it was. A pick starts the picked case from the top, and pressing the
 // case already shown restarts it (owner, 26 Oct 2026), its card dipping out and back in; a pick also draws the
@@ -80,6 +80,8 @@ track(el, keys);
 const fill = (el, from, to, easing) => track(el, [{ opacity: 1, transform: 'none', at: 0 }, { opacity: 1, transform: 'none', at: L.reset, easing: E.crossfade }, { opacity: 0, transform: 'none', at: back }, { opacity: 0, transform: 'scaleX(0)', at: back + 1 }, { opacity: 1, transform: 'scaleX(0)', at: back + 2 }, { opacity: 1, transform: 'scaleX(0)', at: from, easing }, { opacity: 1, transform: 'none', at: to }]);
 // A mark (a stop, the seal) fades at the reset and grows in from `from` scale at its moment.
 const grow = (el, at, from) => track(el, [{ opacity: 1, transform: 'none', at: 0 }, { opacity: 1, transform: 'none', at: L.reset, easing: E.crossfade }, { opacity: 0, transform: 'none', at: back }, { opacity: 0, transform: `scale(${from})`, at, easing: E.settle }, { opacity: 1, transform: 'none', at: at + L.seal }]);
+// A layer shown at rest goes at the reset and fades back in from its moment, over `over`.
+const appear = (el, at, over = L.in) => track(el, [{ opacity: 1, at: 0 }, { opacity: 1, at: L.reset, easing: E.crossfade }, { opacity: 0, at: back }, { opacity: 0, at, easing: E.reveal }, { opacity: 1, at: at + over }]);
 // The query's status in the corner: Asked, Reported, Final. While the query is asked it's the one part lit:
 // Asked comes in from `statusFrom` and a Paper ring lights it over `glow`. Then it steps back until the end.
 const chip = card => {
@@ -138,45 +140,33 @@ grow(q('stop-paid'), arrive, .4);
 states(q('cover'), [0, arrive], () => true);
 states(q('cover-note'), [0, arrive], () => true);
 };
-// The DAO card, a vote bar read top to bottom: the vote lights and its votes come in steadily from both ends;
-// the majority tick stretches as For passes it, the vote closes, its tallies show and, a beat later, it has
-// Passed, going live in two days; the light moves down to Augur Lituus, whose Yes is open to challenge while
-// the line fills, then Final and not challenged; then the vote lights again and the upgrade is Blocked, while
-// its bar stays back.
-const vote = card => {
-const V = U.vote, q = name => card.querySelector(`[data-card="${name}"]`);
-const run = V.close - L.focus, share = parseFloat(q('bar')?.dataset.share) || 50, passes = L.focus + Math.round(run * 50 / share), passed = V.close + V.status;
+// The DAO card, a switch read top to bottom: the upgrade's row lights while the vote is open; the vote passes and
+// the go-live switch slides on, knob and ring Paper, to go live in two days. The light moves down to Augur
+// Lituus, the larger part: the report rings Yes, the line for the day it's open to challenge fills, and at Final
+// the Green sweeps across Yes with its check while No steps back. Then the row lights again and the switch slides
+// back off, its knob Green: Blocked. The knob's colours are three stacked squares that cross-fade, so only
+// transform and opacity move.
+const switchCard = card => {
+const S = U.switch, q = name => card.querySelector(`[data-card="${name}"]`), knob = q('knob');
+const on = `translateX(${(knob && getComputedStyle(knob).getPropertyValue('--travel').trim()) || '32px'})`;
+const lit = [{ opacity: 0, at: 0 }, { opacity: 0, at: S.close + U.swapIn, easing: E.reveal }, { opacity: 1, at: S.close + S.slide }, { opacity: 1, at: L.paid, easing: E.reveal }, { opacity: 0, at: L.paid + S.slide / 2 }];
 chip(card);
-light(q('poll'), [reset, [around(L.focus), 1], [around(L.reported), L.past], [around(L.paid), 1]]);
+light(q('app'), [reset, [around(L.focus), 1], [around(L.reported), L.past], [around(L.paid), 1]]);
 light(q('oracle'), [reset, [around(L.reported), 1]]);
-// The bar is full while the vote runs and steps back to `past`, as it rests, as the DAO acts.
-light(q('bar'), [[0, 1, L.fade, E.crossfade], [around(L.paid), V.past]], V.past);
-['for', 'against'].forEach(name => fill(q(name), L.focus, V.close, 'linear'));
-track(q('tick'), [{ transform: 'none', at: 0 }, { transform: 'none', at: passes, easing: E.settle }, { transform: `scaleY(${V.tickScale})`, at: passes + V.tick * .3, easing: E.reveal }, { transform: 'none', at: passes + V.tick }]);
-['for-label', 'against-label'].forEach(name => states(q(name), [0, V.close], () => true));
-states(q('status-word'), [0, passed, L.paid], () => true);
-states(q('status-note'), [0, passed, L.paid], () => true);
-states(q('answer'), [0, L.reported, L.final], k => k === 2);
-seal(card);
+states(q('app-value'), [0, S.close, L.paid], () => true);
+states(q('app-note'), [0, S.close, L.paid], () => true);
+track(knob, [{ transform: 'none', at: 0 }, { transform: 'none', at: S.close, easing: E.travel }, { transform: on, at: S.close + S.slide }, { transform: on, at: L.paid, easing: E.travel }, { transform: 'none', at: L.paid + S.slide }]);
+track(q('switch-on'), lit);
+track(q('knob-on'), lit);
+appear(q('knob-win'), L.paid + S.slide / 2, S.slide / 2);
+appear(q('yes-ring'), L.reported);
+fill(q('yes-fill'), L.final, L.final + L.in, E.settle);
+appear(q('yes-pick'), L.final + S.pick);
+light(q('no'), [[0, 1, L.fade, E.crossfade], [L.final, S.other]], S.other);
+states(q('answer-note'), [0, L.reported, L.final], () => true);
 waiting(q('wait'));
 };
-// Ryan's and Augus's DAO card, a proposal: its pending words show from the reset, a Mist line runs under its
-// pending check, and at the answer each pending word goes and its answer comes in; then the footer.
-const proposal = card => {
-const q = name => card.querySelector(`[data-card="${name}"]`), qa = name => [...card.querySelectorAll(`[data-card="${name}"]`)], at = L.reported;
-// Two looks of one value: `was` shows from the reset until the answer, and the resting `now` is back after it.
-const swap = (was, now, from) => {
-track(was, [{ opacity: 0, at: 0 }, { opacity: 0, at: back, easing: E.crossfade }, { opacity: 1, at: back + L.resetIn }, { opacity: 1, at }, { opacity: 0, at: at + U.swapOut }]);
-track(now, [{ opacity: 1, transform: 'none', at: 0 }, { opacity: 1, transform: 'none', at: L.reset, easing: E.crossfade }, { opacity: 0, transform: 'none', at: back }, { opacity: 0, transform: from, at: at + U.swapIn, easing: E.settle }, { opacity: 1, transform: 'none', at: at + U.swapIn + U.swap }]);
-};
-swap(q('status-wait'), q('status-done'), `scale(${U.statusFrom})`);
-const now = qa('now');
-qa('was').forEach((el, k) => swap(el, now[k], `translateY(${U.rise}px)`));
-track(q('scan'), [{ opacity: 0, transform: 'scaleX(0)', at: 0 }, { opacity: 1, transform: 'scaleX(0)', at: L.focus, easing: E.travel }, { opacity: 1, transform: 'none', at: L.focus + U.scan }, { opacity: 1, transform: 'none', at }, { opacity: 0, transform: 'none', at: at + U.swapOut }]);
-track(q('foot'), [{ opacity: 1, transform: 'none', at: 0 }, { opacity: 1, transform: 'none', at: L.reset, easing: E.crossfade }, { opacity: 0, transform: 'none', at: back }, { opacity: 0, transform: `translateY(${U.footRise}px)`, at: at + U.footAt, easing: E.settle }, { opacity: 1, transform: 'none', at: at + U.footAt + U.foot }]);
-track(q('result'), [{ opacity: 1, at: 0 }, { opacity: 1, at: back }, { opacity: 0, at: back + 1 }, { opacity: 0, at: at + U.resultAt }, { opacity: 1, at: at + U.resultAt + U.result }]);
-};
-const kinds = { query, relay, vote, proposal };
+const kinds = { query, relay, switch: switchCard };
 const clear = () => { loop.forEach(a => a.cancel()); loop = []; };
 const settle = () => { once.forEach(a => a.cancel()); once = []; };
 // Builds the shown case's loop at `at` on the cycle: playing while the stage is on screen, else paused there.
@@ -196,13 +186,21 @@ else { frozen = phase(); loop.forEach(a => { a.pause(); a.currentTime = frozen; 
 playing = running();
 };
 const halt = () => { on = false; settle(); clear(); };
+// The loop starts once the section reveal (reveal-v2.js) has brought the stage in, so a reveal and a loop never start
+// together.
+let ratio = 0;
+const begin = () => {
+const group = root.closest('[data-armed]');
+if (group) { group.addEventListener('revealed', begin, { once: true }); return; }
+if (!on && !held && !reduced.matches && visible && ratio >= U.threshold) { on = true; start(0); }
+else sync();
+};
 const observer = new IntersectionObserver(entries => {
 const entry = entries[entries.length - 1];
-visible = entry.isIntersecting;
+visible = entry.isIntersecting; ratio = entry.intersectionRatio;
 // Leaving the screen ends a reader's stop: back in view, the case plays again.
 if (!visible) held = false;
-if (!on && !held && !reduced.matches && entry.intersectionRatio >= U.threshold) { on = true; start(0); }
-else sync();
+begin();
 }, { threshold: [0, U.threshold] });
 observer.observe(stage);
 root.addEventListener('tabsbeforechange', () => { settle(); clear(); });

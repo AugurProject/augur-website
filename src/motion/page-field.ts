@@ -37,8 +37,10 @@ export function initPageField() {
   let occupied = new Set<string>(), cols = 0, rows = 0;
 
   const measure = () => {
+    // Positions are read against the layer itself, so they hold while the page is lifted (the
+    // announcement's drop-in moves the layer with everything else).
     const root = document.documentElement, width = root.scrollWidth, height = root.scrollHeight;
-    const x0 = scrollX, y0 = scrollY;
+    const origin = layer.getBoundingClientRect(), x0 = -origin.left, y0 = -origin.top;
     cols = Math.ceil(width / GRID); rows = Math.ceil(height / GRID);
     occupied = new Set();
     const mark = (rect: DOMRect, margin: number = t.margin) => {
@@ -110,7 +112,8 @@ export function initPageField() {
   const clear = () => { cancelAnimationFrame(frame); frame = 0; last = ''; pool.forEach(square => square.getAnimations().forEach(a => a.cancel())); };
   const light = () => {
     frame = 0;
-    const c = Math.round((x + scrollX - OFFSET) / GRID), r = Math.round((y + scrollY - OFFSET) / GRID), key = `${c},${r}`;
+    const origin = layer.getBoundingClientRect();
+    const c = Math.round((x - origin.left - OFFSET) / GRID), r = Math.round((y - origin.top - OFFSET) / GRID), key = `${c},${r}`;
     if (key === last) return;
     last = key;
     if (c < 0 || r < 0 || c >= cols || r >= rows || occupied.has(key)) return;

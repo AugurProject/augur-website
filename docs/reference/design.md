@@ -13,7 +13,7 @@ The live Figma file has not been inspected for these docs. The website may have 
 
 ## Adaptations
 
-Each adaptation is a source-level fact, not a claim of rendered conformity. "Approval not found" means no owner decision was located; it does not mean the choice was never made. An inherited difference without a recorded approval is not, by itself, a defect.
+Each adaptation is a source-level fact, not a claim of rendered conformity. "Approval not found" means no owner decision was located; it does not mean the choice was never made. An inherited difference without a recorded approval is not, by itself, a defect. The owner decided on 29 October 2026 that adaptations marked "Approval not found" need no approval record ([decisions](../records/decisions.md#29-october-2026)).
 
 - **Colour roles.** The card role is Dark 2 (`#1d1d30`) and the dark border is Mist (`#71728a`). Adopted upstream in `0.2.0` (jubalm/augur-design-system#9), so the site no longer declares them.
 - **Hover edge on clickable outline controls.** Owner decision, 19 October 2026: "a subtle green border when the user hovers … where it makes sense." Green at 50% opacity, now the design system's `--brand-hover-edge` (adopted in `0.2.0`). Controls upstream keep the neutral `--input-hover`.
@@ -32,4 +32,4 @@ The site declares a design-system role only where its value differs from the pac
 - **Icons.** Six glyphs come from the design system's square-cut set (`@augurproject/design-system/icons/<name>.svg`, added in `0.3.0`): `arrow-right`, `arrow-up-right`, `check`, `chevron-down`, `plus` and `x`. They are 1.75 strokes in `currentColor` on a 20×20 grid, where the other 15 icons are Phosphor Bold fills. The answer chips in [Applications.astro](../../src/designs/current/sections/Applications.astro) and the gate in [CaseGraphic.astro](../../src/designs/current/art/CaseGraphic.astro) draw the same `check` path as a polyline so it can draw in. Owner-approved, 27 October 2026 (#28 comment 1): "the two animated checks in Applications and CaseGraphic use the square-cut DS check shape."
 - **Reduced motion.** The package's reduced-motion rule wins over the site's: transitions and animations collapse to 0.01ms rather than the site's 0.001ms.
 
-Owner approvals still missing, pending assets and the 24 October alignment check are in [open decisions](../records/open-decisions.md#design) and [verification](../records/verification.md).
+Open design questions are in [open decisions](../records/open-decisions.md#design), closed ones in [decisions](../records/decisions.md), and the 24 October alignment check in [verification](../records/verification.md).

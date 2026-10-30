@@ -1,8 +1,8 @@
 /* Melo's site chrome (owner, 26 Oct 2026: "Bring Melo's header and footer (icons, logo, Menu/Close,
    hide-on-scroll header, footer design) to every inner page. Keep / as it is."): the header and footer
-   rules of the owner's design, on every page but the live homepage. Loaded as a string (review-inline.ts,
-   chromeInline): the review copies list it with their own sheets, and PageLayout renders it on every inner
-   page before the announcement bar, whose dismissal slides every element after it. "/" never loads it.
+   rules of the owner's design, on every page. Loaded as a string (review-inline.ts,
+   chromeInline): every homepage version lists it with its own sheets, and PageLayout renders it on every other
+   page before the announcement bar, whose dismissal slides every element after it.
    The header and footer sit outside <main>, so every rule starts with .site-header or .site-footer and
    comes after the components' own styles, so it wins a specificity tie.
    The rest of the chrome is markup keyed on ownerChrome() (homepage-review.ts): Icon.astro draws Augur's

@@ -1,46 +1,31 @@
 # Open decisions
 
-Decisions and owner confirmations still outstanding. When one is settled, delete its entry here and update the reference it affects. Until then, items here are not established.
+Decisions and owner actions still outstanding, checked against the code on 31 October 2026. When one is settled, delete its entry here, add it to [decisions](decisions.md) and update the reference it affects. Until then, items here are not established.
 
-## Homepage
+## Content
 
-- **Unsourced claims in the live design.** `melo`'s copy ([homepage-v2.ts](../../src/designs/melo/data/homepage-v2.ts)) is approved as written (owner, 29 October 2026), but four claims still need a source: “Not even Augur’s creators can override an answer.” (Trustless card); “Designed to cost attackers more than almost any other oracle.” (Robust card, against whitepaper Abstract p1, §3 p3 and §8 p20); “Win user trust.” (builder reasons); and the use-case card values (64¢→99¢, flight AB123, 71%, “Goes live in 2 days”), which are illustrative and carry no visible “Example” marker.
-- **Placeholder Learn guides.** Seven of the eight guides in [src/content/learn](../../src/content/learn/) are `placeholder: true`, and all carry `needsReview: true`. Nothing on the page marks them.
-- **Learn More articles.** [home-resources.ts](../../src/designs/current/data/home-resources.ts) uses an implementation substitution that has no editorial approval. Confirm the article selection and usable destinations before treating it as approved content. Details in [homepage reference](../reference/homepage.md#content-and-destinations).
-- **Content review flags.** Resolve the flags marked in code: `needsReview: true` entries in [faq.ts](../../src/data/faq.ts), [products.ts](../../src/data/products.ts) and the Learn guides, and `walkthroughReview` in [walkthrough.ts](../../src/data/walkthrough.ts). The code is the source of truth for which flags are open.
-- **Product details.** Products, the header and the FAQ describe Augur Lituus, Zoltar and Augur Statoblast; their descriptions and statuses in [products.ts](../../src/data/products.ts) need maintainer review.
-- **Browser findings from 26 October.** Mobile menu focus after choosing a link, tab-reveal overshoot, small link targets, hidden tab panels without JavaScript and possible light-on-white print colours are filed on Track task #7. Details in [verification](verification.md#26-october-2026-homepage-browser-checks).
+- **Privacy rewrite.** Legal drafts it; the person is not named yet ([decisions](decisions.md#30-october-2026)). [privacy.astro](../../src/pages/privacy.astro) still carries the old augur.net wording, which says the site collects no personal data. That is now inaccurate: the site stores newsletter addresses (D1), sends contact messages through Proton and runs GA4 without a consent banner. The rewrite must cover all three.
+- **"Last Updated" on the legal pages.** [privacy.astro](../../src/pages/privacy.astro) and [terms.astro](../../src/pages/terms.astro) refer to a "Last Updated" date at the top of the page, and neither shows one, as on the old site.
+- **REP holders on `/rep/`** (Track #55). Whether [rep.astro](../../src/pages/rep.astro) should point holders of the stranded REPv2 token to the ported fork guides under `/learn/fork/` (Track #55 names the old "what to do" guide); it links no fork guide now. Also open from the same task: whether the site links to exchanges at all, or only to Etherscan.
 
-## Ported content
+## Analytics and headers
 
-From the old augur.net port ([ported content](../reference/ported-content.md)).
-
-- **Privacy and terms text.** Ported word for word and awaiting a legal rewrite (owner decision, 30 October 2026). The privacy text says the site collects no personal data; the site now stores newsletter addresses (D1), sends contact messages through Proton and runs GA4 without a consent banner. Both pages refer to a "Last Updated" date that neither shows, as on the old site.
-- **Unused `melo` blog column.** The `v1` branch of `melo`'s [LearnMore.astro](../../src/designs/melo/sections/LearnMore.astro), not used on `/`, reads `publishedAt` and `cover` from the `blog` collection, which has `publishDate` and no `cover`. It would fail if switched on, and would list posts on the homepage against the owner's decision.
-
-## Contact page
-
-- **Recipient inbox.** Messages go to `contact@augur.net` (`CONTACT_TO`). Confirm that inbox exists and is read; [links.ts](../../src/data/links.ts) still marks it unverified.
-- **Proton plan and sender.** Sending needs a paid Proton plan with the augur.net domain, the address `contact-form@augur.net` and an SMTP token for it. None of these is confirmed or created yet.
+- **GA4 Google signals and ad personalisation.** The `config` call in [PageLayout.astro](../../src/layouts/PageLayout.astro) sets `allow_google_signals` and `allow_ad_personalization_signals` to `true`, copied from the old site's snippet. Whether to keep them was not asked when GA4 was approved.
+- **Content Security Policy.** [\_headers](../../public/_headers) sends `Content-Security-Policy-Report-Only`. Before it is enforced: check the main pages and the forms for reports in the browser console, and replace `https://*.workers.dev` in `connect-src` and `form-action` with the `augur-forms` origin once `PUBLIC_FORMS_URL` is set ([deploy](../guides/deploy.md#cut-over-to-wwwaugurnet), step 7).
+- **HSTS.** `Strict-Transport-Security` is `max-age=86400` with no preload. Track #6 proposed raising it after a week; [deploy](../guides/deploy.md#cut-over-to-wwwaugurnet) says raise it only by owner decision. Which applies, and to what value, is not decided.
+- **Share image.** [og-image.png](../../public/og-image.png) was made by an agent on 30 October 2026 from the brand kit ([hosting](../reference/hosting.md#page-metadata)) and has had no owner or design review.
 
 ## Deployment
 
-Before going public:
-
-- Choose the production deployment target.
-- Configure the custom domain and routes.
-- Review external destinations and production deployment before claiming readiness.
+- **Forms Worker.** Both forms are offline on production: `augur-forms` is not deployed and `PUBLIC_FORMS_URL` is not set in the Workers Builds environment, so the footer form renders `data-newsletter="offline"` and the contact form `method="dialog"` (checked 31 October 2026). Left, by the owner ([deploy](../guides/deploy.md#forms-worker-augur-forms)):
+  - create the D1 database and replace `REPLACE_WITH_ID_FROM_WRANGLER_D1_CREATE` in [workers/forms/wrangler.jsonc](../../workers/forms/wrangler.jsonc);
+  - set `SITE_URL` and `ALLOWED_ORIGINS` there: they say `https://augur.net` and `https://augur.net,https://www.augur.net`, while the canonical host is www (Track #34 asks for `SITE_URL=https://www.augur.net` and the workers.dev host in `ALLOWED_ORIGINS`);
+  - Proton: a paid plan with the augur.net domain, the address `contact-form@augur.net` and its SMTP token (`PROTON_SMTP_TOKEN`);
+  - confirm that `contact@augur.net`, the contact form's `CONTACT_TO`, exists and is read; [links.ts](../../src/data/links.ts) still marks it unverified;
+  - deploy, then set `PUBLIC_FORMS_URL` for the site and redeploy it.
+- **Cutover.** www.augur.net still serves the old GitHub Pages site (checked 31 October 2026). The steps are in Track #5 and [deploy](../guides/deploy.md#cut-over-to-wwwaugurnet): move augur.net's DNS from Njalla to Cloudflare with every Proton mail record, attach `www.augur.net` and `augur.net` to `augur-website-next` with the apex redirect, then stop the old site's Pages deploy and hourly workflow.
 
 ## Design
 
-- Whether the Green shades, Crimson border and colour-role mapping need owner approval records.
 - **`--color-muted` override.** It could be removed by changing the two `text-muted` uses in [global.css](../../src/styles/global.css) to `text-muted-foreground`; not done. See [design reference](../reference/design.md#design-system-alignment).
-
-### Pending assets
-
-The design reference will be firmed up once these are provided. Until then, items marked unconfirmed, unverified or missing are not established.
-
-- **Written record of the hover-edge decision (19 October 2026).** Reported by the owner; not yet recorded in this repository.
-- **Owner approvals for the other adaptations.** None found yet.
-- **Earlier prototype and design-file frames.** No reachable copy. Historical only; not a specification or a source to keep in sync.
-- **Design-system alignment.** Package pinned to `0.3.0`; the brand foundation PDF reference stays at `f3c089a`. Alignment with later design-system changes is not established.
+- **Design-system alignment.** The package is pinned to `0.3.0`; the brand foundation PDF reference stays at `f3c089a`. Alignment with later design-system changes is not established.

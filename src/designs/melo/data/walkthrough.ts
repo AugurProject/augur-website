@@ -1,7 +1,6 @@
 /** How it works: one walkthrough of taking part, from a question opening to getting
  * paid (owner + Augus, 19 Oct 2026). Resolution / Walkthrough 146:470 was read on
- * 5 October 2026; the REP rows that were section 07 now live in each step's “Your REP”
- * zone. Mechanism facts: January 2026 Augur Lituus whitepaper §2, §4.0.1–4.0.2,
+ * 5 October 2026. Mechanism facts: January 2026 Augur Lituus whitepaper §2, §4.0.1–4.0.2,
  * §4.1, §4.3.1, §4.4.2–4.4.3 and §4.5. Draft copy: every string
  * below awaits the owner's approval (docs/launch-checklist.md). */
 export const walkthroughReview = { needsReview: true, source: 'Draft copy, 19 October 2026; January 2026 Augur Lituus whitepaper.' } as const;
@@ -39,62 +38,24 @@ export const query = {
 // after 12 hours, a 15 REP bond and a 30 REP appeal.
 const fee = 15, bond = fee, challenge = bond * 2, share = bond * 4 / 5, burned = bond - share, reward0 = fee / 6;
 export const rep = { fee, bond, challenge, share, burned, reward0 } as const;
-const amount = (value: number) => `${value} REP`;
 
-/** A square in the zone: a bond (Pewter, one 32 px square per bond), what you gain
- * (Green: “80% of theirs” is 80% of a bond's area, the reward a smaller square), or
- * a lost bond (outlined). */
-export type Square = 'bond' | 'share' | 'reward' | 'lost';
-/** `amount` is a REP tag; `detail` is a plain line in its place; `label` replaces the squares'
- * own numbers (the reward when its amount is known). */
-export interface Group { squares: Square[]; caption: string; amount?: string; detail?: string; label?: string }
-/** Every panel leads with its payoff (owner, 19 Oct 2026: “more selly … use %”): a
- * label, a headline figure and a few words on what the figure is. The diagram under it
- * shows what you lock, what has to happen and what comes back, so no sentence repeats it
- * (owner, 19 Oct 2026: “too noisy”, so each fact is said once). Percentages are one question's payout in
- * REP from the whitepaper rules and these example amounts, never a yield or a rate,
- * and the loss case always sits in the same panel. */
-interface Pitch { label: string; stat: string; statNote: string }
-export type Zone = Pitch & (
-  | { kind: 'meter'; scale: readonly [string, string]; caption: string; note: string }
-  | { kind: 'flow'; summary: string; stake: Group; condition: string; outcome: Group[]; note: string }
-  | { kind: 'receipt'; summary: string; outcome: Group[]; note: string });
-const percent = (part: number, whole: number) => `${Math.round(part / whole * 100)}%`;
-
-const reward: Group = { squares: ['reward'], caption: 'Reward', amount: `Up to ${amount(fee)}` };
 export const walkthrough: readonly {
   title: string; description: string; status: string; state: 'pending' | 'active' | 'final';
-  answerLabel: string; outcome: 'YES' | 'NO' | null; zone: Zone;
+  answerLabel: string; outcome: 'YES' | 'NO' | null;
 }[] = [
   { title: 'A question opens', description: 'Anyone can ask a multiple-choice question and pay a fee in REP. The fee funds a reward for reporting the right answer, and the reward grows the longer the question waits.',
-    status: 'Awaiting report', state: 'pending', answerLabel: 'Possible outcomes', outcome: null,
-    // The meter tops out at the fee: the reward is at most the whole fee.
-    zone: { kind: 'meter', label: 'Reward offered', stat: `Up to ${amount(fee)}`, statNote: 'plus any tips',
-      scale: ['0 REP', `${amount(fee)} fee`], caption: `In the whitepaper's example, a reporter takes it at ${amount(reward0)} after 12 hours.`,
-      note: 'Paid to whoever first reports the answer that becomes final.' } },
+    status: 'Awaiting report', state: 'pending', answerLabel: 'Possible outcomes', outcome: null },
   { title: 'Report what happened', description: 'Stake REP equal to the fee on the outcome you saw. Until its appeal period ends, anyone can challenge it.',
-    status: 'Open to challenge', state: 'active', answerLabel: 'Reported answer', outcome: 'YES',
-    zone: { kind: 'flow', label: 'If you report', stat: `+${percent(reward0, bond)}`, statNote: 'on your bond',
-      note: `If your answer is overturned, you lose your ${amount(bond)} bond.`, summary: `If you report: stake ${amount(bond)}; if no one challenges, you get ${amount(bond)} back plus the reward, ${amount(reward0)} in the whitepaper's example.`,
-      stake: { squares: ['bond'], caption: 'Your bond', amount: amount(bond) }, condition: 'No challenge',
-      outcome: [{ squares: ['bond'], caption: 'Bond back', amount: amount(bond) }, { ...reward, label: String(reward0) }] } },
+    status: 'Open to challenge', state: 'active', answerLabel: 'Reported answer', outcome: 'YES' },
   { title: 'Challenge a wrong answer', description: 'Think a report is wrong? Stake double its bond on the right outcome. Each challenge doubles the bond again and restarts the appeal period.',
-    status: 'Challenge received', state: 'active', answerLabel: 'Current answer', outcome: 'NO',
-    zone: { kind: 'flow', label: 'If you challenge', stat: `+${percent(share, challenge)}`, statNote: 'on your bond', summary: `You challenge: stake ${amount(challenge)}; if your answer holds, you get ${amount(challenge)} back plus ${amount(share)}, ${percent(share, bond)} of the bond you challenged.`,
-      stake: { squares: ['bond', 'bond'], caption: 'Double bond', amount: amount(challenge) }, condition: 'Answer holds',
-      outcome: [{ squares: ['bond', 'bond'], caption: 'Bond back', amount: amount(challenge) }, { squares: ['share'], caption: `${percent(share, bond)} of theirs`, amount: amount(share) }],
-      note: `If your answer is overturned, you lose your bond, and ${percent(share, bond)} of it goes to whoever was right.` } },
+    status: 'Challenge received', state: 'active', answerLabel: 'Current answer', outcome: 'NO' },
   { title: "Get paid when it's final", description: 'When an appeal period ends without a new challenge, the latest answer is final. Winners are paid, and apps act on the answer.',
-    status: 'Final answer', state: 'final', answerLabel: 'Final answer', outcome: 'NO',
-    zone: { kind: 'receipt', label: 'Your payout', stat: amount(challenge + share), statNote: 'plus the reward', summary: `You receive: your ${amount(challenge)} bond back, ${amount(share)} from the losing bond, and the reward, because you were first to stake on NO.`,
-      outcome: [{ squares: ['bond', 'bond'], caption: 'Bond back', amount: amount(challenge) }, { squares: ['share'], caption: 'From the YES bond', amount: amount(share) }, { ...reward, detail: 'First to stake on NO' }],
-      note: `The other ${amount(burned)} of the losing bond is burned.` } },
+    status: 'Final answer', state: 'final', answerLabel: 'Final answer', outcome: 'NO' },
 ];
 
 /** Activity, one entry per step, oldest first: what happened and the REP involved (a fee
  * or a bond). The step's description explains each entry, so the log keeps one line per
- * event. `stake` marks a bond on an outcome, which the card's outcome rows add up; the
- * REP panel under the steps is the payoff, Activity the history. No addresses or times:
+ * event. `stake` marks a bond on an outcome. No addresses or times:
  * the card is illustrative (no invented addresses). */
 export const ledger: readonly { event: string; amount?: number; stake?: 'YES' | 'NO'; you?: boolean; replacedAt?: number }[] = [
   { event: 'Query opened', amount: fee },
@@ -103,20 +64,3 @@ export const ledger: readonly { event: string; amount?: number; stake?: 'YES' | 
   { event: 'Challenged with NO', amount: challenge, stake: 'NO', you: true },
   { event: 'NO is final' },
 ];
-/** Bonds on each outcome after step `step`, largest first. */
-export const stakesAt = (step: number) => {
-  const totals = new Map<'YES' | 'NO', number>();
-  for (const entry of ledger.slice(0, step + 1)) if (entry.stake) totals.set(entry.stake, (totals.get(entry.stake) ?? 0) + entry.amount!);
-  return [...totals].map(([outcome, value]) => ({ outcome, value })).sort((a, b) => b.value - a.value);
-};
-export { amount };
-
-/** For anyone holding REP, under the walkthrough: two points, each a lead-in and one line.
- * The fork point follows the whitepaper §4.2.2 (REP that isn't migrated is effectively destroyed). */
-export const holder = {
-  title: 'Holding REP?',
-  points: [
-    { lead: 'Optional.', text: 'You never have to report or challenge.' },
-    { lead: 'But never passive.', text: 'Holding REP is a duty to the truth. In a fork, move it to the universe that reflects reality, or it loses its value.' },
-  ],
-};

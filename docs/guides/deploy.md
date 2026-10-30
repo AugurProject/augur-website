@@ -1,6 +1,6 @@
 # Deploy
 
-The site builds to static files in `dist/`. Any static host can serve them. Forms post to a separate Worker, `augur-forms`; see [Forms Worker](#forms-worker-augur-forms). Configuration facts are in [wrangler.jsonc](../../wrangler.jsonc) and [astro.config.mjs](../../astro.config.mjs); production decisions still open are in [open decisions](../records/open-decisions.md#deployment).
+The site builds to static files in `dist/`. Production is the Cloudflare Worker `augur-website-next`, built from `main` by Workers Builds and served at its workers.dev URL until the cutover. Forms post to a separate Worker, `augur-forms`, deployed by hand; see [Forms Worker](#forms-worker-augur-forms). Configuration facts are in [wrangler.jsonc](../../wrangler.jsonc) and [astro.config.mjs](../../astro.config.mjs); deployment steps still open are in [open decisions](../records/open-decisions.md#deployment).
 
 ## Build
 
@@ -25,6 +25,21 @@ Keep `session: false` in `astro.config.mjs`; the comment there says why.
 
 What the Worker serves (headers, redirects, the 404 page, metadata, analytics and the supply endpoints) is in [hosting reference](../reference/hosting.md).
 
+### One deploy at a time
+
+Every merge to `main` starts its own Workers Build, and the build that finishes last becomes production, whatever its commit. Two merges close together can race: on 31 October 2026 PR #1's build finished after PR #2's and put the old site back on production ([verification](../records/verification.md#31-october-2026-production-after-the-deploy-race)).
+
+1. Merge one pull request.
+2. Wait until its Workers Build has deployed.
+3. Run `npm run check:launch -- https://augur-website-next.<account-subdomain>.workers.dev`. No row may fail.
+4. Merge the next pull request.
+
+If an older build has overwritten production:
+
+1. In the Cloudflare dashboard, find the Worker version built from the latest `main` commit (Workers Builds lists each build's commit and version).
+2. Deploy that version to 100% with `cf workers deployments create`; nothing is rebuilt. Or retry the latest `main` build in Workers Builds.
+3. Run `npm run check:launch` against production again.
+
 ## Check a deployment
 
 `npm run check:launch -- <baseURL>` (or `node scripts/check-launch.mjs <baseURL> [referenceURL]`) requests the served site and prints a pass/fail table: every URL in the old augur.net sitemap, `/mission/` and `/team/` redirects, the supply endpoints byte for byte against the reference (default `https://www.augur.net`, fetched in the same run), `/api/supply/total` redirecting, the dropped `/data/` files returning 404, the 404 page, the security headers, canonical and share tags, the GA snippet, `robots.txt`, the sitemap, `/rss.xml`, `/og-image.png`, trailing-slash redirects and caching. It exits 1 if any row fails.
@@ -35,7 +50,7 @@ What the Worker serves (headers, redirects, the 404 page, metadata, analytics an
 
 ## Cut over to www.augur.net
 
-1. Deploy `main` and run `npm run check:launch -- https://augur-website-next.<account-subdomain>.workers.dev` while the old site still serves www.augur.net. No row may fail; this is the run that compares the supply endpoints with the old site. The `X-Robots-Tag` row confirms that the host-scoped `noindex` in `public/_headers` works on Cloudflare; it has only been checked under `wrangler dev`. If it fails, the canonical tags still point every page at www.augur.net.
+1. Deploy `main` and run `npm run check:launch -- https://augur-website-next.<account-subdomain>.workers.dev` while the old site still serves www.augur.net. No row may fail; this is the run that compares the supply endpoints with the old site. The `X-Robots-Tag` row confirms that the host-scoped `noindex` in `public/_headers` still applies; it passed on production on 31 October 2026. If it fails, the canonical tags still point every page at www.augur.net.
 2. Attach `www.augur.net` to the Worker as its custom domain, and redirect the apex `augur.net` to `https://www.augur.net/` permanently.
 3. Check Cloudflare's managed robots.txt for the zone (AI Crawl Control). If it is on, Cloudflare can add to or replace [robots.txt](../../public/robots.txt); compare `curl https://www.augur.net/robots.txt` with the file.
 4. Run `npm run check:launch -- https://www.augur.net`. The supply rows now compare the site with itself, so step 1 is the real comparison; this run adds the apex redirect.
@@ -43,7 +58,7 @@ What the Worker serves (headers, redirects, the 404 page, metadata, analytics an
 6. In GA4 Realtime for `G-4VLMY3QMC9`, confirm that page views arrive from www.augur.net.
 7. Before switching the CSP from `Content-Security-Policy-Report-Only` to `Content-Security-Policy`, open the main pages and the forms and check the browser console for CSP reports. Once `PUBLIC_FORMS_URL` is set, replace `https://*.workers.dev` in `connect-src` and `form-action` with that origin.
 
-`Strict-Transport-Security` is `max-age=86400` without `preload`; raise it only by owner decision.
+`Strict-Transport-Security` is `max-age=86400` without `preload`; raise it only by owner decision (open: see [open decisions](../records/open-decisions.md#analytics-and-headers)).
 
 ## Refresh the REP supply snapshot
 
