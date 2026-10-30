@@ -13,4 +13,18 @@ const learn = defineCollection({
     ...review,
   }),
 });
-export const collections = { learn };
+
+// Ported from the old augur.net (docs/reference/ported-content.md). Served at their old URLs and not
+// linked from the header, homepage or Learn index.
+
+// Blog posts, one folder each: /blog/<folder>/. `featuredImage` feeds the index cards.
+const blog = defineCollection({
+  loader: glob({ pattern: '*/index.mdx', base: './src/content/blog' }),
+  schema: ({ image }) => z.object({
+    title: z.string(), description: z.string(), author: z.string(),
+    publishDate: z.date(), updatedDate: z.date().optional(), tags: z.array(z.string()).optional(),
+    featuredImage: image(),
+  }),
+});
+
+export const collections = { learn, blog };
