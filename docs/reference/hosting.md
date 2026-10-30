@@ -4,7 +4,8 @@ How the `augur-website-next` Worker serves the build, the metadata every page ca
 
 ## Serving
 
-- Every page is prerendered, so the build's Worker config, `dist/client/wrangler.json`, has no Worker script: Workers static assets answer every request, and [\_headers](../../public/_headers) and [\_redirects](../../public/_redirects) apply to every response, including redirects and the 404 page.
+- Every page is prerendered, so the build's Worker config, `dist/client/wrangler.json`, has no Worker script, and under `wrangler dev` Workers static assets answer every request: [\_headers](../../public/_headers) and [\_redirects](../../public/_redirects) apply to every response, including redirects and the 404 page.
+- Deployed versions can differ. The Workers Builds preview build (`npx wrangler preview`, checked 30 October 2026) carries Astro's Worker script. Pages, redirects and the 404 page for browser navigations still come from static assets, but a non-navigation request for an unknown path (curl, a crawler's asset fetch) reaches the Worker, which answers a plain `404 Not found` without the `_headers` headers. Run `npm run check:launch` against the production workers.dev URL after merge to see which case production is in.
 - Unknown paths get [404.astro](../../src/pages/404.astro), built to `dist/client/404.html`, with status 404 (`assets.not_found_handling: "404-page"` in [wrangler.jsonc](../../wrangler.jsonc)).
 - `/mission` and `/team`, with or without the trailing slash, redirect 301 to `/about/` (`public/_redirects`).
 - Trailing slashes: Workers static assets answer `/about` with a temporary 307. At build, [astro.config.mjs](../../astro.config.mjs) appends a `/about /about/ 301` rule to `dist/client/_redirects` for every folder that holds an `index.html`, pages and supply endpoints alike, after the hand-written rules, which win. Workers allows 2,000 static redirects; the build fails above that. `/about/index.html` still gets the 307 to `/about/`.

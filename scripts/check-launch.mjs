@@ -4,6 +4,9 @@
 // same run), redirects, the 404 page, response headers and the crawl files. Plain Node, no dependencies.
 // Exits 1 when any check fails; WARN and SKIP rows do not fail the run. Steps: docs/guides/deploy.md.
 
+import http from 'node:http';
+import https from 'node:https';
+
 const [baseArg, referenceArg = 'https://www.augur.net'] = process.argv.slice(2);
 if (!baseArg || baseArg.startsWith('-')) {
   console.error('Usage: node scripts/check-launch.mjs <baseURL> [referenceURL]\n  e.g. node scripts/check-launch.mjs http://localhost:8787');
@@ -91,12 +94,27 @@ const supplyMeta = check(`/api/supply/meta.json is byte-identical to ${new URL(r
   return row(FAIL, 'token or supply differs from the reference');
 });
 
-const notFoundPage = check('An unknown path returns the 404 page with status 404', async () => {
-  const path = `/launch-check-${Date.now()}/`;
-  const response = await get(path);
+// Sent as a browser page load. When the deployed version carries a Worker script (as `wrangler preview`
+// builds do), Cloudflare serves the 404 page only to navigations; other requests reach the Worker.
+// node:http rather than fetch, which replaces Sec-Fetch-Mode with its own value.
+const navigate = path => new Promise((resolve, reject) => {
+  const url = new URL(path, base);
+  const client = url.protocol === 'https:' ? https : http;
+  const req = client.get(url, { timeout: 20_000, headers: { 'user-agent': 'augur-check-launch', 'sec-fetch-mode': 'navigate', 'sec-fetch-dest': 'document', accept: 'text/html' } }, response => {
+    let body = '';
+    response.setEncoding('utf8').on('data', chunk => { body += chunk; }).on('end', () => resolve({ status: response.statusCode, type: response.headers['content-type'] ?? '(none)', body }));
+  });
+  req.on('timeout', () => req.destroy(new Error('timed out'))).on('error', reject);
+});
+const notFoundPage = check('An unknown path returns the 404 page with status 404 (browser navigation)', async () => {
+  const { status, type, body } = await navigate(`/launch-check-${Date.now()}/`);
+  const ok = status === 404 && type.startsWith('text/html') && /<html/i.test(body) && body.includes('Page not found');
+  return row(ok ? PASS : FAIL, `${status}, ${type}, ${body.length} bytes`);
+});
+const notFoundStatus = check('An unknown path returns status 404 to a non-browser request', async () => {
+  const response = await get(`/launch-check-${Date.now()}.json`);
   const body = await response.text();
-  const ok = response.status === 404 && contentType(response).startsWith('text/html') && /<html/i.test(body) && body.includes('Page not found');
-  return row(ok ? PASS : FAIL, `${response.status}, ${contentType(response)}, ${body.length} bytes`);
+  return row(response.status === 404 ? PASS : FAIL, `${response.status}, ${contentType(response)}, ${body.length} bytes${body.includes('Page not found') ? ', the 404 page' : ''}`);
 });
 
 let home;
@@ -172,6 +190,7 @@ const checks = [
   expectStatus('/data/fork-risk.json', 404, '/data/fork-risk.json returns 404 (dropped)'),
   expectStatus('/data/dispute-markets-seed.json', 404, '/data/dispute-markets-seed.json returns 404 (dropped)'),
   notFoundPage,
+  notFoundStatus,
   ...securityHeaders,
   pageMetadata,
   analytics,

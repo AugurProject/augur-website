@@ -15,6 +15,10 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - The contact form against Proton's real SMTP server and a deployed `augur-forms` Worker; it has been checked only locally, with the `log` provider and a fake SMTP server (29 October 2026).
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
 
+## 30 October 2026: Workers Builds preview of the launch branch
+
+`node scripts/check-launch.mjs https://launch-replace-augur-net-augur-website-next.bytebros.workers.dev` against the preview build (`npx wrangler preview`): 69 passed, 0 failed, 1 skipped (the apex redirect). The preview carries Astro's Worker script: a browser navigation to an unknown path gets the 404 page, while a non-navigation request gets the Worker's plain 9-byte `Not found` with status 404 and without the `_headers` headers ([hosting](../reference/hosting.md#serving)). `X-Robots-Tag: noindex` is present on the preview host, but it also appears on the Worker's own 404, so Cloudflare may add it to preview URLs itself; the `_headers` rule for the production workers.dev host is confirmed only under `wrangler dev`.
+
 ## 30 October 2026: merged launch branch under `wrangler dev`
 
 Checked against `launch/replace-augur-net` after merging the content port and the launch plumbing, with the Blog navigation item made local. `npm run build` (59 pages) and `npm run check:designs` (`current`, `melo`) pass. The build was served by `npx wrangler dev` and checked with `node scripts/check-launch.mjs http://127.0.0.1:8811`: 67 passed, 0 failed, 2 skipped (the workers.dev `X-Robots-Tag` and the apex redirect, which need the real hosts). Every URL in the old sitemap answers 200, or 301 to `/about/` for `/mission/` and `/team/`; the supply endpoints are byte-identical to www.augur.net; the sitemap lists 51 pages and no form result pages; the header Blog link points to `/blog/` without ↗.
