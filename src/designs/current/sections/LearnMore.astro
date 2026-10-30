@@ -25,7 +25,7 @@ const [featured,next]=posts;
     {featured&&<a class="featured-post" href={featured.href}><BlogCover variant={featured.cover}/><div class="featured-text"><h4>{featured.title}</h4><p class="post-description">{featured.description}</p></div></a>}
     {next&&<a class="post-row" href={next.href}><h4>{next.title}</h4></a>}
    </div>
-   <div class="learn-foot"><a class="button outline" href="https://www.augur.net/blog/">View all posts</a></div>
+   <div class="learn-foot"><a class="button outline" href={links.archive.url}>View all posts</a></div>
   </div>
  </div>
 </div></section>

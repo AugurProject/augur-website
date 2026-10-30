@@ -113,8 +113,8 @@ The Lituus Foundation restarted Augur in March 2025. In May it proposed Generali
 
 From the blog:
 
-- [Augur Reboot 2025 Roadmap ↗](https://www.augur.net/blog/augur-reboot-2025/), 1 April 2025
-- [Generalized Augur ↗](https://www.augur.net/blog/generalized-augur/), 13 May 2025
+- [Augur Reboot 2025 Roadmap](/blog/augur-reboot-2025/), 1 April 2025
+- [Generalized Augur](/blog/generalized-augur/), 13 May 2025
 
 ### The design, published (completed, 29 January 2026)
 
@@ -124,19 +124,19 @@ The paper: Augur Lituus Whitepaper, PDF, January 2026, AugurProject/whitepaper o
 
 ### A fork, run live (completed, Augur v2, 3 August 2026)
 
-Augur v2's fork mechanism completed its first live run on Ethereum mainnet. REP holders migrated to the universe they backed, and Yes won. [Read the fork report ↗](https://www.augur.net/blog/post-fork-announcements/)
+Augur v2's fork mechanism completed its first live run on Ethereum mainnet. REP holders migrated to the universe they backed, and Yes won. [Read the fork report](/blog/post-fork-announcements/)
 
 REP migrated, by universe: Yes universe 6,398,081 REP; No universe 1,786 REP. That is 6.4 million REP in total, about 58.2% of the original 11 million supply. Source: fork report, 5 August 2026.
 
 ### Building Augur Lituus (in progress, first milestones completed in July 2026)
 
-ChainSafe is engineering Augur Lituus, and the Foundation reviews the work against the whitepaper. The current focus is dispute resolution and forking. [Follow the build ↗](https://github.com/AugurProject/Lituus-CS) · [Q2 2026 report ↗](https://www.augur.net/blog/q2-2026-progress-report/)
+ChainSafe is engineering Augur Lituus, and the Foundation reviews the work against the whitepaper. The current focus is dispute resolution and forking. [Follow the build ↗](https://github.com/AugurProject/Lituus-CS) · [Q2 2026 report](/blog/q2-2026-progress-report/)
 
 Automated tests in the implementation: about 40 at the start of the quarter, 300+ at the end, across 22 merged pull requests. Source: Q2 2026 report, 1 October 2026.
 
 ### Tested and audited (up next, 2027)
 
-Before applications can depend on Augur Lituus, the implementation has to be tested, audited and explained in plain language. [Read the Q2 2026 report ↗](https://www.augur.net/blog/q2-2026-progress-report/)
+Before applications can depend on Augur Lituus, the implementation has to be tested, audited and explained in plain language. [Read the Q2 2026 report](/blog/q2-2026-progress-report/)
 
 Goals for the coming quarter:
 
@@ -156,5 +156,5 @@ Augur Lituus is designed for the prediction markets, protocols and apps that cal
 Answers, updates and the people around Augur.
 
 - [FAQ](/faq.md): plain answers on markets, REP and how questions get settled.
-- [Blog ↗](https://www.augur.net/blog/): progress reports, research and design notes from the team.
+- [Blog](/blog/): progress reports, research and design notes from the team.
 - [Community ↗](https://discord.gg/Y3tCZsSmz3): ask questions, share ideas and follow the build on Discord.
