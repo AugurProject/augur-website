@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "check:designs": "node scripts/check-designs.mjs",
+    "check:launch": "node scripts/check-launch.mjs",
     "preview": "astro build && astro preview",
     "astro": "astro",
     "generate-types": "wrangler types",
