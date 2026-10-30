@@ -27,6 +27,11 @@ const blog = defineCollection({
   }),
 });
 
+// The Augur v2 whitepaper, one file per section, with no frontmatter: /whitepapers/augur-v2/<file>/.
+const whitepaperV2 = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/whitepaper-v2' }),
+});
+
 // The fork guides: /learn/fork/ (index.mdx) and /learn/fork/<file>/, ordered by `order`.
 const forkGuides = defineCollection({
   loader: glob({ pattern: '*.mdx', base: './src/content/fork-guides' }),
@@ -38,4 +43,4 @@ const forkGuides = defineCollection({
   }),
 });
 
-export const collections = { learn, blog, forkGuides };
+export const collections = { learn, blog, whitepaperV2, forkGuides };

@@ -1,0 +1,46 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PageHero from '../../components/pages/PageHero.astro';
+import Button from '../../components/primitives/Button.astro';
+import { augurV2, lituusPaper } from '../../data/whitepapers';
+// The old augur.net /whitepapers/ page. Not linked from the header (its Whitepaper item goes to the
+// Augur Lituus PDF); reachable by URL and from the Augur v2 breadcrumbs (docs/reference/ported-content.md).
+---
+<PageLayout title="Whitepapers | Augur" description="Published Augur whitepaper editions with web, Markdown, original PDF, and source repository links.">
+ <PageHero title="Whitepapers" lead="Explore the research behind Augur. Read the Augur v2 whitepaper as a navigable web edition, or open the original publications and source materials alongside it for provenance and deeper study." />
+ <section class="site-container papers" aria-label="Whitepapers">
+  <article class="paper">
+   <p class="kicker">Release {augurV2.release}</p>
+   <h2><a href={augurV2.path}>{augurV2.shortTitle}</a></h2>
+   <p class="paper-title">{augurV2.title}</p>
+   <div class="paper-actions">
+    <Button href={augurV2.path}>Read the web edition</Button>
+    <Button href={augurV2.pdf} variant="text" external>Download PDF</Button>
+    <Button href={augurV2.source} variant="text" external>View source</Button>
+   </div>
+  </article>
+  <article class="paper">
+   <p class="kicker">Original publication</p>
+   <h2>{lituusPaper.shortTitle}</h2>
+   <p class="paper-title">{lituusPaper.title}</p>
+   <div class="paper-actions">
+    <Button href={lituusPaper.pdf} variant="outline" external>Download PDF</Button>
+    <Button href={lituusPaper.source} variant="text" external>View source</Button>
+   </div>
+   <p class="paper-note">Web edition not published yet.</p>
+  </article>
+ </section>
+</PageLayout>
+<style>
+ .papers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding-block:24px 96px}
+ .paper{display:flex;flex-direction:column;gap:12px;padding:32px;border:1px solid var(--web-outline);background:var(--web-quiet)}
+ .kicker{font-size:14px;line-height:20px;color:var(--muted-foreground)}
+ .paper h2{font-size:28px;line-height:36px}
+ .paper h2 a{text-decoration:none}
+ .paper h2 a:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+ .paper-title{color:var(--muted-foreground)}
+ .paper-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px 32px;margin-top:auto;padding-top:24px;border-top:1px solid var(--web-outline)}
+ .paper-note{font-size:14px;line-height:20px;color:var(--muted-foreground)}
+ @media(max-width:1023px){.papers{grid-template-columns:1fr}}
+ @media(max-width:600px){.paper{padding:24px}.papers{padding-block:8px 64px}}
+</style>
