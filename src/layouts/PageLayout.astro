@@ -18,6 +18,9 @@ const { title = 'Augur | The frontier of decentralized truth', description = 'Re
 const canonicalUrl = canonical ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 const shareImage = new URL(site.shareImage.path, Astro.site).href;
 const xHandle = `@${new URL(links.x.url).pathname.slice(1)}`;
+// GA4 runs on the canonical host only, so workers.dev, previews and local builds are not counted. No consent
+// banner (jubalm, 30 October 2026). The configuration matches the old site's gtag snippet.
+const analytics = { id: site.analyticsId, host: Astro.site!.hostname };
 // A page's plain Markdown copy sits in public/ at its path plus `.md` (home: /index.md). The link is
 // added only when that file exists, so pages without one (placeholder guides, result pages) get none.
 const mdFiles = new Set(Object.keys(import.meta.glob('/public/**/*.md')).map(file => file.slice('/public'.length)));
@@ -52,6 +55,7 @@ const markdown = !bare && !noindex && mdFiles.has(mdPath) ? mdPath : undefined;
   <link rel="icon" href="/brand/kit/rep-token/rep-token-icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/brand/kit/rep-token/rep-token-icon.png" />
   <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
+  <script is:inline define:vars={analytics}>if(location.hostname===host){const tag=document.createElement('script');tag.async=true;tag.src='https://www.googletagmanager.com/gtag/js?id='+id;document.head.append(tag);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};gtag('js',new Date());gtag('config',id,{allow_google_signals:true,allow_ad_personalization_signals:true});}</script>
  </head>
  <body>
   <a class="skip-link" href="#main">Skip to content</a>

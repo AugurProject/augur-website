@@ -5,6 +5,8 @@ export const site = {
   announcement: { id: '2026-10-augur-is-back', enabled: true, until: null as string | null },
   // The live homepage design, a folder in src/designs/. HOME_DESIGN overrides it for one build.
   homeDesign: 'melo' as 'current' | 'melo',
+  // GA4 property of the old augur.net, kept (jubalm, 30 October 2026). PageLayout loads it on the canonical host only.
+  analyticsId: 'G-4VLMY3QMC9',
   // Open Graph and Twitter card for every page, at the URL the old site used. Its text, for the alt.
   shareImage: { path: '/og-image.png', width: 1200, height: 630, alt: 'Augur. The frontier of decentralized truth. Real-world answers for onchain apps, controlled by no one.' },
 } as const;
