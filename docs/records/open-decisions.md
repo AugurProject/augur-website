@@ -9,7 +9,6 @@ Decisions and owner confirmations still outstanding. When one is settled, delete
 - **Learn More articles.** [home-resources.ts](../../src/designs/current/data/home-resources.ts) uses an implementation substitution that has no editorial approval. Confirm the article selection and usable destinations before treating it as approved content. Details in [homepage reference](../reference/homepage.md#content-and-destinations).
 - **Content review flags.** Resolve the flags marked in code: `needsReview: true` entries in [faq.ts](../../src/data/faq.ts), [products.ts](../../src/data/products.ts) and the Learn guides, and `walkthroughReview` in [walkthrough.ts](../../src/data/walkthrough.ts). The code is the source of truth for which flags are open.
 - **Product details.** Products, the header and the FAQ describe Augur Lituus, Zoltar and Augur Statoblast; their descriptions and statuses in [products.ts](../../src/data/products.ts) need maintainer review.
-- **Metadata, indexing and security.** Review production metadata, indexing and security requirements. The layout emits no canonical, Open Graph, Twitter, robots or structured-data tags and has no CSP script-hash handling, and the `indexable` export does not control the layout.
 - **Browser findings from 26 October.** Mobile menu focus after choosing a link, tab-reveal overshoot, small link targets, hidden tab panels without JavaScript and possible light-on-white print colours are filed on Track task #7. Details in [verification](verification.md#26-october-2026-homepage-browser-checks).
 
 ## Contact page
@@ -23,7 +22,6 @@ Before going public:
 
 - Choose the production deployment target.
 - Configure the custom domain and routes.
-- Set the public hostname and response-header policy.
 - Review external destinations and production deployment before claiming readiness.
 
 ## Design

@@ -15,6 +15,19 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - The contact form against Proton's real SMTP server and a deployed `augur-forms` Worker; it has been checked only locally, with the `log` provider and a fake SMTP server (29 October 2026).
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
 
+## 30 October 2026: launch plumbing under `wrangler dev`
+
+Checked against the `launch/plumbing` branch (base `84d15a3`), before the blog, whitepaper, fork guides, privacy, terms and RSS were merged in. `npm run build` and `npm run check:designs` pass. The build was served by `npx wrangler dev` (Wrangler 4.151) and checked with `node scripts/check-launch.mjs http://127.0.0.1:8799`: 31 passed, 36 failed, 2 skipped. All 36 failures are routes that branch did not have yet (17 blog URLs, 6 fork guides, 10 whitepaper URLs, `/privacy/`, `/terms/`, `/rss.xml`).
+
+- Supply endpoints byte-identical to www.augur.net, served as `text/html; charset=utf-8` and `application/json`; `/api/supply/total` 301s to `/api/supply/total/`.
+- `/mission`, `/mission/`, `/team` and `/team/` 301 to `/about/`; `/about` 301s to `/about/`, keeping a query string, with no loop. `/data/fork-risk.json` and unknown paths return 404 with the 404 page.
+- The `_headers` security headers arrive on pages, on the 404 response and on redirects. HTML is `public, max-age=0, must-revalidate`; `/brand/` stays revalidated while its files get one day.
+- With `Host: augur-website-next.bytebros.workers.dev` or a preview-style host, `/` carries `X-Robots-Tag: noindex`; with `www.augur.net`, `augur.net` or `127.0.0.1`, it does not.
+- In headless Chrome with `www.augur.net` mapped to the local server, the GA4 script is added; at `127.0.0.1` it is not. No hit was confirmed in GA.
+- The 404 page and footer were looked at in headless Chrome at 1440 and 1024 px. Narrower widths were not: headless Chrome would not size the window below about 500 px.
+
+Not checked: anything on Cloudflare itself (the deployed Worker, the host-scoped header on real workers.dev hosts, managed robots.txt, the custom domain and apex redirect), CSP reports in a browser, share-card rendering on social sites, and phone widths.
+
 ## 29 October 2026: contact form sending through a real SMTP server
 
 Checked against the #35 branch after `36862df`, with the SMTP timeout raised to 25 seconds. The forms Worker ran under `wrangler dev` with `MAIL_PROVIDER=proton`, pointed by `PROTON_SMTP_HOST` and `PROTON_SMTP_PORT` at Ethereal (`smtp.ethereal.email:587`), a free test SMTP service that accepts and keeps mail without delivering it, using a throwaway account the owner created. This exercises the same path Proton will use: STARTTLS on 587, `AUTH PLAIN`, `MAIL FROM`, `RCPT TO`, `DATA`.
