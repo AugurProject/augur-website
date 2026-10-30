@@ -54,6 +54,12 @@ const permanentTrailingSlash = {
   },
 };
 
+/** Pages that render `<meta name="robots" content="noindex">` (form results) stay out of the sitemap. */
+const isIndexable = (/** @type {string} */ page) => {
+  const html = join(clientDir, new URL(page).pathname, 'index.html');
+  return !existsSync(html) || !/<meta name="robots" content="noindex"/.test(readFileSync(html, 'utf8'));
+};
+
 // https://astro.build/config
 export default defineConfig({
   // Canonical origin (www stays canonical; the apex redirects to it). Used for canonical URLs, the sitemap and RSS.
@@ -64,6 +70,6 @@ export default defineConfig({
   session: false,
   // Ported content from the old augur.net: MDX for the blog and fork guides, KaTeX math for the whitepaper.
   markdown: { remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex] },
-  integrations: [mdx(), sitemap(), permanentTrailingSlash],
+  integrations: [mdx(), sitemap({ filter: isIndexable }), permanentTrailingSlash],
   vite: { plugins: [homeDesignPlugin, tailwindcss()] }
 });
