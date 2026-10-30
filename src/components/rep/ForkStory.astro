@@ -1,6 +1,7 @@
 ---
 import { fork, moonFork } from '../../data/rep';
 import Icon from '../primitives/Icon.astro';
+import { isExternal } from '../../data/links';
 /** If a fork happens. Left: the proposed Augur Lituus steps on a rail, the step that asks
  * something of holders marked by a hollow Green square (the How it works holder note's “act”
  * mark). Right: the split as a picture, then the one fork that has happened, Augur v2's Moon
@@ -30,7 +31,7 @@ const total = moonFork.phases.reduce((sum, phase) => sum + phase.days, 0);
     {moonFork.phases.map((phase, index) => <li style={`--share:${phase.days / total}`} class:list={{ 'is-migration': index === 1 }}><span class="phase-bar" aria-hidden="true"></span><span class="phase-dates">{phase.start}{phase.end && <> – {phase.end}</>}</span><strong>{phase.label}</strong><span class="phase-detail">{phase.detail}</span></li>)}
    </ol>
    <p class="moon-note">{moonFork.note}</p>
-   <a class="button text" href={moonFork.link.href}><span class="button-label">{moonFork.link.label}</span><Icon name="arrow-up-right"/></a>
+   <a class="button text" href={moonFork.link.href}><span class="button-label">{moonFork.link.label}</span>{isExternal(moonFork.link.href)&&<Icon name="arrow-up-right"/>}</a>
   </article>
  </div>
 </div>

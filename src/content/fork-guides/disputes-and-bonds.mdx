@@ -1,0 +1,61 @@
+---
+title: "How Disputes & Bonds Work"
+description: "Learn how Augur v2 dispute rounds escalate."
+topic: fork
+order: 2
+contentType: lesson
+label: "HOW DISPUTES & BONDS WORK"
+historical: false
+status: available
+presentation: standard
+---
+
+import ProseCard from '../../components/content/ProseCard.astro'
+
+A fork is the end of an escalation path, not the first response to disagreement. Augur first gives reporters and REP holders a sequence of reporting and dispute rounds in which a tentative outcome can be challenged.
+
+## From report to dispute
+
+After a market's event ends, a designated reporter has an initial reporting window. If the market receives a report, that outcome becomes tentative. A REP holder can challenge it by staking REP on a different outcome during a dispute round.
+
+The first dispute round can last up to 24 hours. Subsequent dispute rounds can last up to seven days. The exact market state and timing come from the protocol; a dispute is not by itself evidence that a fork is imminent.
+
+## The bond formula
+
+For dispute round *n*, the bond required to dispute in favor of outcome *ω* is:
+
+> **B(ω, n) = 2A<sub>n</sub> − 3S(ω, n)**
+
+Where *A<sub>n</sub>* is the total stake across all outcomes at the beginning of the round and *S(ω, n)* is the stake on the proposed outcome at that point. The formula means the target is not a simple fixed multiple of the previous bond. Bond sizes depend on the market's stake distribution.
+
+Bonds are crowdsourced: several users can contribute to the same dispute. A dispute succeeds when an outcome other than the tentative outcome accumulates enough stake to fill its bond.
+
+## What happens after a successful dispute?
+
+The filled bond's size, measured against all theoretical REP, determines the next state:
+
+<ProseCard>
+| Filled dispute bond | Protocol result |
+|---|---|
+| Less than 0.02% of theoretical REP | The new tentative outcome enters another dispute round immediately. |
+| At least 0.02% but less than 2.5% | The new tentative outcome enters a waiting-for-window phase before another dispute round. |
+| At least 2.5% | The market enters the fork state. |
+</ProseCard>
+
+The 2.5% threshold is a proportion of theoretical REP, not a promise that every deployment uses the genesis-universe number. In the genesis universe, the maintained reference calculates 2.5% of 11,000,000 REP as 275,000 REP.
+
+## Outcomes for participants
+
+During a dispute round, stake is held in escrow. Unsuccessful dispute stake is returned when the round ends. When a market finalizes without a fork, stake on an incorrect outcome is forfeited: the protocol burns 20% and redistributes the remainder to REP staked on the final outcome. The bond design targets a 40% return for successful disputers.
+
+These are protocol incentive rules, not financial advice or a forecast of any individual result.
+
+## Why this leads to migration mechanics
+
+If a successfully filled bond reaches the fork threshold, Augur creates child universes and REP holders can make a one-way choice among them. That process is separate from ordinary dispute participation.
+
+Continue with **[How Fork Migration Works →](/learn/fork/migration-mechanics/)**. For future-oriented preparation rather than live instructions, read **[What To Do Around Fork Risk →](/learn/fork/what-to-do/)**.
+
+## Protocol basis
+
+The thresholds, bond formula, dispute windows, and incentive descriptions follow the [canonical Augur v2 whitepaper, especially the dispute-round section](/whitepapers/augur-v2/how-augur-works/#7-dispute-round) and its maintained protocol glossary. The fork-state and migration behavior are implemented in the pinned [`Universe.sol`](https://github.com/AugurProject/augur/blob/bd13a797016b373834e9414096c6086f35aa628f/packages/augur-core/src/contracts/reporting/Universe.sol) and [`ReputationToken.sol`](https://github.com/AugurProject/augur/blob/bd13a797016b373834e9414096c6086f35aa628f/packages/augur-core/src/contracts/reporting/ReputationToken.sol).

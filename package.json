@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "check:designs": "node scripts/check-designs.mjs",
+    "check:launch": "node scripts/check-launch.mjs",
     "preview": "astro build && astro preview",
     "astro": "astro",
     "generate-types": "wrangler types",
@@ -17,13 +18,21 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.4.0",
+    "@astrojs/markdown-remark": "^7.3.5",
+    "@astrojs/mdx": "^8.1.2",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
     "@augurproject/design-system": "https://github.com/jubalm/augur-design-system/releases/download/v0.3.0/augurproject-design-system-0.3.0.tgz",
     "@fontsource/schibsted-grotesk": "^5.3.0",
     "@fontsource/sora": "^5.3.0",
     "@phosphor-icons/core": "^2.1.1",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.4.2",
-    "tailwindcss": "^4.3.3"
+    "katex": "^0.16.47",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
+    "tailwindcss": "^4.3.3",
+    "unist-util-visit": "^5.2.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",

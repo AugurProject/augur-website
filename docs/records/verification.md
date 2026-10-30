@@ -15,6 +15,44 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - The contact form against Proton's real SMTP server and a deployed `augur-forms` Worker; it has been checked only locally, with the `log` provider and a fake SMTP server (29 October 2026).
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
 
+## 30 October 2026: Workers Builds preview of the launch branch
+
+`node scripts/check-launch.mjs https://launch-replace-augur-net-augur-website-next.bytebros.workers.dev` against the preview build (`npx wrangler preview`): 69 passed, 0 failed, 1 skipped (the apex redirect). The preview carries Astro's Worker script: a browser navigation to an unknown path gets the 404 page, while a non-navigation request gets the Worker's plain 9-byte `Not found` with status 404 and without the `_headers` headers ([hosting](../reference/hosting.md#serving)). `X-Robots-Tag: noindex` is present on the preview host, but it also appears on the Worker's own 404, so Cloudflare may add it to preview URLs itself; the `_headers` rule for the production workers.dev host is confirmed only under `wrangler dev`.
+
+## 30 October 2026: merged launch branch under `wrangler dev`
+
+Checked against `launch/replace-augur-net` after merging the content port and the launch plumbing, with the Blog navigation item made local. `npm run build` (59 pages) and `npm run check:designs` (`current`, `melo`) pass. The build was served by `npx wrangler dev` and checked with `node scripts/check-launch.mjs http://127.0.0.1:8811`: 67 passed, 0 failed, 2 skipped (the workers.dev `X-Robots-Tag` and the apex redirect, which need the real hosts). Every URL in the old sitemap answers 200, or 301 to `/about/` for `/mission/` and `/team/`; the supply endpoints are byte-identical to www.augur.net; the sitemap lists 51 pages and no form result pages; the header Blog link points to `/blog/` without ↗.
+
+Not checked: everything listed as not checked in the two entries below, and a deploy to Cloudflare.
+
+## 30 October 2026: launch plumbing under `wrangler dev`
+
+Checked against the `launch/plumbing` branch (base `84d15a3`), before the blog, whitepaper, fork guides, privacy, terms and RSS were merged in. `npm run build` and `npm run check:designs` pass. The build was served by `npx wrangler dev` (Wrangler 4.151) and checked with `node scripts/check-launch.mjs http://127.0.0.1:8799`: 31 passed, 36 failed, 2 skipped. All 36 failures are routes that branch did not have yet (17 blog URLs, 6 fork guides, 10 whitepaper URLs, `/privacy/`, `/terms/`, `/rss.xml`).
+
+- Supply endpoints byte-identical to www.augur.net, served as `text/html; charset=utf-8` and `application/json`; `/api/supply/total` 301s to `/api/supply/total/`.
+- `/mission`, `/mission/`, `/team` and `/team/` 301 to `/about/`; `/about` 301s to `/about/`, keeping a query string, with no loop. `/data/fork-risk.json` and unknown paths return 404 with the 404 page.
+- The `_headers` security headers arrive on pages, on the 404 response and on redirects. HTML is `public, max-age=0, must-revalidate`; `/brand/` stays revalidated while its files get one day.
+- With `Host: augur-website-next.bytebros.workers.dev` or a preview-style host, `/` carries `X-Robots-Tag: noindex`; with `www.augur.net`, `augur.net` or `127.0.0.1`, it does not.
+- In headless Chrome with `www.augur.net` mapped to the local server, the GA4 script is added; at `127.0.0.1` it is not. No hit was confirmed in GA.
+- The 404 page and footer were looked at in headless Chrome at 1440 and 1024 px. Narrower widths were not: headless Chrome would not size the window below about 500 px.
+
+Not checked: anything on Cloudflare itself (the deployed Worker, the host-scoped header on real workers.dev hosts, managed robots.txt, the custom domain and apex redirect), CSP reports in a browser, share-card rendering on social sites, and phone widths.
+
+## 30 October 2026: content ported from the old augur.net
+
+Checked against `launch/port-content` at `c0355d9` ([ported content](../reference/ported-content.md)), with the old site's source at `ba18725` and the live www.augur.net for comparison.
+
+- `npm run build` and `npm run check:designs` (`current` and `melo`) pass; each commit on the branch builds on its own.
+- Every blog, whitepaper, fork-guide, privacy and terms URL in the old sitemap (35) has `dist/client/<path>/index.html`.
+- `dist/client/rss.xml` is byte-identical to the live `https://www.augur.net/rss.xml` (16 items).
+- Text of the 16 posts, 6 fork guides and 9 whitepaper pages, tags removed, matches the live pages except for the listed differences: the monitor removals, the guide titles moved to the header, the "References" heading, and two posts where the old site had turned `$…$` into math. Privacy and terms match word for word apart from the case of the three community links.
+- In the ported pages, 2,003 internal links and fragments resolve to built files and ids, and all 84 image URLs exist in `dist/client`. The appendices carry KaTeX markup, and the KaTeX stylesheet is linked from the whitepaper pages only.
+- No `↗` or arrow icon on any `/blog/` link except the navigation's Blog entry (see [open decisions](open-decisions.md#ported-content)). `fork-risk`, `/data/fork`, "fork monitor" and "gauge" appear nowhere in `src/` or `dist/client/`.
+- `wrangler dev` on the build: the ported pages, `/rss.xml`, the whitepaper `.md` files and a figure answer 200 with HTML, XML, Markdown and JPEG types; `/blog` and `/learn/fork` 307 to the trailing slash.
+- Headless Chrome screenshots at 1440 px (blog index and post, a fork guide, the migration record, whitepaper appendix and index, privacy) and at 390 px through an iframe (blog index, a fork guide, a whitepaper appendix): layout holds, wide tables scroll inside their box, and inline and display math render.
+
+Not checked: Safari and Firefox, a real phone, JavaScript turned off, keyboard and screen-reader use, reduced motion, print, and a deployed Worker.
+
 ## 29 October 2026: contact form sending through a real SMTP server
 
 Checked against the #35 branch after `36862df`, with the SMTP timeout raised to 25 seconds. The forms Worker ran under `wrangler dev` with `MAIL_PROVIDER=proton`, pointed by `PROTON_SMTP_HOST` and `PROTON_SMTP_PORT` at Ethereal (`smtp.ethereal.email:587`), a free test SMTP service that accepts and keeps mail without delivering it, using a throwaway account the owner created. This exercises the same path Proton will use: STARTTLS on 587, `AUTH PLAIN`, `MAIL FROM`, `RCPT TO`, `DATA`.

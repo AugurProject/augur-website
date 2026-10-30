@@ -3,7 +3,7 @@ import PageLayout from '../layouts/PageLayout.astro';
 import PageHero from '../components/pages/PageHero.astro';
 import Icon from '../components/primitives/Icon.astro';
 import { history } from '../data/history';
-import { links } from '../data/links';
+import { links, isExternal } from '../data/links';
 
 // Website first (19 October 2026); Figma About 218:45 follows on "update figma" (figma-workflow.md).
 // Roles: Augur blog 21 July 2026 and Q2 2026 report. No backstop or veto: whitepaper §2.
@@ -48,7 +48,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
      </div>
      <p class="event-text">{entry.text}</p>
      {entry.figure && <p class="event-figure"><strong>{entry.figure.value}</strong><span>{entry.figure.caption}</span></p>}
-     <a class="cite line-link is-ruled" href={links[entry.source.key].url}><span class="button-label">{entry.source.label}</span><span aria-hidden="true">↗</span></a>
+     <a class="cite line-link is-ruled" href={links[entry.source.key].url}><span class="button-label">{entry.source.label}</span>{isExternal(links[entry.source.key].url) && <span aria-hidden="true">↗</span>}</a>
     </li>
    ))}
   </ol>
@@ -63,7 +63,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
      <p class="role-label">{item.role}</p>
      <h3>{item.name}</h3>
      <p>{item.text}</p>
-     <div class="card-actions">{item.actions.map(action => <a class="button text" href={action.href} aria-label={action.name}>{action.logo && <Icon name={action.logo} />}<span class="button-label">{action.label}</span><Icon name="arrow-up-right" /></a>)}</div>
+     <div class="card-actions">{item.actions.map(action => <a class="button text" href={action.href} aria-label={action.name}>{action.logo && <Icon name={action.logo} />}<span class="button-label">{action.label}</span>{isExternal(action.href) && <Icon name="arrow-up-right" />}</a>)}</div>
     </li>
    ))}
   </ul>
@@ -86,7 +86,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
     <li>
      <h3>{item.title}</h3>
      <p>{item.text}</p>
-     <div class="card-actions">{item.actions.map(action => <a class="button text" href={action.href} aria-label={action.name}>{action.logo && <Icon name={action.logo} />}<span class="button-label">{action.label}</span><Icon name="arrow-up-right" /></a>)}</div>
+     <div class="card-actions">{item.actions.map(action => <a class="button text" href={action.href} aria-label={action.name}>{action.logo && <Icon name={action.logo} />}<span class="button-label">{action.label}</span>{isExternal(action.href) && <Icon name="arrow-up-right" />}</a>)}</div>
     </li>
    ))}
   </ul>

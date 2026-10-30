@@ -1,0 +1,46 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import ArticleHeader from '../../../components/content/ArticleHeader.astro';
+import Prose from '../../../components/content/Prose.astro';
+import SectionRail from '../../../components/content/SectionRail.astro';
+import PagerNav from '../../../components/content/PagerNav.astro';
+// The old augur.net fork guides at their old URLs: /learn/fork/ (index.mdx) and /learn/fork/<file>/.
+// Not listed on the Learn index (docs/reference/ported-content.md).
+type Guide = CollectionEntry<'forkGuides'>;
+const guidePath = (guide: Guide) => guide.id === 'index' ? '/learn/fork/' : `/learn/fork/${guide.id}/`;
+
+export async function getStaticPaths() {
+  const guides = (await getCollection('forkGuides', guide => guide.data.status !== 'planned')).sort((a, b) => a.data.order - b.data.order);
+  return guides.map((guide, index) => ({ params: { slug: guide.id === 'index' ? undefined : guide.id }, props: { guide, guides, previous: guides[index - 1], next: guides[index + 1] } }));
+}
+interface Props { guide: Guide; guides: Guide[]; previous?: Guide; next?: Guide }
+const { guide, guides, previous, next } = Astro.props;
+const { Content, headings } = await render(guide);
+const { title, presentation } = guide.data;
+const isIndex = guide.id === 'index';
+// The migration record keeps the old site's archive header in place of its title.
+const archive = presentation === 'historical-record';
+const crumbs = [{ label: 'Learn', href: '/learn/' }, ...(isIndex ? [{ label: 'Fork' }] : [{ label: 'Fork', href: '/learn/fork/' }, { label: title }])];
+const items = guides.map(item => ({ href: guidePath(item), label: item.data.title, current: item.id === guide.id, note: item.data.status === 'archived' ? 'Archived' : undefined }));
+const pagerLink = (item: Guide | undefined, kicker: string) => item && { href: guidePath(item), kicker, title: item.data.title };
+---
+<PageLayout title={`${title} | Learn`} description={guide.data.description}>
+ {archive
+  ? <ArticleHeader crumbs={crumbs} eyebrow="Archive · Migration closed" title="Moon Fork migration is closed" subtitle="Historical procedure and evidence only" lead="This page preserves the completed migration record, screenshots, and historical interfaces. It is not an active guide or a recommendation to connect a wallet or submit a transaction." />
+  : <ArticleHeader crumbs={crumbs} title={title} />}
+ <div class="site-container article-body">
+  <SectionRail heading="Fork guides" items={items} headings={headings.filter(h => h.depth === 2)} />
+  <article class="reading-column">
+   <Prose><Content /></Prose>
+   <PagerNav label="Fork guides" previous={pagerLink(previous, 'Previous')} next={pagerLink(next, 'Up next')} />
+  </article>
+ </div>
+</PageLayout>
+<style>
+ .article-body{display:grid;grid-template-columns:264px minmax(0,720px);gap:120px;padding-block:72px 96px}
+ .reading-column{min-width:0}
+ @media(max-width:1200px){.article-body{grid-template-columns:220px minmax(0,720px);gap:64px}}
+ @media(max-width:1023px){.article-body{grid-template-columns:1fr;gap:48px}}
+ @media(max-width:600px){.article-body{padding-block:40px 64px}}
+</style>

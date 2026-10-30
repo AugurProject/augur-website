@@ -1,0 +1,237 @@
+---
+// The old augur.net privacy policy (src/pages/privacy.astro at ba18725), wording unchanged; only the markup
+// and styling are new (docs/reference/ported-content.md).
+// AWAITING LEGAL REWRITE (owner decision, 2026-10-30): this text predates the new site and does not cover
+// what it now does. It still says no personal data is collected, but the site now stores newsletter email
+// addresses (Cloudflare D1, through the augur-forms Worker), sends contact-form messages by email (Proton)
+// and runs Google Analytics 4. Do not edit the wording here; replace it with the reviewed rewrite.
+import PageLayout from '../layouts/PageLayout.astro';
+import ArticleHeader from '../components/content/ArticleHeader.astro';
+import Prose from '../components/content/Prose.astro';
+import LegalContacts from '../components/content/LegalContacts.astro';
+---
+<PageLayout title="Privacy Policy | Augur" description="The augur.net privacy policy.">
+ <ArticleHeader eyebrow="Legal" title="Privacy Policy" />
+ <div class="site-container legal-body">
+  <div class="reading-column">
+   <Prose>
+   <p class="legal-lead">
+     <span class="loud">The Lituus Foundation</span> operates this website as a static informational resource about the Augur protocol reboot. <span class="loud">We do not collect, store, or process personal data through this website.</span>
+   </p>
+
+   <h2>Introduction</h2>
+   <div class="legal-section">
+     <p>
+       Your privacy is important to us. This Privacy Policy explains how the Lituus Foundation ("we" or "us") collects, uses, and protects information when you visit the informational website for the Augur decentralized oracle system (the "Site").
+     </p>
+     <p>
+       This Site is intended for a global audience (except as noted below for certain restricted regions) and is designed for informational purposes only. <strong>Importantly, we do not collect personal information like your name, address, or contact details on this Site, as we do not have user registrations, login accounts, or payment processing.</strong>
+     </p>
+     <p>
+       The only information we collect is technical data related to your browsing of the Site, primarily via Google Analytics and standard web server logs. We do not sell or share any personal data with third parties for marketing purposes, and we do not use your data for advertising or profiling.
+     </p>
+   </div>
+
+   <h2>Information We Collect</h2>
+   <div class="legal-section">
+     <p>
+       Because our Site does not require any login or direct user input, the information we collect is limited to technical and usage data automatically collected during your visit. This includes:
+     </p>
+     <p>
+       <strong>Device and Browser Information:</strong> We collect details such as your browser type and version, operating system, device type (e.g., desktop or mobile), and other technical information provided by your browser.
+     </p>
+     <p>
+       <strong>IP Address and Approximate Location:</strong> When you visit the Site, our systems and Google Analytics may record your device's IP address. We use IP addresses to infer approximate geographic location (e.g., country or city), but not your precise address.
+     </p>
+     <p>
+       <strong>Site Usage Data:</strong> We collect data about your interactions with our Site. This includes which pages you visited, the date and time of your visits, how long you stayed on each page, and how you navigated the Site.
+     </p>
+     <p>
+       Please note that all of the data above is collected in a way that does not directly identify you as an individual. <strong>We do not know your name, email, phone number, or any other personally identifiable information just from you browsing the Site.</strong>
+     </p>
+   </div>
+
+   <h2>Use of Cookies and Google Analytics</h2>
+   <div class="legal-box">
+     <p>
+       <strong>COOKIES AND ANALYTICS</strong>
+     </p>
+     <p>
+       The Site uses cookies and similar technologies primarily through our use of Google Analytics. Cookies are small text files placed on your device that help us recognize repeat visitors and collect information about Site traffic.
+     </p>
+     <p>
+       <strong>Google Analytics:</strong> We use Google Analytics, a web analytics service provided by Google LLC, to understand how visitors engage with our Site. This data is sent to Google's servers in anonymized or pseudonymized form.
+     </p>
+     <p>
+       We do not use Google Analytics for advertising or ad targeting purposes. The data from Google Analytics is used solely to help us monitor site performance and user interests so we can improve the content and structure of the Site.
+     </p>
+   </div>
+
+   <h2>How We Use Your Information</h2>
+   <div class="legal-section">
+     <p>
+       We use the information collected to serve the following purposes:
+     </p>
+     <p>
+       <strong>Site Performance and Improvement:</strong> We analyze aggregate usage data (for example, which pages are most visited, how users navigate the Site, and which content is most engaging) to understand how the Site is used and identify areas for improvement.
+     </p>
+     <p>
+       <strong>Monitoring and Security:</strong> Technical information like IP addresses and log data may be used to protect the security and integrity of the Site. We monitor for unusual usage patterns that might indicate malicious activity.
+     </p>
+     <p>
+       <strong>Global Access Management:</strong> As noted in our Terms of Service, access from certain sanctioned jurisdictions is not permitted. In rare cases, we might use geolocation data derived from IP addresses to enforce these access restrictions.
+     </p>
+     <p>
+       Importantly, <strong>we do not use the data we collect to profile you individually, to make automated decisions about you, or for any kind of targeted advertising.</strong>
+     </p>
+   </div>
+
+   <h2>How We Share Your Information</h2>
+   <div class="legal-section">
+     <p>
+       <strong>Your information is not sold or rented to any third parties.</strong> We value your privacy and have a strict policy against monetizing user data. The limited ways in which we may share information are as follows:
+     </p>
+     <p>
+       <strong>Service Providers (Google Analytics):</strong> As described, we use Google Analytics as a third-party analytics provider. In that context, certain usage data is automatically shared with Google because Google operates the analytics platform on our behalf.
+     </p>
+     <p>
+       <strong>Legal Compliance:</strong> We may disclose information collected about you if required to do so by law or in response to a valid legal request. We will only share the minimum data necessary to comply with such legal obligations.
+     </p>
+     <p>
+       Aside from the above, we do not share your browsing data with any advertisers or unrelated third parties. We do not engage in any cross-site tracking or selling of user data for advertising.
+     </p>
+   </div>
+
+   <h2>Your Choices and Opt-Out Options</h2>
+   <div class="legal-section">
+     <p>
+       We respect your control over your personal data and provide the following options to manage or limit the information collected:
+     </p>
+     <p>
+       <strong>Google Analytics Opt-Out:</strong> If you do not want Google Analytics to collect data about your visits, you can opt out. Google provides an official Google Analytics Opt-out Browser Add-on that you can install in your browser.
+     </p>
+     <p>
+       <strong>Cookie Controls:</strong> You can control or delete cookies through your browser settings. Most web browsers allow you to refuse new cookies, delete existing cookies, or notify you when new cookies are set.
+     </p>
+     <p>
+       <strong>Do Not Track Signals:</strong> Currently, our Site does not respond in a unique way to DNT headers, because we do not engage in cross-site tracking or advertising that would typically be affected by DNT.
+     </p>
+   </div>
+
+   <h2>Data Retention</h2>
+   <div class="legal-section">
+     <p>
+       We retain the information we collect for only as long as necessary to fulfill the purposes outlined in this Privacy Policy, or as required by law. Specifically:
+     </p>
+     <p>
+       <strong>Google Analytics Data:</strong> Data collected via Google Analytics is retained on Google's systems for a limited period. We have configured our Google Analytics account to adhere to standard retention practices. By default, Google Analytics 4 retains granular data for 14 months after which the data is automatically deleted from Google's servers.
+     </p>
+     <p>
+       <strong>Server Logs:</strong> Our web server logs (which contain IP addresses and visit timestamps) are generally retained for a short duration, typically for 90 days or less, unless a particular log entry is needed longer for security analysis.
+     </p>
+     <p>
+       Once the retention period expires, or the data is no longer needed, we either delete the data or anonymize it so that it can no longer be associated with any individual.
+     </p>
+   </div>
+
+   <h2>Your Rights</h2>
+   <div class="legal-section">
+     <p>
+       Depending on your location and applicable data protection laws, you may have certain rights regarding the personal data we hold about you. Since our Site collects very limited personal data, some of the rights may be more theoretical than practical in this context. These rights may include:
+     </p>
+     <p>
+       <strong>Right of Access:</strong> You have the right to request confirmation of whether we are processing personal data about you, and if so, to request a copy of that data.
+     </p>
+     <p>
+       <strong>Right to Deletion:</strong> You have the right to request that we delete personal data we have collected from you. For analytics or logs, we cannot specifically isolate data by individual, but logs expire routinely and analytics data is aggregated.
+     </p>
+     <p>
+       <strong>Right to Object or Restrict Processing:</strong> You have the right to object to our processing of your data or ask that we limit the processing. In practice, since we only use it for site improvement, the primary way to exercise this right is to opt out of analytics.
+     </p>
+     <p>
+       To exercise any applicable rights, you may contact us using the information in the Contact section below. We will make good faith efforts to fulfill your requests to the extent we can.
+     </p>
+   </div>
+
+   <h2>Data Security</h2>
+   <div class="legal-section">
+     <p>
+       We take data security seriously and have implemented reasonable administrative, technical, and physical measures to protect the information we collect from loss, misuse, or unauthorized access. For example:
+     </p>
+     <p>
+       The Site is hosted on secure servers with firewall protection. We use HTTPS encryption (TLS) for all communications, which means data transmitted between your browser and our Site is encrypted in transit.
+     </p>
+     <p>
+       Data collected via Google Analytics is stored on Google's secure servers. Google Analytics data is protected by Google's security measures, and access to our Google Analytics account is restricted to authorized personnel.
+     </p>
+     <p>
+       <strong>It's important to note, however, that no method of transmission over the internet or electronic storage is 100% secure.</strong> While we strive to protect your information, we cannot guarantee absolute security.
+     </p>
+   </div>
+
+   <h2>International Users</h2>
+   <div class="legal-section">
+     <p>
+       The Site is operated from the United States, and the Lituus Foundation is based in the U.S. If you are visiting the Site from outside the U.S., please be aware that your information will be transferred to and processed in the United States. The data protection laws of the United States may differ from the laws of your country of residence.
+     </p>
+     <p>
+       However, we take steps to ensure that your privacy is protected as described in this Policy, regardless of where the data is processed. By using our Site, you consent to the transfer of your information to the United States and to the processing of that information as described in this Privacy Policy.
+     </p>
+     <p>
+       <strong>Please note that users in OFAC-sanctioned countries are not permitted to use the Site</strong> (per our Terms of Service), and we do implement technical measures to block access from those regions.
+     </p>
+   </div>
+
+   <h2>Children's Privacy</h2>
+   <div class="legal-box">
+     <p>
+       <strong>COPPA COMPLIANCE</strong>
+     </p>
+     <p>
+       This Site and its content are not directed at children under the age of 13. We do not knowingly collect any personal information from children under 13. Given that our Site has no registration or interactive features, it is very unlikely we would ever receive data identifying a child.
+     </p>
+     <p>
+       If you are under 13, please do not use or access the Site. Parents or guardians: if you become aware that your child under 13 has provided any information, please contact us. We will take prompt steps to delete any personal information concerning children under 13.
+     </p>
+   </div>
+
+   <h2>Changes to This Privacy Policy</h2>
+   <div class="legal-section">
+     <p>
+       We may update or revise this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. If we make material changes, we will post the updated Privacy Policy on this page and update the "Last Updated" date at the top.
+     </p>
+     <p>
+       <strong>Changes to the policy will become effective when posted, unless stated otherwise.</strong> We encourage you to review this Privacy Policy periodically to stay informed about how we are protecting your information.
+     </p>
+     <p>
+       Your continued use of the Site after any modifications to this Privacy Policy will signify your acceptance of the changes.
+     </p>
+   </div>
+
+   <h2>Contact Us</h2>
+   <div class="legal-box">
+     <p>
+       If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us. The Lituus Foundation is responsible for the processing of data on this Site.
+     </p>
+     <p>
+       We will endeavor to respond to your inquiry within a reasonable timeframe. For data access or deletion requests, please provide enough information for us to identify any data relating to you.
+     </p>
+     <LegalContacts />
+   </div>
+   </Prose>
+  </div>
+ </div>
+</PageLayout>
+<style>
+ .legal-body{padding-block:64px 96px}
+ .reading-column{max-width:720px}
+ .legal-lead{font-size:22px;line-height:33px;color:var(--muted-foreground)}
+ .loud{color:var(--foreground)}
+ .legal-section>*+*{margin-top:20px}
+ .legal-box{padding:24px 28px;border:1px solid var(--web-outline);background:var(--web-quiet)}
+ .legal-box>*+*{margin-top:20px}
+ .legal-box ul,.legal-section ul{padding-left:24px;list-style:square}
+ .legal-box li+li,.legal-section li+li{margin-top:8px}
+ @media(max-width:767px){.legal-lead{font-size:20px;line-height:30px}.legal-box{padding:20px}}
+ @media(max-width:600px){.legal-body{padding-block:40px 64px}}
+</style>

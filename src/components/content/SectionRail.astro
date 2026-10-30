@@ -1,0 +1,26 @@
+---
+// The side rail of a multi-page ported document (fork guides, whitepaper sections), after the Learn
+// guide rail: the document's pages, then this page's headings. Static links, no script; it replaces
+// the old site's React drawer. Below 1024 px it sits above the text and drops the headings.
+export interface RailItem { href: string; label: string; current?: boolean; note?: string }
+interface Props { heading: string; items: RailItem[]; headings?: { slug: string; text: string }[] }
+const { heading, items, headings = [] } = Astro.props;
+---
+<aside class="section-rail">
+ <nav aria-label={heading}><h2>{heading}</h2><ol>{items.map(item => <li><a href={item.href} aria-current={item.current ? 'page' : undefined}><span class="label">{item.label}</span>{item.note && <span class="note">{item.note}</span>}</a></li>)}</ol></nav>
+ {headings.length > 0 && <nav aria-label="On this page" class="toc"><h2>On this page</h2>{headings.map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</nav>}
+</aside>
+<style>
+ .section-rail{align-self:start;position:sticky;top:32px;max-height:calc(100vh - 64px);overflow-y:auto;scrollbar-width:thin}
+ h2{font:600 14px/20px var(--font-heading);color:var(--muted-foreground);margin:0 0 12px}
+ ol{list-style:none;margin:0;padding:0}
+ li a{display:flex;flex-direction:column;justify-content:center;min-height:44px;padding:8px 0 8px 16px;border-left:1px solid var(--web-outline);font:400 15px/22px var(--font-heading);color:var(--muted-foreground);text-decoration:none}
+ li a:hover{color:var(--foreground);border-color:var(--brand-hover-edge)}
+ li a[aria-current=page]{color:var(--foreground);border-left:2px solid var(--primary);padding-left:15px}
+ .note{font-size:13px;line-height:18px;color:var(--muted-foreground)}
+ .toc{margin-top:24px;padding-top:16px;border-top:1px solid var(--border-quiet)}
+ .toc a{display:block;padding:8px 0;font-size:14px;line-height:20px;color:var(--muted-foreground);text-decoration:none}
+ .toc a:hover{color:var(--foreground)}
+ @media(max-width:1023px){.section-rail{position:static;max-height:none;overflow:visible}.toc{display:none}ol{display:grid;grid-template-columns:1fr 1fr;column-gap:24px}}
+ @media(max-width:600px){ol{grid-template-columns:1fr}}
+</style>

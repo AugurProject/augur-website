@@ -1,0 +1,51 @@
+---
+// Long-form reading styles for the content ported from the old augur.net (blog posts, the Augur v2
+// whitepaper, the fork guides, privacy and terms). Learn guides keep their own lighter styles.
+// Markdown renders outside this component's scope, hence :global() under the wrapper; :where() keeps the
+// rules at one class of specificity, so components placed inside (ProseCard, LegalContacts) can restyle.
+interface Props { class?: string }
+const { class: className } = Astro.props;
+---
+<div class:list={['prose-article', className]}><slot /></div>
+<style>
+ .prose-article{font-size:18px;line-height:30px;color:var(--foreground);overflow-wrap:break-word}
+ .prose-article :global(:where(p,ul,ol,blockquote,pre,figure,hr,.table-scroll,.callout,.katex-display,img,.prose-card,section)+*){margin-top:20px}
+ .prose-article :global(:where(h1,h2,h3,h4)){color:var(--foreground);scroll-margin-top:24px}
+ .prose-article :global(:where(h1)){font-size:clamp(32px,3vw,44px);line-height:1.2;letter-spacing:-.01em;margin-bottom:32px}
+ .prose-article :global(:where(h2)){font-size:clamp(24px,2.2vw,30px);line-height:1.25;margin-top:56px}
+ .prose-article :global(:where(h3)){font-size:22px;line-height:30px;margin-top:40px}
+ .prose-article :global(:where(h4)){font-size:18px;line-height:28px;margin-top:32px}
+ .prose-article :global(:where(h1,h2,h3,h4)+*){margin-top:16px}
+ .prose-article>:global(:where(:first-child)){margin-top:0}
+ .prose-article :global(:where(a)){color:var(--foreground);text-decoration:underline;text-decoration-thickness:1px;text-decoration-color:var(--primary);text-underline-offset:4px}
+ .prose-article :global(:where(a:hover)){text-decoration-thickness:2px}
+ .prose-article :global(:where(.offsite-mark)){display:inline-block;margin-left:3px;font-size:.85em;text-decoration:none}
+ .prose-article :global(:where(strong)){font-weight:600;color:var(--foreground)}
+ .prose-article :global(:where(ul,ol)){padding-left:24px}
+ .prose-article :global(:where(ul)){list-style:square}
+ .prose-article :global(:where(ol)){list-style:decimal}
+ .prose-article :global(:where(li+li)),.prose-article :global(:where(li>:where(ul,ol))){margin-top:8px}
+ .prose-article :global(:where(li>p+p)){margin-top:12px}
+ .prose-article :global(:where(li)::marker){color:var(--muted-foreground)}
+ .prose-article :global(:where(blockquote)){padding-left:20px;border-left:2px solid var(--primary)}
+ .prose-article :global(:where(blockquote>*+*)){margin-top:12px}
+ .prose-article :global(:where(:not(pre)>code)){font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85em;padding:1px 5px;background:var(--web-tile);overflow-wrap:anywhere}
+ .prose-article :global(:where(pre)){padding:16px 20px;background:var(--web-quiet);border:1px solid var(--web-outline);overflow-x:auto;font-size:14px;line-height:22px}
+ .prose-article :global(:where(hr)){border:0;border-top:1px solid var(--web-outline);margin-block:48px}
+ .prose-article :global(:where(hr+*)){margin-top:0}
+ .prose-article :global(:where(img)){display:block;height:auto;border:1px solid var(--web-outline)}
+ .prose-article :global(:where(.table-scroll)){overflow-x:auto;max-width:100%}
+ .prose-article :global(:where(.table-scroll:focus-visible)){outline:2px solid var(--ring);outline-offset:2px}
+ .prose-article :global(:where(table)){width:100%;border-collapse:collapse;font-size:15px;line-height:22px}
+ .prose-article :global(:where(th,td)){padding:12px 16px 12px 0;border-bottom:1px solid var(--web-outline);text-align:left;vertical-align:top}
+ .prose-article :global(:where(th)){font:600 14px/20px var(--font-heading);color:var(--muted-foreground);border-bottom-color:var(--muted-foreground)}
+ .prose-article :global(:where(sup)){font-size:.7em;line-height:0}
+ .prose-article :global(:where(sup a)){text-decoration:none;padding-inline:1px}
+ .prose-article :global(:where(.footnotes)){margin-top:56px;padding-top:24px;border-top:1px solid var(--web-outline);font-size:15px;line-height:24px;color:var(--muted-foreground)}
+ .prose-article :global(:where(.katex)){font-size:1.05em}
+ .prose-article :global(:where(.katex-display)){overflow-x:auto;overflow-y:hidden;padding-block:4px}
+ /* Blog callouts: paragraphs that opened with an emoji (rehype-callouts). */
+ .prose-article :global(:where(.callout)){padding:12px 16px;border-left:2px solid var(--primary);background:var(--web-quiet)}
+ .prose-article :global(:where(.callout+.callout)){margin-top:8px}
+ @media(max-width:767px){.prose-article{font-size:17px;line-height:28px}}
+</style>

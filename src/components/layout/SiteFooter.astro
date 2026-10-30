@@ -2,7 +2,7 @@
 import Brand from '../primitives/Brand.astro';
 import Icon from '../primitives/Icon.astro';
 import Button from '../primitives/Button.astro';
-import {navigationGroups,pages,type NavigationItem} from '../../data/navigation';
+import {navigation,navigationGroups,pages,type NavigationItem} from '../../data/navigation';
 import {links} from '../../data/links';
 import {newsletter} from '../../data/newsletter';
 import {forms} from '../../data/forms';
@@ -26,7 +26,7 @@ const email=links.contact.url.replace(/^mailto:/,'');
     </div>
   </div>
   <div class="site-container footer-grid directory">
-    <div class="identity"><a href="/" aria-label="Augur home"><Brand /></a><p>Augur's work is funded and coordinated by the <a href={links.foundation.url}>Lituus Foundation<Icon name="arrow-up-right"/></a>.</p></div>
+    <div class="identity"><a href="/" aria-label="Augur home"><Brand /></a><p>Augur's work is funded and coordinated by the <a href={links.foundation.url}>Lituus Foundation<Icon name="arrow-up-right"/></a>.</p><ul class="legal-links" aria-label="Legal">{navigation.legal.map(item=><li><a href={item.href}>{item.label}</a></li>)}</ul></div>
     <nav class="footer-links" aria-label="Footer">{navigationGroups.map(group=><div><h2>{group.label}</h2><ul>{group.items.map(item=><li><a class="line-link" href={item.href}>{(item as NavigationItem).logo&&<Icon name={(item as NavigationItem).logo!} class="social-logo"/>}<span class="button-label">{item.label}</span>{('external' in item && item.external)&&<Icon name="arrow-up-right"/>}</a></li>)}</ul></div>)}</nav>
   </div>
 </footer>
@@ -58,7 +58,7 @@ const email=links.contact.url.replace(/^mailto:/,'');
    event.preventDefault();if(sending)return;status.replaceChildren();
    if(!validate()){input.focus();return;}
    if(form.dataset.newsletter==='offline'){
-    const blog=document.createElement('a');blog.href='https://www.augur.net/blog/';blog.textContent='Follow the blog';
+    const blog=document.createElement('a');blog.href='/blog/';blog.textContent='Follow the blog';
     status.append('Email sign-up isn’t connected yet, so nothing was sent or saved. ',blog,' for updates in the meantime.');
     return;
    }
@@ -90,6 +90,8 @@ const email=links.contact.url.replace(/^mailto:/,'');
 /* A hairline opens the directory, so the contact band and the links read as two groups. The logo heads the
    first column level with the link headings, and the funding line sits 16 under it. */
 .identity{display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:16px}.identity p{font-size:14px;line-height:22px;color:var(--muted-foreground);max-width:300px}
+/* Privacy and Terms sit under the funding line, in its size and colour. */
+.legal-links{display:flex;flex-wrap:wrap;gap:4px 24px;list-style:none;padding:0;margin:0;font-size:14px;line-height:22px}.legal-links a{display:inline-flex;align-items:center;min-height:24px;color:var(--muted-foreground)}.legal-links a:hover{color:var(--foreground)}
 .identity p a{color:var(--foreground);white-space:nowrap}.identity p a:hover{text-decoration-thickness:2px}.identity p :global(.web-icon),.identity p :global(.web-icon svg){width:12px;height:12px}.identity p :global(.web-icon){margin-left:2px;vertical-align:-1px}
 .footer-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px}
 .footer-links h2{font:600 14px/20px var(--font-heading);letter-spacing:0;color:var(--muted-foreground);margin-bottom:16px}.footer-links ul{list-style:none;padding:0;margin:0}
@@ -98,7 +100,7 @@ const email=links.contact.url.replace(/^mailto:/,'');
 .footer-links :global(.social-logo),.footer-links :global(.social-logo svg){width:18px;height:18px}.footer-links :global(.social-logo){margin-right:6px;color:var(--muted-foreground);transition:color 180ms ease-out}.footer-links a:hover :global(.social-logo){color:var(--foreground)}
 /* Below 1280 a 1fr / 1fr contact row over four equal link columns with the same gap, so the
    newsletter's edge lands on the third column; the identity row splits on that edge too. */
-@media(max-width:1279px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}.directory{grid-template-columns:minmax(0,1fr)}.identity{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;align-items:center;padding-bottom:0}.footer-links{gap:48px}}
+@media(max-width:1279px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}.directory{grid-template-columns:minmax(0,1fr)}.identity{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 48px;align-items:center;padding-bottom:0}.legal-links{grid-column:2}.footer-links{gap:48px}}
 @media(max-width:767px){.contact-band{padding-block:64px}.footer-grid{grid-template-columns:minmax(0,1fr)}.directory{padding-block:40px 48px;row-gap:40px}.identity{display:flex;align-items:flex-start;gap:24px}.footer-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}.footer-links li a{min-height:44px}}
 /* Under 375 px the field would clip its placeholder beside the button: stack them. */
 @media(max-width:374px){.newsletter-row{flex-direction:column;align-items:stretch}}
