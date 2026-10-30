@@ -15,6 +15,21 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - The contact form against Proton's real SMTP server and a deployed `augur-forms` Worker; it has been checked only locally, with the `log` provider and a fake SMTP server (29 October 2026).
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
 
+## 30 October 2026: content ported from the old augur.net
+
+Checked against `launch/port-content` at `c0355d9` ([ported content](../reference/ported-content.md)), with the old site's source at `ba18725` and the live www.augur.net for comparison.
+
+- `npm run build` and `npm run check:designs` (`current` and `melo`) pass; each commit on the branch builds on its own.
+- Every blog, whitepaper, fork-guide, privacy and terms URL in the old sitemap (35) has `dist/client/<path>/index.html`.
+- `dist/client/rss.xml` is byte-identical to the live `https://www.augur.net/rss.xml` (16 items).
+- Text of the 16 posts, 6 fork guides and 9 whitepaper pages, tags removed, matches the live pages except for the listed differences: the monitor removals, the guide titles moved to the header, the "References" heading, and two posts where the old site had turned `$…$` into math. Privacy and terms match word for word apart from the case of the three community links.
+- In the ported pages, 2,003 internal links and fragments resolve to built files and ids, and all 84 image URLs exist in `dist/client`. The appendices carry KaTeX markup, and the KaTeX stylesheet is linked from the whitepaper pages only.
+- No `↗` or arrow icon on any `/blog/` link except the navigation's Blog entry (see [open decisions](open-decisions.md#ported-content)). `fork-risk`, `/data/fork`, "fork monitor" and "gauge" appear nowhere in `src/` or `dist/client/`.
+- `wrangler dev` on the build: the ported pages, `/rss.xml`, the whitepaper `.md` files and a figure answer 200 with HTML, XML, Markdown and JPEG types; `/blog` and `/learn/fork` 307 to the trailing slash.
+- Headless Chrome screenshots at 1440 px (blog index and post, a fork guide, the migration record, whitepaper appendix and index, privacy) and at 390 px through an iframe (blog index, a fork guide, a whitepaper appendix): layout holds, wide tables scroll inside their box, and inline and display math render.
+
+Not checked: Safari and Firefox, a real phone, JavaScript turned off, keyboard and screen-reader use, reduced motion, print, and a deployed Worker.
+
 ## 29 October 2026: contact form sending through a real SMTP server
 
 Checked against the #35 branch after `36862df`, with the SMTP timeout raised to 25 seconds. The forms Worker ran under `wrangler dev` with `MAIL_PROVIDER=proton`, pointed by `PROTON_SMTP_HOST` and `PROTON_SMTP_PORT` at Ethereal (`smtp.ethereal.email:587`), a free test SMTP service that accepts and keeps mail without delivering it, using a throwaway account the owner created. This exercises the same path Proton will use: STARTTLS on 587, `AUTH PLAIN`, `MAIL FROM`, `RCPT TO`, `DATA`.
