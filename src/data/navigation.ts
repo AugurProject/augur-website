@@ -27,6 +27,8 @@ export const navigation = {
   ],
   // Community logos identify each destination wherever it is listed (Figma 43:153).
   community: [external('Discord', 'discord', { logo: 'discord-logo' }), external('Telegram', 'telegram', { logo: 'telegram-logo' }), external('X', 'x', { logo: 'x-logo' }), external('GitHub', 'github', { logo: 'github-logo' })],
+  // Footer only, under the funding line; not one of the navigation groups below.
+  legal: [{ label: 'Privacy', href: '/privacy/' }, { label: 'Terms', href: '/terms/' }],
 } satisfies Record<string, NavigationItem[]>;
 
 export const navigationGroups = [
