@@ -178,18 +178,21 @@ export const homeV2 = {
         cover: { name: 'Delay cover', paid: 'Paid', notes: ['If over 2 h late', 'Every policyholder'] },
         builders: 'Payouts run once the delay is confirmed, with no claims to review. An insurance app could also use a faster oracle and turn to Augur Lituus only when a claim is disputed.',
       },
-      // The DAO card is a vote bar (owner, 28 Oct 2026, "polish vote bar then implement on melo", concept 2 of the
-      // DAO sketch board's second round, after the first round was "too similar" to the other two cards): the
-      // DAO's vote drawn as DAO apps draw it, For from the left and Against from the right, passing the majority,
-      // then the query on the DAO's written rules outranks it. Real DAOs queue a passed vote behind a timelock,
-      // often two days, before it runs; here Augur Lituus's Yes holds it there, so the vote alone doesn't decide
-      // (Ryan 10: a change that breaks the DAO's rules can't be pushed through). The question is 402 px at 22 px,
-      // under the market's 426, so the three cards keep one height. Values are illustrative.
+      // The DAO card is a switch (owner, 29 Oct 2026, "Polish, review then implement the Switch into /melo",
+      // concept 1 of the DAO board's round 5, after the vote bar and three rounds of other pictures). The DAO's
+      // part is one row: the treasury upgrade's go-live switch, which the vote turns on and the block turns off.
+      // Augur Lituus's part is the larger (owner, 29 Oct 2026: "None of them give enough importance to the Augur
+      // Lituus process"): both answers, so it reads as a yes/no, the report on Yes, the day it's open to
+      // challenge, then Final. Real DAOs queue a passed vote behind a timelock, often two days, before it runs;
+      // here Augur Lituus's Yes holds it there, so the vote alone doesn't decide (Ryan 10: a change that breaks
+      // the DAO's rules can't be pushed through). The question is 402 px at 22 px, under the market's 426:
+      // between about 1030 and 1095 px it keeps one line while the other two wrap, so the card is 28 px shorter
+      // there. Values are illustrative.
       governance: {
         label: 'Query',
         title: 'Does this upgrade break a DAO rule?',
-        vote: { name: 'Vote on the treasury upgrade', share: 71, for: 'For', against: 'Against', majority: 'Majority', states: ['Voting', 'Passed'], live: 'Goes live in 2 days' },
-        oracle: { answer: 'Yes' },
+        upgrade: { name: 'Treasury upgrade', states: ['Voting', 'Passed'], notes: ['Open to members', 'Goes live in 2 days'] },
+        oracle: { answer: 'Yes', other: 'No' },
         outcome: { status: 'Blocked', note: 'It won’t go live' },
         builders: 'Every upgrade is checked against the DAO’s own rules by a process the core team doesn’t control. Changes within the constitution can still go live.',
       },
@@ -217,8 +220,8 @@ export const homeV2 = {
     // `steps`). The owner's "the whole process from asking to getting a final answer and the middle stuff"
     // stays on the scroll: the four steps, the waits in the scenes and the bodies. Augus, 18 Oct: the consumer
     // case, so the moves speak to "you" and every gain keeps its condition beside the risk. Augus's worry:
-    // plain words on the scroll; "bond", "appeal period" and "Reporter Pay" appear once each, explained,
-    // inside the example. Draft copy.
+    // plain words, so "bond", "appeal period" and "Reporter Pay" appear nowhere, the example included (29 Oct
+    // 2026). Draft copy.
     // Facts (January 2026 whitepaper): anyone asks for a fee in REP (§2 p2, §4.4.2 p7); the reward rises
     // from 0 REP toward the fee until someone reports, and goes to the first to back the final answer
     // (§4.4.3 p7, §4.3.1 p6); a report stakes the fee, a challenge stakes double on another answer and
@@ -233,44 +236,44 @@ export const homeV2 = {
       label: 'How taking part works',
       // Each step (sketch A of the item 4 board; owner, 25 Oct 2026: "build A on /2"): a tab with its number and
       // name, and a stage with its scene (how-scenes.ts), the claim in two lines (setup in
-      // Pewter, payoff in Paper), one body line, which carries the wait that follows, and the example's figure
-      // for that step (`fact`: a label and a figure HowItWorks.astro fills from walkthrough.ts, the numbers the
-      // example below opens with). Get paid's figure is what you win of their stake, as in the example's Paid
-      // out ("on top of" your stake back and the reward). Challenge says "double theirs": in the cold read,
-      // "stake double" didn't say of what. `scene` names the step's drawing.
+      // Pewter, payoff in Paper) and one body line, which carries the wait that follows. Nothing sits under the scene (owner, 29 Oct
+      // 2026: a figure row, then captions, then a legend there each took the eye from the claim). Challenge says "double theirs": in the cold read, "stake double" didn't say of what. `scene`
+      // names the step's drawing.
       // `note` is the tab's line under its name (owner, 26 Oct 2026: "a tiny text below the 'Ask' 'Report' stuff"):
       // read with the name it says what the step is in REP terms, so the row of tabs tells the whole process before
       // any is picked. It never repeats the claim (the line the tabs had before did, and went as noise). Facts: a
       // fee per question in REP (§4.4.2 p7), a report stakes on an outcome (§4.1 p5), a challenge stakes on another
       // (§4.0.2 p4), rewards go to the outcome that becomes final (§4.3.1 p6). Short enough for one line from 1024.
       stops: [
-        { title: 'Ask', note: 'Pay a fee in REP', scene: 'ask', claim: ['Anyone can ask.', 'A fee funds the reward.'], body: 'The reward grows until someone reports what happened.', fact: ['In the example', '{fee} fee'] },
-        { title: 'Report', note: 'Stake on an answer', scene: 'report', claim: ['Report what you saw.', 'Stake REP on it.'], body: 'No challenge in time? Your stake comes back with the reward.', fact: ['In the example', '{bond} on {reported}'] },
-        { title: 'Challenge', note: 'Back another answer', scene: 'challenge', claim: ['Think it’s wrong?', 'Stake double theirs.'], body: 'The time to challenge starts again on your answer.', fact: ['In the example', '{challenge} on {challenged}'] },
-        { title: 'Get paid', note: 'If your answer holds', scene: 'paid', claim: ['No new stake in time?', 'The answer is final.'], body: 'Whoever backed it wins most of the losing stake.', fact: ['In the example, you win', '+{share}'] },
+        { title: 'Ask', note: 'Pay a fee in REP', scene: 'ask', claim: ['Anyone can ask.', 'A fee funds the reward.'], body: 'The reward grows until someone reports what happened.' },
+        { title: 'Report', note: 'Stake on an answer', scene: 'report', claim: ['Report what you saw.', 'Stake REP on it.'], body: 'No challenge in time? Your stake comes back with the reward.' },
+        { title: 'Challenge', note: 'Back another answer', scene: 'challenge', claim: ['Think it’s wrong?', 'Stake double theirs.'], body: 'The time to challenge starts again on your answer.' },
+        { title: 'Get paid', note: 'If your answer holds', scene: 'paid', claim: ['No new stake in time?', 'The answer is final.'], body: 'Whoever backed it wins most of the losing stake.' },
       ],
-      // The example: walkthrough.ts's question and amounts, with "you" as the challenger who turns out
-      // right, so the card ends on your payout (peak–end). HowItWorks.astro fills {fee}, {bond},
-      // {challenge} and the answers ({reported}, {challenged}, {final}) from walkthrough.ts, which also
-      // gives the Paid out figures. The reward's amount for an overturned report isn't in §4.4.3, so the
-      // card names it without a figure, "on top of" the +12 (cold read, 25 Oct: "with your 30 REP back and
-      // the reward" left the reward looking like part of it); the reporter "lost" theirs, so Paid out never
-      // reads as paying them. `story` labels the rows (the four steps above, numbered the same), and `you`
-      // marks the row that is your move.
+      // The example as a story (owner, 29 Oct 2026: "I love the story in words", sketch D of the example board):
+      // walkthrough.ts's question and amounts in four plain sentences, one per step above, each under that step's
+      // name, with "you" as the challenger who turns out right, so it ends on your payout (peak–end). No jargon:
+      // the scroll never says bond, appeal period or Reporter Pay, so the story doesn't either. HowItWorks.astro
+      // fills each {name} from walkthrough.ts. Emphasis is marked, never automatic (owner, 29 Oct 2026: "fix the
+      // bold and green"): **…** is bold, Sora 600 in Paper, and {+name} is your win, bold in Green. Bold carries
+      // the story on its own: the fee, each side's answer and stake, said the same way in Report and Challenge,
+      // and the final answer; your own stake coming back stays plain, since it isn't a gain. The reward's amount
+      // for an overturned report isn't in §4.4.3, so it has no figure; it goes to the first to back the final
+      // answer, you here. The reporter's 15 REP splits into your 12 and 3 burned. `label` names the card for
+      // screen readers.
+      // Facts behind the wording: a question comes with rules for judging it (walkthrough.ts's fields); the fee
+      // isn't fixed, so 15 REP is "in this example" (the whitepaper's §4.5 figure; who sets its size isn't
+      // claimed); anyone can report (§2, rep.ts), so the reporter never reads as the team; a report stakes the
+      // fee (§2, §4.1); a challenge restarts the time to challenge, now on the new answer (§4.0.2). Get paid
+      // names the final answer, then your payoff, then the burned rest (option B of the copy review).
       example: {
-        tag: 'Example',
-        status: 'Final answer',
-        story: 'What happened',
-        rows: [
-          { event: 'The question is asked', note: 'The reward, Reporter Pay, starts at 0 REP and rises toward the fee.', amount: '{fee} fee' },
-          { event: 'Someone reports {reported}', note: 'The first stake, called a bond, always equals the fee.', amount: '{bond}' },
-          { event: 'You challenge with {challenged}', note: 'Double their stake. The time to challenge (the appeal period) starts again.', amount: '{challenge}', you: true },
-          { event: '{final} is final', note: 'The time to challenge ends with no new stake.' },
+        label: 'An example, step by step',
+        story: [
+          'Say someone asks, “{question}” They set the rules for judging it and pay a fee in REP, which funds a reward for the right answer. In this example, the fee is **{fee}**.',
+          'Anyone can report. Here, someone reports **{reported}** and stakes **{bond}** on it, the same as the fee.',
+          'You think the reporter is wrong, so you challenge with **{challenged}** and stake **{challenge}** on it, double theirs. The time to challenge starts again, and now anyone can challenge you.',
+          'No one challenges you in time, so the final answer is **{final}**. You get your {challenge} back, plus {+share} of the reporter’s stake and the reward. The other {burned} of theirs is burned.',
         ],
-        paid: 'Paid out',
-        you: { who: 'You', note: 'Most of their stake, on top of your {challenge} back and the reward.' },
-        reporter: { who: 'The reporter', note: 'Lost their whole stake.' },
-        burned: { who: 'Burned', note: 'The rest of their stake.' },
       },
     },
   },
@@ -284,11 +287,24 @@ export const homeV2 = {
     //   window"; Lituus-CS forking isn't built, docs/sources.md), hence "is designed to". Unmoved REP
     //   loses its value (§4.2.2 p5): Augus's "risk losing the token" is reworded, since nothing takes it.
     //   Ryan's "check in at least once a month" is declined: the paper sets no cadence, and a monthly
-    //   check could miss a two-week window. `act` gives the point the hollow Green square of a move.
+    //   check could miss a two-week window.
+    // Labels, not squares (owner, 29 Oct 2026, sketch A of the Holding REP board: "Earn", then Ryan's
+    // "Non-passivity" in plain words): each point is a tile led by its `label`, and `earn` gives Earn's the
+    // Green outline. Earn is incisive (REP earns REP, like work that pays, "paid in REP", never money, price or
+    // yield) and stays conditional and optional; the fork point is calm: a last resort (rep.ts), then what to
+    // do, then the one fact, plainly (moving doesn't promise value, so it says only what unmoved REP loses).
+    // Smaller (owner, same day: "occupying too much space"), then one full-width Navy card with the points as spec
+    // rows (round 5 of the Holding REP board: "just text floating around looks weird"): each `label` is the row's
+    // term. Earn echoes the heading ("Know what happened?"); "when you know" keeps taking part a choice. The fork
+    // row is about not being fully passive, never a duty or a threat (owner: "do not scare people away"): holding
+    // is mostly hands-off, and a fork opens a window to move (the two-week window is a proposed design, so it
+    // stays unnamed; what unmoved REP loses is on the REP page). `link` names the REP page by what it gives you
+    // ("Learn more" says nothing), an outline button in the card.
     title: 'Holding REP?',
+    link: 'How REP works',
     points: [
-      { lead: 'Put it to work, if you want.', text: 'Stake it to report or challenge, and earn when your answer holds.' },
-      { lead: 'Watch for forks.', text: 'If one starts, Augur Lituus is designed to give you two weeks to move your REP. REP left behind loses its value.', act: true },
+      { label: 'Earn REP', text: 'Report or challenge when you know what happened, and get paid in REP when your answer holds.', earn: true },
+      { label: 'Stay in the loop', text: 'Holding is mostly hands-off. If a fork ever starts, there’s a window to move your REP to the answer you believe in.' },
     ],
   },
   learnMore: {

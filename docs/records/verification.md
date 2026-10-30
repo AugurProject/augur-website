@@ -15,6 +15,14 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - The contact form against Proton's real SMTP server and a deployed `augur-forms` Worker; it has been checked only locally, with the `log` provider and a fake SMTP server (29 October 2026).
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
 
+## 31 October 2026: Melo's homepage at lab `abfb3b5`
+
+Checked against `launch/melo-latest`: `melo`'s Applications and How It Works files merged from augur-web-lab `1b95a3a..abfb3b5`. Each of the seven files differs from the lab at `abfb3b5` only as it differed from `1b95a3a` (import paths, `.site-container`, `--brand-hover-edge`); the lab's dropped `rep` import is dropped here too, and every module the new code imports exists. `npm run build` (59 pages) and `npm run check:designs` (`current`, `melo`) pass. Served by `npx wrangler dev`, `node scripts/check-launch.mjs http://127.0.0.1:8812`: 67 passed, 0 failed, 1 warning (the supply snapshot's block is behind www.augur.net's), 2 skipped.
+
+Headless Chromium (Playwright) at 1440×900 and 390×844, the built site against the lab's `/melo/` at `abfb3b5` under `astro dev`: Applications, How It Works and Holding REP have identical text and identical section sizes, and screenshots match. All four How It Works steps and all three use cases (DAOs & governance shows the switch card) select on click. The site logged no console errors.
+
+Not checked: the lab rendered with fallback fonts (its dev server refused the font files from a copied checkout), so line wraps were compared by eye only; no pixel diff; the other sections, which this change does not touch; everything listed under Not yet checked.
+
 ## 30 October 2026: Workers Builds preview of the launch branch
 
 `node scripts/check-launch.mjs https://launch-replace-augur-net-augur-website-next.bytebros.workers.dev` against the preview build (`npx wrangler preview`): 69 passed, 0 failed, 1 skipped (the apex redirect). The preview carries Astro's Worker script: a browser navigation to an unknown path gets the 404 page, while a non-navigation request gets the Worker's plain 9-byte `Not found` with status 404 and without the `_headers` headers ([hosting](../reference/hosting.md#serving)). `X-Robots-Tag: noindex` is present on the preview host, but it also appears on the Worker's own 404, so Cloudflare may add it to preview URLs itself; the `_headers` rule for the production workers.dev host is confirmed only under `wrangler dev`.

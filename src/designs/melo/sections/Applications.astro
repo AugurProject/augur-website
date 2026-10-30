@@ -63,13 +63,13 @@ const check=signals?'4.5 10.5 8.25 14.25 15.5 7':'40 144 96 200 224 72';
 // The market card is a query split in two (owner, 26 Oct 2026, "Split it is"): the market's price beside
 // Augur Lituus's status and answer. The insurance card is the same query as a relay (owner, 28 Oct 2026,
 // "Relay it is"): one line through the flight, Augur Lituus and the cover, an ordered list of three steps
-// under it. The DAO card is the same query as a vote bar (owner, 28 Oct 2026, "polish vote bar"): the DAO's
-// vote passes the majority, then Augur Lituus's answer on its written rules holds it. Copies whose DAO card
-// still has the proposal rows (Ryan's and Augus's) keep that card. All three share the head and Augur Lituus's
-// words (`cards.query`). Each value that changes keeps every
-// state in one cell, the resting one last and the others hidden from screen readers, so no JavaScript,
-// reduced motion and print show the end. Before the report Augur Lituus's value is empty, never a dash (owner,
-// 28 Oct 2026); on the DAO card the note "Waiting for a report" stands in its place.
+// under it. The DAO card is the same query as a switch (owner, 29 Oct 2026, "implement the Switch into
+// /melo"): one row for the upgrade and its go-live switch, then Augur Lituus's larger part, both answers as
+// chips over the line for the day it's open to challenge. Copies whose DAO card still has the proposal rows
+// (Ryan's and Augus's) keep that card. All three share the head and Augur Lituus's words (`cards.query`).
+// Each value that changes keeps every state in one cell, the resting one last and the others hidden from
+// screen readers, so no JavaScript, reduced motion and print show the end. Before the report Augur Lituus's
+// value is empty, never a dash (owner, 28 Oct 2026).
 const cards=signals&&copy&&'cards' in copy.applications?copy.applications.cards:undefined;
 ---
 <section class="applications section" aria-labelledby="applications-heading">
@@ -84,7 +84,7 @@ const cards=signals&&copy&&'cards' in copy.applications?copy.applications.cards:
     {cases.map((app,i)=><div role="tabpanel" id={`application-panel-${app.id}`} aria-labelledby={`application-tab-${app.id}`} class="case-panel" tabindex="0" hidden={i!==0}>
      <p class="case-summary">{app.summary}</p>
      {cards?<Fragment>{(card=>card&&<Fragment>
-      {'oracle' in card?<div class="case-card" data-card-kind={'market' in card?'query':'flight' in card?'relay':'vote'}>
+      {'oracle' in card?<div class="case-card" data-card-kind={'market' in card?'query':'flight' in card?'relay':'switch'}>
        <div class="card-head"><span class="card-label">{card.label}<span class="sr-only">.</span></span><span class="split-states split-status" data-card="status"><span class="st-ask" aria-hidden="true"><i></i>{cards.query.statuses[0]}<b class="st-glow"></b></span><span class="st-rep" aria-hidden="true"><i></i>{cards.query.statuses[1]}</span><span class="st-fin"><span class="sr-only">Status: </span><i></i>{cards.query.statuses[2]}<span class="sr-only">.</span></span></span></div>
        <p class="card-title">{card.title}</p>
        {'market' in card?<div class="card-split">
@@ -106,14 +106,16 @@ const cards=signals&&copy&&'cards' in copy.applications?copy.applications.cards:
          <li class="relay-step is-oracle" data-card="oracle"><span class="relay-name split-by">{cards.query.name}<span class="sr-only">:</span></span> <span class="relay-value"><span class="split-states" data-card="answer"><span aria-hidden="true"></span><span aria-hidden="true">{card.oracle.answer}</span><span class="split-win">{card.oracle.answer}<span class="sr-only">.</span></span></span></span> <span class="relay-note"><span class="split-states" data-card="answer-note"><span aria-hidden="true">{cards.query.notes[0]}</span><span aria-hidden="true">{cards.query.notes[1]}</span><span>{cards.query.notes[2]}<span class="sr-only">.</span></span></span></span></li>
          <li class="relay-step is-cover" data-card="leg-cover"><span class="relay-name">{card.cover.name}<span class="sr-only">:</span></span> <span class="relay-value"><span class="split-states" data-card="cover"><span aria-hidden="true"></span><span class="split-win">{card.cover.paid}<span class="sr-only">,</span></span></span></span> <span class="relay-note"><span class="split-states" data-card="cover-note"><span aria-hidden="true">{card.cover.notes[0]}</span><span>{card.cover.notes[1]}<span class="sr-only">.</span></span></span></span></li>
         </ol>
-       </div>:<div class="card-vote">
-        <div class="vote-poll" data-card="poll">
-        <div class="vote-head"><span class="vote-name">{card.vote.name}<span class="sr-only">:</span></span><span class="vote-status"><span class="vote-word"><span class="split-states" data-card="status-word"><span aria-hidden="true">{card.vote.states[0]}</span><span aria-hidden="true">{card.vote.states[1]}</span><span class="split-win">{card.outcome.status}<span class="sr-only">,</span></span></span></span> <span class="vote-note"><span class="split-states" data-card="status-note"><span aria-hidden="true"></span><span aria-hidden="true">{card.vote.live}</span><span>{card.outcome.note}<span class="sr-only">.</span></span></span></span></span></div>
-        <div class="vote-bar" data-card="bar" data-share={card.vote.share} style={`--for:${card.vote.share}%`} aria-hidden="true"><span class="vote-track"></span><span class="vote-for" data-card="for"></span><span class="vote-against" data-card="against"></span><span class="vote-tick" data-card="tick"></span></div>
-        <p class="vote-scale"><span class="split-states" data-card="for-label"><span aria-hidden="true">{card.vote.for}</span><span>{card.vote.for} {card.vote.share}%<span class="sr-only">,</span></span></span> <span class="vote-majority">{card.vote.majority}<span class="sr-only"> 50%,</span></span> <span class="split-states" data-card="against-label"><span aria-hidden="true">{card.vote.against}</span><span>{card.vote.against} {100-card.vote.share}%<span class="sr-only">.</span></span></span></p>
+       </div>:<div class="card-switch">
+        <div class="switch-row" data-card="app">
+         <span class="switch-track" aria-hidden="true"><i class="switch-on" data-card="switch-on"></i><i class="switch-knob" data-card="knob"><b></b><b data-card="knob-on"></b><b data-card="knob-win"></b></i></span>
+         <span class="switch-text"><span class="switch-name">{card.upgrade.name}<span class="sr-only">:</span></span><span class="switch-line"><span class="switch-value"><span class="split-states" data-card="app-value"><span aria-hidden="true">{card.upgrade.states[0]}</span><span aria-hidden="true">{card.upgrade.states[1]}</span><span class="split-win">{card.outcome.status}<span class="sr-only">,</span></span></span></span><span class="switch-note"><span class="split-states" data-card="app-note"><span aria-hidden="true">{card.upgrade.notes[0]}</span><span aria-hidden="true">{card.upgrade.notes[1]}</span><span>{card.outcome.note}<span class="sr-only">.</span></span></span></span></span></span>
         </div>
-        <p class="vote-answer" data-card="oracle"><span class="split-by">{cards.query.name}<span class="sr-only">:</span></span> <span class="vote-yes"><span class="split-states" data-card="answer"><span class="vote-why" aria-hidden="true">{cards.query.notes[0]}</span><span aria-hidden="true">{card.oracle.answer}<span class="vote-why">{cards.query.notes[1]}</span></span><span class="split-win">{card.oracle.answer}<span class="split-seal vote-seal" aria-hidden="true"><svg class="card-check" viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1"/></svg></span><span class="sr-only">.</span><span class="vote-why">{cards.query.notes[2]}<span class="sr-only">.</span></span></span></span></span></p>
-        <span class="split-wait vote-wait" data-card="wait" aria-hidden="true"><i></i></span>
+        <div class="choice" data-card="oracle">
+         <p class="choice-by"><span class="split-by">{cards.query.name}<span class="sr-only">: {card.oracle.answer}.</span></span></p>
+         <div class="choice-row"><span class="choice-opt" aria-hidden="true">{card.oracle.answer}<i class="choice-ring" data-card="yes-ring"></i><i class="choice-fill" data-card="yes-fill"></i><span class="choice-pick" data-card="yes-pick">{card.oracle.answer}<svg class="card-check" viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1"/></svg></span></span><span class="choice-opt is-other" data-card="no" aria-hidden="true">{card.oracle.other}</span><span class="choice-note"><span class="split-states" data-card="answer-note"><span aria-hidden="true">{cards.query.notes[0]}</span><span aria-hidden="true">{cards.query.notes[1]}</span><span>{cards.query.notes[2]}<span class="sr-only">.</span></span></span></span></div>
+         <span class="split-wait choice-wait" data-card="wait" aria-hidden="true"><i></i></span>
+        </div>
        </div>}
       </div>:<div class="case-card" data-card-kind="proposal">
        <div class="card-head"><span class="card-label">{card.label}<span class="sr-only">.</span></span><span class="card-status"><span class="status-wait" data-card="status-wait" aria-hidden="true"><i></i>{card.pending}</span><span class="status-done" data-card="status-done">{card.resolved}</span></span></div>

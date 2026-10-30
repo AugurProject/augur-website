@@ -74,27 +74,31 @@ export const applicationTimeline = { threshold:.6, out:160, start:120, enter:640
  * `depart`, and its stretch of line runs Paper from `focus` to the last of `ticks`, when it lands; at `reported`
  * Augur Lituus's stop comes in with a Paper Yes, and the next stretch fills Pewter until `final`, when the stop
  * becomes the seal; from `paid` the line runs Green to the cover over `pay` (travel easing), and `arrive` after
- * `paid` the cover's stop fills and "Paid" comes in. The DAO card, a vote bar (owner, 28 Oct 2026, "polish vote
- * bar"), adds `vote`: from `focus` to `close` For and Against fill in steadily from their ends and the majority
- * tick stretches to `tickScale` and back over `tick` as For passes it; at `close` the tallies show and, `status`
- * later, the vote has Passed (`close` comes before the market's last tick, so Passed is read before the light
- * moves on); at `paid` the bar steps back to `past` and the status turns to Blocked.
+ * `paid` the cover's stop fills and "Paid" comes in. The DAO card, a switch (owner, 29 Oct 2026, "implement the
+ * Switch into /melo"), adds `switch`: at `close` the vote has Passed and the go-live switch slides on over
+ * `slide` (travel easing), its knob and ring turning Paper (`close` comes before the market's last tick, so Passed
+ * is read before the light moves on). Augur Lituus, the larger part, shows both answers: at `reported` Yes's
+ * ring lights, the line for the day it's open to challenge fills until `final`, then the Green sweeps across
+ * Yes over `in`, its checked label shows `pick` later, and No steps back to `other`. At `paid` the switch slides
+ * back off over `slide`, its knob turning Green halfway, and the status turns to Blocked.
  * Ryan's and Augus's DAO card, a proposal, loops on the same cycle: its pending words show from the reset, and
  * from `focus` a Mist line runs under its pending check over `scan`. At `reported` each pending word and that
  * line go over `swapOut`, and each answer comes in from `swapIn` over `swap` (a value rising `rise` px, the
  * status from `statusFrom` scale); the footer rises `footRise` px from `footAt` over `foot`, and the result
  * fades in from `resultAt` over `result`. */
-export const useCaseTimeline = { threshold:.6, link:240, out:160, at:160, in:320, scan:600, swapOut:140, swapIn:120, swap:320, rise:4, statusFrom:.92, footAt:160, foot:420, footRise:6, resultAt:520, result:320, loop:{ cycle:12000, fade:600, reset:400, resetOut:300, resetIn:400, out:200, in:520, light:400, dim:.35, past:.5, slide:55, glow:1400, focus:1400, ticks:[1800, 2400, 3000], reported:4400, waitIn:280, final:6400, seal:420, paid:7200, rest:8300 }, relay:{ depart:1200, pay:640, arrive:560 }, vote:{ close:2600, status:200, tick:420, tickScale:1.4, past:.5 } } as const;
+export const useCaseTimeline = { threshold:.6, link:240, out:160, at:160, in:320, scan:600, swapOut:140, swapIn:120, swap:320, rise:4, statusFrom:.92, footAt:160, foot:420, footRise:6, resultAt:520, result:320, loop:{ cycle:12000, fade:600, reset:400, resetOut:300, resetIn:400, out:200, in:520, light:400, dim:.35, past:.5, slide:55, glow:1400, focus:1400, ticks:[1800, 2400, 3000], reported:4400, waitIn:280, final:6400, seal:420, paid:7200, rest:8300 }, relay:{ depart:1200, pay:640, arrive:560 }, switch:{ close:2600, slide:480, pick:240, other:.4 } } as const;
 /** How it works on /2/ (owner, 25 Oct 2026, item 4: "build A on /2", four steps over one stage; how-path-v2.js,
  * which gets this, `easing` and how-scenes.ts's acts written in). Steps are picked by press or key, never hover
  * (owner, 26 Oct 2026). Once per tab session, after `threshold` of the stage is in view, the shown step's scene acts from
  * `entrance` and the heading's "paid" draws from `underlineAt` over `underline` (draw). A pick swaps the stage:
  * the shown step fades out over `out` and the picked one fades in from `at` over `in`; on every pick its scene acts
  * from `pick`. Each act's own timing (the magnet, 26 Oct 2026) lives with its drawing in
- * how-scenes.ts. The words never move. Opening the example: its rows rise `rise` px and fade in over `row`
- * (settle), `stagger` apart, and the payout figure drops `rise` px into place from `figureAt` over `figure`, last
- * (0.9 s in all). Closing is instant. */
-export const howPathTimeline = { threshold:.5, entrance:200, underlineAt:360, underline:560, out:160, at:160, in:320, pick:200, rise:8, row:320, stagger:110, figureAt:560, figure:320 } as const;
+ * how-scenes.ts. The links between the two steps draw in order (29 Oct 2026), each over `rail` (draw),
+ * `railStagger` apart, one run: forward top to bottom, each square lighting (opacity .3 and 60% to full, newcomer)
+ * over `light` from `lightAt` into the link that reaches it; back bottom to top, the picked square lighting at once. The words never move. Opening the example: its
+ * four sentences rise `rise` px and fade in over `row` (settle), `stagger` apart (0.65 s in all). Closing is
+ * instant. */
+export const howPathTimeline = { threshold:.5, entrance:200, underlineAt:360, underline:560, out:160, at:160, in:320, pick:200, rail:360, railStagger:360, lightAt:300, light:280, rise:8, row:320, stagger:110 } as const;
 /** Sitewide field (owner, 19 Oct 2026): cells within `margin` px of text or an object stay empty; full-width
  * bands darker than `bandLuminance` count as background. A `density` share of the rest hold a 3 px square,
  * `green` of them Green, in `steps` opacity steps across `paperOpacity` / `greenOpacity`; redrawn `debounce`
