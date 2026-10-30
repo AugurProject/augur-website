@@ -25,7 +25,7 @@ wait until its deploy is live and `npm run check:launch` passes before merging t
 
 <!-- The decisions this relies on or adds, linked to docs/records/decisions.md. New decisions are appended there in this PR. -->
 
-See [docs/records/decisions.md](https://github.com/jubalm/augur-website-next/blob/main/docs/records/decisions.md).
+See [docs/records/decisions.md](https://github.com/AugurProject/augur-website/blob/main/docs/records/decisions.md).
 
 ## Credit
 
