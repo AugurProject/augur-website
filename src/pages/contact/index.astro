@@ -11,6 +11,8 @@ import { contact } from '../../data/contact';
 const socials = [{ key: 'telegram', label: 'Telegram', icon: 'telegram-logo' }, { key: 'github', label: 'GitHub', icon: 'github-logo' }, { key: 'x', label: 'X', icon: 'x-logo' }] as const;
 const email = links.contact.url.replace(/^mailto:/, '');
 const live = Boolean(forms.url);
+// With the forms off (forms.enabled), the message column becomes a mailto link with a subject line.
+const mailto = `${links.contact.url}?subject=${encodeURIComponent('Augur inquiry')}`;
 const max = (field: keyof typeof contact.fields) => contact.fields[field].maxLength;
 const describedBy = (field: string) => `contact-${field}-error${live ? ' contact-notice' : ''}`;
 ---
@@ -21,8 +23,9 @@ const describedBy = (field: string) => `contact-${field}-error${live ? ' contact
    <p class="contact-lead">Ask us anything about Augur. If you’re building on it, tell us what your project needs to resolve.</p>
    <div class="community-invitation"><h2><Icon name="discord-logo"/>Talk with the community.</h2><p>Compare notes with builders, ask technical questions and follow the discussion on Discord.</p><Button href={links.discord.url} variant="outline" external>Join the conversation</Button></div>
    <div class="socials"><h2>Find us elsewhere</h2><ul>{socials.map(social => <li><a href={links[social.key].url}><Icon name={social.icon}/><span>{social.label}</span><Icon name="arrow-up-right"/></a></li>)}</ul></div>
-   <p class="email-direct">Prefer email? <a class="line-link" href={links.contact.url}><span class="button-label">{email}</span></a></p>
+   {forms.enabled && <p class="email-direct">Prefer email? <a class="line-link" href={links.contact.url}><span class="button-label">{email}</span></a></p>}
   </section>
+  {forms.enabled ? 
   <section class="contact-message" aria-labelledby="message-title"><h2 id="message-title">Send us a message</h2><p>Ask a question, or share a project and the answers it depends on.</p>
    <form action={live ? forms.url + contact.path : undefined} method={live ? 'post' : 'dialog'} data-contact-form={live ? 'live' : 'offline'} aria-labelledby="message-title">
     <div class="error-summary" data-error-summary role="alert" tabindex="-1"></div>
@@ -38,7 +41,9 @@ const describedBy = (field: string) => `contact-${field}-error${live ? ' contact
     <Button type="submit">Send message</Button>
     <p class="contact-status" role="status" aria-live="polite" data-contact-status></p>
    </form>
-  </section>
+  </section> : <section class="contact-message" aria-labelledby="message-title"><h2 id="message-title">Email the team</h2><p>Ask a question, or share a project and the answers it depends on.</p>
+   <div class="mailto-actions"><Button href={mailto}>Email us</Button><a class="line-link" href={mailto}><span class="button-label">{email}</span></a></div>
+  </section>}
  </div>
 </PageLayout>
 <script>
@@ -121,6 +126,8 @@ const describedBy = (field: string) => `contact-${field}-error${live ? ' contact
 .field label{font-weight:400}.field label span{color:var(--muted-foreground)}
 .field textarea{min-height:132px;resize:vertical}
 .field :is(input,textarea){background:var(--web-tile)}
+.mailto-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px;margin-top:24px}
+.mailto-actions .line-link{color:var(--muted-foreground);transition:color 180ms ease-out}.mailto-actions .line-link:hover{color:var(--foreground)}
 .contact-notice{font-size:14px;line-height:20px;color:var(--muted-foreground);margin:20px 0 24px;max-width:560px}
 .contact-notice a{color:var(--foreground)}
 .contact-status{margin-top:16px;font-size:14px;line-height:20px}.contact-status:empty{display:none}

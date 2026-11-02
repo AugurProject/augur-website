@@ -2,6 +2,8 @@
 
 `/contact/` lets a visitor email the Augur team. The page is static; the form posts to the separate `augur-forms` Worker in [workers/forms](../../workers/forms/), which checks the submission, emails it through Augur's Proton account and answers with a redirect back to the site or, for script submits, JSON. Nothing is stored.
 
+The form is off for now: with `forms.enabled` false ([forms.ts](../../src/data/forms.ts)) the page shows a mailto link in place of the form and the result pages are not built ([decisions](../records/decisions.md#2-november-2026)). The rest of this page describes the form when it is on.
+
 ## Page
 
 - [contact/index.astro](../../src/pages/contact/index.astro) renders the page with [PageLayout.astro](../../src/layouts/PageLayout.astro) and `footer={false}`, because the footer's contact band would repeat the page. Layout, fields and copy follow the lab's contact page (augur-web-lab `1b95a3a`), approved by the owner on 29 October 2026; the notice and result wording were recommended on Track #35 and approved the same day.

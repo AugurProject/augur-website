@@ -37,3 +37,7 @@ From the launch interview of 30 October 2026, unless noted.
 - **Footer email.** Adopt Melo's removal of contact@augur.net from the footer ("pretty sure there is a reason"). The newsletter consent line links `/contact/` instead. (jubalm; PR #3)
 - **Pull request titles and merges.** Pull request titles use Conventional Commits, `type(scope): what changes`; commit messages keep the plain imperative style; pull requests are merged with merge commits. (jubalm; [AGENTS.md](../../AGENTS.md#pull-requests))
 - **One deploy at a time.** Merge one pull request, wait until its deploy is live and `npm run check:launch` passes against production, then merge the next. This follows the race between the PR #1 and PR #2 builds ([verification](verification.md#31-october-2026-production-after-the-deploy-race)). (jubalm; [deploy](../guides/deploy.md#one-deploy-at-a-time))
+
+## 2 November 2026
+
+- **Forms off for the DevCon launch.** Replaces "Forms" (30 October 2026). Hide the newsletter and contact forms and use a mailto link at most. One switch, `enabled` in [forms.ts](../../src/data/forms.ts), turns them off: the footer's newsletter column shows Blog, RSS feed and X links, `/contact/` offers `mailto:contact@augur.net` with a subject line, and the `/contact/<result>/` and `/newsletter/<result>/` pages are not built. The `augur-forms` Worker code stays. (jubalm)
