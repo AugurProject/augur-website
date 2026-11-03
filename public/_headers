@@ -12,6 +12,10 @@
 https://:worker.:account.workers.dev/*
   X-Robots-Tag: noindex
 
+# Astro's hashed build output never changes under the same name.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
 /images/*
   Cache-Control: public, max-age=86400
 

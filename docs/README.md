@@ -8,7 +8,7 @@ Documents are grouped by type. What each type is for, and how to tell them apart
 
 ## Guides
 
-- [Deploy](guides/deploy.md): Build, preview and deploy to Cloudflare Workers, check a deployment with `check:launch`, cut over to www.augur.net, refresh the REP supply snapshot, and the `augur-forms` Worker behind the forms.
+- [Deploy](guides/deploy.md): Build, preview and deploy to GitHub Pages and Cloudflare Workers, check a deployment with `check:launch`, cut over to www.augur.net, refresh the REP supply endpoints, and the `augur-forms` Worker behind the forms.
 - [Homepage designs](guides/homepage-design.md): Check every homepage design, switch the live one, make a stakeholder preview or retire a design.
 - [Update the design system](guides/update-design-system.md): Upgrade the `@augurproject/design-system` package, or change a shared token or control.
 

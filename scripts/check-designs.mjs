@@ -4,9 +4,10 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { designs } from '../src/designs/index.ts';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const folders = readdirSync(join(root, 'src/designs'), { withFileTypes: true }).filter(entry => entry.isDirectory()).map(entry => entry.name);
 const problems = [
   ...designs.filter(name => !existsSync(join(root, 'src/designs', name, 'Home.astro'))).map(name => `${name}: in src/designs/index.ts but src/designs/${name}/Home.astro is missing`),
@@ -20,7 +21,7 @@ try {
     const dir = join(out, name);
     const build = spawnSync('npx', ['astro', 'build', '--outDir', dir], { cwd: root, stdio: 'inherit', env: { ...process.env, HOME_DESIGN: name } });
     if (build.status !== 0) problems.push(`${name}: build failed`);
-    else if (!existsSync(join(dir, 'client/index.html'))) problems.push(`${name}: build wrote no client/index.html`);
+    else if (!existsSync(join(dir, 'index.html'))) problems.push(`${name}: build wrote no index.html`);
   }
 } finally {
   rmSync(out, { recursive: true, force: true });

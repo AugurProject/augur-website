@@ -4,7 +4,6 @@ import { appendFileSync, existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import cloudflare from '@astrojs/cloudflare';
 import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
@@ -33,17 +32,18 @@ const homeDesignPlugin = {
   },
 };
 
-// The built client folder (dist/client, or <outDir>/client for check:designs), set once the config is final.
+// The build folder (dist, or the --outDir check:designs passes), set once the config is final.
 let clientDir = '';
 
 /** Workers static assets answer `/about` with a temporary 307 to `/about/`. This appends a permanent
  * `/about /about/ 301` rule to `_redirects` for every folder with an index.html (pages, and the supply
  * endpoints in public/api/supply), after the hand-written rules in public/_redirects, which win.
+ * GitHub Pages ignores `_redirects` and already answers `/about` with a 301 to `/about/`.
  * @type {import('astro').AstroIntegration} */
 const permanentTrailingSlash = {
   name: 'permanent-trailing-slash',
   hooks: {
-    'astro:config:done': ({ config }) => { clientDir = fileURLToPath(config.build.client).replace(/[\\/]$/, ''); },
+    'astro:config:done': ({ config }) => { clientDir = fileURLToPath(config.outDir).replace(/[\\/]$/, ''); },
     'astro:build:done': () => {
       const file = join(clientDir, '_redirects');
       const existing = existsSync(file) ? readFileSync(file, 'utf8') : '';
@@ -69,10 +69,11 @@ const isIndexable = (/** @type {string} */ page) => {
 export default defineConfig({
   // Canonical origin (www stays canonical; the apex redirects to it). Used for canonical URLs, the sitemap and RSS.
   site: 'https://www.augur.net',
-  adapter: cloudflare(),
-  // Keep false. Otherwise the Cloudflare adapter enables a KV session binding,
-  // which fails the Workers preview build with error 10021 (missing namespace_id).
-  session: false,
+  // A plain static build with no adapter, so the same dist/ deploys to Cloudflare Workers static assets and to
+  // GitHub Pages (docs/reference/hosting.md). Every page is prerendered.
+  // Old pages folded into /about/ (owner, 30 October 2026). Cloudflare answers these with the 301s in
+  // public/_redirects before reaching the files; GitHub Pages serves the meta-refresh page Astro writes here.
+  redirects: { '/mission': '/about/', '/team': '/about/' },
   // Ported content from the old augur.net (docs/reference/ported-content.md). `.md` (Learn guides and the
   // whitepaper) gets KaTeX math and the whitepaper's cross-file links. `.mdx` (blog posts and fork guides)
   // gets no math, so prose like "You don't spend $2 to steal $1." stays text (the old site parsed it as

@@ -2,6 +2,8 @@
 // Requests the served site at <baseURL> and checks what the old augur.net promised: every URL in its sitemap,
 // the REP supply endpoints (byte for byte against <referenceURL>, default https://www.augur.net, fetched in the
 // same run), redirects, the 404 page, response headers and the crawl files. Plain Node, no dependencies.
+// It detects a GitHub Pages host (`Server: GitHub.com`), which ignores public/_headers and public/_redirects,
+// and checks what Pages serves instead (docs/reference/hosting.md#github-pages).
 // Exits 1 when any check fails; WARN and SKIP rows do not fail the run. Steps: docs/guides/deploy.md.
 
 import http from 'node:http';
@@ -15,6 +17,8 @@ if (!baseArg || baseArg.startsWith('-')) {
 const base = new URL(baseArg).origin;
 const reference = new URL(referenceArg).origin;
 const baseHost = new URL(base).hostname;
+// GitHub Pages answers with `Server: GitHub.com`; Cloudflare with `Server: cloudflare`.
+const onPages = (await fetch(base, { method: 'HEAD', signal: AbortSignal.timeout(20_000), headers: { 'user-agent': 'augur-check-launch' } })).headers.get('server') === 'GitHub.com';
 
 // Paths in the old site's sitemap (AugurProject/augur-reboot-website at ba18725), 30 October 2026.
 const oldSitemap = [
@@ -65,6 +69,22 @@ const expectRedirect = (path, to, { codes = [301, 308], label = `${path} redirec
   const ok = codes.includes(response.status) && where === to;
   return row(ok ? PASS : FAIL, `${response.status} → ${where}`);
 });
+
+// GitHub Pages has no server-side redirects: `/mission` gets its 301 to `/mission/`, which is the page Astro
+// writes for `redirects` in astro.config.mjs (a meta refresh to the target, noindex, canonical to the target).
+const expectRefresh = (path, to, label = `${path} forwards to ${to}`) => check(label, async () => {
+  let response = await get(path);
+  let hops = '';
+  if (isPermanent(response.status) && target(response, path) === `${path}/`) {
+    await response.body?.cancel();
+    hops = `${response.status} → ${path}/, `;
+    response = await get(`${path}/`);
+  }
+  const body = await response.text();
+  const ok = response.status === 200 && body.includes(`<meta http-equiv="refresh" content="0;url=${to}">`) && body.includes(`<link rel="canonical" href="https://www.augur.net${to}">`);
+  return row(ok ? PASS : FAIL, `${hops}${response.status}${ok ? `, meta refresh to ${to}` : ', no meta refresh to the target'}`);
+});
+const moved = (path, to, label) => (onPages ? expectRefresh(path, to, label) : expectRedirect(path, to, { codes: [301], label }));
 
 const supplyField = field => check(`/api/supply/${field}/ is byte-identical to ${new URL(reference).host}`, async () => {
   const path = `/api/supply/${field}/`;
@@ -129,8 +149,15 @@ const securityHeaders = [
 ].map(([name, test, expected]) => check(`/ sends ${name}: ${expected}`, async () => {
   const { headers } = await homeResponse();
   const value = headers.get(name);
+  if (onPages && value === null) return row(SKIP, 'GitHub Pages sends no custom headers (public/_headers is Cloudflare only)');
   return row(value !== null && test(value) ? PASS : FAIL, value === null ? '(missing)' : value.length > 60 ? `${value.slice(0, 57)}...` : value);
 }));
+
+const referrerMeta = check('/ carries <meta name="referrer" content="strict-origin-when-cross-origin">', async () => {
+  const { body } = await homeResponse();
+  const ok = body.includes('<meta name="referrer" content="strict-origin-when-cross-origin">');
+  return row(ok ? PASS : FAIL, ok ? 'present' : 'missing');
+});
 
 const pageMetadata = check('/ has canonical, Open Graph and Twitter tags and no noindex', async () => {
   const { status, body } = await homeResponse();
@@ -156,11 +183,13 @@ const robotsTag = check('X-Robots-Tag: noindex on workers.dev only', async () =>
   return row(SKIP, `host ${baseHost} is neither; X-Robots-Tag ${value ?? 'absent'}`);
 });
 
-const cacheControl = (path, test, expected) => check(`${path} Cache-Control: ${expected}`, async () => {
+// GitHub Pages sets `max-age=600` on every file and can't be configured.
+const cacheControl = (path, test, expected) => check(`${path} Cache-Control: ${onPages ? 'max-age=600 (GitHub Pages)' : expected}`, async () => {
   const response = await get(path);
   await response.body?.cancel();
   const value = response.headers.get('cache-control');
-  return row(response.status === 200 && value !== null && test(value) ? PASS : FAIL, `${response.status}, ${value ?? '(missing)'}`);
+  const ok = response.status === 200 && value !== null && (onPages ? value === 'max-age=600' : test(value));
+  return row(ok ? PASS : FAIL, `${response.status}, ${value ?? '(missing)'}`);
 });
 
 const file = (path, test = () => true, expected = '') => check(`${path} returns 200${expected}`, async () => {
@@ -179,9 +208,9 @@ const apex = check('https://augur.net/ redirects permanently to https://www.augu
 });
 
 const checks = [
-  ...oldSitemap.map(path => movedToAbout.has(path) ? expectRedirect(path, '/about/', { codes: [301], label: `${path} (old sitemap) 301 to /about/` }) : expectStatus(path, 200, `${path} (old sitemap) returns 200`)),
-  expectRedirect('/mission', '/about/', { codes: [301], label: '/mission 301 to /about/' }),
-  expectRedirect('/team', '/about/', { codes: [301], label: '/team 301 to /about/' }),
+  ...oldSitemap.map(path => movedToAbout.has(path) ? moved(path, '/about/', `${path} (old sitemap) ${onPages ? 'forwards' : '301'} to /about/`) : expectStatus(path, 200, `${path} (old sitemap) returns 200`)),
+  moved('/mission', '/about/', `/mission ${onPages ? 'forwards' : '301'} to /about/`),
+  moved('/team', '/about/', `/team ${onPages ? 'forwards' : '301'} to /about/`),
   supplyField('total'),
   supplyField('circulating'),
   supplyMeta,
@@ -192,6 +221,7 @@ const checks = [
   notFoundPage,
   notFoundStatus,
   ...securityHeaders,
+  referrerMeta,
   pageMetadata,
   analytics,
   robotsTag,
@@ -219,7 +249,7 @@ await Promise.all(Array.from({ length: 6 }, async () => {
 }));
 
 const width = Math.max(...results.map(result => result.check.length));
-console.log(`Launch check: ${base} (supply reference ${reference}), ${new Date().toISOString()}\n`);
+console.log(`Launch check: ${base}, ${onPages ? 'GitHub Pages' : 'not GitHub Pages'} (supply reference ${reference}), ${new Date().toISOString()}\n`);
 console.log(`${'STATUS'.padEnd(6)}  ${'CHECK'.padEnd(width)}  DETAIL`);
 for (const { status, check: label, detail } of results) console.log(`${status.padEnd(6)}  ${label.padEnd(width)}  ${detail}`);
 const count = status => results.filter(result => result.status === status).length;

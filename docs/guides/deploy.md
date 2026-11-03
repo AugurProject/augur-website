@@ -1,6 +1,6 @@
 # Deploy
 
-The site builds to static files in `dist/`. Production is the Cloudflare Worker `augur-website-next`, built from `main` by Workers Builds and served at its workers.dev URL until the cutover. Forms post to a separate Worker, `augur-forms`, deployed by hand; see [Forms Worker](#forms-worker-augur-forms). Configuration facts are in [wrangler.jsonc](../../wrangler.jsonc) and [astro.config.mjs](../../astro.config.mjs); deployment steps still open are in [open decisions](../records/open-decisions.md#deployment).
+The site builds to static files in `dist/`, with no adapter, and the same build deploys to two hosts from `main`: GitHub Pages, which serves www.augur.net once the [cutover](#cut-over-to-wwwaugurnet) is done, and the Cloudflare Worker `augur-website-next`, built by Workers Builds, which serves its workers.dev URL, pull request previews and a standby copy. Forms post to a separate Worker, `augur-forms`, deployed by hand; see [Forms Worker](#forms-worker-augur-forms). Configuration facts are in [wrangler.jsonc](../../wrangler.jsonc), [astro.config.mjs](../../astro.config.mjs) and [the Pages workflow](../../.github/workflows/pages.yml); what each host serves differently is in [hosting reference](../reference/hosting.md); deployment steps still open are in [open decisions](../records/open-decisions.md#deployment).
 
 ## Build
 
@@ -21,17 +21,29 @@ Other branches and pull requests then get preview builds.
 
 To deploy from a local machine, run `npm run deploy`. It requires Cloudflare access.
 
-Keep `session: false` in `astro.config.mjs`; the comment there says why.
+The Worker has no script: `wrangler.jsonc` points Workers static assets at `dist/`, which serves [\_headers](../../public/_headers) and [\_redirects](../../public/_redirects). A checkout that was built before the adapter was removed can hold a stale `.wrangler/deploy/config.json` that sends Wrangler to `dist/client/wrangler.json`; delete `.wrangler/deploy/` if `wrangler dev` or `wrangler deploy` says that file doesn't exist.
 
 What the Worker serves (headers, redirects, the 404 page, metadata, analytics and the supply endpoints) is in [hosting reference](../reference/hosting.md).
 
+## Deploy to GitHub Pages
+
+[pages.yml](../../.github/workflows/pages.yml) runs on every push to `main`, every hour (at minute 17) and on demand. It runs `npm ci`, refreshes the REP supply endpoints with `npm run supply` (the job stops there if every RPC endpoint fails, so the last deploy stays live), runs `npm run build`, removes the Cloudflare-only `dist/_headers` and `dist/_redirects`, and deploys `dist/` with `actions/deploy-pages`.
+
+One-time setup (repository admin):
+
+1. Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+2. Optional: add an Actions secret `ETH_RPC_URL` (Settings → Secrets and variables → Actions) naming a mainnet RPC endpoint. Without it, `npm run supply` uses the public endpoints listed in [generate-supply.mjs](../../scripts/generate-supply.mjs).
+3. Run the workflow once from the Actions tab. Until www.augur.net is this repository's custom domain, the deploy lives at `https://augurproject.github.io/augur-website/`, where pages load but their root-relative assets and links don't; nothing links there.
+
+The site assumes it is served from the root of its host, so there is no base path setting.
+
 ### One deploy at a time
 
-Every merge to `main` starts its own Workers Build, and the build that finishes last becomes production, whatever its commit. Two merges close together can race: on 31 October 2026 PR #1's build finished after PR #2's and put the old site back on production ([verification](../records/verification.md#31-october-2026-production-after-the-deploy-race)).
+Every merge to `main` starts its own Workers Build, and the build that finishes last becomes the Worker's production, whatever its commit. Two merges close together can race: on 31 October 2026 PR #1's build finished after PR #2's and put the old site back on production ([verification](../records/verification.md#31-october-2026-production-after-the-deploy-race)). The Pages workflow doesn't race: its runs queue in one `concurrency` group, and each builds the commit it was started for.
 
 1. Merge one pull request.
-2. Wait until its Workers Build has deployed.
-3. Run `npm run check:launch -- https://augur-website-next.<account-subdomain>.workers.dev`. No row may fail.
+2. Wait until its Workers Build has deployed and its Pages run has finished.
+3. Run `npm run check:launch -- https://www.augur.net` and `npm run check:launch -- https://augur-website-next.<account-subdomain>.workers.dev`. No row may fail.
 4. Merge the next pull request.
 
 If an older build has overwritten production:
@@ -45,51 +57,47 @@ If an older build has overwritten production:
 `npm run check:launch -- <baseURL>` (or `node scripts/check-launch.mjs <baseURL> [referenceURL]`) requests the served site and prints a pass/fail table: every URL in the old augur.net sitemap, `/mission/` and `/team/` redirects, the supply endpoints byte for byte against the reference (default `https://www.augur.net`, fetched in the same run), `/api/supply/total` redirecting, the dropped `/data/` files returning 404, the 404 page, the security headers, canonical and share tags, the GA snippet, `robots.txt`, the sitemap, `/rss.xml`, `/og-image.png`, trailing-slash redirects and caching. It exits 1 if any row fails.
 
 - Locally: `npm run build`, then `npx wrangler dev`, then run the check against the printed `http://localhost:<port>`.
-- `WARN` on `meta.json` means the supply and token match but `generatedAt` and `blockNumber` differ, because the old site regenerates it hourly. It does not fail the run.
+- The check detects a GitHub Pages host from its `Server: GitHub.com` header and prints which it found. On Pages, `/mission` and `/team` must reach the meta-refresh page Astro writes (a 301 to the trailing slash first is fine), the security header rows are `SKIP` because Pages sends no custom headers, and every `Cache-Control` row expects Pages' fixed `max-age=600`. The referrer `<meta>` row applies on both hosts.
+- `WARN` on `meta.json` means the supply and token match but `generatedAt` and `blockNumber` differ, because the reference regenerates it hourly. It does not fail the run. A `FAIL` on the supply rows against the Cloudflare host means its committed snapshot is behind the reference; see [Refresh the REP supply snapshot](#refresh-the-rep-supply-snapshot).
 - The `X-Robots-Tag` row is checked only against a `*.workers.dev` host (expects `noindex`) or `www.augur.net` (expects none). The apex row is checked only against `https://www.augur.net`.
 
 ## Cut over to www.augur.net
 
-1. Deploy `main` and run `npm run check:launch -- https://augur-website-next.<account-subdomain>.workers.dev` while the old site still serves www.augur.net. No row may fail; this is the run that compares the supply endpoints with the old site. The `X-Robots-Tag` row confirms that the host-scoped `noindex` in `public/_headers` still applies; it passed on production on 31 October 2026. If it fails, the canonical tags still point every page at www.augur.net.
-2. Attach `www.augur.net` to the Worker as its custom domain, and redirect the apex `augur.net` to `https://www.augur.net/` permanently.
-3. Check Cloudflare's managed robots.txt for the zone (AI Crawl Control). If it is on, Cloudflare can add to or replace [robots.txt](../../public/robots.txt); compare `curl https://www.augur.net/robots.txt` with the file.
-4. Run `npm run check:launch -- https://www.augur.net`. The supply rows now compare the site with itself, so step 1 is the real comparison; this run adds the apex redirect.
-5. Stop the old site's hourly workflow and GitHub Pages deploy in `AugurProject/augur-reboot-website`; the supply files here no longer follow it.
-6. In GA4 Realtime for `G-4VLMY3QMC9`, confirm that page views arrive from www.augur.net.
-7. Before switching the CSP from `Content-Security-Policy-Report-Only` to `Content-Security-Policy`, open the main pages and the forms and check the browser console for CSP reports. Once `PUBLIC_FORMS_URL` is set, replace `https://*.workers.dev` in `connect-src` and `form-action` with that origin.
+www.augur.net moves from `AugurProject/augur-reboot-website` (the old site) to this repository's GitHub Pages site (owner, 2 November 2026). DNS stays at Njalla and doesn't change: the apex `A` records already point at GitHub Pages, `www` is a `CNAME` to `augurproject.github.io`, and augur.net is a verified domain of the AugurProject organization. Mail records are untouched. Every step needs admin rights on both repositories.
 
-`Strict-Transport-Security` is `max-age=86400` without `preload`; raise it only by owner decision (open: see [open decisions](../records/open-decisions.md#analytics-and-headers)).
+Before, with the old site still live:
+
+1. The [Pages workflow](#deploy-to-github-pages) has deployed `main` at least once, and `npm run check:launch -- https://augur-website-next.<account-subdomain>.workers.dev` passes (it serves the same build).
+2. Pick a quiet hour. Between steps 3 and 4 www.augur.net serves GitHub's 404 page, and the certificate check in step 5 can add time.
+
+Switch:
+
+3. In `AugurProject/augur-reboot-website`: Settings → Pages → Custom domain → **Remove**. Then Actions → *Build and Deploy Augur Site with Fork Risk Monitoring* → **Disable workflow**, so its hourly run doesn't redeploy.
+4. In `AugurProject/augur-website`: Settings → Pages → Custom domain: enter `www.augur.net` → **Save**. Wait for the DNS check to pass.
+5. Tick **Enforce HTTPS** once GitHub allows it (it is greyed out until the certificate is issued).
+6. Run `npm run check:launch -- https://www.augur.net`. No row may fail. It should report a GitHub Pages host and pass the apex row (GitHub redirects `augur.net` to `https://www.augur.net/`).
+
+After:
+
+7. Run *Deploy to GitHub Pages* once by hand so the supply endpoints are fresh, and check `curl -i https://www.augur.net/api/supply/total/`.
+8. In GA4 Realtime for `G-4VLMY3QMC9`, confirm that page views arrive from www.augur.net.
+9. Keep the old repository as it is for a week as the rollback, then archive it if nothing needs it.
+
+Rollback: remove the custom domain from this repository, add `www.augur.net` back to `AugurProject/augur-reboot-website` and re-enable its workflow. The DNS never changed, so nothing else moves back.
+
+On Pages the `public/_headers` headers, including `Strict-Transport-Security`, aren't sent; the Cloudflare host keeps them. HSTS is `max-age=86400` without `preload` there; raise it only by owner decision (open: see [open decisions](../records/open-decisions.md#analytics-and-headers)). Before switching the CSP from `Content-Security-Policy-Report-Only` to `Content-Security-Policy` on Cloudflare, open the main pages and the forms and check the browser console for CSP reports. Once `PUBLIC_FORMS_URL` is set, replace `https://*.workers.dev` in `connect-src` and `form-action` with that origin.
 
 ## Refresh the REP supply snapshot
 
-The supply files are static (see [hosting reference](../reference/hosting.md#rep-supply-endpoints)). To update them by hand:
+On GitHub Pages the supply endpoints are regenerated hourly by the workflow (see [hosting reference](../reference/hosting.md#rep-supply-endpoints)). The committed files, which the Cloudflare host serves, change only when someone commits a refresh:
 
-1. From the repository root, read `totalSupply()` five blocks behind the tip and write the three files in the old format:
-
-   ```sh
-   node --input-type=module <<'EOF'
-   import { writeFileSync } from 'node:fs';
-   const rpc = 'https://ethereum-rpc.publicnode.com';
-   const token = '0xCf6A0A7826fa124B7705d6f3c675eAD76f1e540D';
-   const call = async (method, params) => (await (await fetch(rpc, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }) })).json()).result;
-   const block = Number(await call('eth_blockNumber', [])) - 5;
-   const wei = BigInt(await call('eth_call', [{ to: token, data: '0x18160ddd' }, `0x${block.toString(16)}`]));
-   const fraction = (wei % 10n ** 18n).toString().padStart(18, '0').replace(/0+$/, '');
-   const supply = `${wei / 10n ** 18n}${fraction ? `.${fraction}` : ''}`;
-   for (const field of ['total', 'circulating']) writeFileSync(`public/api/supply/${field}/index.html`, supply);
-   const meta = { generatedAt: new Date().toISOString(), blockNumber: block, note: 'Circulating equals total: no locked, reserved, or treasury allocations.', token: { address: token, symbol: 'REPv2_Yes_1', role: 'Current REP, the token of the winning/canonical child universe of the Moon Fork.', totalSupplyWei: wei.toString(), totalSupply: supply, circulatingSupply: supply } };
-   writeFileSync('public/api/supply/meta.json', `${JSON.stringify(meta, null, '\t')}\n`);
-   console.log(`${supply} REP at block ${block}`);
-   EOF
-   ```
-
-2. `git diff public/api/supply`: the total and circulating files hold the same bare decimal, with no trailing newline, and the value is below the 11,000,000 REP genesis supply.
-3. Update the snapshot date, block and value in [hosting reference](../reference/hosting.md#rep-supply-endpoints), commit and deploy.
-4. Check `curl -i https://www.augur.net/api/supply/total/`.
+1. `npm run supply`: reads `totalSupply()` five blocks behind the tip and rewrites `public/api/supply/`. It refuses to write anything unless the on-chain symbol is `REPv2_Yes_1`, decimals are 18 and the supply is within (0, 11,000,000] REP. Set `ETH_RPC_URL` to try another endpoint first.
+2. `git diff public/api/supply`: the total and circulating files hold the same bare decimal, with no trailing newline.
+3. Commit and deploy.
 
 ## Forms Worker (`augur-forms`)
 
-[workers/forms](../../workers/forms/) is a separate Worker with its own `package.json` and [wrangler.jsonc](../../workers/forms/wrangler.jsonc). It serves `POST /subscribe` for the newsletter form, storing addresses in the D1 database `augur-website-signups` (binding `SIGNUPS`), and `POST /contact` for the contact page, which emails messages through Augur's Proton account (see [contact page](../reference/contact.md)). Its one secret is `PROTON_SMTP_TOKEN`. Run every command below in `workers/forms`; the package scripts pass `--config wrangler.jsonc`, because otherwise Wrangler also finds the site build's `.wrangler/deploy/config.json` and stops.
+[workers/forms](../../workers/forms/) is a separate Worker with its own `package.json` and [wrangler.jsonc](../../workers/forms/wrangler.jsonc). It serves `POST /subscribe` for the newsletter form, storing addresses in the D1 database `augur-website-signups` (binding `SIGNUPS`), and `POST /contact` for the contact page, which emails messages through Augur's Proton account (see [contact page](../reference/contact.md)). Its one secret is `PROTON_SMTP_TOKEN`. Run every command below in `workers/forms`; the package scripts pass `--config wrangler.jsonc`, because otherwise Wrangler can find a `.wrangler/deploy/config.json` left in the site folder by an older build and stop.
 
 - Variables: `SITE_URL` (where no-JavaScript submits are redirected) and `ALLOWED_ORIGINS` (comma-separated origins allowed to post). Set both to wherever the site is served.
 - Rate limits: `SUBSCRIBE_RATE_LIMITER`, `namespace_id` `1001`, 5 per 60 seconds per IP; `CONTACT_RATE_LIMITER`, `namespace_id` `1002`, 3 per 60 seconds per IP. Change an id if another Worker on the account already uses it.

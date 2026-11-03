@@ -3,11 +3,11 @@
 	"compatibility_date": "2026-10-12",
 	"compatibility_flags": ["global_fetch_strictly_public"],
 	"name": "augur-website-next",
-	"main": "@astrojs/cloudflare/entrypoints/server",
+	// No Worker script: Workers static assets serve the static build in dist/, with public/_headers and
+	// public/_redirects (docs/reference/hosting.md).
 	"assets": {
 		"directory": "./dist",
-		"binding": "ASSETS",
-		// Unknown paths get dist/client/404.html (src/pages/404.astro) with status 404, not an empty body.
+		// Unknown paths get dist/404.html (src/pages/404.astro) with status 404, not an empty body.
 		"not_found_handling": "404-page"
 	},
 	"observability": {
