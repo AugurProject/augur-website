@@ -44,3 +44,7 @@ From the launch interview of 30 October 2026, unless noted.
 - **Hosting on two hosts.** GitHub Pages serves www.augur.net, from this repository's Pages workflow, so the launch needs no DNS move. Cloudflare Workers (`augur-website-next`) keeps deploying the same build from `main` as a standby and for pull request previews. Both deploy one static build with no adapter ([hosting reference](../reference/hosting.md#serving)). This replaces the 30 October "Production target". (jubalm)
 - **Previews.** No separate Pages preview host: pull requests are previewed on Cloudflare, and the cutover moves the custom domain and is checked live ([deploy](../guides/deploy.md#cut-over-to-wwwaugurnet)). (jubalm)
 - **REP supply endpoints.** Regenerated in every GitHub Pages run, hourly, by a port of the old site's script, because the supply still grows (about 220 REP between 30 October and 2 November). This replaces the 30 October "Data feeds" decision for the supply endpoints only; the fork-risk feed and the dispute-markets seed stay dropped. (jubalm)
+
+## 3 November 2026
+
+- **One hero image.** The homepage hero shows one image at every width, the desktop one: the live floor. The lituus flock that phones and portrait tablets showed below 1024 px is removed; below 1024 px the floor sits under the copy. (jubalm)
