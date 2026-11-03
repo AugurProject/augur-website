@@ -116,7 +116,7 @@
   .field :is(input,textarea):focus { @apply border-signal; }
   .field :is(input,textarea)[aria-invalid=true] { border-bottom:2px solid #cf294e; }
   .field-error { @apply text-sm text-paper; }
-  .page-field { @apply pointer-events-none absolute top-0 left-0 z-10 overflow-hidden; }
+  .page-field { @apply pointer-events-none absolute top-0 left-0 z-10 max-w-full overflow-hidden; }
   .page-field svg { @apply block; }
   .page-field .field-light { @apply absolute top-0 left-0 size-[5px] bg-paper opacity-0; }
   .page-field .field-light.is-green { @apply bg-signal; }

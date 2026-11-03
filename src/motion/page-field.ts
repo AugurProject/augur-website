@@ -38,7 +38,10 @@ export function initPageField() {
 
   const measure = () => {
     // Positions are read against the layer itself, so they hold while the page is lifted (the
-    // announcement's drop-in moves the layer with everything else).
+    // announcement's drop-in moves the layer with everything else). The layer is collapsed first:
+    // its own size from the last draw counts in scrollWidth and scrollHeight, so without this it never
+    // shrinks after the window narrows and leaves the page scrolling sideways.
+    layer.style.width = '0'; layer.style.height = '0';
     const root = document.documentElement, width = root.scrollWidth, height = root.scrollHeight;
     const origin = layer.getBoundingClientRect(), x0 = -origin.left, y0 = -origin.top;
     cols = Math.ceil(width / GRID); rows = Math.ceil(height / GRID);
