@@ -324,34 +324,11 @@
 @media(max-width:600px){.home-v2 .tenet-closer{margin-top:24px}.home-v2 .closer-reader{padding:20px 24px}.home-v2 .closer-who{font-size:16px}.home-v2 .closer-line .payoff{font-size:18px;line-height:27px}}
 @media(forced-colors:active){.home-v2 .closer-readers{border:1px solid CanvasText}}
 
-/* Hero: the lituus flock (owner, 22 Oct 2026: the hero "looks awful and weird", make it "more fancy").
-   FlockArt.astro draws the resting frame from hero-flock.ts; hero-flock-v2.js plays the 12 s loop on
-   transform and opacity only. The art keeps the old square field's box in the hero grid, and its stream
-   runs past the box up to the hero's top edge, where the hero clips it. A cluster is a zero-size origin
-   that its keys move and turn; its glyph (an svg <use>) sits at its lateral place in the stream, and the
-   pointer lens moves the glyph. On phones the stream would cross the copy above it, so the art is clipped
-   to its box and fades in from the top. */
-.home-v2 .flock{position:relative;display:block;width:100%;aspect-ratio:572/457;container-type:inline-size;pointer-events:none;transform-origin:calc(290 / 572 * 100%) calc(236 / 457 * 100%)}
-.home-v2 .flock-glyphs{position:absolute;width:0;height:0;overflow:hidden}
-.home-v2 .flock-c{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0}
-.home-v2 .flock-l{position:absolute;left:calc(-13.5 * 100cqw / 572);top:calc((var(--l) - 13.5) * 100cqw / 572);width:calc(27 * 100cqw / 572);height:calc(27 * 100cqw / 572);overflow:visible;transition:transform 280ms var(--ease-reveal)}
-.home-v2 .flock-centre{position:absolute;width:calc(34 * 100cqw / 572);aspect-ratio:1}
-.home-v2 .flock-centre svg{display:block;width:100%;height:100%;overflow:visible}
-.home-v2 .flock-ripple{position:absolute;width:28px;height:28px;margin:-14px 0 0 -14px;border:1px solid var(--primary);pointer-events:none}
-/* Arrival (once per tab session, hero-arrival.js): the flock fades in and settles onto the pole while
-   it already flows. */
-.home-v2 [data-hero-arrival=entering] .flock{animation:flock-in calc(var(--field-duration) * var(--hero-motion-factor,1)) var(--ease-reveal) calc(var(--field-start) * var(--hero-motion-factor,1)) backwards}
-@keyframes flock-in{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
 /* The headline and the support line paint at once and only rise into place (the scroll-motion brief, 29 Oct 2026): a
    fade from nothing held back the Largest Contentful Paint, the support paragraph on phones, by the length of the
    fade. heroTimeline.v2 times them (Hero.astro); the underline, the actions and the art still fade in after them. */
 .home-v2 .home-hero[data-hero-arrival=entering] :is([data-hero-line],.hero-support){animation-name:hero-rise}
 @keyframes hero-rise{from{transform:translateY(8px)}to{transform:none}}
-@media(max-width:767px){.home-v2 .flock{overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 22%);mask-image:linear-gradient(to bottom,transparent,#000 22%)}}
-@media(prefers-reduced-motion:reduce){.home-v2 .flock-l{transition:none}}
-/* Forced colours: the glyphs' squares live in <use> copies, which page rules do not reach, but inherited
-   custom properties do, so the flock redefines the tokens its fills, the answer square and the ring read. */
-@media(forced-colors:active){.home-v2 .flock{--mark-participant:CanvasText;--muted-foreground:CanvasText;--foreground:CanvasText;--primary:CanvasText}.home-v2 .flock svg,.home-v2 .flock-ripple{forced-color-adjust:none}}
 
 /* Roadmap (item 5, from the 25 Oct audit; Roadmap.astro is shared, so /2/'s polish is CSS only). The
    evidence box fills the panel's height on every stop with its content centred, so switching stops no
@@ -429,38 +406,45 @@
 
 /* Hero background layer (owner, 22 Oct 2026: a full-screen hero video "like most websites", then a
    series of generated loops, then "Let's try live first"; the motion-rule exception is in
-   AGENTS.md). From 1024 px it fills the hero's right side and replaces the
-   flock. Hero.astro picks what it holds: the live floor (hero-floor-v2.js draws a tilted floor of royal
-   navy squares on a canvas, where reports run into one block that fills Green) or the generated video
-   (hero-video-v2.js). Below 1024 px the cover crop would put the scene behind the copy, so phones and
-   portrait tablets keep the flock. The markup is a still (1920 or 2560 wide), so it paints first; the
-   script lays its canvas or <video> over it on the same frame. The canvas crops its 16:9 scene the way
-   object-fit: cover at 90% 50% crops the still and the video.
-   The scene starts 30% in and runs to the right edge, anchored right. On heroes taller than 56vw (1024 x
-   768, portrait tablets) the layer stops at that height and centres, so the cover crop never zooms the
-   scene's focus (the block, or the video's square) towards the copy. The scene reaches left of its focus,
-   so a Navy gradient holds over the layer up to the copy's right edge (26-28% of the layer at every width)
-   and clears just before the focus (44-53%): the copy keeps plain Navy. Its top and bottom fade into Navy, so no edge shows against
-   the header or the answer band. Arrival fades it in like the flock. Print and forced colours show the
-   flock instead. */
+   AGENTS.md). It is the hero's only art at every width (owner, 3 Nov 2026: one hero image, the desktop
+   one; the lituus flock that phones and portrait tablets showed is gone). Hero.astro picks what it holds:
+   the live floor (hero-floor-v2.js draws a tilted floor of royal navy squares on a canvas, where reports
+   run into one block that fills Green) or the generated video (hero-video-v2.js). The markup is a still
+   (1920 or 2560 wide), so it paints first; the script lays its canvas or <video> over it on the same
+   frame. The canvas crops its 16:9 scene the way object-fit: cover at 90% 50% crops the still and the video.
+   From 1024 px the scene starts 30% in and runs to the right edge, anchored right. On heroes taller than
+   56vw (1024 x 768) the layer stops at that height and centres, so the cover crop never zooms the scene's
+   focus (the block, or the video's square) towards the copy. The scene reaches left of its focus, so a
+   Navy gradient holds over the layer up to the copy's right edge (26-28% of the layer at every width) and
+   clears just before the focus (44-53%): the copy keeps plain Navy.
+   Below 1024 px the cover crop would put the scene behind the copy, so the hero stacks: the copy, then the
+   layer edge to edge in a 4:3 box (no taller than 56svh), where the block sits just right of centre.
+   The scene's top third is empty Navy (the floor's far edge fades out), so the box rises by that much
+   under the copy, which stays above it; the scroll cue would sit on the floor, so it hides there.
+   Its top and bottom fade into Navy at every width, so no edge shows against the copy, the header or the
+   answer band. Arrival fades it in. Print and forced colours hide it. */
 /* Hero text breaks (22 Oct 2026). Where the lead takes two lines (1280 and below) it breaks after the
    comma, "Real-world answers for onchain apps, / controlled by no one.", keeping "onchain apps" whole: the
    clause is one unbreakable span and the lead wraps greedily instead of v2's balance, which split it
    "…for onchain / apps, …". Phones keep "…onchain / apps, controlled by no one." The body keeps its
    last five words together (Hero.astro), so it never ends on a widow such as "of a lie." at 1280. */
 .home-v2 .hero-lead{text-wrap:wrap}.home-v2 .hero-keep{white-space:nowrap}
-.home-v2 .hero-video{display:none}
-@media(min-width:1024px){
-.home-v2 .hero-video{position:absolute;inset:max(0px,calc(50% - 28vw)) 0 max(0px,calc(50% - 28vw)) 30%;z-index:0;display:block;opacity:var(--hero-video-opacity,.9);pointer-events:none;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 48px,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 48px,#000 calc(100% - 96px),transparent)}
+.home-v2 .hero-video{position:relative;z-index:0;display:block;opacity:var(--hero-video-opacity,.9);pointer-events:none;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 48px,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 48px,#000 calc(100% - 96px),transparent)}
 .home-v2 .hero-video img,.home-v2 .hero-video video{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:90% 50%}
 .home-v2 .hero-video canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
-.home-v2 .hero-video::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--background) 0%,var(--background) 27%,transparent 45%)}
-.home-v2 .hero-video~.hero-inner .flock{display:none}
 .home-v2 [data-hero-arrival=entering] .hero-video{animation:hero-video-in calc(var(--field-duration) * var(--hero-motion-factor,1)) var(--ease-reveal) calc(var(--field-start) * var(--hero-motion-factor,1)) backwards}
+@media(min-width:1024px){
+.home-v2 .hero-video{position:absolute;inset:max(0px,calc(50% - 28vw)) 0 max(0px,calc(50% - 28vw)) 30%}
+.home-v2 .hero-video::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--background) 0%,var(--background) 27%,transparent 45%)}
+}
+@media(max-width:1023px){
+.home-v2 .home-hero{flex-direction:column;align-items:stretch;justify-content:center;gap:16px;padding-bottom:0}
+.home-v2 .hero-video{order:1;width:100%;aspect-ratio:4/3;max-height:56svh;margin-top:calc(min(75vw,56svh) * -.3)}.home-v2 .hero-scroll{display:none}
+.home-v2 .hero-inner{grid-template-columns:minmax(0,1fr)}.home-v2 .hero-copy{max-width:620px}
 }
 @keyframes hero-video-in{from{opacity:0;transform:scale(1.04)}}
-@media print{.home-v2 .hero-video{display:none}.home-v2 .hero-video~.hero-inner .flock{display:block}}
-@media(forced-colors:active){.home-v2 .hero-video{display:none}.home-v2 .hero-video~.hero-inner .flock{display:block}}
+@media print{.home-v2 .hero-video{display:none}}
+@media(forced-colors:active){.home-v2 .hero-video{display:none}}
 /* Hero review (22 Oct 2026). From 1024 px the two actions keep the standard control: 48 px, Sora 600 16/24,
    24 px insets and a 24 px gap (DESIGN.md), where v1 steps them down to 14 px below 1200. Both fit the 466 px
    copy column at 1024 with 54 px to spare, and a primary action set smaller than the body copy above it
