@@ -1,10 +1,13 @@
 ---
+import { forms } from '../../data/forms';
 import PageLayout from '../../layouts/PageLayout.astro';
 import Button from '../../components/primitives/Button.astro';
 import Brand from '../../components/primitives/Brand.astro';
 import { newsletter, type NewsletterResult } from '../../data/newsletter';
 // Where the footer form lands without JavaScript; the augur-forms Worker redirects here with its result.
 export function getStaticPaths() {
+  // Not built while the forms are off (forms.enabled).
+  if (!forms.enabled) return [];
   return (Object.keys(newsletter.messages) as NewsletterResult[]).map(result => ({ params: { result } }));
 }
 const result = Astro.params.result as NewsletterResult;

@@ -3,7 +3,7 @@ import Brand from '../primitives/Brand.astro';
 import Icon from '../primitives/Icon.astro';
 import Button from '../primitives/Button.astro';
 import {navigation,navigationGroups,pages,type NavigationItem} from '../../data/navigation';
-import {links} from '../../data/links';
+import {links,isExternal} from '../../data/links';
 import {newsletter} from '../../data/newsletter';
 import {forms} from '../../data/forms';
 import {site} from '../../data/site';
@@ -14,19 +14,21 @@ import {site} from '../../data/site';
 // On the homepage the footer settles in as one group, with no stagger (reveal-v2.js); every other page renders
 // it unchanged.
 const reveal=Astro.url.pathname==='/'&&site.homeDesign==='melo'?'':undefined;
+// With the forms off (forms.enabled), the newsletter column points to where updates already appear.
+const follow:{label:string;href:string;logo?:string}[]=[{label:'Blog',href:links.archive.url},{label:'RSS feed',href:'/rss.xml'},{label:'X',href:links.x.url,logo:'x-logo'}];
 ---
 <footer class="site-footer" data-reveal={reveal}>
   <div id="contact" class="contact-band">
     <div class="site-container footer-grid">
       <div class="contact-copy"><h2 id="contact-title">Talk to the Augur team.</h2><p>Ask about the protocol or share feedback. Building on it? Tell us what your project needs.</p><div class="contact-actions"><Button href={pages.contact}>Talk to us</Button></div></div>
       <div class="newsletter"><h2 id="newsletter-title">Follow Augur's progress</h2><p>Research, development and product updates.</p>
-        <form class="newsletter-form" action={forms.url ? forms.url+newsletter.path : undefined} method={forms.url ? 'post' : 'dialog'} aria-labelledby="newsletter-title" data-newsletter={forms.url ? 'live' : 'offline'}>
+        {forms.enabled ? <form class="newsletter-form" action={forms.url ? forms.url+newsletter.path : undefined} method={forms.url ? 'post' : 'dialog'} aria-labelledby="newsletter-title" data-newsletter={forms.url ? 'live' : 'offline'}>
           <div class="newsletter-row"><div class="field"><label for="newsletter-email">Email address</label><input type="email" id="newsletter-email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required maxlength="254" aria-describedby={forms.url ? 'newsletter-email-error newsletter-consent' : 'newsletter-email-error'} /></div><Button type="submit" variant="outline">Subscribe</Button></div>
           {forms.url && <div class="newsletter-trap" aria-hidden="true"><label for="newsletter-nickname">Leave this empty</label><input type="text" id="newsletter-nickname" name={forms.honeypot} tabindex="-1" autocomplete="off" /></div>}
           <p class="field-error" id="newsletter-email-error" hidden></p>
           <p class="newsletter-status" role="status" aria-live="polite" data-newsletter-status></p>
           {forms.url && <p class="newsletter-consent" id="newsletter-consent">{newsletter.consent} <a href={pages.contact}>contact us</a>.</p>}
-        </form></div>
+        </form> : <ul class="follow-links">{follow.map(item=><li><a class="line-link" href={item.href}>{item.logo&&<Icon name={item.logo} class="social-logo"/>}<span class="button-label">{item.label}</span>{isExternal(item.href)&&<Icon name="arrow-up-right"/>}</a></li>)}</ul>}</div>
     </div>
   </div>
   <div class="site-container footer-grid directory">
@@ -88,6 +90,8 @@ const reveal=Astro.url.pathname==='/'&&site.homeDesign==='melo'?'':undefined;
 .newsletter-row{display:flex;align-items:flex-end;gap:12px}.newsletter .field{flex:1;min-width:0;gap:12px}.newsletter .field>label{font-weight:400}.newsletter .field input{background:var(--web-tile)}
 .newsletter .field-error{margin-top:12px}.newsletter-status{margin-top:12px;font-size:14px;line-height:20px;color:var(--muted-foreground)}.newsletter-status:empty{display:none}.newsletter-status a{color:var(--foreground)}
 .newsletter-consent{margin-top:12px;font-size:14px;line-height:20px;color:var(--muted-foreground)}.newsletter-consent a{color:var(--foreground)}
+.follow-links{display:flex;flex-wrap:wrap;gap:4px 32px;list-style:none;padding:0;margin:0}.follow-links a{display:flex;align-items:center;gap:4px;min-height:44px;line-height:24px}
+.follow-links :global(.web-icon),.follow-links :global(.web-icon svg){width:14px;height:14px}.follow-links :global(.social-logo),.follow-links :global(.social-logo svg){width:18px;height:18px}.follow-links :global(.social-logo){margin-right:6px;color:var(--muted-foreground)}
 /* Off-screen rather than display:none, so form-filling bots still see the trap field. */
 .newsletter-trap{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 .directory{padding-block:48px 64px;border-top:1px solid var(--web-outline)}
