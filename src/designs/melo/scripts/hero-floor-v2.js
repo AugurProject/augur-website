@@ -4,14 +4,14 @@
 // pulse out across the floor at 0.74 of the loop, settles from 0.84 and rests, on a 12 s loop whose every
 // motion repeats a whole number of times, so it closes exactly. It draws a 16:9 scene on a canvas in the
 // hero video's layer, cropped like object-fit: cover at 90% 50% (home-v2-only.css places and fades the
-// layer), from 1024 px only, at 30 frames a second. The markup is a still of the loop's 0.76 point, the
+// layer), at every width, at 30 frames a second. The markup is a still of the loop's 0.76 point, the
 // complete block, rendered from this code; no-JavaScript visitors keep it, the loop starts on that frame
 // so the swap is invisible, and reduced motion draws it and stops. A first-visit arrival fades the layer
 // in from nothing, so there the loop starts at its rest point instead: the floor arrives calm and the
 // block builds once the copy has been read (hero review, 22 Oct 2026). Like the other loops it plays while
 // the hero is on screen and the tab is visible,
-// and holds its frame otherwise. Print and forced colours hide it and show the flock.
-// While it plays it answers the visitor (owner: "make it interactive"), as the flock did: a fine pointer
+// and holds its frame otherwise. Print and forced colours hide it.
+// While it plays it answers the visitor (owner: "make it interactive"): a fine pointer
 // carries a soft light across the floor, and a click or tap on a square sends a report from it, with a
 // ripple where it starts and a flash where it reaches the block. The layer itself never takes the pointer;
 // the hero listens, and links, buttons and the copy are left alone.
@@ -241,7 +241,6 @@ makeRest();
 return true;
 };
 
-const wide = matchMedia('(min-width:1024px)');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let phase = hero.dataset.heroArrival === 'entering' ? 0 : STILL, last = 0, drawn = 0, raf = 0, visible = false, printing = false, mounted = false;
 const running = () => visible && !document.hidden && !reduced.matches;
@@ -255,7 +254,7 @@ if (now - drawn >= 1000 / FPS - 2) { draw(phase, now); drawn = now; }
 raf = requestAnimationFrame(frame);
 };
 const sync = () => {
-if (!wide.matches || printing) { stop(); return; }
+if (printing) { stop(); return; }
 if (!mounted) { if (!size()) return; canvas.setAttribute('aria-hidden', 'true'); box.append(canvas); mounted = true; draw(phase); }
 if (reduced.matches) { stop(); phase = STILL; draw(phase); box.dataset.floor = 'still'; return; }
 if (!running()) { stop(); box.dataset.floor = 'paused'; return; }
@@ -293,7 +292,6 @@ tap(Math.round(f[0]), Math.round(f[1]), performance.now());
 new IntersectionObserver(entries => { visible = entries.some(entry => entry.isIntersecting); sync(); }).observe(hero);
 new ResizeObserver(() => { if (mounted && size()) draw(phase); }).observe(box);
 document.addEventListener('visibilitychange', sync);
-wide.addEventListener('change', sync);
 reduced.addEventListener('change', sync);
 addEventListener('beforeprint', () => { printing = true; sync(); });
 addEventListener('afterprint', () => { printing = false; sync(); });
