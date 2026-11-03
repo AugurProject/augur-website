@@ -1,0 +1,62 @@
+# Builds the static site and deploys it to GitHub Pages (docs/guides/deploy.md#github-pages).
+# Cloudflare Workers Builds deploys the same build from main separately.
+# The hourly run refreshes the REP supply endpoints CoinMarketCap reads (docs/reference/hosting.md#rep-supply-endpoints).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One Pages deploy at a time; a newer push waits rather than cancelling one in progress.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # Fail-closed: if every RPC endpoint fails, the job stops here and the last deploy stays live.
+      # ETH_RPC_URL is optional; without it the script uses public endpoints.
+      - name: Refresh REP supply endpoints
+        run: npm run supply
+        env:
+          ETH_RPC_URL: ${{ secrets.ETH_RPC_URL }}
+
+      - run: npm run build
+
+      # Cloudflare-only files. GitHub Pages would serve them as public files.
+      - name: Remove Cloudflare config files
+        run: rm -f dist/_headers dist/_redirects
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

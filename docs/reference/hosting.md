@@ -1,22 +1,34 @@
 # Hosting reference
 
-How the `augur-website-next` Worker serves the build, the metadata every page carries, and the REP supply endpoints. Cutover and refresh steps are in [deploy](../guides/deploy.md#cut-over-to-wwwaugurnet).
+How the two hosts serve the build, the metadata every page carries, and the REP supply endpoints. Deploy, cutover and refresh steps are in [deploy](../guides/deploy.md).
 
 ## Serving
 
-- Every page is prerendered, so the build's Worker config, `dist/client/wrangler.json`, has no Worker script, and under `wrangler dev` Workers static assets answer every request: [\_headers](../../public/_headers) and [\_redirects](../../public/_redirects) apply to every response, including redirects and the 404 page.
-- Production (the `main` deploy, checked 31 October 2026) behaves the same way: an unknown path gets the 404 page with status 404 and the `_headers` headers, both for a browser navigation and for a plain request such as curl.
-- Preview builds differ. The Workers Builds preview build (`npx wrangler preview`) carries Astro's Worker script. Pages, redirects and the 404 page for browser navigations still come from static assets, but a non-navigation request for an unknown path (curl, a crawler's asset fetch) reaches the Worker, which answers a plain 9-byte `Not found` with status 404 and without the `_headers` headers.
-- Unknown paths get [404.astro](../../src/pages/404.astro), built to `dist/client/404.html`, with status 404 (`assets.not_found_handling: "404-page"` in [wrangler.jsonc](../../wrangler.jsonc)).
-- `/mission` and `/team`, with or without the trailing slash, redirect 301 to `/about/` (`public/_redirects`).
-- Trailing slashes: Workers static assets answer `/about` with a temporary 307. At build, [astro.config.mjs](../../astro.config.mjs) appends a `/about /about/ 301` rule to `dist/client/_redirects` for every folder that holds an `index.html`, pages and supply endpoints alike, after the hand-written rules, which win. Workers allows 2,000 static redirects; the build fails above that. `/about/index.html` still gets the 307 to `/about/`.
+The site is a plain static build in `dist/` with no adapter: every page is prerendered and there is no server code. One build deploys to two hosts from `main`:
+
+- **GitHub Pages**, from [pages.yml](../../.github/workflows/pages.yml), serves www.augur.net once the [cutover](../guides/deploy.md#cut-over-to-wwwaugurnet) is done (owner, 2 November 2026).
+- **Cloudflare Workers static assets**, the Worker `augur-website-next` built by Workers Builds, serves its workers.dev URL, pull request previews and a standby copy. [wrangler.jsonc](../../wrangler.jsonc) has no Worker script, so static assets answer every request, previews included.
+
+| | Cloudflare | GitHub Pages |
+|---|---|---|
+| Unknown path | [404.astro](../../src/pages/404.astro), built to `dist/404.html`, with status 404 (`assets.not_found_handling: "404-page"`) | the same `404.html`, with status 404 |
+| `/mission`, `/team` (with or without the slash) | 301 to `/about/` ([\_redirects](../../public/_redirects)) | `/mission` 301 to `/mission/`, which is a meta-refresh page to `/about/` with `noindex` and a canonical to `/about/` (`redirects` in [astro.config.mjs](../../astro.config.mjs)) |
+| `/about` without the slash | 301 to `/about/` (rule added at build, below) | 301 to `/about/` (Pages' own behaviour) |
+| Response headers | [\_headers](../../public/_headers), below | none of `_headers`; the workflow deletes `_headers` and `_redirects` from the upload, because Pages would serve them as files |
+| Caching | below | `max-age=600` on every file, not configurable |
+
+- Trailing slashes on Cloudflare: Workers static assets answer `/about` with a temporary 307. At build, [astro.config.mjs](../../astro.config.mjs) appends a `/about /about/ 301` rule to `dist/_redirects` for every folder that holds an `index.html`, pages and supply endpoints alike, after the hand-written rules, which win. Workers allows 2,000 static redirects; the build fails above that. `/about/index.html` still gets the 307 to `/about/`.
+- The meta-refresh pages for `/mission/` and `/team/` are in the Cloudflare upload too, but `_redirects` answers those paths first. They stay out of the sitemap because of their `noindex`.
+- The site assumes it is served from the root of its host. Before the cutover the Pages deploy sits at `https://augurproject.github.io/augur-website/`, where root-relative assets and links break; it isn't linked from anywhere.
 
 ## Response headers
+
+These come from `_headers`, so only the Cloudflare host sends them. The one that matters for visitors is also set in the page: `<meta name="referrer" content="strict-origin-when-cross-origin">` in [PageLayout.astro](../../src/layouts/PageLayout.astro), on both hosts. The old augur.net on GitHub Pages sent none of them either (checked 2 November 2026).
 
 - Every path: `Strict-Transport-Security: max-age=86400` (no preload), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY`, `Permissions-Policy: camera=(), microphone=(), geolocation=()` and a `Content-Security-Policy-Report-Only`.
 - The CSP allows `'self'`, inline scripts and styles (the pages use inline `<script>`, `<style>` and `style` attributes), the GA4 hosts (`www.googletagmanager.com`, `*.google-analytics.com`, `*.analytics.google.com`) and `https://*.workers.dev` for the forms Worker in `connect-src` and `form-action`, because `PUBLIC_FORMS_URL` is not set yet. It names no report endpoint, so violations show only in the browser console.
 - `X-Robots-Tag: noindex` on `https://:worker.:account.workers.dev/*`, which matches the Worker's workers.dev host and its preview hosts, so only the canonical host is indexed. On the production workers.dev host every response carries it alongside the other `_headers` headers, and Cloudflare's own `/cdn-cgi/trace` there does not, so it comes from this rule. Cloudflare adds `X-Robots-Tag: noindex` to preview hosts by itself, including the preview Worker's plain 404.
-- Caching: HTML keeps the Workers default, `public, max-age=0, must-revalidate`. `/_astro/*` is `public, max-age=31536000, immutable` (added to `_headers` by the Cloudflare adapter at build). `/images/*`, the files directly in `/brand/` (`/brand/:file`, so not the `/brand/` page) and `/brand/kit/*` are `public, max-age=86400`.
+- Caching: HTML keeps the Workers default, `public, max-age=0, must-revalidate`. `/_astro/*` is `public, max-age=31536000, immutable`, because Astro names those files by content hash. `/images/*`, the files directly in `/brand/` (`/brand/:file`, so not the `/brand/` page) and `/brand/kit/*` are `public, max-age=86400`.
 - A header set by two matching rules is joined with a comma, so two rules must not set the same header for one path.
 
 ## Page metadata
@@ -33,15 +45,17 @@ Google Analytics 4, property `G-4VLMY3QMC9` (`analyticsId` in [site.ts](../../sr
 
 ## REP supply endpoints
 
-CoinMarketCap reads these. They are static snapshots, copied byte for byte from the live old site on 30 October 2026 at 12:10 UTC.
+CoinMarketCap reads these. [generate-supply.mjs](../../scripts/generate-supply.mjs) (`npm run supply`) writes them, in the old site's format, byte for byte.
 
 | URL | File | Body | Served as |
 |---|---|---|---|
-| `/api/supply/total/` | [public/api/supply/total/index.html](../../public/api/supply/total/index.html) | `6546099.870765873711645614`: whole REP, a bare decimal with no trailing newline | `text/html; charset=utf-8` |
+| `/api/supply/total/` | [public/api/supply/total/index.html](../../public/api/supply/total/index.html) | whole REP as a bare decimal with no trailing newline, such as `6546319.740033638376287306` | `text/html; charset=utf-8` |
 | `/api/supply/circulating/` | [public/api/supply/circulating/index.html](../../public/api/supply/circulating/index.html) | the same value: no locked, reserved or treasury allocations | `text/html; charset=utf-8` |
-| `/api/supply/meta.json` | [public/api/supply/meta.json](../../public/api/supply/meta.json) | provenance: block 26304643, generated 2026-10-30T09:23:09.030Z, wei value as a string; tab-indented with a trailing newline | `application/json` |
+| `/api/supply/meta.json` | [public/api/supply/meta.json](../../public/api/supply/meta.json) | provenance: block number, generation time, and the wei value as a string; tab-indented with a trailing newline | `application/json` |
 
-- The value is ERC-20 `totalSupply()` of REPv2_Yes_1, `0xCf6A0A7826fa124B7705d6f3c675eAD76f1e540D`. Supply has been effectively fixed since the fork window closed on 3 August 2026.
-- The old site's hourly pipeline that wrote these files (`scripts/generate-supply-endpoints.ts` in `AugurProject/augur-reboot-website`) is retired; nothing updates them now.
+- The value is ERC-20 `totalSupply()` of REPv2_Yes_1, `0xCf6A0A7826fa124B7705d6f3c675eAD76f1e540D`, read five blocks behind the tip. It still grows slowly: forkAndRedeem on unredeemed forking-market bonds mints REP (6,546,099.87 on 30 October 2026, 6,546,319.74 on 2 November 2026).
+- **GitHub Pages** (www.augur.net) regenerates the files in every workflow run, hourly and on each push to `main`, so they are at most about an hour old (owner, 2 November 2026). The script is fail-closed: unless the on-chain symbol is `REPv2_Yes_1`, decimals are 18 and the supply is within (0, 11,000,000] REP, it writes nothing and the run stops before deploying.
+- **Cloudflare** serves the committed files, which change only when someone runs `npm run supply` and commits ([deploy](../guides/deploy.md#refresh-the-rep-supply-snapshot)).
+- This replaces the old site's hourly pipeline (`scripts/generate-supply-endpoints.ts` in `AugurProject/augur-reboot-website`), which uses `ethers`; the port uses plain JSON-RPC calls and the same public endpoints, with `ETH_RPC_URL` tried first when set.
 - `/api/supply/total` and `/api/supply/circulating` redirect 301 to the trailing-slash URL, as on the old site.
 - The old site's other data feeds, `/data/fork-risk.json` and `/data/dispute-markets-seed.json`, are dropped on purpose and return 404.

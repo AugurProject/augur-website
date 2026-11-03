@@ -2,8 +2,8 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import Button from '../components/primitives/Button.astro';
 import { pages } from '../data/navigation';
-// Builds to dist/client/404.html. Workers static assets serve it, with status 404, for any path that
-// matches no file (`assets.not_found_handling` in wrangler.jsonc), so its links must be root-relative.
+// Builds to dist/404.html. Workers static assets (`assets.not_found_handling` in wrangler.jsonc) and GitHub
+// Pages both serve it, with status 404, for any path that matches no file, so its links must be root-relative.
 ---
 <PageLayout title="Page not found | Augur" description="This page doesn’t exist on augur.net." noindex canonical={false}>
  <section class="not-found site-container">

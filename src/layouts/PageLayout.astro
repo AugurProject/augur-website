@@ -33,6 +33,7 @@ const markdown = !bare && !noindex && mdFiles.has(mdPath) ? mdPath : undefined;
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0e0e21" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>{title}</title>{noindex && <meta name="robots" content="noindex" />}
   <meta name="description" content={description} />
   {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}

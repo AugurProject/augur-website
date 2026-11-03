@@ -23,7 +23,7 @@ Decisions and owner actions still outstanding, checked against the code on 31 Oc
   - Proton: a paid plan with the augur.net domain, the address `contact-form@augur.net` and its SMTP token (`PROTON_SMTP_TOKEN`);
   - confirm that `contact@augur.net`, the contact form's `CONTACT_TO`, exists and is read; [links.ts](../../src/data/links.ts) still marks it unverified;
   - deploy, then set `PUBLIC_FORMS_URL` for the site and redeploy it.
-- **Cutover.** www.augur.net still serves the old GitHub Pages site (checked 31 October 2026). The steps are in [deploy](../guides/deploy.md#cut-over-to-wwwaugurnet): move augur.net's DNS from Njalla to Cloudflare with every Proton mail record, attach `www.augur.net` and `augur.net` to `augur-website-next` with the apex redirect, then stop the old site's Pages deploy and hourly workflow.
+- **Cutover.** www.augur.net still serves the old GitHub Pages site from `AugurProject/augur-reboot-website` (checked 2 November 2026). The switch moves its custom domain to this repository's Pages site and needs admin rights on both repositories; DNS doesn't change. Steps: [deploy](../guides/deploy.md#cut-over-to-wwwaugurnet).
 
 ## Design
 
