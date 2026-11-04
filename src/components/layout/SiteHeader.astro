@@ -111,8 +111,8 @@ ul{list-style:none;padding:0;margin:0}
 .nav-panel a:hover .nav-mark,.nav-panel a:focus-visible .nav-mark{background:var(--primary);transform:rotate(45deg) scale(.9)}
 .nav-panel a:hover .nav-external,.nav-panel a:focus-visible .nav-external{color:var(--foreground);transform:translate(2px,-2px)}
 .nav-panel a[aria-current=page]{background:var(--web-quiet)}.nav-panel a[aria-current=page]::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:2px;background:var(--primary)}
-/* Products: Augur Lituus leads as a card with a Green action; Zoltar and Augur
-   Statoblast stack beside it. The action's ::after stretches over the card. */
+/* Products: Augur Lituus leads as a card with a Green action; Zoltar (and Augur
+   Statoblast, when showStatoblast is on) stack beside it. The action's ::after stretches over the card. */
 .nav-panel[data-variant=products] ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px}
 .nav-panel[data-variant=products] li{display:flex}.nav-panel[data-variant=products] li>a{flex:1;padding:20px 16px}
 .nav-panel[data-variant=products] .nav-description{font-size:14px;line-height:20px}

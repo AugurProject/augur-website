@@ -34,7 +34,6 @@ The Lituus Foundation funds independent teams to build Augur. Neither the Founda
 
 - **Funds and coordinates: Lituus Foundation.** Took on stewardship of Augur and its treasury in 2025. It funds more than one team working on the problem and reviews the Augur Lituus code against the whitepaper. [lituus.foundation ↗](https://lituus.foundation/)
 - **Engineers Augur Lituus: ChainSafe.** Builds the Augur Lituus implementation in a public repository, and completed its first milestones in July 2026. [chainsafe.io ↗](https://chainsafe.io/)
-- **Builds Augur Statoblast: Dark Florist.** An independent team funded by the Foundation. It builds Augur Statoblast, a prediction market on Zoltar, and pursues its own oracle research. [GitHub ↗](https://github.com/darkflorist)
 - **Decides the answers: anyone with REP at stake.** Anyone can report what happened or challenge a report by putting REP behind it, and a fork is the last resort. No one holds a backstop or veto over Augur Lituus answers, the Foundation included. [See how it works](/index.md#how-it-works)
 
 ## How the work is done

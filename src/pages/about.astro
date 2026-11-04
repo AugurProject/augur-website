@@ -5,16 +5,19 @@ import AboutScene from '../components/pages/AboutScene.astro';
 import Icon from '../components/primitives/Icon.astro';
 import { history } from '../data/history';
 import { links, isExternal } from '../data/links';
+import { showStatoblast } from '../data/products';
 
 // Website first (19 October 2026); Figma About 218:45 follows on "update figma" (figma-workflow.md).
 // The hero's stack fills the space beside its words (owner, 30 Oct 2026: about-scene.ts).
 // Roles: Augur blog 21 July 2026 and Q2 2026 report. No backstop or veto: whitepaper §2.
 type Action = { label: string; href: string; logo?: string; name?: string };
-const roles: { role: string; name: string; text: string; actions: Action[] }[] = [
+const allRoles: { role: string; name: string; text: string; actions: Action[] }[] = [
  { role: 'Funds and coordinates', name: 'Lituus Foundation', text: 'Took on stewardship of Augur and its treasury in 2025. It funds more than one team working on the problem and reviews the Augur Lituus code against the whitepaper.', actions: [{ label: 'lituus.foundation', href: links.foundation.url }] },
  { role: 'Engineers Augur Lituus', name: 'ChainSafe', text: 'Builds the Augur Lituus implementation in a public repository, and completed its first milestones in July 2026.', actions: [{ label: 'chainsafe.io', href: links.chainSafe.url }] },
  { role: 'Builds Augur Statoblast', name: 'Dark Florist', text: 'An independent team funded by the Foundation. It builds Augur Statoblast, a prediction market on Zoltar, and pursues its own oracle research.', actions: [{ label: 'GitHub', name: 'Dark Florist on GitHub', href: links.darkFlorist.url, logo: 'github-logo' }] },
 ];
+// Dark Florist builds Augur Statoblast, so it is listed only while showStatoblast is on.
+const roles = allRoles.filter(item => showStatoblast || item.name !== 'Dark Florist');
 const principles: { title: string; text: string; actions: Action[] }[] = [
  { title: 'Open source', text: 'Augur Lituus and Zoltar are developed in public repositories, where anyone can follow or audit the work.', actions: [{ label: 'Augur Lituus code', href: links.lituusCode.url, logo: 'github-logo' }, { label: 'Zoltar code', href: links.zoltarCode.url, logo: 'github-logo' }] },
  { title: 'Research first', text: 'Each design is published for review before it is built. The whitepaper came out six months before the first implementation milestones.', actions: [{ label: 'Read the whitepaper', href: links.whitepaper.url }] },
@@ -60,7 +63,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
 
  <section id="who" class="section site-container ruled" aria-labelledby="who-title">
   <div class="section-heading"><h2 id="who-title">Who does what</h2><p class="lead">The Lituus Foundation funds independent teams to build Augur. Neither the Foundation nor the teams decide what the oracle answers.</p></div>
-  <ul class="builders" role="list">
+  <ul class="builders" role="list" style={`--builders:${roles.length}`}>
    {roles.map(item => (
     <li class="tile">
      <p class="role-label">{item.role}</p>
@@ -123,7 +126,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
  .event-figure span{font-size:15px;line-height:22px;color:var(--muted-foreground)}
  .timeline-next{margin-top:48px;padding-left:40px}
  /* Who does what: the three builders, then the one role no organization holds. */
- .builders{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+ .builders{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--builders,3),minmax(0,1fr));gap:24px}
  .builders li{display:flex;flex-direction:column}
  .role-label{font:600 14px/20px var(--font-heading);color:var(--muted-foreground)}
  .builders h3{margin-top:8px}

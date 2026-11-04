@@ -1,6 +1,12 @@
 import { links } from './links';
+/** Dark Florist's products (Augur Statoblast and its interface, Statoblast Trading) are off the live site
+ * for now (jubalm, 4 November 2026, AUG72). Set to true to bring them back everywhere that reads this:
+ * the Products menu, the products page, the FAQ answer, the About entry and the Learn guide. The
+ * hand-written Markdown pages under public/ cannot read it; docs/records/decisions.md lists their restore edits.
+ */
+export const showStatoblast = false;
 /** Figma Products 219:81. Descriptions and statuses require maintainer review. */
-export const products = [
+const allProducts = [
   { id: 'augur-lituus', name: 'Augur Lituus', tagline: 'Resolution for real-world outcomes.',
     description: 'The next generation of Augur’s oracle. Any app can ask a multiple-choice question. Anyone can report an answer, anyone can challenge it with a larger bond, and a fork is the last resort.',
     detail: 'Forcing a false answer is designed to cost more than the oracle’s entire market cap.',
@@ -13,3 +19,4 @@ export const products = [
     description: 'The prediction-market layer on Zoltar: collateral, reporting, disputes and settlement for each market. Statoblast Trading is its trading interface.',
     detail: '', status: 'In development', builder: 'Dark Florist, with Lituus Foundation backing', design: '', codeLabel: 'In the Zoltar repository', paper: '', code: links.zoltarCode.url, needsReview: true },
 ] as const;
+export const products = allProducts.filter(product => showStatoblast || product.id !== 'augur-statoblast');

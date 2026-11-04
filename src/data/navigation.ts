@@ -1,5 +1,5 @@
 import { links, type LinkKey } from './links';
-import { products } from './products';
+import { products, showStatoblast } from './products';
 
 /** `logo` marks a community destination wherever it is listed; `icon`,
  * `description` and `cta` only enrich the header panels. An item with a `cta`
@@ -14,11 +14,11 @@ const tagline = (id: (typeof products)[number]['id']) => products.find(product =
 export const navigation = {
   augur: [{ label: 'About', href: '/about/' }, { label: 'Contact', href: pages.contact }, { label: 'Brand assets', href: '/brand/' }],
   // Product taglines come from the products directory (Figma 219:81).
-  // Augur Lituus leads the panel; Zoltar and Augur Statoblast follow it.
+  // Augur Lituus leads the panel; Zoltar and, when showStatoblast is on, Augur Statoblast follow it.
   products: [
     { label: 'Augur Lituus', href: '/products/#augur-lituus', description: tagline('augur-lituus'), cta: 'Explore Augur Lituus' },
     { label: 'Zoltar', href: '/products/#zoltar', description: tagline('zoltar') },
-    { label: 'Augur Statoblast', href: '/products/#augur-statoblast', description: tagline('augur-statoblast') },
+    ...(showStatoblast ? [{ label: 'Augur Statoblast', href: '/products/#augur-statoblast', description: tagline('augur-statoblast') }] : []),
   ],
   resources: [
     { label: 'Blog', href: links.archive.url, linkKey: 'archive', icon: 'newspaper' }, { label: 'FAQ', href: '/faq/', icon: 'question' },
