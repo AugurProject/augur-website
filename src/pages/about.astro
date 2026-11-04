@@ -5,7 +5,7 @@ import AboutScene from '../components/pages/AboutScene.astro';
 import Icon from '../components/primitives/Icon.astro';
 import { history } from '../data/history';
 import { links, isExternal } from '../data/links';
-import { showStatoblast } from '../data/products';
+import { showStatoblast, showZoltar } from '../data/products';
 
 // Website first (19 October 2026); Figma About 218:45 follows on "update figma" (figma-workflow.md).
 // The hero's stack fills the space beside its words (owner, 30 Oct 2026: about-scene.ts).
@@ -19,7 +19,7 @@ const allRoles: { role: string; name: string; text: string; actions: Action[] }[
 // Dark Florist builds Augur Statoblast, so it is listed only while showStatoblast is on.
 const roles = allRoles.filter(item => showStatoblast || item.name !== 'Dark Florist');
 const principles: { title: string; text: string; actions: Action[] }[] = [
- { title: 'Open source', text: 'Augur Lituus and Zoltar are developed in public repositories, where anyone can follow or audit the work.', actions: [{ label: 'Augur Lituus code', href: links.lituusCode.url, logo: 'github-logo' }, { label: 'Zoltar code', href: links.zoltarCode.url, logo: 'github-logo' }] },
+ { title: 'Open source', text: showZoltar ? 'Augur Lituus and Zoltar are developed in public repositories, where anyone can follow or audit the work.' : 'Augur Lituus is developed in a public repository, where anyone can follow or audit the work.', actions: [{ label: 'Augur Lituus code', href: links.lituusCode.url, logo: 'github-logo' }, ...(showZoltar ? [{ label: 'Zoltar code', href: links.zoltarCode.url, logo: 'github-logo' }] : [])] },
  { title: 'Research first', text: 'Each design is published for review before it is built. The whitepaper came out six months before the first implementation milestones.', actions: [{ label: 'Read the whitepaper', href: links.whitepaper.url }] },
  { title: 'Clear about status', text: 'Quarterly reports say what is done and what is still open, including the parts still being worked out.', actions: [{ label: 'Q2 2026 report', href: links.q2Report.url }] },
 ];

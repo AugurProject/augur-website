@@ -16,7 +16,7 @@ Review flag: this answer still needs review.
 
 ### Where can I trade on Augur?
 
-Augur v2 still runs today. Augur Lituus and Zoltar, the next versions of Augur, are in development and are not trading products. [See product status](/products.md)
+Augur v2 still runs today. Augur Lituus, the next version of Augur, is in development and is not a trading product. [See product status](/products.md)
 
 Review flag: this answer still needs review.
 

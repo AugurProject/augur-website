@@ -5,6 +5,13 @@ import { links } from './links';
  * hand-written Markdown pages under public/ cannot read it; docs/records/decisions.md lists their restore edits.
  */
 export const showStatoblast = false;
+/** Zoltar is off the live site for now too (jubalm, 4 November 2026, AUG73), so only Augur Lituus is left.
+ * Set to true to bring it back in the same places, plus the "How they fit together" diagram, the About
+ * "Open source" line and the Learn guide (which also needs showStatoblast). Independent of showStatoblast,
+ * though Augur Statoblast runs on Zoltar: turn Zoltar on before, or with, Statoblast. The Markdown pages
+ * under public/ cannot read it; docs/records/decisions.md lists their restore edits.
+ */
+export const showZoltar = false;
 /** Figma Products 219:81. Descriptions and statuses require maintainer review. */
 const allProducts = [
   { id: 'augur-lituus', name: 'Augur Lituus', tagline: 'Resolution for real-world outcomes.',
@@ -19,4 +26,4 @@ const allProducts = [
     description: 'The prediction-market layer on Zoltar: collateral, reporting, disputes and settlement for each market. Statoblast Trading is its trading interface.',
     detail: '', status: 'In development', builder: 'Dark Florist, with Lituus Foundation backing', design: '', codeLabel: 'In the Zoltar repository', paper: '', code: links.zoltarCode.url, needsReview: true },
 ] as const;
-export const products = allProducts.filter(product => showStatoblast || product.id !== 'augur-statoblast');
+export const products = allProducts.filter(product => (showStatoblast || product.id !== 'augur-statoblast') && (showZoltar || product.id !== 'zoltar'));
