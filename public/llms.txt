@@ -8,7 +8,7 @@ Augur Lituus is the next generation of Augur's oracle. Anyone can answer, anyone
 
 - [Home](/index.md): What Augur Lituus is, what it can power, how reporting and challenging work, and the roadmap.
 - [About](/about.md): What Augur is, its history from 2015, and who does what: the Lituus Foundation, ChainSafe and REP holders.
-- [Products](/products.md): Augur Lituus and Zoltar, how they fit together, and their status (all in development).
+- [Products](/products.md): Augur Lituus and its status (in development).
 - [REP](/rep.md): The REP token: which version is current, the contract address, how bonds and forks work, and what holders can do.
 - [FAQ](/faq.md): Short answers about Augur, how questions get settled, REP and building with Augur.
 - [Learn](/learn.md): The guide list (only one guide is written so far) and key terms.

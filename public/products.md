@@ -1,19 +1,8 @@
 # Products
 
-Augur Lituus answers real-world questions for any app. Zoltar is a shared foundation that lets different oracle designs use REP.
+Augur Lituus answers real-world questions for any app.
 
 Review flag: the product descriptions and statuses on this page need maintainer review.
-
-## How they fit together
-
-Each product has its own job. REP, Augur's token, secures all of them.
-
-- **Any app** asks a real-world question and acts on the answer.
-- **Augur Lituus** is the oracle: anyone can report, anyone can challenge, a fork is the last resort.
-- **Zoltar** is a forkable oracle ledger that records questions, universes, REP and forks.
-- **REP** is Reputation: the token holders put at risk to report, challenge and choose a side in a fork.
-
-This shows each product's role. It doesn't imply that Augur Lituus runs on Zoltar.
 
 ## Augur Lituus
 
@@ -29,17 +18,3 @@ Forcing a false answer is designed to cost more than the oracle's entire market 
 - Code: Lituus-CS, public on GitHub
 
 [See how it works](/index.md#how-it-works) · [Read the whitepaper ↗](https://github.com/AugurProject/whitepaper/blob/master/Lituus/English/Augur_Lituus_Whitepaper.pdf) · [View the code ↗](https://github.com/AugurProject/Lituus-CS)
-
-## Zoltar
-
-Shared foundation for oracles.
-
-A forkable oracle ledger. It records questions, universes, REP and forks, and never judges which answer is true.
-
-Different oracle designs can share the same REP, as long as they handle forking.
-
-- Status: In development
-- Research: Zoltar system overview
-- Code: AugurProject/zoltar, public on GitHub
-
-[Read the research ↗](https://github.com/AugurProject/zoltar/blob/main/docs/explanation/zoltar.html) · [View the code ↗](https://github.com/AugurProject/zoltar)

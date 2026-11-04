@@ -40,6 +40,6 @@ The Lituus Foundation funds independent teams to build Augur. Neither the Founda
 
 The work happens in public, so anyone can check it.
 
-- **Open source.** Augur Lituus and Zoltar are developed in public repositories, where anyone can follow or audit the work. [Augur Lituus code ↗](https://github.com/AugurProject/Lituus-CS) · [Zoltar code ↗](https://github.com/AugurProject/zoltar)
+- **Open source.** Augur Lituus is developed in a public repository, where anyone can follow or audit the work. [Augur Lituus code ↗](https://github.com/AugurProject/Lituus-CS)
 - **Research first.** Each design is published for review before it is built. The whitepaper came out six months before the first implementation milestones. [Read the whitepaper ↗](https://github.com/AugurProject/whitepaper/blob/master/Lituus/English/Augur_Lituus_Whitepaper.pdf)
 - **Clear about status.** Quarterly reports say what is done and what is still open, including the parts still being worked out. [Q2 2026 report](/blog/q2-2026-progress-report/)

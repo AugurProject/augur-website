@@ -1,6 +1,6 @@
 import { links } from './links';
 import { currentRep } from './rep';
-import { showStatoblast } from './products';
+import { showStatoblast, showZoltar } from './products';
 export type FaqCategory = 'Getting started' | 'How it works' | 'REP' | 'Building with Augur';
 export interface FaqEntry { id: string; question: string; pageQuestion?: string; answer: string; category: FaqCategory; homepage: boolean; needsReview: boolean; link: { href: string; label: string }; }
 export const faqCategories: FaqCategory[] = ['Getting started', 'How it works', 'REP', 'Building with Augur'];
@@ -28,7 +28,9 @@ export const faqEntries: FaqEntry[] = [
   { id: 'trading', category: 'Getting started', homepage: false, needsReview: true, question: 'Where can I trade on Augur?',
     answer: showStatoblast
       ? 'Augur v2 still runs today. Augur Statoblast is a prediction-market layer on Zoltar, and Statoblast Trading is its trading interface. These products are in development.'
-      : 'Augur v2 still runs today. Augur Lituus and Zoltar, the next versions of Augur, are in development and are not trading products.',
+      : showZoltar
+        ? 'Augur v2 still runs today. Augur Lituus and Zoltar, the next versions of Augur, are in development and are not trading products.'
+        : 'Augur v2 still runs today. Augur Lituus, the next version of Augur, is in development and is not a trading product.',
     link: { href: showStatoblast ? '/products/#augur-statoblast' : '/products/', label: 'See product status' } },
   { id: 'who-decides', category: 'How it works', homepage: false, needsReview: true, question: 'Who decides whether an outcome is true?',
     answer: 'No committee, multisig or veto picks the answer. Anyone can report an answer or challenge one. Every report is backed by a bond. A fork is the last resort.',
