@@ -15,7 +15,6 @@ Only one guide has been written so far. The other seven are placeholders on the 
 - What REP does (Start here, guide 4): how REP secures answers, and what holders can choose to do.
 - Writing questions an oracle can answer (For builders): clear outcomes, a firm deadline and criteria that leave no room for doubt.
 - When a question can't be answered (For builders): what "Invalid" means, and how to avoid it.
-- How Augur Lituus, Zoltar and Augur Statoblast fit together (Overview): three products, one token, and what each one is for. See [Products](/products.md).
 - Reading the Augur Lituus whitepaper (Research): a guided walk through the January 2026 paper, section by section.
 
 ## Key terms

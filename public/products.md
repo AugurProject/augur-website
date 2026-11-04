@@ -1,6 +1,6 @@
 # Products
 
-Augur Lituus answers real-world questions for any app. Zoltar is a shared foundation that lets different oracle designs use REP. Augur Statoblast is a prediction market built on Zoltar.
+Augur Lituus answers real-world questions for any app. Zoltar is a shared foundation that lets different oracle designs use REP.
 
 Review flag: the product descriptions and statuses on this page need maintainer review.
 
@@ -10,8 +10,6 @@ Each product has its own job. REP, Augur's token, secures all of them.
 
 - **Any app** asks a real-world question and acts on the answer.
 - **Augur Lituus** is the oracle: anyone can report, anyone can challenge, a fork is the last resort.
-- **Statoblast Trading** is the trading interface for Augur Statoblast.
-- **Augur Statoblast** is prediction markets: collateral, reporting, disputes and settlement.
 - **Zoltar** is a forkable oracle ledger that records questions, universes, REP and forks.
 - **REP** is Reputation: the token holders put at risk to report, challenge and choose a side in a fork.
 
@@ -45,15 +43,3 @@ Different oracle designs can share the same REP, as long as they handle forking.
 - Code: AugurProject/zoltar, public on GitHub
 
 [Read the research ↗](https://github.com/AugurProject/zoltar/blob/main/docs/explanation/zoltar.html) · [View the code ↗](https://github.com/AugurProject/zoltar)
-
-## Augur Statoblast
-
-Prediction markets on Zoltar.
-
-The prediction-market layer on Zoltar: collateral, reporting, disputes and settlement for each market. Statoblast Trading is its trading interface.
-
-- Status: In development
-- Built by: Dark Florist, with Lituus Foundation backing
-- Code: In the Zoltar repository
-
-[View the code ↗](https://github.com/AugurProject/zoltar)

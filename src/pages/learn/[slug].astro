@@ -4,7 +4,9 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import HeritageField from '../../components/art/HeritageField.astro';
 import Glossary from '../../components/content/Glossary.astro';
 import GuideWalkthrough from '../../components/content/GuideWalkthrough.astro';
-export async function getStaticPaths() { return (await getCollection('learn')).map(guide=>({params:{slug:guide.id},props:{guide}})); }
+import { showStatoblast } from '../../data/products';
+// The products guide covers Augur Statoblast, so it is not built while showStatoblast is off.
+export async function getStaticPaths() { return (await getCollection('learn')).filter(guide=>showStatoblast||guide.id!=='how-the-products-fit-together').map(guide=>({params:{slug:guide.id},props:{guide}})); }
 interface Props { guide: CollectionEntry<'learn'>; }
 const { guide }=Astro.props;
 const { Content, headings }=await render(guide);

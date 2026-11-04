@@ -3,9 +3,10 @@ import { getCollection } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/pages/PageHero.astro';
 import Glossary from '../../components/content/Glossary.astro';
+import { showStatoblast } from '../../data/products';
 const guides = await getCollection('learn');
 const start = guides.filter(guide=>guide.data.order).sort((a,b)=>a.data.order!-b.data.order!);
-const moreIds=['writing-questions','when-a-question-cannot-be-answered','how-the-products-fit-together','reading-the-whitepaper'];
+const moreIds=['writing-questions','when-a-question-cannot-be-answered',...(showStatoblast?['how-the-products-fit-together']:[]),'reading-the-whitepaper'];
 const more=moreIds.flatMap(id=>guides.filter(guide=>guide.id===id));
 ---
 <PageLayout title="Learn about Augur" description="Start with four short guides to oracles, Augur Lituus, disputes and REP, with definitions of the key terms.">

@@ -48,3 +48,13 @@ From the launch interview of 30 October 2026, unless noted.
 ## 3 November 2026
 
 - **One hero image.** The homepage hero shows one image at every width, the desktop one: the live floor. The lituus flock that phones and portrait tablets showed below 1024 px is removed; below 1024 px the floor sits under the copy. (jubalm)
+
+## 4 November 2026
+
+- **Dark Florist's products off the live site, for now.** Augur Statoblast and Statoblast Trading are hidden until the owner brings them back (AUG72). One switch, `showStatoblast` in [products.ts](../../src/data/products.ts), set to `false`, drives the Products menu, the products page (hero, description, diagram and product section), the "Where can I trade on Augur?" FAQ answer, the About entry for Dark Florist and the Learn guide "How Augur Lituus, Zoltar and Augur Statoblast fit together" (not built). Blog posts stay: they are dated history ported from the old site. The `darkFlorist` link and the guide's Markdown stay in the code. Defaults taken for the open questions (About entry, Learn guide, blog posts, replacement copy): About entry hidden, Learn guide hidden rather than cut to two products, blog posts stay, and the FAQ answer says Augur Lituus and Zoltar are in development and are not trading products. (jubalm)
+  - **To restore:** set `showStatoblast` to `true`, then undo the hand-written Markdown edits below, which cannot read the switch (the original text is in the AUG72 pull request):
+    - `public/products.md`: the intro sentence "Augur Statoblast is a prediction market built on Zoltar.", the two "How they fit together" bullets (Statoblast Trading, Augur Statoblast) and the whole `## Augur Statoblast` section.
+    - `public/faq.md`: the "Where can I trade on Augur?" answer, which named Augur Statoblast and Statoblast Trading.
+    - `public/about.md`: the "Builds Augur Statoblast: Dark Florist" bullet.
+    - `public/learn.md`: the "How Augur Lituus, Zoltar and Augur Statoblast fit together" bullet.
+    - `public/llms.txt`: "Dark Florist" in the About line and "Augur Statoblast" in the Products line.
