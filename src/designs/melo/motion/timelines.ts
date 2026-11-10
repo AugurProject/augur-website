@@ -20,7 +20,7 @@ export function timeAt(curve:string,progress:number){
  return at(x1,x2,(low+high)/2);
 }
 /** The hero's arrival (hero review, 22 Oct 2026; the scroll-motion brief, 29 Oct 2026; owner, 10 Nov 2026). The art's layer
- * (`field`) fades in briefly and the floor builds itself (`floor`, hero-floor-v2.js): from `delay` after its first frame a
+ * (`field`) fades in briefly and the floor builds itself (`floor`, hero-floor.js): from `delay` after its first frame a
  * wave of light runs out from the block over `build`, and the loop starts at `phase`. The text values here (`lines`, `copy`,
  * `actions`, `underline`) are the arrival without the page veil, where the headline and the support line are visible from the
  * first paint and only rise 8 px, since on phones the support paragraph is the Largest Contentful Paint (measured) and a fade
@@ -39,7 +39,7 @@ export const heroTimeline = {
 export const ribbonTimeline = { threshold: .6, duration: 900, edgeFade: 180, word: { duration: 420, rise: .45 } } as const;
 export const roadmapTimeline = {track:1000,stopStagger:110,stopDuration:320,evidence:850} as const;
 /** Use cases (owner, 25 Oct 2026): each case is a product card that waits, gets its answer
- * and acts (use-cases-v2.js, which gets this and `easing` written in). A pick draws the 2 px Green line from the
+ * and acts (use-cases.js, which gets this and `easing` written in). A pick draws the 2 px Green line from the
  * tab over `link`, fades the shown case out over `out` and the picked one in from `at` over `in`.
  * Each card loops (owner, 28 Oct 2026: "all animations should be going in a loop"), keyed by `loop` on one
  * `cycle` that opens and closes on the finished card, from when `threshold` of the stage is in view. The reset
@@ -72,7 +72,7 @@ export const roadmapTimeline = {track:1000,stopStagger:110,stopDuration:320,evid
  * back off over `slide`, its knob turning Green halfway, and the status turns to Blocked. The query's status chip
  * comes in from `statusFrom` scale. */
 export const useCaseTimeline = { threshold:.6, link:240, out:160, at:160, in:320, swapIn:120, statusFrom:.92, loop:{ cycle:12000, fade:600, reset:400, resetOut:300, resetIn:400, out:200, in:520, light:400, dim:.35, past:.5, slide:55, glow:1400, focus:1400, ticks:[1800, 2400, 3000], reported:4400, waitIn:280, final:6400, seal:420, paid:7200, rest:8300 }, relay:{ depart:1200, pay:640, arrive:560 }, switch:{ close:2600, slide:480, pick:240, other:.4 } } as const;
-/** How it works on /2/ (owner, 25 Oct 2026, item 4: "build A on /2", four steps over one stage; how-path-v2.js,
+/** How it works on /2/ (owner, 25 Oct 2026, item 4: "build A on /2", four steps over one stage; how-path.js,
  * which gets this, `easing` and how-scenes.ts's acts written in). Steps are picked by press or key, never hover
  * (owner, 26 Oct 2026). A pick swaps the stage: the shown step fades out over `out` and the picked one fades in from
  * `at` over `in`; on every pick its scene acts from `pick`. Each act's own timing (the magnet, 26 Oct 2026) lives
@@ -92,7 +92,7 @@ export const useCaseTimeline = { threshold:.6, link:240, out:160, at:160, in:320
  * in all). Closing is instant. */
 export const howPathTimeline = { threshold:.6, underline:560, out:160, at:160, in:320, pick:200, rail:360, railStagger:360, lightAt:300, light:280, rise:8, row:320, stagger:110 } as const;
 /** Section reveal on the review copies (owner, 29 Oct 2026: "content should appear little by little while scrolling";
- * the scroll-motion brief; reveal-v2.js, which gets this, `easing` and `timing.panel` written in). Each [data-reveal]
+ * the scroll-motion brief; reveal.js, which gets this, `easing` and `timing.panel` written in). Each [data-reveal]
  * group armed below the fold settles in once, when its top passes `line` of the screen: it fades in as it rises `rise`
  * px over `timing.panel` (the heading `headingRise` over `heading`), on the settle curve, `stagger` after the group
  * before it in its section and `itemStagger` between the cards of one row, so a section lands within about 700 ms. A

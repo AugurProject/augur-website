@@ -1,14 +1,14 @@
 /* Melo's site chrome (owner, 26 Oct 2026: "Bring Melo's header and footer (icons, logo, Menu/Close,
    hide-on-scroll header, footer design) to every inner page. Keep / as it is."): the header and footer
-   rules of the owner's design, on every page. Loaded as a string (review-inline.ts,
+   rules of the owner's design, on every page. Loaded as a string (inline.ts,
    chromeInline): every homepage version lists it with its own sheets, and PageLayout renders it on every other
    page before the announcement bar, whose dismissal slides every element after it.
    The header and footer sit outside <main>, so every rule starts with .site-header or .site-footer and
    comes after the components' own styles, so it wins a specificity tie.
-   The rest of the chrome is markup keyed on ownerChrome() (homepage-review.ts): Icon.astro draws Augur's
+   The rest of the chrome is markup keyed on ownerChrome() (homepage.ts): Icon.astro draws Augur's
    square-cut glyphs for the signals (logos stay Phosphor), and SiteHeader.astro gives the Resources rows
    Augur's square mark in place of pictograms, makes the Products lead card itself the link, labels the
-   phone buttons "Menu" and "Close" and runs header-v2.js. */
+   phone buttons "Menu" and "Close" and runs header.js. */
 
 /* Phone header: the words "Menu" and "Close" in the same outline box, in place of the hamburger and
    the cross (a labelled "Menu" is found more readily than the bare glyph, NN/g). */
@@ -41,7 +41,7 @@
 @media(prefers-reduced-motion:reduce){.site-header .nav-lead-label::after,.site-header .nav-lead-arrow{transition:none}}
 @media(forced-colors:active){.site-header .nav-lead>a{border:1px solid CanvasText}.site-header .nav-lead-label::after{forced-color-adjust:none;background:CanvasText}}
 
-/* Hide on the way down, back on the way up (owner, 22 Oct 2026; header-v2.js sets the attributes, so
+/* Hide on the way down, back on the way up (owner, 22 Oct 2026; header.js sets the attributes, so
    without JavaScript the header stays in the flow). Sticky at the top; slid up by its own height, a
    transform, when hidden. Once it has left its place under the announcement, a 1 px Outline line marks
    its foot so the page doesn't run into it unseen (no shadows). Reduced motion swaps the slide for a cut. */

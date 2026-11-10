@@ -5,7 +5,7 @@
 // acts again on every arrival). The markup is the rest state: without JavaScript, or if the CSP blocked this, the first step shows with its scene drawn, the example
 // stays open and the button stays hidden; reduced motion and print show the same. Timings and easings come from
 // timelines.ts (howPathTimeline, easing, revealTimeline.ready) and each scene's act from how-scenes.ts (howActs),
-// written in at build time (review-inline.ts). Transform and opacity only.
+// written in at build time (inline.ts). Transform and opacity only.
 (() => {
 const T = __HOW_PATH__, E = T.easing, L = T.timeline, ACTS = T.acts, html = document.documentElement;
 // page-field.ts sizes its layer to the page's scrollHeight, which counts the layer itself, so the layer can
@@ -59,7 +59,7 @@ const act = (i, at) => {
 (ACTS[step(i)] || []).forEach(([name, delay, duration, frames]) => go(panels[i]?.querySelector(`[data-how-part="${name}"]`), frames, at + delay, duration, 'linear'));
 };
 // The entrance, in the section's reading order (scroll-motion brief, 29 Oct 2026), one thing at a time: "paid" in the
-// heading draws, once per tab session, as the lead lands (the section reveal, reveal-v2.js), while the heading is on
+// heading draws, once per tab session, as the lead lands (the section reveal, reveal.js), while the heading is on
 // screen; then the shown step's scene acts. A walk down the steps was built first and cut the same day: in two cold
 // reads, light passing through the steps while the stage stayed on Ask read as a stepper that had lost its content,
 // or as focus moving on its own. "paid" waits undrawn from the first paint, so it never shows, vanishes and draws

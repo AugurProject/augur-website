@@ -13,7 +13,7 @@
  * - Their stake is Mist and yours Green. No words in the drawing.
  * - The steps are one story. State 0 is before Ask and state k is after step k. Each step's scene is drawn at its
  *   state (no JavaScript, reduced motion and print show it). Its act is a set of keyframe tracks from the state
- *   before, built here and played by how-path-v2.js with transform and opacity only.
+ *   before, built here and played by how-path.js with transform and opacity only.
  * One camera for all four, the drawing about three quarters of the stage wide, as on the board. */
 import { M, E, P, block, quad, node, plane, mix, shift, r2, card, navy, mist, paper, green, pewter, type Material, type SvgNode, type Keyframe, type Point } from './iso-kit';
 

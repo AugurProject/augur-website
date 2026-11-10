@@ -3,26 +3,25 @@ import Button from '../../../components/primitives/Button.astro';
 import {links} from '../../../data/links';
 import {heroTimeline} from '../motion/timelines';
 import heroArrival from '../../../motion/hero-arrival.js?raw';
-import {homeCopy,type ReviewVariant} from '../data/homepage-review';
-import {reviewInline} from '../scripts/review-inline';
-// Each homepage version renders its own copy (homepage-review.ts). The versions change only the body's
+import {homeCopy} from '../data/homepage';
+import {homeInline} from '../scripts/inline';
+// Each homepage version renders its own copy (homepage.ts). The versions change only the body's
 // last clause (Ryan 2); the headline and art stay (Ryan 1).
 // Ryan 16 swaps "See how it works" for three reader links, `hero.paths` (Ryan's and Melo's); on Ryan's
 // the whitepaper link stays. A copy with `whitepaper: false` drops it (Melo's, owner, 29 Oct 2026).
 // The hero's art is one background layer at every width (owner, 3 Nov 2026: one hero image, the desktop
 // one). From 1024 px it fills the hero's right 70% beside the copy; below 1024 px it sits under the copy
-// (home-v2-only.css). It holds the live floor (hero-floor-v2.js draws it on a canvas; "Let's try live first")
-// or the generated video (hero-video-v2.js), chosen by `layer` below. The markup is only a still; the script
+// (home-extra.css). It holds the live floor (hero-floor.js draws it on a canvas; "Let's try live first")
+// or the generated video (hero-video.js), chosen by `layer` below. The markup is only a still; the script
 // lays the canvas or the <video> over it. A <video> in the markup would show the browser's own controls
 // without JavaScript.
-interface Props { variant:ReviewVariant; }
 const layer=('floor' as 'floor'|'video');
 const still=layer==='floor'?'/images/hero/augur-hero-floor.webp':'/images/hero/augur-hero-loop-poster.webp';
 const stills=layer==='floor'?'/images/hero/augur-hero-floor.webp 1920w, /images/hero/augur-hero-floor-2560.webp 2560w':'/images/hero/augur-hero-loop-poster.webp 1920w, /images/hero/augur-hero-loop-poster-2560.webp 2560w';
-const {variant}=Astro.props;const copy=homeCopy(variant);
+const copy=homeCopy;
 const paths='paths' in copy.hero?copy.hero.paths:undefined;
 const whitepaper='whitepaper' in copy.hero?copy.hero.whitepaper:true;
-// The body's last words stay on one line (home-v2-only.css), so it never ends on a widow: five, or the
+// The body's last words stay on one line (home-extra.css), so it never ends on a widow: five, or the
 // copy's own `keep` where its ending is longer (Ryan's, which five broke early at 1440).
 const endWords=copy.hero.bodyEnd.split(' ');
 const keep='keep' in copy.hero?copy.hero.keep:5;
@@ -36,7 +35,7 @@ const intro='intro' in copy.hero?copy.hero.intro:'Augur Lituus is the next gener
 const bodyStart='bodyStart' in copy.hero?copy.hero.bodyStart:'Anyone can answer, anyone can challenge, and ';
 const arrivalScript=heroArrival.replace('__DEV__',String(import.meta.env.DEV));
 // The arrival (heroTimeline): the headline and the support line only rise, under 300 ms, so they paint at
-// once (home-v2-only.css swaps their keyframes); the underline draws before the actions arrive and retracts
+// once (home-extra.css swaps their keyframes); the underline draws before the actions arrive and retracts
 // sooner; the art fades in once the text has landed.
 const t=heroTimeline;const {lines,underline,underlineOut}=t;
 const style=`--line-duration:${lines[0].end}ms;--copy-start:${t.copy.start}ms;--copy-duration:${t.copy.end-t.copy.start}ms;--action-start:${t.actions.start}ms;--action-duration:${t.actions.end-t.actions.start}ms;--field-start:${t.field.start}ms;--field-duration:${t.field.end-t.field.start}ms;--underline-start:${underline.start}ms;--underline-duration:${underline.end-underline.start}ms;--underline-out-start:${underlineOut.start}ms;--underline-out-duration:${underlineOut.end-underlineOut.start}ms;--underline-hover:${heroTimeline.underlineHover}ms;--cue-start:${heroTimeline.scrollCue.start}ms;--cue-duration:${heroTimeline.scrollCue.end-heroTimeline.scrollCue.start}ms;--cue-cycle:${heroTimeline.scrollCue.cycle}ms`;
@@ -52,7 +51,7 @@ const style=`--line-duration:${lines[0].end}ms;--copy-start:${t.copy.start}ms;--
   </div>
  </div>
  <span class="hero-scroll" aria-hidden="true" data-scroll-cue><span class="hero-scroll-dot"></span></span>
-</section><script is:inline set:html={reviewInline.v2.scripts[layer]}></script>
+</section><script is:inline set:html={homeInline.scripts[layer]}></script>
 <script>
 // The scroll cue has done its job once the page scrolls: it fades out and stops.
 const cue=document.querySelector<HTMLElement>('[data-scroll-cue]');

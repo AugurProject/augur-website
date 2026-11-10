@@ -22,7 +22,7 @@
 // finished card until the next pick, or until the stage has left the screen. The tabs controller ends every
 // animation on a resize, so the loop is rebuilt where it was; print shows the finished card. Transform and
 // opacity only, so the loop runs off the main thread. Timings and easings come from timelines.ts
-// (useCaseTimeline, easing), written in at build time (review-inline.ts).
+// (useCaseTimeline, easing), written in at build time (inline.ts).
 (() => {
 const T = __USE_CASES__, E = T.easing, U = T.timeline, L = U.loop;
 const root = document.querySelector('[data-use-cases]');
@@ -186,7 +186,7 @@ else { frozen = phase(); loop.forEach(a => { a.pause(); a.currentTime = frozen; 
 playing = running();
 };
 const halt = () => { on = false; settle(); clear(); };
-// The loop starts once the section reveal (reveal-v2.js) has brought the stage in, so a reveal and a loop never start
+// The loop starts once the section reveal (reveal.js) has brought the stage in, so a reveal and a loop never start
 // together.
 let ratio = 0;
 const begin = () => {

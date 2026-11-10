@@ -1,7 +1,5 @@
-/** Homepage v2 copy, the /2/ review copy (owner, 21 Oct 2026). One home for every v2 string: the
- * home sections read it through homeCopy() (homepage-review.ts) when `variant` is 'v2'; v1 keeps its
- * copy where it is, untouched. v3 and v4 (homepage-v3.ts, homepage-v4.ts) spread this object and
- * override it section by section, so a change here reaches them too wherever they don't override.
+/** Homepage copy (owner, 21 Oct 2026). One home for every homepage string: the
+ * sections read it by importing `homeCopy`.
  * Source: Ryan's 17 notes as Augus marked them (dash = do, X = don't, 1–3 = Augus rewrote it).
  * Each entry names its source: "Ryan n" or "Augus n".
  * Augus's worry is that v2 turns technical, so jargon stays in the small supporting lines.
@@ -13,11 +11,11 @@
  * value, the fork never takes it; REP is optional, never a duty to report or challenge.
  * Draft copy for review, not approved. Deliberately not flagged `needsReview`: /2/ is a review route
  * and the flag would add launch blockers (check-launch).
- * The variant type and the version list live in homepage-review.ts. */
+ */
 
 import { stakedBehind } from '../../../data/rep';
 
-export const homeV2 = {
+export const homeCopy = {
   hero: {
     // Owner, 29 Oct 2026: Augus's ideas, each said once. The opening sentence points back at the lead ("those
     // answers": real-world answers for onchain apps), so it defines "oracle" without saying the lead again.
@@ -32,9 +30,9 @@ export const homeV2 = {
     keep: 2,
     bodyEnd: 'lying is designed to cost more than ever before.',
     // Ryan 16, on Melo's too (owner, 29 Oct 2026): the page split into three intents on the first screen,
-    // in the hero's action area (Hero.astro, home-v2-only.css), in place of "See how it works". Traders
+    // in the hero's action area (Hero.astro, home-extra.css), in place of "See how it works". Traders
     // first, so theirs is the one Green action. Each link lands on its section's heading; the REP link
-    // targets the How it works heading, not #how-it-works, which would open the example (how-path-v2.js).
+    // targets the How it works heading, not #how-it-works, which would open the example (how-path.js).
     // Ryan's copy reads these.
     paths: {
       label: 'Jump to',
@@ -81,10 +79,10 @@ export const homeV2 = {
       { title: 'Robust', diagram: 'mesh', claim: ['Harder to game.', 'Costlier to manipulate.'], body: 'Designed with economic defenses against false outcomes that set a new bar.' },
     ],
     // The statement stays v1's: "The answer is nobody’s call." On /2/ it heads the closer, above a panel of
-    // the two readers (owner, 23 and 25 Oct 2026; Tenets.astro, home-v2-only.css), so each payoff says what
+    // the two readers (owner, 23 and 25 Oct 2026; Tenets.astro, home-extra.css), so each payoff says what
     // it means for that reader instead of a fifth "no one". Both setups name the same risk, a wrong answer.
     // Owner, 29 Oct 2026: both readers take /ryan/'s lines. Both setups and payoffs fit one line wherever the
-    // readers sit side by side (the closer steps their sizes down below 1280, home-v2-only.css).
+    // readers sit side by side (the closer steps their sizes down below 1280, home-extra.css).
     paths: [
       // Ryan 7: misresolution said outright ("misresolve" is his word). "Probably" keeps the unsourced "many
       // traders" a guess about the reader, never a statistic; the payoff says no authority decides at all

@@ -2,8 +2,8 @@
 // scroll-motion brief). Each section settles in once, in reading order, as the reader reaches it: its heading, its lead,
 // its main block and its foot, each a [data-reveal] group ("item" marks one card of a row). A group fades in as it rises,
 // a beat after the group before it in its section, once its top passes 90% of the screen (revealTimeline and easing from
-// timelines.ts, written in at build time by review-inline.ts). The markup is the settled page: this arms (hides) only
-// groups that lie wholly below the fold, under data-armed (home-v2-only.css), and lifts it as each group lands, so no
+// timelines.ts, written in at build time by inline.ts). The markup is the settled page: this arms (hides) only
+// groups that lie wholly below the fold, under data-armed (home-extra.css), and lifts it as each group lands, so no
 // JavaScript, reduced motion, forced colours, print and whatever is already on screen show everything at once.
 // seen.ts's rules, mirrored under its storage key: a reload or a history visit shows everything (read from the navigation
 // type, so it holds where storage is blocked), a later visit in the tab session shows the groups already seen, and an

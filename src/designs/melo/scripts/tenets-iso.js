@@ -6,7 +6,7 @@
 // server-rendered frame, a scene runs while any part of it is on screen, pauses off-screen or in a hidden tab
 // and resumes where it was, print shows the resting frame, and reduced motion never starts it. Transform and
 // opacity only. The three scenes share one clock so they stay in step. A scene whose card is still settling in
-// (the section reveal, reveal-v2.js) starts once it has landed: a reveal and a loop never start together.
+// (the section reveal, reveal.js) starts once it has landed: a reveal and a loop never start together.
 (() => {
 const svgs = [...document.querySelectorAll('svg[data-iso-scene]')];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');

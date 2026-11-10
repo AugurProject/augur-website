@@ -1,39 +1,38 @@
 ---
 import IsoScene from '../art/diagrams/IsoScene.astro';
-import {homeCopy,type ReviewVariant} from '../data/homepage-review';
-import {reviewInline} from '../scripts/review-inline';
-// Each homepage version renders its own copy (homepage-review.ts): its three cards and reader lines (v2:
-// Augus's cards and Ryan's reader lines, homepage-v2.ts), on the same markup.
-interface Props { variant:ReviewVariant; }
-const {variant}=Astro.props;const copy=homeCopy(variant);
+import {homeCopy} from '../data/homepage';
+import {homeInline} from '../scripts/inline';
+// Each homepage version renders its own copy (homepage.ts): its three cards and reader lines (v2:
+// Augus's cards and Ryan's reader lines, homepage.ts), on the same markup.
+const copy=homeCopy;
 // The heading states the problem and the band answers it, so "Augur" appears once up top. "Why Augur"
 // stays as the section's name, for landmarks and the #why-augur anchor (owner, 18 Oct 2026).
 // The closer's statement is shared; every claim and line is a setup and a payoff: the setup is muted, the
 // payoff in Paper, so the eye lands on what changes (owner, 18 Oct 2026).
 const statement='The answer is nobody’s call.';
 // Each card draws an isometric scene, which says its claim (IsoScene.astro, tenets-iso.ts): Two roads for
-// Permissionless, Middleman crumbles for Trustless and the Catapult for Robust; tenets-iso-v2.js plays
+// Permissionless, Middleman crumbles for Trustless and the Catapult for Robust; tenets-iso.js plays
 // them, rendered after the section.
 const isoKinds={cross:'roads',authority:'middleman',mesh:'catapult'} as const;
 const cards=copy.why.tenets.map(card=>({...card,iso:isoKinds[card.diagram]}));
 const paths=copy.why.paths;
 // The statement heads the closer as its <h3>, so heading navigation reaches it, and the readers follow as
 // a list under it, each named by an <h4> (25 Oct 2026), so heading navigation reaches each reader too
-// (home-v2-only.css lays them out).
+// (home-extra.css lays them out).
 // v3 (Ryan 6): a card with a `tip` gets a "?" toggletip beside its title. The title and the button share a
 // head row (a button inside the <h3> would join the heading's name); the definition is a native popover
 // (click, tap, Enter, Space, Esc and click-outside need no script), described by the button, and anchored
 // under the tab (home-v3.css). The version's `tips` script (tenet-tips-v3.js) adds hover and focus.
-const tips=cards.some(card=>'tip' in card)?reviewInline[variant].scripts.tips:undefined;
-// The section reveal (reveal-v2.js): the heading, the lead, the three cards left to right and the closer
+const tips=cards.some(card=>'tip' in card)?homeInline.scripts.tips:undefined;
+// The section reveal (reveal.js): the heading, the lead, the three cards left to right and the closer
 // settle in as the reader reaches them; each scene keeps looping once its card has landed. The answer band keeps its
-// own ribbon, which follows the lead (ribbon-v2.js; the band carries data-answer-band-v2).
+// own ribbon, which follows the lead (ribbon.js; the band carries data-answer-band).
 ---
 <section class="tenets" id="why-augur" aria-label="Why Augur" data-tenets>
  <div class="site-container">
   <div class="section-heading"><h2 id="tenets-heading" data-reveal>Smart contracts<br/>can't see the world.</h2><p class="lead" data-reveal>{copy.why.lead}</p></div>
  </div>
- <div class="answer-band" data-answer-band-v2><p class="site-container" data-answer>{copy.why.answer}</p></div>
+ <div class="answer-band" data-answer-band><p class="site-container" data-answer>{copy.why.answer}</p></div>
  <div class="site-container tenet-grid">
   {cards.map(card=>{const {title,claim,body}=card;const tip='tip' in card?card.tip:undefined;return <article class="tenet-card" data-tenet-card data-reveal="item">
    {tip?<div class="tenet-head" style={`anchor-name:--${tip.id}`}><h3 class="tenet-tab">{title}</h3><button type="button" class="tenet-tip" popovertarget={tip.id} aria-label={tip.label} aria-describedby={tip.id} data-tenet-tip><span class="tenet-tip-mark" aria-hidden="true">?</span></button><p class="tenet-tip-pop" id={tip.id} popover style={`position-anchor:--${tip.id}`}><strong>{title}:</strong> {tip.text}</p></div>:<h3 class="tenet-tab">{title}</h3>}
@@ -51,7 +50,7 @@ const tips=cards.some(card=>'tip' in card)?reviewInline[variant].scripts.tips:un
    </li>)}</ul>
   </div>
  </div>
-</section>{tips&&<script is:inline set:html={tips}></script>}<script is:inline set:html={reviewInline.v2.scripts.ribbon}></script><script is:inline set:html={reviewInline.v2.scripts.tenets}></script>
+</section>{tips&&<script is:inline set:html={tips}></script>}<script is:inline set:html={homeInline.scripts.ribbon}></script><script is:inline set:html={homeInline.scripts.tenets}></script>
 <style>
  .tenets{padding-top:64px}.tenets>.site-container:first-child{padding-top:72px;padding-bottom:56px}.section-heading{margin-bottom:0}.answer-band{position:relative;overflow:hidden;background:var(--primary);color:var(--background);padding:24px 0 28px}.answer-band p{font-family:var(--font-heading);font-size:clamp(26px,2.5vw,36px);font-weight:600;line-height:44px;letter-spacing:-.01em;text-wrap:balance}
  .tenet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-top:48px;padding-bottom:96px}
@@ -89,7 +88,7 @@ const tips=cards.some(card=>'tip' in card)?reviewInline[variant].scripts.tips:un
  .closer-who{display:flex;align-items:center;gap:8px;font:600 14px/20px var(--font-heading);letter-spacing:.01em;color:var(--foreground);margin:0 0 10px}
  .closer-who::before{content:'';width:6px;height:6px;flex:none;background:var(--primary)}
  .closer-line{font:400 20px/30px var(--font-heading);letter-spacing:-.01em;color:var(--foreground);margin:0;text-wrap:balance}.closer-line>span{display:block;text-wrap:balance}
- /* Ribbon sweep (ribbon-v2.js): the static band is the no-JS, reduced-motion and print state. */
+ /* Ribbon sweep (ribbon.js): the static band is the no-JS, reduced-motion and print state. */
  .answer-band[data-ribbon=armed]{background:transparent;color:var(--foreground)}.answer-band :global(.ribbon-fill){position:absolute;inset:0;background:var(--primary);transform-origin:left;transform:scaleX(0)}.answer-band :global(.ribbon-overlay){position:absolute;inset:0;padding:inherit;color:var(--background);clip-path:inset(0 100% 0 0);user-select:none;pointer-events:none}.answer-band :global(.ribbon-edge){position:absolute;top:0;bottom:0;left:6px;display:flex;flex-direction:column;justify-content:center;gap:8px;pointer-events:none}.answer-band :global(.ribbon-edge i){display:block;width:10px;height:10px;background:var(--primary)}.answer-band :global(.ribbon-edge i:nth-child(2)){transform:translateX(8px)}.answer-band :global(.ribbon-word){display:inline-block}
  @media print{.answer-band :global(:is(.ribbon-fill,.ribbon-overlay,.ribbon-edge)){display:none}.answer-band[data-ribbon]{background:var(--primary);color:var(--background)}}
  @media(forced-colors:active){.tenet-card{border:1px solid CanvasText}.tenet-card::before,.tenet-card::after,.tenet-closer::after{display:none}.tenet-tab::before,.closer-who::before{forced-color-adjust:none;background:CanvasText}}

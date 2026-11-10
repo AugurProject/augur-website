@@ -1,16 +1,16 @@
 // The answer band's ribbon on the review copies (Tenets.astro renders this right after the section): home-art.ts's
 // sweep, which "/" keeps, carried here so it can follow the section's lead (owner's ask, 29 Oct 2026: motion that leads
-// the eye in reading order; the scroll-motion brief). The band carries data-answer-band-v2 instead of "/"'s
+// the eye in reading order; the scroll-motion brief). The band carries data-answer-band instead of "/"'s
 // data-answer-band, so home-art.ts leaves it alone. A Green ribbon grows from the left under the statement, led by three
 // squares, and each word of the Navy copy rises into place as the front reaches it; the live statement underneath stays
 // one text node. Unlike the other entrances it plays on every load, a reload included (owner, 6 Oct 2026), once 60% of
-// the band is in view; while the heading row above it is still settling in (reveal-v2.js), it waits for the lead to land,
+// the band is in view; while the heading row above it is still settling in (reveal.js), it waits for the lead to land,
 // so the answer comes after the question. Already on screen when this runs: the settled band. Reduced motion, print and
-// page hide settle it. Timings from timelines.ts (ribbonTimeline, easing), written in at build time (review-inline.ts);
+// page hide settle it. Timings from timelines.ts (ribbonTimeline, easing), written in at build time (inline.ts);
 // timeAt is timelines.ts's, copied.
 (() => {
 const T = __RIBBON__, E = T.easing, R = T.timeline;
-const band = document.querySelector('[data-answer-band-v2]'), text = band?.querySelector('[data-answer]');
+const band = document.querySelector('[data-answer-band]'), text = band?.querySelector('[data-answer]');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 if (!band || !text || reduced.matches || !('IntersectionObserver' in window) || typeof band.animate !== 'function') return;
 const box = band.getBoundingClientRect();

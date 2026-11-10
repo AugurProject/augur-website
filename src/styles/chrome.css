@@ -1,4 +1,4 @@
-/* Melo's site chrome, ported from the web lab (chrome-v2.css at 1b95a3a): the header and footer rules,
+/* Melo's site chrome, ported from the web lab (chrome.css at 1b95a3a): the header and footer rules,
    shared by every page and both homepage designs. PageLayout renders it inline before the announcement
    bar, after the components' own styles, so it wins a specificity tie; every rule starts with .site-header
    or .site-footer. SiteHeader.astro carries the rest: the Resources rows' square mark, the Products lead
@@ -35,7 +35,7 @@
 @media(prefers-reduced-motion:reduce){.site-header .nav-lead-label::after,.site-header .nav-lead-arrow{transition:none}}
 @media(forced-colors:active){.site-header .nav-lead>a{border:1px solid CanvasText}.site-header .nav-lead-label::after{forced-color-adjust:none;background:CanvasText}}
 
-/* Hide on the way down, back on the way up (owner, 22 Oct 2026; header-v2.js sets the attributes, so
+/* Hide on the way down, back on the way up (owner, 22 Oct 2026; header.js sets the attributes, so
    without JavaScript the header stays in the flow). Sticky at the top; slid up by its own height, a
    transform, when hidden. Once it has left its place under the announcement, a 1 px Outline line marks
    its foot so the page doesn't run into it unseen (no shadows). Reduced motion swaps the slide for a cut. */

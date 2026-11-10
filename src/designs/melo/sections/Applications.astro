@@ -1,17 +1,16 @@
 ---
 import { applications } from '../../../data/applications';
 import Button from '../../../components/primitives/Button.astro';
-import {homeCopy,type ReviewVariant} from '../data/homepage-review';
-import {reviewInline} from '../scripts/review-inline';
-// Each homepage version renders its own copy (homepage-review.ts). Augur's square mark stands in the case
+import {homeCopy} from '../data/homepage';
+import {homeInline} from '../scripts/inline';
+// Each homepage version renders its own copy (homepage.ts). Augur's square mark stands in the case
 // tiles, with no builder icons, and the check glyph's own path in the answer chip. Its styles are
-// home-v2-only.css.
-interface Props { variant:ReviewVariant; }
-const {variant}=Astro.props;const copy=homeCopy(variant);
+// home-extra.css.
+const copy=homeCopy;
 // v2 (Ryan 8–11, Augus 1): the one-sentence lead, the DAO case's summary spread over the shared one (same
 // id and title) and Augus's builder block, liability first (title over
-// the reasons; the ask closes the reasons panel in home-v2-only.css). The lead's balance and the phone
-// spacing are in home-v2.css.
+// the reasons; the ask closes the reasons panel in home-extra.css). The lead's balance and the phone
+// spacing are in home-page.css.
 // v3 (Ryan 9–11) has the same lead, its own DAO case, and no builder block. v4 keeps v2's case and its own
 // builder copy.
 const cases=applications.map(app=>app.id==='governance'?{...app,...copy.applications.governance}:app);
@@ -22,8 +21,8 @@ const builder='builder' in copy.applications?copy.applications.builder:undefined
 // stroke, so it can draw in.
 const check='4.5 10.5 8.25 14.25 15.5 7';
 // The right box (owner, 25 Oct 2026, from the item 3 mock): each case is a product card that waits, gets
-// its answer and acts, then a paragraph for builders (homepage-v2.ts `cards`, home-v2-only.css,
-// use-cases-v2.js). Arrow keys pick a tab (automatic activation); the root carries data-use-cases for its
+// its answer and acts, then a paragraph for builders (homepage.ts `cards`, home-extra.css,
+// use-cases.js). Arrow keys pick a tab (automatic activation); the root carries data-use-cases for its
 // script.
 // The market card is a query split in two (owner, 26 Oct 2026, "Split it is"): the market's price beside
 // Augur Lituus's status and answer. The insurance card is the same query as a relay (owner, 28 Oct 2026,
@@ -36,7 +35,7 @@ const check='4.5 10.5 8.25 14.25 15.5 7';
 // screen readers, so no JavaScript, reduced motion and print show the end. Before the report Augur Lituus's
 // value is empty, never a dash (owner, 28 Oct 2026).
 const cards=copy.applications.cards;
-// The section reveal (reveal-v2.js): the heading, the lead, the picker and the card stage as one group, then
+// The section reveal (reveal.js): the heading, the lead, the picker and the card stage as one group, then
 // the builder block. The card's loop starts once the group has landed.
 ---
 <section class="applications section" aria-labelledby="applications-heading">
@@ -95,7 +94,7 @@ const cards=copy.applications.cards;
    <div class="builder-ask"><p><span class="ask-setup">{builder.ask[0]}</span> <span class="ask-payoff">{builder.ask[1]}</span></p><Button href="/contact/" variant="text">Talk to us</Button></div>
   </div>}
  </div>
-</section><script is:inline set:html={reviewInline.v2.scripts.useCases}></script>
+</section><script is:inline set:html={homeInline.scripts.useCases}></script>
 <style>
  /* What can Augur Lituus power? (was "What could you build?"; owner, 18–19 Oct 2026). Written for
     traders first; the heading names the product and the cases answer it. Organized as a list beside an

@@ -1,9 +1,9 @@
-/* Homepage v2 (owner, 21 Oct 2026), the UI system of every review version (/ryan/, /ryan-augus/, /melo/). Loaded as a string (review-inline.ts) and rendered
+/* Homepage v2 (owner, 21 Oct 2026), the UI system of every review version (/ryan/, /ryan-augus/, /melo/). Loaded as a string (inline.ts) and rendered
    inline on those pages alone, so none of it reaches "/", not even as a CSP hash. Every rule starts with
-   .home-v2 (the review <main>; Ryan's adds .home-v3) and comes after the page's own styles, so it wins a specificity tie.
+   .home-page (the review <main>; Ryan's adds .home-v3) and comes after the page's own styles, so it wins a specificity tie.
    Astro adds one [data-astro-cid-…] to each compound of a component rule: `.tenet-card` ships as
-   `.tenet-card[data-astro-cid-…]` and ties with `.home-v2 .tenet-card`, but `.answer-band p` ships as
-   `.answer-band[…] p[…]` and beats `.home-v2 .answer-band p`. So override one-compound rules directly,
+   `.tenet-card[data-astro-cid-…]` and ties with `.home-page .tenet-card`, but `.answer-band p` ships as
+   `.answer-band[…] p[…]` and beats `.home-page .answer-band p`. So override one-compound rules directly,
    and give v2-only markup its own class names rather than out-scoring longer v1 selectors.
    Component <style> blocks stay v1-only: a v2 rule there would ship on "/" too. */
 
@@ -16,19 +16,19 @@
    builder's case, the REP holder bar). The hero keeps its own fit to the first screen. Print keeps
    layout.css's 32, which v1's scoped paddings override. Ids out-score v1's longer scoped selectors
    (`.tenets[…]>.site-container[…]:first-child` is 0,5,0); class rules tie and win by coming later. */
-.home-v2{--section-space:96px;--heading-gap:48px;--block-gap:64px}
-@media(max-width:1023px){.home-v2{--section-space:72px}}
-@media(max-width:767px){.home-v2{--section-space:64px;--heading-gap:32px;--block-gap:48px}}
-@media print{.home-v2{--section-space:32px}}
-.home-v2>:is(.applications,.how-it-works,.home-learn),.home-v2 :is(#why-augur,#roadmap){padding-block:var(--section-space)}
-.home-v2 .section-heading{margin-bottom:var(--heading-gap)}
+.home-page{--section-space:96px;--heading-gap:48px;--block-gap:64px}
+@media(max-width:1023px){.home-page{--section-space:72px}}
+@media(max-width:767px){.home-page{--section-space:64px;--heading-gap:32px;--block-gap:48px}}
+@media print{.home-page{--section-space:32px}}
+.home-page>:is(.applications,.how-it-works,.home-learn),.home-page :is(#why-augur,#roadmap){padding-block:var(--section-space)}
+.home-page .section-heading{margin-bottom:var(--heading-gap)}
 /* Why Augur: heading row, the answer band and the cards, one heading gap apart (v1: 56 and 48). */
-.home-v2 #why-augur>.site-container:first-child{padding-block:0}.home-v2 #why-augur .tenet-grid{padding-block:var(--heading-gap) 0}
-.home-v2 .builder-case{margin-top:var(--block-gap)}
-.home-v2 #roadmap>.site-container{padding-top:0}
+.home-page #why-augur>.site-container:first-child{padding-block:0}.home-page #why-augur .tenet-grid{padding-block:var(--heading-gap) 0}
+.home-page .builder-case{margin-top:var(--block-gap)}
+.home-page #roadmap>.site-container{padding-top:0}
 
 /* Hero (Ryan 1: kept). Its lead balances like every v2 lead: at 1200–1300 it left "one." alone. */
-.home-v2 .hero-lead{text-wrap:balance}
+.home-page .hero-lead{text-wrap:balance}
 
 /* Why Augur (Ryan 5 and 17, Augus 3). The cards carry the differentiators, so the claims get bolder
    through type alone: H3 24/32 (DESIGN.md) wherever every claim line still fits on one line, H4 20/26
@@ -37,32 +37,32 @@
    label again (the 200 px tab was for "Bribery-resistant", 18 Oct). Bodies balance, so no line ends on
    a stray "No". Measured with the v2 copy at 1024–1440 (every 20–40 px), 1023, 900, 768 and 360–600:
    the three cards and the two reader cells keep equal line counts, so none has an empty foot. */
-.home-v2 .tenet-card{--tab:184px}
+.home-page .tenet-card{--tab:184px}
 /* Ryan's lead runs to two lines at 1024 and on phones; balanced, it never leaves "paid." alone. */
-.home-v2 .tenets .lead{text-wrap:balance}
-.home-v2 .tenet-claim{font-size:20px;line-height:26px}.home-v2 .tenet-claim .setup{color:inherit}.home-v2 .tenet-body{text-wrap:balance}
-@media(min-width:1200px),(min-width:768px) and (max-width:1023px){.home-v2 .tenet-claim{font-size:24px;line-height:32px}}
+.home-page .tenets .lead{text-wrap:balance}
+.home-page .tenet-claim{font-size:20px;line-height:26px}.home-page .tenet-claim .setup{color:inherit}.home-page .tenet-body{text-wrap:balance}
+@media(min-width:1200px),(min-width:768px) and (max-width:1023px){.home-page .tenet-claim{font-size:24px;line-height:32px}}
 /* 1024–1199: three cards in a narrow row (a 229–300 px column). The insets tighten to 24 (the closer
    keeps its text on the card text edge: 24 plus the 12 px half gutter) and the reader lines step down
    to 18/27, as on phones, so both payoffs wrap at the same widths. */
-@media(min-width:1024px) and (max-width:1199px){.home-v2 .tenet-tab{padding:0 24px}.home-v2 .tenet-visual{padding:24px}.home-v2 .tenet-copy{padding:24px}.home-v2 .closer-line{font-size:18px;line-height:27px}}
+@media(min-width:1024px) and (max-width:1199px){.home-page .tenet-tab{padding:0 24px}.home-page .tenet-visual{padding:24px}.home-page .tenet-copy{padding:24px}.home-page .closer-line{font-size:18px;line-height:27px}}
 /* Tablet: the diagram sits beside the copy, and the shorter v2 copy would leave the copy column's
    foot empty, so the copy centres against the diagram, as the diagram already does. */
-@media(max-width:1023px){.home-v2 .tenet-copy{justify-content:center}}
-@media(min-width:601px) and (max-width:767px){.home-v2 .closer-line{font-size:18px;line-height:27px}}
+@media(max-width:1023px){.home-page .tenet-copy{justify-content:center}}
+@media(min-width:601px) and (max-width:767px){.home-page .closer-line{font-size:18px;line-height:27px}}
 /* Phones: the closer statement in H4 fits one line from 375 px; the gaps tighten to the scale's 16 / 12. */
-@media(max-width:600px){.home-v2 .tenet-card{--tab:168px}.home-v2 .tenet-grid{gap:16px}.home-v2 .tenet-visual{padding:12px 24px 16px}}
+@media(max-width:600px){.home-page .tenet-card{--tab:168px}.home-page .tenet-grid{gap:16px}.home-page .tenet-visual{padding:12px 24px 16px}}
 
 /* What can Augur Lituus power? (Ryan 9–11, Augus 1). Same markup and layout as v1; these rules only
    fit the v2 copy. Ryan's one-sentence lead balances, so "world." is never left alone (it was at 1440). */
-.home-v2 .applications .lead{text-wrap:balance}
+.home-page .applications .lead{text-wrap:balance}
 /* Where the "Decided in the open…" line and the action's explanation wrap (phones), they balance, so no
    line ends on a stray "No side." or "go live." (verification pass, 21 Oct: every tab at 360 and 390
    left one or two words alone). From 768 they fit one line and balance changes nothing. */
-.home-v2 :is(.case-by,.case-explanation){text-wrap:balance}
+.home-page :is(.case-by,.case-explanation){text-wrap:balance}
 /* The builder's reasons balance too: v1's `pretty` still left "outcomes." alone at 360, and from 1024
    each reason now breaks at its sentence ("Disputes settle in the open. / The project never…"). */
-.home-v2 .builder-point{text-wrap:balance}
+.home-page .builder-point{text-wrap:balance}
 
 /* How it works (Ryan 12 and 13, Augus 2). Closed by default: the heading, a one-line lead with its
    toggle, the four steps as a strip and the holder bar. The example is v1's walkthrough, unpinned.
@@ -70,32 +70,32 @@
    heading (lead 33 + 24 + toggle 48 = 105 against the heading's 96 at 1440), so the action stays with
    its text and neither column ends early. Below 1024 the row stacks: heading, lead, toggle. Where the
    lead wraps (1024–1199, phones) it balances into its two sentences. */
-.home-v2 .how-it-works .section-heading .lead{text-wrap:balance}
-@media(min-width:1024px){.home-v2 .how-it-works .section-heading{grid-template-areas:"title lead" "title action";row-gap:24px}.home-v2 .how-it-works h2{grid-area:title}.home-v2 .how-it-works .section-heading .lead{grid-area:lead}.home-v2 .how-toggle{grid-area:action}}
+.home-page .how-it-works .section-heading .lead{text-wrap:balance}
+@media(min-width:1024px){.home-page .how-it-works .section-heading{grid-template-areas:"title lead" "title action";row-gap:24px}.home-page .how-it-works h2{grid-area:title}.home-page .how-it-works .section-heading .lead{grid-area:lead}.home-page .how-toggle{grid-area:action}}
 /* The toggle is the section's one action, an outline button like the builder's "Talk to us". Its
    words say what a press does next ("Walk through an example" / "Hide the example") and aria-expanded
-   carries the state; the chevron turns with it. Which words show is home-v2-only.css's (.how-more),
+   carries the state; the chevron turns with it. Which words show is home-extra.css's (.how-more),
    beside the box that keeps one width for both. */
-.home-v2 .how-toggle{justify-self:start}
-.home-v2 .how-toggle .web-icon{transition:transform 180ms var(--ease-reveal)}.home-v2 .how-toggle[aria-expanded=true] .web-icon{transform:rotate(180deg)}
+.home-page .how-toggle{justify-self:start}
+.home-page .how-toggle .web-icon{transition:transform 180ms var(--ease-reveal)}.home-page .how-toggle[aria-expanded=true] .web-icon{transform:rotate(180deg)}
 /* Closed, the example is hidden="until-found", so find in page and text fragments can still open it
    (Chromium, Firefox). base.css's [hidden]{display:none!important} would defeat that, so this one
    element gets its box back; the browser keeps its content unrendered (content-visibility). Without
    JavaScript the script never closes it, and print always shows it, without the controls. */
-.home-v2 [data-how-demo][hidden=until-found]{display:block!important}
-@media print{.home-v2 [data-how-demo][hidden]{display:block!important;content-visibility:visible}.home-v2 :is(.how-toggle,.how-strip){display:none!important}}
-@media(prefers-reduced-motion:reduce){.home-v2 :is(.how-step,.how-step-index,.how-toggle .web-icon){transition:none}}
-/* Opening and closing (how-it-works-v2.js): a same-document view transition, like the FAQ's, 380 ms
+.home-page [data-how-demo][hidden=until-found]{display:block!important}
+@media print{.home-page [data-how-demo][hidden]{display:block!important;content-visibility:visible}.home-page :is(.how-toggle,.how-strip){display:none!important}}
+@media(prefers-reduced-motion:reduce){.home-page :is(.how-step,.how-step-index,.how-toggle .web-icon){transition:none}}
+/* Opening and closing (how-it-works.js): a same-document view transition, like the FAQ's, 380 ms
    on the reveal ease. The strip's box eases to the example's height and clips the live example, so it
    unrolls from where the strip was; the band grows with it, and the holder and the sections below
    slide, so nothing jumps. Closing runs the same in reverse.
    Names exist only while html[data-how-transition] is set; the strip and the open example share
    "how-stage", and only one of them is rendered at a time. Reduced motion, arrivals (the hero's
    "See how it works", #how-it-works) and browsers without view transitions change at once. */
-html[data-how-transition] .home-v2 #how-it-works{view-transition-name:how-band}
-html[data-how-transition] .home-v2 :is(.how-strip,[data-how-demo]:not([hidden])){view-transition-name:how-stage}
-html[data-how-transition] .home-v2 #roadmap{view-transition-name:how-roadmap}
-html[data-how-transition] .home-v2 #learn-more{view-transition-name:how-learn}
+html[data-how-transition] .home-page #how-it-works{view-transition-name:how-band}
+html[data-how-transition] .home-page :is(.how-strip,[data-how-demo]:not([hidden])){view-transition-name:how-stage}
+html[data-how-transition] .home-page #roadmap{view-transition-name:how-roadmap}
+html[data-how-transition] .home-page #learn-more{view-transition-name:how-learn}
 ::view-transition-group(how-band),::view-transition-group(how-stage),::view-transition-group(how-holder),::view-transition-group(how-roadmap),::view-transition-group(how-learn){animation-duration:380ms;animation-timing-function:cubic-bezier(.22,.61,.36,1)}
 /* The band's own box paints its colour, so a shrinking band never shows the page behind it. */
 ::view-transition-group(how-band){overflow:clip;background:var(--web-band)}::view-transition-group(how-stage){overflow:clip}
@@ -113,20 +113,20 @@ html[data-how-transition]::view-transition-old(root){display:none}html[data-how-
    others, and below 1024 each panel fits its own milestone, as the use-case stage does from the same
    width, instead of reserving 630 / 720 px (empty feet of up to 61 px at 768 and 91 at 390). Only what
    follows the panel moves when a tab changes; the default Now tab is already taller than 720 on phones. */
-.home-v2 .roadmap .lead{text-wrap:balance}
+.home-page .roadmap .lead{text-wrap:balance}
 /* The Now status left "2026" alone on its last line at 390 and 1024 ("…completed in July / 2026"), and
    at 360 the Now title split the name ("Building Augur / Lituus."); balanced: "Building / Augur Lituus."
    "The design, published." and "Ready for applications." still break before their last word at 360. */
-.home-v2 :is(.roadmap-status,.roadmap-story h3){text-wrap:balance}
-@media(max-width:1023px){.home-v2 .roadmap-panel{min-height:0}}
+.home-page :is(.roadmap-status,.roadmap-story h3){text-wrap:balance}
+@media(max-width:1023px){.home-page .roadmap-panel{min-height:0}}
 /* Where a milestone's two links wrap (phones), they stack 16 apart, like the hero's two actions and the
    Learn more foot, so each pair reads as one group (v1: 24). */
-.home-v2 .roadmap-links{row-gap:16px}
+.home-page .roadmap-links{row-gap:16px}
 /* 768–919 (iPad portrait): six stops share 704–855 px, and "Implementation" (116 px at 14 px) ran 23 px
    past its tab at 768, butting into "Testing & audits" and the Now box's edge (in v1 too). Labels step
    down to 12/18 with 10 px insets there, so the longest ends 8 px inside its box; weight and colour still
    set them apart from the 12 px dates. `[role=tab]` outranks v1's `.roadmap-tabs[…] button[…]`. */
-@media(min-width:768px) and (max-width:919px){.home-v2 .roadmap-tabs button[role=tab]{padding-inline:10px}.home-v2 .roadmap-label{font-size:12px;line-height:18px}}
+@media(min-width:768px) and (max-width:919px){.home-page .roadmap-tabs button[role=tab]{padding-inline:10px}.home-page .roadmap-label{font-size:12px;line-height:18px}}
 
 /* Learn more (Ryan 15). One column on the shared heading row, so no column is left half empty in any
    state (a 500 / 668 split would leave 112–190 px under the heading whenever an answer is open). The
@@ -135,11 +135,11 @@ html[data-how-transition]::view-transition-old(root){display:none}html[data-how-
    the questions' 25 px text inset, and the text link 32 px after it. Phones stack the two 16 apart, as
    the hero's actions do, the link padded onto the same inset; side by side they need 345 px. During the
    FAQ's morph the foot slides with the list instead of jumping (motion.css names the questions). */
-.home-v2 .home-learn .lead{text-wrap:balance}
+.home-page .home-learn .lead{text-wrap:balance}
 /* The FAQ's own wraps (review fix, 21 Oct 2026): v1's copy left one word alone on a last line, the
    first answer's "own." from 768 up and at 360, the third's "window." at 360 and the first question's
    "markets?" at 390. Answers wrap pretty and questions balance; neither adds a line anywhere measured. */
-.home-v2 .faq-answer p{text-wrap:pretty}.home-v2 .faq-item summary>span:first-child{text-wrap:balance}
+.home-page .faq-answer p{text-wrap:pretty}.home-page .faq-item summary>span:first-child{text-wrap:balance}
 /* Print shows every answer, as it shows the How it works example: on paper nothing can be opened.
    Browsers without ::details-content print the questions, as before. */
-@media print{.home-v2 .faq-item::details-content{content-visibility:visible}.home-v2 .faq-toggle{display:none}}
+@media print{.home-page .faq-item::details-content{content-visibility:visible}.home-page .faq-toggle{display:none}}

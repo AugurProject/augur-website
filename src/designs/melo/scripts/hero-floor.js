@@ -3,7 +3,7 @@
 // Reports run along the grid into one 8 x 8 block, which fills Green square by square and rises, sends one
 // pulse out across the floor at 0.74 of the loop, settles from 0.84 and rests, on a 12 s loop whose every
 // motion repeats a whole number of times, so it closes exactly. It draws a 16:9 scene on a canvas in the
-// hero video's layer, cropped like object-fit: cover at 90% 50% (home-v2-only.css places and fades the
+// hero video's layer, cropped like object-fit: cover at 90% 50% (home-extra.css places and fades the
 // layer), at every width, at 30 frames a second. The markup is a still of the loop's 0.76 point, the
 // complete block, rendered from this code; no-JavaScript visitors keep it, the loop starts on that frame
 // so the swap is invisible, and reduced motion draws it and stops. On a first-visit arrival the floor
