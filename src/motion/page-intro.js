@@ -11,7 +11,8 @@
   const navigation = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : undefined;
   if ((navigation && navigation.type !== 'navigate') || location.hash || document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   try { if (sessionStorage.getItem('augur:intro-seen') === '1') return; sessionStorage.setItem('augur:intro-seen', '1'); } catch {}
-  root.dataset.intro = 'loading';
+  // `introPlayed` stays for the page's life: the hero stages its arrival behind the veil (page-intro.css).
+  root.dataset.intro = 'loading'; root.dataset.introPlayed = '';
   let lifted = false;
   const lift = () => {
     if (lifted) return;

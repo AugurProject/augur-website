@@ -40,7 +40,7 @@
   };
   // Under the first-visit veil (page-intro.js) the arrival's animations wait, paused, and so does its clock.
   let cleanup;
-  const begin = () => { if (!settled) cleanup = setTimeout(complete, 3000 * factor); };
+  const begin = () => { if (!settled) cleanup = setTimeout(complete, 3800 * factor); };
   if (document.documentElement.dataset.intro === 'loading') document.addEventListener('augur:intro', begin, { once: true }); else begin();
   const inputOptions = { capture: true, passive: true, signal: lifecycle.signal };
   root.addEventListener('focusin', settle, inputOptions);

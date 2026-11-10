@@ -6,3 +6,16 @@
 :root[data-intro=loading] .home-hero,:root[data-intro=loading] .home-hero *,:root[data-intro=loading] .home-hero *::before,:root[data-intro=loading] .home-hero *::after{animation-play-state:paused!important}
 @keyframes page-intro-line{to{transform:scaleX(1)}}
 @media print{:root[data-intro]::before,:root[data-intro]::after{display:none}}
+/* Behind the veil the hero stages its arrival (owner, 10 Nov 2026: "present the bg, then the hero text positions in
+   place"): the floor builds first, as the veil lifts; then the headline's lines fade and rise into place one after
+   another, the support line follows, then the actions; the underline draws once the headline has landed. The veil
+   already holds the first paint, so here the text may start from nothing. Times run from the veil's lift. */
+:root[data-intro-played] .home-hero[data-hero-arrival=entering] [data-hero-line]{animation:page-intro-rise 760ms cubic-bezier(.16,1,.3,1) 450ms backwards}
+:root[data-intro-played] .home-hero[data-hero-arrival=entering] [data-hero-line]:nth-of-type(2){animation-delay:540ms}
+:root[data-intro-played] .home-hero[data-hero-arrival=entering] [data-hero-line]:nth-of-type(3){animation-delay:630ms}
+:root[data-intro-played] .home-hero[data-hero-arrival=entering] .hero-support{animation:page-intro-rise-soft 700ms cubic-bezier(.16,1,.3,1) 820ms backwards}
+:root[data-intro-played] .home-hero[data-hero-arrival=entering] .hero-actions{animation:page-intro-fade 500ms ease-out 1080ms backwards}
+:root[data-intro-played] .home-hero .hero-emphasis::after{animation-delay:1350ms,2900ms}
+@keyframes page-intro-rise{from{opacity:0;transform:translateY(28px)}}
+@keyframes page-intro-rise-soft{from{opacity:0;transform:translateY(12px)}}
+@keyframes page-intro-fade{from{opacity:0;visibility:hidden}}
