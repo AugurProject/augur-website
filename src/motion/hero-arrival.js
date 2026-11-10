@@ -6,7 +6,7 @@
   root.dataset.heroArrival = 'settled';
 
   // Scrolling back up to the hero replays the arrival: once the hero has been fully out of view and any of it comes back,
-  // the layer, the floor (hero-floor-v2.js listens for `heroreplay`) and the text play again, once per exit, unless motion
+  // the layer, the floor (hero-floor.js listens for `heroreplay`) and the text play again, once per exit, unless motion
   // is reduced, the tab is hidden or focus is inside the hero.
   if ('IntersectionObserver' in window) {
     let away = false, timer = 0, replay;

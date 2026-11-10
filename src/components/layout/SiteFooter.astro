@@ -11,9 +11,9 @@ import {site} from '../../data/site';
 // Both rows sit on the site's 500 / 80 / 668 heading grid, so the newsletter and the first
 // link column share one edge with every section above. One footer nav landmark; every
 // footer heading is an h2, a peer of the contact title rather than nested under it.
-// On the homepage the footer settles in as one group, with no stagger (reveal-v2.js); every other page renders
+// On the homepage the footer settles in as one group, with no stagger (reveal.js); every other page renders
 // it unchanged.
-const reveal=Astro.url.pathname==='/'&&site.homeDesign==='melo'?'':undefined;
+const reveal=Astro.url.pathname==='/'?'':undefined;
 // With the forms off (forms.enabled), the newsletter column points to where updates already appear.
 const follow:{label:string;href:string;logo?:string}[]=[{label:'Blog',href:links.archive.url},{label:'RSS feed',href:'/rss.xml'},{label:'X',href:links.x.url,logo:'x-logo'}];
 ---

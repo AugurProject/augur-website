@@ -2,7 +2,7 @@
 // our face the first time ... wait for fonts or something that shifts the layouts"). Inlined in <head>, so it
 // arms before the first paint: a Navy veil with the glyph and a short Green line covers the page (PageLayout's
 // intro style) while the three web fonts load, for at least MIN ms from when it arms and at most MAX, then dissolves. The hero's
-// arrival and the floor's build wait under it (hero-arrival.js, hero-floor-v2.js, the paused animations) and
+// arrival and the floor's build wait under it (hero-arrival.js, hero-floor.js, the paused animations) and
 // start as it lifts, so the intro plays once, on settled type. Like every entrance it shows once per tab
 // session: a reload, a history visit, a #section, a hidden tab or reduced motion skip it, and so does no
 // JavaScript. The page underneath paints as usual; the veil only covers it.

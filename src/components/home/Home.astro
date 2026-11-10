@@ -1,0 +1,26 @@
+---
+import Hero from './sections/Hero.astro';
+import Tenets from './sections/Tenets.astro';
+import Applications from './sections/Applications.astro';
+import HowItWorks from './sections/HowItWorks.astro';
+import Roadmap from './sections/Roadmap.astro';
+import LearnMore from './sections/LearnMore.astro';
+import {homeInline} from './scripts/inline';
+// Melo's design from the web lab (the lab's homepage, "/", at 795ca0c). Its sheets scope every rule to
+// `.home-page` and follow every component style (linked in the head), so they win ties, as in the lab. They
+// render before the sections: placed after them, they sat about 500 KB into the page, and the browser painted
+// the hero without them (the art in the flow, the copy below the fold) until the parser reached them.
+// The section reveal (reveal.js) must see every section and the footer; the lab renders it after the footer
+// through its layout's "end" slot. Here it is an inline module, which runs once the whole document is parsed.
+---
+{homeInline.styles.map(css=><style is:inline set:html={css}></style>)}
+<div class="home-page">
+ <Hero/><Tenets/><Applications/><HowItWorks/><Roadmap/><LearnMore/>
+</div>
+<script is:inline type="module" set:html={homeInline.scripts.reveal}></script>
+<script>
+ // The shared tabs controller binds the use cases, How it works' steps and the roadmap once; each section's own
+ // motion is its inline script (inline.ts).
+ import {setupAllTabs} from '../../motion/tabs';
+ setupAllTabs();
+</script>

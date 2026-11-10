@@ -1,0 +1,57 @@
+---
+import { walkthrough, query, ledger, rep } from '../data/walkthrough';
+import Icon from '../../../components/primitives/Icon.astro';
+import Button from '../../../components/primitives/Button.astro';
+import {homeCopy} from '../data/homepage';
+import {howScenes} from '../data/how-scenes';
+import type {SvgNode} from '../../../data/iso-kit';
+import {homeInline} from '../scripts/inline';
+// Each homepage version renders its own copy (homepage.ts).
+const copy=homeCopy,how=copy.howItWorks,holderCopy=copy.holder;
+// Owner, 25 Oct 2026, item 4: "build A on /2", sketch A of the item 4 board; 29 Oct 2026, sketch B of the How
+// it works board: the four steps as a vertical tablist beside one Navy stage, the shared tabs controller's markup
+// (tabs.ts). Each step's rail is the link down to the next step. Each step's panel holds its scene of a question's
+// life (how-scenes.ts, drawn here at rest like IsoScene.astro's) over the claim and a body line; then the section's
+// one button, which opens one question's story in a Navy card (four sentences,
+// each under its step's name), then Holding REP. how-path.js adds hover and the stage's motion, and runs the
+// button. The example's question, amounts and answers come from walkthrough.ts (one source), with a no-break space
+// before "REP"; it has no foot (owner, 29 Oct 2026: the whitepaper note went). The section reveal (reveal.js)
+// settles in the heading, the lead and Holding REP; the steps and the stage stay put: once the lead has landed,
+// how-path.js draws “paid” in the heading, then plays the shown step's scene.
+const path=how.path;
+const [,reported,challenged]=ledger,finalAnswer=walkthrough[walkthrough.length-1]!.outcome;
+const reps=(value:number)=>`${value} REP`;
+const values:Record<string,string>={fee:reps(rep.fee),bond:reps(rep.bond),challenge:reps(rep.challenge),share:reps(rep.share),burned:reps(rep.burned),reported:reported!.stake!,challenged:challenged!.stake!,final:finalAnswer!,question:query.title};
+// The example's sentences (homepage.ts): {name} is the value, **…** bold, and {+name} the value bold in Green
+// ({+words} with no such value sets the words themselves, as {+the reward}).
+const value=(text:string)=>text.replace(/\{(\w+)\}/g,(token,name:string)=>values[name]??token);
+const story=(text:string)=>text.split(/(\*\*.+?\*\*|\{\+[^}]+\})/).filter(Boolean).map(part=>part.startsWith('**')?{value:value(part.slice(2,-2)),win:false}:part.startsWith('{+')?{value:values[part.slice(2,-1)]??part.slice(2,-1),win:true}:value(part));
+// Holding REP where the points carry labels (every version): the point that earns leads, its term the answer under
+// the title and its sentence beside them; the others are the card's foot, with the link.
+const holderPoints:readonly {label?:string;text:string;earn?:boolean}[]=holderCopy.points;
+const holderLead=holderPoints.find(point=>point.earn)??holderPoints[0]!,holderRest=holderPoints.filter(point=>point!==holderLead);
+---
+<section class="how-it-works section" id="how-it-works" aria-labelledby="how-heading" data-how><div class="site-container">
+ <div class="section-heading"><h2 id="how-heading" data-paid-heading data-reveal>Know what happened?<br/>Get <span class="paid">paid<span class="paid-mark" aria-hidden="true"></span></span> to report it.</h2><p class="lead" data-reveal>{path.lead}</p></div>
+ <div class="how-path" data-tabs data-how-path data-panel-swap data-activation="automatic" data-active="0">
+  <div class="how-path-tabs" role="tablist" aria-orientation="vertical" aria-label={path.label}>{path.stops.map((stop,i)=><button type="button" role="tab" id={`how-tab-${stop.scene}`} aria-controls={`how-panel-${stop.scene}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} class="how-path-tab" aria-labelledby={`how-tab-${stop.scene}-name`} aria-describedby={`how-tab-${stop.scene}-note`}><span class="how-path-rail" aria-hidden="true" data-how-rail></span><span class="how-path-index" aria-hidden="true">{i+1}</span><span class="how-path-name" id={`how-tab-${stop.scene}-name`}>{stop.title}</span><span class="how-path-note" id={`how-tab-${stop.scene}-note`}>{stop.note}</span></button>)}</div>
+  <div class="how-path-stage">{path.stops.map((stop,i)=><div role="tabpanel" id={`how-panel-${stop.scene}`} aria-labelledby={`how-tab-${stop.scene}`} class="how-path-panel" tabindex="0" hidden={i!==0} data-how-step={stop.scene}><svg viewBox="0 0 336 168" width="336" height="168" class="how-scene" data-how-scene={stop.scene} aria-hidden="true"><g transform={howScenes.transform}>{(function render(nodes:SvgNode[]):any{return nodes.map(({tag,attrs,children})=>{const Tag=tag as any;return children?<Tag {...attrs}>{render(children)}</Tag>:<Tag {...attrs}/>;});})(howScenes.worlds[stop.scene])}</g></svg><div class="how-path-words"><p class="how-claim"><span class="setup">{stop.claim[0]}</span><span>{stop.claim[1]}</span></p><p class="how-body">{stop.body}</p></div></div>)}</div>
+ </div>
+ <button type="button" class="button outline how-toggle how-more" aria-expanded="true" aria-controls="how-example" data-how-more hidden><span class="how-toggle-open">{how.open}</span><span class="how-toggle-close">{how.close}</span><Icon name="chevron-down"/></button>
+ <div class="path-example" id="how-example" data-how-demo>
+  <div class="example" role="region" aria-label={path.example.label}>
+   <ol class="example-story">{path.example.story.map((text,i,all)=><li class:list={['example-step',{'is-you':i===all.length-1}]} data-example-row><span class="example-name">{path.stops[i]!.title}</span><p class="example-line">{story(text).map(part=>typeof part==='string'?part:<strong class:list={{'is-win':part.win}}>{part.value}</strong>)}</p></li>)}</ol>
+  </div>
+ </div>
+ {holderPoints.some(point=>point.label)?<div class="holding has-labels" data-reveal><div class="holding-top"><h3 class="holding-title">{holderCopy.title}</h3><p class="holding-earn">{holderLead.label}</p><p class="holding-line">{holderLead.text}</p></div><div class="holding-foot"><ul class="holding-notes">{holderRest.map(point=><li><span class="holding-label">{point.label}</span> {point.text}</li>)}</ul><Button href="/rep/" variant="outline">{'link' in holderCopy?holderCopy.link:'Learn about REP'}</Button></div></div>:<div class="holding" data-reveal><div class="holding-head"><h3 class="holding-title">{holderCopy.title}</h3>{'link' in holderCopy?<Button href="/rep/" variant="outline">{holderCopy.link}</Button>:<Button href="/rep/" variant="text">Learn about REP</Button>}</div><ul class="holding-points">{holderCopy.points.map(point=><li class:list={['holding-point',{'is-act':'act' in point,'is-earn':'earn' in point}]}>{'label' in point?<span class="holding-label">{point.label}</span>:<i class="holding-mark" aria-hidden="true"></i>}<p>{'lead' in point&&<Fragment><strong>{point.lead}</strong> </Fragment>}{point.text}</p></li>)}</ul></div>}
+</div></section><script is:inline set:html={homeInline.scripts.howPath}></script>
+<style>
+ /* One section answers “How do I take part, and how do I get paid?” (owner + Augus, 19 Oct 2026). The
+    steps, their stage, the example and Holding REP are laid out in home-page.css and home-extra.css. */
+ .how-it-works{background:var(--web-band);padding-block:96px}.section-heading{margin-bottom:48px}
+ /* “paid” is the promise, so it keeps a Green underline; it draws in once per visit as the
+    heading's lead lands (how-path.js) and is simply there otherwise. */
+ .paid{position:relative;display:inline-block}
+ .paid-mark{position:absolute;left:0;right:0;bottom:.02em;height:.1em;min-height:3px;background:var(--primary);transform-origin:left}
+ @media(max-width:767px){.how-it-works{padding-block:64px}}
+</style>

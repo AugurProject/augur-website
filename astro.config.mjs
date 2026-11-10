@@ -12,27 +12,12 @@ import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 
 import { site } from './src/data/site.ts';
-import { designs } from './src/designs/index.ts';
 import rehypeCallouts from './src/markdown/rehype-callouts.mjs';
 import rehypeHeadingEmoji from './src/markdown/rehype-heading-emoji.mjs';
 import rehypePortedContent from './src/markdown/rehype-ported-content.mjs';
 import rehypeWhitepaperLinks from './src/markdown/rehype-whitepaper-links.mjs';
 
-// The live homepage design: `site.homeDesign`, unless `HOME_DESIGN` names another one for this build.
-const homeDesign = process.env.HOME_DESIGN || site.homeDesign;
-if (!(/** @type {readonly string[]} */ (designs)).includes(homeDesign)) throw new Error(`Unknown HOME_DESIGN "${homeDesign}". Designs: ${designs.join(', ')}.`);
-
-/** Resolves `virtual:home-design` to the live design's Home.astro at build time. A dynamic import would
- * still bundle every design and link their CSS into `/`. @type {import('vite').Plugin} */
-const homeDesignPlugin = {
-  name: 'home-design',
-  enforce: 'pre',
-  resolveId(id) {
-    if (id === 'virtual:home-design') return fileURLToPath(new URL(`./src/designs/${homeDesign}/Home.astro`, import.meta.url));
-  },
-};
-
-// The build folder (dist, or the --outDir check:designs passes), set once the config is final.
+// The build folder (dist), set once the config is final.
 let clientDir = '';
 
 /** Workers static assets answer `/about` with a temporary 307 to `/about/`. This appends a permanent
@@ -81,5 +66,5 @@ export default defineConfig({
   // only touches the ported collections.
   markdown: { processor: unified({ remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex, rehypeWhitepaperLinks, rehypePortedContent] }) },
   integrations: [mdx({ processor: unified({ rehypePlugins: [rehypeHeadingEmoji, rehypeCallouts, rehypePortedContent] }) }), sitemap({ filter: isIndexable }), permanentTrailingSlash],
-  vite: { plugins: [homeDesignPlugin, tailwindcss()] }
+  vite: { plugins: [tailwindcss()] }
 });

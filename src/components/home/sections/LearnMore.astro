@@ -1,0 +1,37 @@
+---
+import {homeCopy} from '../data/homepage';
+import {navigation} from '../../../data/navigation';
+import {links,isExternal} from '../../../data/links';
+import {doorScenes,doorBox} from '../data/door-scenes';
+import type {SvgNode} from '../../../data/iso-kit';
+import Icon from '../../../components/primitives/Icon.astro';
+// Each homepage version renders its own copy (homepage.ts).
+// Item 6; owner, 26 Oct 2026: sketch A: no questions, three doors, the FAQ, the blog and Discord.
+// Each door is one link that fills its tile (the title's link stretches over it), so the accessible
+// name stays the title and the door's line describes it. Hrefs come from the navigation directory the
+// header and footer use, so the doors can't drift from those menus. No generic icons (owner): each door
+// is marked by its own object from the iso kit (door-scenes.ts), drawn here at rest like IsoScene.astro's.
+const keep=homeCopy.learnMore.keepGoing;
+// The blog is a page of this site again (ported from the old augur.net), so its door takes → like the FAQ's.
+// It is found by key or by path, whichever the navigation entry uses.
+const blog=navigation.resources.find(item=>item.linkKey==='archive'||item.href===links.archive.url)!;
+const discord=navigation.community.find(item=>item.linkKey==='discord')!;
+const doors=[
+ {id:'faq',...keep.faq,href:navigation.resources.find(item=>item.href==='/faq/')!.href,external:false},
+ {id:'blog',...keep.blog,href:blog.href,external:isExternal(blog.href)},
+ {id:'community',...keep.community,href:discord.href,external:true},
+] as const;
+// The section reveal (reveal.js): the heading, the lead, then the doors left to right.
+---
+<section class="home-learn section" id="learn-more" aria-labelledby="learn-heading"><div class="site-container">
+ <div class="section-heading"><h2 id="learn-heading" data-reveal>{keep.heading}</h2><p class="lead" data-reveal>{keep.lead}</p></div>
+ <ul class="doors">{doors.map(door=><li class="door" data-external={door.external?'':undefined} data-reveal="item">
+  <svg class="door-art" viewBox={`0 0 ${doorBox.w} ${doorBox.h}`} width={doorBox.w} height={doorBox.h} aria-hidden="true" focusable="false" data-door={door.id}><g transform={doorScenes[door.id].transform}>{(function render(nodes:SvgNode[]):any{return nodes.map(({tag,attrs,children})=>{const Tag=tag as any;return children?<Tag {...attrs}>{render(children)}</Tag>:<Tag {...attrs}/>;});})(doorScenes[door.id].world)}</g></svg><Icon name={door.external?'arrow-up-right':'arrow-right'} class="door-arrow"/>
+  <h3 class="door-title"><a class="door-link" href={door.href} aria-describedby={`door-${door.id}`}>{door.title}</a></h3>
+  <p class="door-line" id={`door-${door.id}`}>{door.line}</p>
+ </li>)}</ul>
+</div></section>
+<style>
+ .home-learn{background:var(--web-band);padding-block:72px 96px}
+ @media(max-width:767px){.home-learn{padding-block:64px}}
+</style>

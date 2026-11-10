@@ -28,7 +28,7 @@ if (!links.repToken.url.endsWith(currentRep.address)) throw new Error('links.rep
 /** As wallets show it: the first six and last four characters. */
 export const shortAddress = `${currentRep.address.slice(0, 6)}…${currentRep.address.slice(-4)}`;
 
-/** The hero's clause, also /2/'s How it works lead (homepage-v2.ts): one source for the fact. */
+/** The hero's clause, also /2/'s How it works lead (data/homepage.ts): one source for the fact. */
 export const stakedBehind = 'Every Augur Lituus answer has REP staked behind it';
 export const hero = {
   title: 'REP makes lying expensive.',

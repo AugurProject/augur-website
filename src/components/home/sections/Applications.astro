@@ -1,0 +1,186 @@
+---
+import { applications } from '../../../data/applications';
+import Button from '../../../components/primitives/Button.astro';
+import {homeCopy} from '../data/homepage';
+import {homeInline} from '../scripts/inline';
+// Each homepage version renders its own copy (homepage.ts). Augur's square mark stands in the case
+// tiles, with no builder icons, and the check glyph's own path in the answer chip. Its styles are
+// home-extra.css.
+const copy=homeCopy;
+// v2 (Ryan 8–11, Augus 1): the one-sentence lead, the DAO case's summary spread over the shared one (same
+// id and title) and Augus's builder block, liability first (title over
+// the reasons; the ask closes the reasons panel in home-extra.css). The lead's balance and the phone
+// spacing are in home-page.css.
+// v3 (Ryan 9–11) has the same lead, its own DAO case, and no builder block. v4 keeps v2's case and its own
+// builder copy.
+const cases=applications.map(app=>app.id==='governance'?{...app,...copy.applications.governance}:app);
+// v3 (Ryan 11) removes the builder block: its copy has no `builder`, so the block isn't rendered and the
+// section ends on the use-case example.
+const builder='builder' in copy.applications?copy.applications.builder:undefined;
+// The answer's check is Augur's check glyph's own centreline (assets/icons/augur/check.svg) drawn as a
+// stroke, so it can draw in.
+const check='4.5 10.5 8.25 14.25 15.5 7';
+// The right box (owner, 25 Oct 2026, from the item 3 mock): each case is a product card that waits, gets
+// its answer and acts, then a paragraph for builders (homepage.ts `cards`, home-extra.css,
+// use-cases.js). Arrow keys pick a tab (automatic activation); the root carries data-use-cases for its
+// script.
+// The market card is a query split in two (owner, 26 Oct 2026, "Split it is"): the market's price beside
+// Augur Lituus's status and answer. The insurance card is the same query as a relay (owner, 28 Oct 2026,
+// "Relay it is"): one line through the flight, Augur Lituus and the cover, an ordered list of three steps
+// under it. The DAO card is the same query as a switch (owner, 29 Oct 2026, "implement the Switch into
+// /melo"): one row for the upgrade and its go-live switch, then Augur Lituus's larger part, both answers as
+// chips over the line for the day it's open to challenge. Every review copy's DAO card is the switch (29 Oct
+// 2026: Ryan's had kept a proposal card). All three share the head and Augur Lituus's words (`cards.query`).
+// Each value that changes keeps every state in one cell, the resting one last and the others hidden from
+// screen readers, so no JavaScript, reduced motion and print show the end. Before the report Augur Lituus's
+// value is empty, never a dash (owner, 28 Oct 2026).
+const cards=copy.applications.cards;
+// The section reveal (reveal.js): the heading, the lead, the picker and the card stage as one group, then
+// the builder block. The card's loop starts once the group has landed.
+---
+<section class="applications section" aria-labelledby="applications-heading">
+ <div class="site-container">
+  <div class="section-heading"><h2 id="applications-heading" data-reveal>What can Augur&nbsp;Lituus power?</h2><p class="lead" data-reveal>{copy.applications.lead}</p></div>
+  <div class="cases" data-tabs data-use-cases data-panel-swap data-activation="automatic" data-active="0" data-reveal>
+   <div class="case-tabs" role="tablist" aria-label="Use cases" aria-orientation="vertical" style={`--count:${cases.length}`}>
+    {cases.map((app,i)=><button type="button" role="tab" id={`application-tab-${app.id}`} aria-controls={`application-panel-${app.id}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} class="case-tab"><span class="case-mark" aria-hidden="true"><span class="case-link"></span></span><span class="case-label"><span class="case-name">{app.title}</span><span class="case-blurb" aria-hidden="true">{app.summary}</span></span></button>)}
+   </div>
+   <div class="case-stage">
+    {cases.map((app,i)=><div role="tabpanel" id={`application-panel-${app.id}`} aria-labelledby={`application-tab-${app.id}`} class="case-panel" tabindex="0" hidden={i!==0}>
+     <p class="case-summary">{app.summary}</p>
+     {(card=>card&&<Fragment>
+      <div class="case-card" data-card-kind={'market' in card?'query':'flight' in card?'relay':'switch'}>
+       <div class="card-head"><span class="card-label">{card.label}<span class="sr-only">.</span></span><span class="split-states split-status" data-card="status"><span class="st-ask" aria-hidden="true"><i></i>{cards.query.statuses[0]}<b class="st-glow"></b></span><span class="st-rep" aria-hidden="true"><i></i>{cards.query.statuses[1]}</span><span class="st-fin"><span class="sr-only">Status: </span><i></i>{cards.query.statuses[2]}<span class="sr-only">.</span></span></span></div>
+       <p class="card-title">{card.title}</p>
+       {'market' in card?<div class="card-split">
+        <div class="split-cell" data-card="market">
+         <p class="split-top"><span class="split-name">{card.market.name}<span class="sr-only">:</span></span></p>
+         <p class="split-value"><span class="split-states" data-card="price-value"><span class="split-price" aria-hidden="true"><span class="split-states" data-card="price">{card.market.prices.map(price=><span>{price}</span>)}</span>¢</span><span class="split-win">{card.market.paid}</span></span></p>
+         <p class="split-note"><span class="split-states" data-card="price-note"><span aria-hidden="true">{card.market.pending}</span><span>{card.market.resolved}</span></span></p>
+        </div>
+        <div class="split-cell is-oracle" data-card="oracle">
+         <p class="split-top"><span class="split-by">{cards.query.name}<span class="sr-only">:</span></span></p>
+         <p class="split-value"><span class="split-states" data-card="answer"><span aria-hidden="true"></span><span aria-hidden="true">{card.oracle.answer}</span><span class="split-win">{card.oracle.answer}<span class="split-seal" aria-hidden="true"><svg class="card-check" viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1"/></svg></span></span></span></p>
+         <p class="split-note"><span class="split-states" data-card="answer-note"><span aria-hidden="true">{cards.query.notes[0]}</span><span aria-hidden="true">{cards.query.notes[1]}</span><span>{cards.query.notes[2]}<span class="sr-only">.</span></span></span></p>
+         <span class="split-wait" data-card="wait" aria-hidden="true"><i></i></span>
+        </div>
+       </div>:'flight' in card?<div class="card-relay">
+        <div class="relay-line" aria-hidden="true"><span class="relay-run"></span><span class="relay-done" data-card="run"></span><span class="relay-wait" data-card="wait"></span><span class="relay-paid" data-card="paid"></span><span class="relay-stop is-flight" data-card="stop-flight"></span><span class="relay-stop is-oracle" data-card="stop-oracle"></span><span class="relay-seal" data-card="seal"><svg class="card-check" viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1"/></svg></span><span class="relay-stop is-cover"></span><span class="relay-stop is-paid" data-card="stop-paid"></span></div>
+        <ol class="relay-steps">
+         <li class="relay-step is-flight" data-card="leg-flight"><span class="relay-name">{card.flight.name}<span class="sr-only">:</span></span> <span class="relay-value"><span class="split-states" data-card="flight"><span aria-hidden="true">{card.flight.states[0]}</span><span>{card.flight.states[1]}<span class="sr-only">,</span></span></span></span> <span class="relay-note"><span class="split-states" data-card="flight-note"><span aria-hidden="true">{card.flight.notes[0]}</span><span>{card.flight.notes[1]}<span class="sr-only">.</span></span></span></span></li>
+         <li class="relay-step is-oracle" data-card="oracle"><span class="relay-name split-by">{cards.query.name}<span class="sr-only">:</span></span> <span class="relay-value"><span class="split-states" data-card="answer"><span aria-hidden="true"></span><span aria-hidden="true">{card.oracle.answer}</span><span class="split-win">{card.oracle.answer}<span class="sr-only">.</span></span></span></span> <span class="relay-note"><span class="split-states" data-card="answer-note"><span aria-hidden="true">{cards.query.notes[0]}</span><span aria-hidden="true">{cards.query.notes[1]}</span><span>{cards.query.notes[2]}<span class="sr-only">.</span></span></span></span></li>
+         <li class="relay-step is-cover" data-card="leg-cover"><span class="relay-name">{card.cover.name}<span class="sr-only">:</span></span> <span class="relay-value"><span class="split-states" data-card="cover"><span aria-hidden="true"></span><span class="split-win">{card.cover.paid}<span class="sr-only">,</span></span></span></span> <span class="relay-note"><span class="split-states" data-card="cover-note"><span aria-hidden="true">{card.cover.notes[0]}</span><span>{card.cover.notes[1]}<span class="sr-only">.</span></span></span></span></li>
+        </ol>
+       </div>:<div class="card-switch">
+        <div class="switch-row" data-card="app">
+         <span class="switch-track" aria-hidden="true"><i class="switch-on" data-card="switch-on"></i><i class="switch-knob" data-card="knob"><b></b><b data-card="knob-on"></b><b data-card="knob-win"></b></i></span>
+         <span class="switch-text"><span class="switch-name">{card.upgrade.name}<span class="sr-only">:</span></span><span class="switch-line"><span class="switch-value"><span class="split-states" data-card="app-value"><span aria-hidden="true">{card.upgrade.states[0]}</span><span aria-hidden="true">{card.upgrade.states[1]}</span><span class="split-win">{card.outcome.status}<span class="sr-only">,</span></span></span></span><span class="switch-note"><span class="split-states" data-card="app-note"><span aria-hidden="true">{card.upgrade.notes[0]}</span><span aria-hidden="true">{card.upgrade.notes[1]}</span><span>{card.outcome.note}<span class="sr-only">.</span></span></span></span></span></span>
+        </div>
+        <div class="choice" data-card="oracle">
+         <p class="choice-by"><span class="split-by">{cards.query.name}<span class="sr-only">: {card.oracle.answer}.</span></span></p>
+         <div class="choice-row"><span class="choice-opt" aria-hidden="true">{card.oracle.answer}<i class="choice-ring" data-card="yes-ring"></i><i class="choice-fill" data-card="yes-fill"></i><span class="choice-pick" data-card="yes-pick">{card.oracle.answer}<svg class="card-check" viewBox="0 0 20 20" focusable="false"><polyline points={check} pathLength="1"/></svg></span></span><span class="choice-opt is-other" data-card="no" aria-hidden="true">{card.oracle.other}</span><span class="choice-note"><span class="split-states" data-card="answer-note"><span aria-hidden="true">{cards.query.notes[0]}</span><span aria-hidden="true">{cards.query.notes[1]}</span><span>{cards.query.notes[2]}<span class="sr-only">.</span></span></span></span></div>
+         <span class="split-wait choice-wait" data-card="wait" aria-hidden="true"><i></i></span>
+        </div>
+       </div>}
+      </div>
+      <div class="case-builders"><p class="builders-cue">{cards.cue}</p><p class="builders-line">{card.builders}</p></div>
+     </Fragment>)(cards[app.id])}
+    </div>)}
+   </div>
+  </div>
+  {builder&&<div class="builder-case" data-reveal>
+   <h3 class="builder-title" id="builder-title">{builder.title[0]}<br/>{builder.title[1]}</h3>
+   <ul class="builder-reasons" aria-labelledby="builder-title">{builder.reasons.map(reason=><li><strong>{reason.title}</strong> <span class="builder-point">{reason.line}</span></li>)}</ul>
+   <div class="builder-ask"><p><span class="ask-setup">{builder.ask[0]}</span> <span class="ask-payoff">{builder.ask[1]}</span></p><Button href="/contact/" variant="text">Talk to us</Button></div>
+  </div>}
+ </div>
+</section><script is:inline set:html={homeInline.scripts.useCases}></script>
+<style>
+ /* What can Augur Lituus power? (was "What could you build?"; owner, 18–19 Oct 2026). Written for
+    traders first; the heading names the product and the cases answer it. Organized as a list beside an
+    example (owner, 19 Oct 2026: "make this clear and organized"): on the left the three kinds of app,
+    each with its name and what it covers, so a reader sees every case without clicking; on the right one
+    worked example that reads top to bottom. Research: UMA's builder tabs make a real question the proof;
+    SEDA gives each use case one small live picture; NN/g asks that the selected tab join its panel. */
+ .applications{--case-gap:80px;padding-block:72px}.section-heading{margin-bottom:48px}
+ /* Balanced, with a no-break space in the name: "What can / Augur Lituus power?" never splits the name.
+    The heading is the section's one visible mention of the name; only the Insurance note names it again. */
+ #applications-heading{text-wrap:balance}
+ /* The list sits on the heading row's 500 column and runs through the 80 gutter into the example, so the
+    picked case and its example form one surface. The rows share the example's height. */
+ .cases{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);column-gap:var(--case-gap)}
+ .case-tabs{position:relative;isolation:isolate;display:grid;grid-auto-rows:1fr;margin-right:calc(-1 * var(--case-gap));background:var(--web-quiet)}
+ .case-tab{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;align-items:start;column-gap:20px;padding:24px calc(var(--case-gap) + 24px) 24px 32px;border:0;border-top:1px solid var(--web-outline);background:transparent;color:var(--muted-foreground);text-align:left;cursor:pointer;transition:border-color 240ms ease-out 280ms,color 240ms ease-out}
+ /* No hairline above the first case, the picked one or the case under it. */
+ .case-tab:first-child,.case-tab[aria-selected="true"],.case-tab[aria-selected="true"]+.case-tab{border-top-color:transparent;transition-delay:0ms}
+ /* The name's first line centers on the case's mark. */
+ .case-label{display:grid;gap:8px;min-width:0;padding-top:6px}
+ .case-name{font:400 clamp(20px,1.67vw,24px)/1.3 var(--font-heading);letter-spacing:-.01em;text-wrap:balance}
+ .case-blurb{font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
+ /* The picked case is the example's surface (owner, 6 Oct 2026: never a side edge). Unpicked cases
+    brighten their name and take the hover edge. */
+ .case-tab[aria-selected="true"]{color:var(--foreground);cursor:default;transition-delay:0ms,120ms}
+ @media(hover:hover) and (pointer:fine){.case-tab:not([aria-selected="true"]):hover{color:var(--foreground)}}
+ .case-tab:focus-visible{outline-offset:-2px}
+ /* Every case stays laid out in the one cell, the unpicked ones invisible, so the stage keeps one height
+    and nothing below it moves. */
+ .case-stage{display:grid;background:var(--web-tile)}
+ .case-panel{grid-area:1/1;display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:48px}
+ .case-panel[hidden]{display:flex!important;visibility:hidden}
+ /* The list carries each case's summary from 1024 up; the example keeps it for screen readers. */
+ .case-summary{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+ /* The builder's case (owner, 19 Oct 2026): the title heads the three reasons, which run across the
+    full width as three open columns, each an icon tile over its claim and point; the way in follows them.
+    A title alone in the 500 column beside the reasons left a dead block under it (owner: "the empty space
+    below is pretty weird"), so nothing here sits beside a taller neighbor. No boxes and no rules (owner:
+    rules over the columns didn't work, open columns did): the icon tiles anchor each reason, in the use-case
+    list's tile style (44 px, Dark 3), with a Green glyph that shows the benefit, never the thing the line
+    denies (owner, 19 Oct 2026: user-minus and gavel read as "remove user" and "you judge"): puzzle-piece
+    (it slots in), scales (a dispute, as in the REP rows' Challenge) and eye (anyone can see).
+    Later the same day the win-win became the title, in two lines over the reasons.
+    The ask (owner, 19 Oct 2026: "better place, better structured"): it trailed the reasons as a muted line,
+    a third "Talk to us" after the header's and before the footer's, while the 668 column beside the title
+    stood empty. From 1024 it is now the title's lead: the project's half takes the heading row every section
+    has (title in 500, lead in 668), the invitation stays in view while the reasons are read, and the half
+    ends on its evidence. Its question is muted and its offer Paper, the house setup and payoff, with the
+    button right after the text. In the DOM, and stacked below 1024, the ask still follows the reasons, so
+    reading and focus order end on it. */
+ .builder-case{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);grid-template-areas:"title ask" "reasons reasons";column-gap:var(--case-gap);row-gap:48px;align-items:start;margin-top:80px}
+ .builder-title{grid-area:title;margin:0;font:600 clamp(26px,2.22vw,32px)/1.25 var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
+ .builder-reasons{grid-area:reasons;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--case-gap);list-style:none;margin:0;padding:0}
+ .builder-reasons li{display:grid;align-content:start;font:400 18px/28px var(--font-heading);letter-spacing:-.01em;color:var(--muted-foreground);text-wrap:pretty}
+ .builder-reasons strong{display:block;margin-bottom:6px;font:600 clamp(20px,1.53vw,22px)/1.4 var(--font-heading);color:var(--foreground)}
+ .builder-point{display:block}
+ .builder-ask{grid-area:ask;align-self:center;display:flex;align-items:center;gap:16px 32px}
+ .builder-ask p{flex:0 1 auto;margin:0;font-size:18px;line-height:28px;color:var(--foreground);text-wrap:pretty}
+ .ask-setup,.ask-payoff{display:block}.ask-setup{color:var(--muted-foreground);text-wrap:balance}
+ .builder-ask :global(.button){flex:none}
+ @media(forced-colors:active){.case-stage{border:1px solid CanvasText}.case-tab:not([aria-selected="true"]):hover{outline:1px solid CanvasText;outline-offset:-1px}.case-tab[aria-selected="true"]{outline:1px solid CanvasText;outline-offset:-1px}}
+ @media(prefers-reduced-motion:reduce){.case-tab{transition:none}}
+ @media(max-width:1200px){.applications{--case-gap:48px}.case-tab{column-gap:16px;padding-left:24px}.case-panel{padding:40px}}
+ /* Below 1024 the list becomes rows of names above the example, which shows the summary itself. */
+ @media(max-width:1023px){
+  .cases{grid-template-columns:minmax(0,1fr)}
+  .case-tabs{grid-auto-rows:auto;margin:0 0 4px;gap:4px;background:none}
+  .case-tab{align-items:center;min-height:64px;padding:10px 20px;column-gap:14px;border-top:0;background:var(--web-quiet);transition-property:background-color,color;transition-delay:0ms}.case-label{padding-top:0}
+  .case-tab[aria-selected="true"]{background:var(--web-tile)}
+  .case-blurb{display:none}
+  .case-panel{padding:36px 32px 44px}
+  /* Stacked, the cases differ in height, so the stage fits the case shown instead of the tallest. */
+  .case-panel[hidden]{display:none!important}
+  .case-summary{position:static;width:auto;height:auto;margin:0 0 20px;overflow:visible;clip:auto;white-space:normal;max-width:34em;font-size:18px;line-height:28px;color:var(--muted-foreground);text-wrap:pretty}
+  .builder-case{display:block;margin-top:56px}.builder-title{margin-bottom:24px}
+  /* Stacked, each reason is a row: its icon tile beside its claim and point. */
+  .builder-reasons{grid-template-columns:minmax(0,1fr);row-gap:28px}
+  .builder-reasons li{grid-template-columns:44px minmax(0,1fr);column-gap:20px}
+  .builder-ask{flex-wrap:wrap;margin-top:40px}.builder-ask p{max-width:34em}
+ }
+ /* Phones: tighter rows and gutters. */
+ @media(max-width:767px){
+  .case-tab{min-height:56px;padding:8px 16px}
+  .case-panel{padding:28px 20px 36px}
+  .case-summary,.builder-ask p{font-size:16px;line-height:24px}
+  .builder-ask{flex-direction:column;align-items:flex-start;gap:20px}.builder-reasons li{column-gap:16px;grid-template-columns:40px minmax(0,1fr)}
+  .builder-reasons li{font-size:17px;line-height:26px}.builder-reasons strong{font-size:20px}
+ }
+</style>
