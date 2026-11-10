@@ -1,0 +1,8 @@
+/* The first-visit veil (page-intro.js): Navy over everything, the glyph, and a Green line that draws under it
+   while the fonts load; it dissolves as the hero's arrival starts. The page's own animations wait under it. */
+:root[data-intro]::before{content:'';position:fixed;inset:0;z-index:2147483646;background:#0e0e21 url(/brand/kit/glyph/augur-glyph-reversed.svg) center calc(50% - 12px)/44px auto no-repeat;pointer-events:none;transition:opacity 520ms cubic-bezier(.22,.61,.36,1)}
+:root[data-intro]::after{content:'';position:fixed;left:calc(50% - 28px);top:calc(50% + 30px);width:56px;height:2px;z-index:2147483647;background:#2ae7a8;transform:scaleX(0);transform-origin:left;pointer-events:none;animation:page-intro-line 1100ms cubic-bezier(.45,0,.2,1) 120ms forwards;transition:opacity 240ms ease-out}
+:root[data-intro=lifting]::before,:root[data-intro=lifting]::after{opacity:0}
+:root[data-intro=loading] .home-hero,:root[data-intro=loading] .home-hero *,:root[data-intro=loading] .home-hero *::before,:root[data-intro=loading] .home-hero *::after{animation-play-state:paused!important}
+@keyframes page-intro-line{to{transform:scaleX(1)}}
+@media print{:root[data-intro]::before,:root[data-intro]::after{display:none}}

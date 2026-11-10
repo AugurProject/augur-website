@@ -268,7 +268,7 @@ if (last) phase = (phase + (now - last) / 1000 / LOOP) % 1;
 last = now;
 if (build < 1) {
 if (hero.dataset.heroArrival !== 'entering') build = 1;
-else { if (!buildFrom) buildFrom = now + INTRO.delay; build = Math.min(1, Math.max(0, (now - buildFrom) / INTRO.build)); }
+else { if (!buildFrom && document.documentElement.dataset.intro !== 'loading') buildFrom = now + INTRO.delay; build = buildFrom ? Math.min(1, Math.max(0, (now - buildFrom) / INTRO.build)) : 0; }
 }
 if (now - drawn >= 1000 / FPS - 2) { draw(phase, now); drawn = now; }
 raf = requestAnimationFrame(frame);
