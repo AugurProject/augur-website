@@ -65,3 +65,10 @@ From the launch interview of 30 October 2026, unless noted.
     - `public/about.md`: the "Open source" bullet and its "Zoltar code" link.
     - `public/llms.txt`: the Products line, which listed Augur Lituus and Zoltar and how they fit together.
     - The Learn guide returns only when `showStatoblast` is on too; its `public/learn.md` bullet is restored with AUG72's steps.
+
+## 10 November 2026
+
+- **Homepage sheets before the sections.** The home-v2 sheets render before the page's sections, because they sat about 500 KB into the HTML and the hero painted unstyled until they arrived. (jubalm)
+- **First paint behind a veil.** The homepage's first paint is held behind a Navy veil with the reversed Augur glyph until the three web fonts (Sora 400 and 600, Schibsted Grotesk 400) have loaded: at least 700 ms on a first load, 300 ms on a reload, and at most 3 s. This supersedes the 29 October rule that the hero's headline and support line are visible from the first paint, for the homepage; without the veil (a `#section` link, say) the old arrival still plays. (jubalm)
+- **Floor first, then text.** The hero stages its arrival behind the veil: the floor builds out from the block first, then the headline lines, the support line, the actions and the underline settle in. (jubalm)
+- **Replay.** The intro replays on a reload and when the visitor scrolls back to the hero, and no longer plays once per tab session. The announcement bar's drop-in is unchanged and still plays once per session. (jubalm)

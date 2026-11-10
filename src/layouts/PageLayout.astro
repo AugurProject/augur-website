@@ -5,14 +5,18 @@ import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import chromeStyle from '../styles/chrome.css?inline';
 import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url';
+import bodyFont from '@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-400-normal.woff2?url';
+import introScript from '../motion/page-intro.js?raw';
+import introStyle from '../styles/page-intro.css?inline';
 import { site } from '../data/site';
 import { links } from '../data/links';
 // `bare` drops the announcement, header and footer for one-off pages such as the newsletter
 // results. `footer={false}` keeps the announcement and header but drops the footer, whose contact
 // band would repeat the contact page. `class` sets <main>'s class for the inner pages. `canonical={false}`
-// drops the canonical link and og:url, for the 404 page, which answers every unknown path.
-interface Props { title?: string; description?: string; noindex?: boolean; bare?: boolean; footer?: boolean; canonical?: boolean; class?: string }
-const { title = 'Augur | The frontier of decentralized truth', description = 'Real-world answers for onchain apps, controlled by no one.', noindex = false, bare = false, footer = true, canonical = true, class: className } = Astro.props;
+// drops the canonical link and og:url, for the 404 page, which answers every unknown path. `intro` arms the
+// first-visit veil (page-intro.js), the homepage only.
+interface Props { title?: string; description?: string; noindex?: boolean; bare?: boolean; footer?: boolean; canonical?: boolean; intro?: boolean; class?: string }
+const { title = 'Augur | The frontier of decentralized truth', description = 'Real-world answers for onchain apps, controlled by no one.', noindex = false, bare = false, footer = true, canonical = true, intro = false, class: className } = Astro.props;
 // Canonical and share URLs use `site` in astro.config.mjs (https://www.augur.net) on every host, so a
 // workers.dev preview points search engines and share cards at the canonical page.
 const canonicalUrl = canonical ? new URL(Astro.url.pathname, Astro.site).href : undefined;
@@ -56,6 +60,8 @@ const markdown = !bare && !noindex && mdFiles.has(mdPath) ? mdPath : undefined;
   <link rel="icon" href="/brand/kit/rep-token/rep-token-icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/brand/kit/rep-token/rep-token-icon.png" />
   <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
+  {intro && <style is:inline set:html={introStyle}></style>}{intro && <script is:inline set:html={introScript}></script>}
   <script is:inline define:vars={analytics}>if(location.hostname===host){const tag=document.createElement('script');tag.async=true;tag.src='https://www.googletagmanager.com/gtag/js?id='+id;document.head.append(tag);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};gtag('js',new Date());gtag('config',id,{allow_google_signals:true,allow_ad_personalization_signals:true});}</script>
  </head>
  <body>

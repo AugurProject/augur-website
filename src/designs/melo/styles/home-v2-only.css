@@ -442,7 +442,7 @@
 .home-v2 .hero-video{order:1;width:100%;aspect-ratio:4/3;max-height:56svh;margin-top:calc(min(75vw,56svh) * -.3)}.home-v2 .hero-scroll{display:none}
 .home-v2 .hero-inner{grid-template-columns:minmax(0,1fr)}.home-v2 .hero-copy{max-width:620px}
 }
-@keyframes hero-video-in{from{opacity:0;transform:scale(1.04)}}
+@keyframes hero-video-in{from{opacity:0}}
 @media print{.home-v2 .hero-video{display:none}}
 @media(forced-colors:active){.home-v2 .hero-video{display:none}}
 /* Hero review (22 Oct 2026). From 1024 px the two actions keep the standard control: 48 px, Sora 600 16/24,

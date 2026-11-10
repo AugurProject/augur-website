@@ -19,17 +19,19 @@ export function timeAt(curve:string,progress:number){
  for(let step=0;step<24;step++){const mid=(low+high)/2;if(at(y1,y2,mid)<progress)low=mid;else high=mid;}
  return at(x1,x2,(low+high)/2);
 }
-/** The hero's arrival (hero review, 22 Oct 2026; the scroll-motion brief, 29 Oct 2026). On phones the support
- * paragraph is the Largest Contentful Paint (measured), and a fade held it back, so the headline and the support line
- * are visible from the first paint and only rise 8 px, each under 300 ms: the lines `lines`, then the support `copy`. The
- * underline draws as "decentralized" settles, before the actions arrive, and retracts before the scroll cue
- * fades in. The art (`field`) fades in once the text has landed and is in by the time it used to be, because at
- * 1440 the floor's still is the LCP element and counts only once its fade ends. */
+/** The hero's arrival (hero review, 22 Oct 2026; the scroll-motion brief, 29 Oct 2026; owner, 10 Nov 2026). The art's layer
+ * (`field`) fades in briefly and the floor builds itself (`floor`, hero-floor-v2.js): from `delay` after its first frame a
+ * wave of light runs out from the block over `build`, and the loop starts at `phase`. The text values here (`lines`, `copy`,
+ * `actions`, `underline`) are the arrival without the page veil, where the headline and the support line are visible from the
+ * first paint and only rise 8 px, since on phones the support paragraph is the Largest Contentful Paint (measured) and a fade
+ * held it back. Behind the veil, and on a replay, page-intro.css stages the text after the floor instead and overrides those
+ * delays; `underlineOut` and `scrollCue` apply to both. hero-arrival.js ends the arrival after 3.8 s. */
 export const heroTimeline = {
   lines:[{start:0,end:280},{start:40,end:320},{start:80,end:360}], copy:{start:120,end:400}, actions:{start:420,end:720},
-  underline:{start:280,end:800}, underlineOut:{start:1900,end:2400}, underlineHover:320, field:{start:600,end:2000},
+  underline:{start:280,end:800}, underlineOut:{start:2600,end:3100}, underlineHover:320, field:{start:120,end:520},
+  floor:{delay:160, build:1500, phase:.1},
   /** Scroll cue: fades in once the underline has gone, then loops until the page scrolls. */
-  scrollCue:{start:2400,end:2800,cycle:2400},
+  scrollCue:{start:3100,end:3500,cycle:2400},
 } as const;
 /** One-time answer ribbon: a Green band sweeps under the statement. */
 /** Each word of the statement rises `rise` em into place, in Navy, as the
