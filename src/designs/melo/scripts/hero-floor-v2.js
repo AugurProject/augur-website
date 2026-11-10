@@ -259,6 +259,8 @@ return true;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const entering = hero.dataset.heroArrival === 'entering';
 let phase = entering ? INTRO.phase : STILL, build = entering ? 0 : 1, buildFrom = 0, last = 0, drawn = 0, raf = 0, visible = false, printing = false, mounted = false;
+// A replay (hero-arrival.js dispatches heroreplay as the visitor scrolls back up to the hero) builds the floor out from the block again.
+hero.addEventListener('heroreplay', () => { build = 0; buildFrom = 0; phase = INTRO.phase; });
 const running = () => visible && !document.hidden && !reduced.matches;
 const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; };
 const frame = now => {

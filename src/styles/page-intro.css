@@ -19,3 +19,13 @@
 @keyframes page-intro-rise{from{opacity:0;transform:translateY(28px)}}
 @keyframes page-intro-rise-soft{from{opacity:0;transform:translateY(12px)}}
 @keyframes page-intro-fade{from{opacity:0;visibility:hidden}}
+/* A replay on scrolling back to the hero (hero-arrival.js sets data-hero-replay): no veil, so the text starts sooner, and the
+   underline runs under its own keyframe names so it restarts. */
+:root[data-intro-played] .home-hero[data-hero-arrival=entering][data-hero-replay] [data-hero-line]{animation-delay:150ms}
+:root[data-intro-played] .home-hero[data-hero-arrival=entering][data-hero-replay] [data-hero-line]:nth-of-type(2){animation-delay:240ms}
+:root[data-intro-played] .home-hero[data-hero-arrival=entering][data-hero-replay] [data-hero-line]:nth-of-type(3){animation-delay:330ms}
+:root[data-intro-played] .home-hero[data-hero-arrival=entering][data-hero-replay] .hero-support{animation-delay:520ms}
+:root[data-intro-played] .home-hero[data-hero-arrival=entering][data-hero-replay] .hero-actions{animation-delay:780ms}
+:root[data-intro-played] .home-hero[data-hero-replay] .hero-emphasis::after{animation-name:hero-underline-in-replay,hero-underline-out-replay;animation-delay:1050ms,2600ms}
+@keyframes hero-underline-in-replay{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes hero-underline-out-replay{from{transform:scaleX(1)}to{transform:scaleX(0)}}

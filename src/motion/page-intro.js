@@ -9,8 +9,9 @@
 (() => {
   const root = document.documentElement, armed = performance.now(), MIN = 700, MAX = 3000, LIFT = 520;
   const navigation = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : undefined;
-  if ((navigation && navigation.type !== 'navigate') || location.hash || document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  try { if (sessionStorage.getItem('augur:intro-seen') === '1') return; sessionStorage.setItem('augur:intro-seen', '1'); } catch {}
+  const reload = !!navigation && navigation.type === 'reload';
+  if ((navigation && navigation.type !== 'navigate' && !reload) || location.hash || document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try { if (!reload && sessionStorage.getItem('augur:intro-seen') === '1') return; sessionStorage.setItem('augur:intro-seen', '1'); } catch {}
   // `introPlayed` stays for the page's life: the hero stages its arrival behind the veil (page-intro.css).
   root.dataset.intro = 'loading'; root.dataset.introPlayed = '';
   let lifted = false;
@@ -35,5 +36,5 @@
     await Promise.all(faces.map(face => set.load(face))).catch(() => {});
     await set.ready;
   };
-  wait().catch(() => {}).then(() => setTimeout(lift, Math.max(0, MIN - (performance.now() - armed))));
+  wait().catch(() => {}).then(() => setTimeout(lift, Math.max(0, (reload ? 300 : MIN) - (performance.now() - armed))));
 })();
