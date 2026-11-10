@@ -23,11 +23,15 @@ export function timeAt(curve:string,progress:number){
  * paragraph is the Largest Contentful Paint (measured), and a fade held it back, so the headline and the support line
  * are visible from the first paint and only rise 8 px, each under 300 ms: the lines `lines`, then the support `copy`. The
  * underline draws as "decentralized" settles, before the actions arrive, and retracts before the scroll cue
- * fades in. The art (`field`) fades in once the text has landed and is in by the time it used to be, because at
- * 1440 the floor's still is the LCP element and counts only once its fade ends. */
+ * fades in. The art's layer (`field`) only fades in briefly, as the text lands, because at 1440 the floor's still is
+ * the LCP element and counts only once its fade ends. The floor then builds itself (`floor`, hero-floor-v2.js): from
+ * `delay` after its first frame, a wave of light runs out from the block to the edges over `build`, each square
+ * lighting as the wave passes it and settling into the floor behind it, and the loop starts at `phase`, so the first
+ * reports are already running in as the wave ends and the block starts to fill about a second later. */
 export const heroTimeline = {
   lines:[{start:0,end:280},{start:40,end:320},{start:80,end:360}], copy:{start:120,end:400}, actions:{start:420,end:720},
-  underline:{start:280,end:800}, underlineOut:{start:1900,end:2400}, underlineHover:320, field:{start:600,end:2000},
+  underline:{start:280,end:800}, underlineOut:{start:1900,end:2400}, underlineHover:320, field:{start:120,end:520},
+  floor:{delay:160, build:1500, phase:.1},
   /** Scroll cue: fades in once the underline has gone, then loops until the page scrolls. */
   scrollCue:{start:2400,end:2800,cycle:2400},
 } as const;

@@ -6,9 +6,12 @@
 // hero video's layer, cropped like object-fit: cover at 90% 50% (home-v2-only.css places and fades the
 // layer), at every width, at 30 frames a second. The markup is a still of the loop's 0.76 point, the
 // complete block, rendered from this code; no-JavaScript visitors keep it, the loop starts on that frame
-// so the swap is invisible, and reduced motion draws it and stops. A first-visit arrival fades the layer
-// in from nothing, so there the loop starts at its rest point instead: the floor arrives calm and the
-// block builds once the copy has been read (hero review, 22 Oct 2026). Like the other loops it plays while
+// so the swap is invisible, and reduced motion draws it and stops. On a first-visit arrival the floor
+// builds itself instead (heroTimeline.floor, written in at build time): a wave of light runs out from the
+// block to the edges, each square lighting as it passes and settling into the floor behind it, and the loop
+// starts near its rest point, so the first reports are running in as the wave ends and the block fills
+// once the copy has been read (hero review, 22 Oct 2026). Pressing, focusing or leaving the hero during the
+// build, which settles the arrival, completes the floor at once. Like the other loops it plays while
 // the hero is on screen and the tab is visible,
 // and holds its frame otherwise. Print and forced colours hide it.
 // While it plays it answers the visitor (owner: "make it interactive"): a fine pointer
@@ -20,7 +23,7 @@ const box = document.querySelector('[data-hero-floor]');
 const hero = box && box.closest('[data-home-hero]');
 const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
 if (!hero || !ctx || !('IntersectionObserver' in window) || !('ResizeObserver' in window)) return;
-const TAU = Math.PI * 2, LOOP = 12, FPS = 30, STILL = .76;
+const TAU = Math.PI * 2, LOOP = 12, FPS = 30, STILL = .76, INTRO = __FLOOR__;
 // Page Navy, the floor's royal navy at rest and lit (the owner's request, not yet a brand token), and the
 // floor's Green: brand Green at 65% over Navy, with no glow, so the hero's button keeps the only full Green
 // on the screen (owner, 22 Oct 2026: "light the floor's block at about 60–70% Green with no glow").
@@ -31,6 +34,9 @@ const NAVY = '#0e0e21', BASE = [27, 39, 102], LIT = [46, 72, 178], GREEN = [42, 
 const C = 15, R = 15, BLOCK = 8, HALF = 4, TILE = .39, LIFT = .45, BLINK = .8, OLD = .063, SPEED = 90;
 // About a fifth of the squares twinkle (by 45% either way), the rest hold still in the cached floor.
 const TWINKLE = .22, DEPTH = .45;
+// The arrival's wave: it reaches the outer ring at WAVE of the build, each square is scattered up to SCATTER
+// later, and a square takes CREST of the build to light and settle.
+const WAVE = .66, SCATTER = .14, CREST = .2;
 const VW = 1600, VH = 900, CX = VW * .7, CY = VH * .52, MAXD = 15;
 const PITCH = 42 * Math.PI / 180, DIST = C * 1.9 + 6, F = (VH / 2) / Math.tan(19 * Math.PI / 180);
 const CA = Math.cos(PITCH), SA = Math.sin(PITCH);
@@ -51,6 +57,8 @@ const c = { idx: cells.length, i, j, inBlock, rank: inBlock ? order[(j + HALF) *
 c.dim = (.34 + .26 * c.r2) * (.55 + .55 * pulse(d / MAXD, .62)) * .89;
 c.fog = (1 - band(C - 7, C + .5, Math.abs(i))) * (1 - band(R - 9, R + .5, j));
 c.ring = Math.max(Math.max(-HALF - i, i - HALF + 1, 0), Math.max(-HALF - j, j - HALF + 1, 0));
+// When the arrival's wave reaches it: the block first, then ring by ring to the edges, a little scattered.
+c.wait = WAVE * c.ring / (C - HALF) + SCATTER * c.r3;
 // Squares that change on every frame and so never rest in the cached floor.
 c.twinkle = !inBlock && c.r1 < TWINKLE; c.old = !inBlock && c.r5 < OLD; c.always = inBlock || c.twinkle || c.old;
 cells.push(c);
@@ -181,7 +189,9 @@ const draw = (p, now) => {
 reports(p);
 if (now) visitor(now);
 ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
-ctx.drawImage(rest, 0, 0);
+// While the floor builds, every square changes on every frame, so the cached floor is not used.
+const building = build < 1, front0 = build * (WAVE + SCATTER + CREST);
+if (building) { ctx.fillStyle = NAVY; ctx.fillRect(0, 0, canvas.width, canvas.height); } else ctx.drawImage(rest, 0, 0);
 ctx.setTransform(view[0], 0, 0, view[0], view[1], view[2]);
 // Then only the squares that change this frame: the twinkling and blinking ones, the block, and any that
 // a report, the ring or the visitor lights. One that rests in the cached floor is wiped back to Navy first.
@@ -191,12 +201,17 @@ let n = 0, wipe = false;
 ctx.beginPath();
 for (const c of cells) {
 const k = c.idx;
-if (!c.always && lightA[k] < .01 && lightB[k] < .01 && lightG[k] < .01 && !(ringOn && Math.abs(c.ring - front) < 4.5)) continue;
+if (!building && !c.always && lightA[k] < .01 && lightB[k] < .01 && lightG[k] < .01 && !(ringOn && Math.abs(c.ring - front) < 4.5)) continue;
 square(c, p);
-const a = Math.max(A, lightA[k]), b = Math.max(B, lightB[k]), g = Math.max(G, lightG[k]);
+let a = Math.max(A, lightA[k]), b = Math.max(B, lightB[k]), g = Math.max(G, lightG[k]);
+if (building) {
+// The square comes in as the wave passes, lit to the floor's bright navy at the wave's crest.
+const x = (front0 - c.wait) / CREST, shown = smooth(x), crest = x > 0 && x < 1.6 ? pulse(x - .45, .4) : 0;
+a = Math.max(a * shown, .62 * crest); b = Math.max(b * shown, crest); g *= shown;
+}
 const alpha = Math.min(1, a) * c.fog;
 if (c.inBlock) { alphas[k] = alpha; qbs[k] = Math.round(b * STEPS); qgs[k] = Math.round(g * STEPS); heights[k] = H; continue; }
-if (!c.always) { quad(ctx, c.low); wipe = true; }
+if (!c.always && !building) { quad(ctx, c.low); wipe = true; }
 if (alpha < .01) continue;
 const qa = Math.round(alpha * 31), qb = Math.round(b * STEPS), qg = Math.round(g * STEPS);
 keys[n++] = (((qa * 17 + qb) * 17 + qg) << 10) | k;
@@ -242,7 +257,8 @@ return true;
 };
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-let phase = hero.dataset.heroArrival === 'entering' ? 0 : STILL, last = 0, drawn = 0, raf = 0, visible = false, printing = false, mounted = false;
+const entering = hero.dataset.heroArrival === 'entering';
+let phase = entering ? INTRO.phase : STILL, build = entering ? 0 : 1, buildFrom = 0, last = 0, drawn = 0, raf = 0, visible = false, printing = false, mounted = false;
 const running = () => visible && !document.hidden && !reduced.matches;
 const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; };
 const frame = now => {
@@ -250,13 +266,17 @@ raf = 0;
 if (!running()) { sync(); return; }
 if (last) phase = (phase + (now - last) / 1000 / LOOP) % 1;
 last = now;
+if (build < 1) {
+if (hero.dataset.heroArrival !== 'entering') build = 1;
+else { if (!buildFrom) buildFrom = now + INTRO.delay; build = Math.min(1, Math.max(0, (now - buildFrom) / INTRO.build)); }
+}
 if (now - drawn >= 1000 / FPS - 2) { draw(phase, now); drawn = now; }
 raf = requestAnimationFrame(frame);
 };
 const sync = () => {
 if (printing) { stop(); return; }
 if (!mounted) { if (!size()) return; canvas.setAttribute('aria-hidden', 'true'); box.append(canvas); mounted = true; draw(phase); }
-if (reduced.matches) { stop(); phase = STILL; draw(phase); box.dataset.floor = 'still'; return; }
+if (reduced.matches) { stop(); phase = STILL; build = 1; draw(phase); box.dataset.floor = 'still'; return; }
 if (!running()) { stop(); box.dataset.floor = 'paused'; return; }
 box.dataset.floor = 'running';
 if (!raf) raf = requestAnimationFrame(frame);
