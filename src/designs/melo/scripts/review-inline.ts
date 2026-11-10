@@ -1,5 +1,5 @@
-// Melo's sheets and scripts, ported from the web lab as strings and rendered is:inline after their markup
-// (Home.astro renders the sheets after the sections; each section renders its script after itself). The
+// Melo's sheets and scripts, ported from the web lab as strings and rendered is:inline
+// (Home.astro renders the sheets before the sections; each section renders its script after itself). The
 // sheets come after every component style, so their rules win specificity ties as they do in the lab.
 // `?inline` is processed, minified CSS; `?raw` is the file as written, with its data written in below.
 import type {ReviewVariant} from '../data/homepage-review';
