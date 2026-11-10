@@ -6,7 +6,7 @@
 import { twoRoads } from './two-roads';
 import { middleman } from './middleman';
 import { catapult } from './catapult';
-export type { SvgNode } from './iso-kit';
+export type { SvgNode } from '../../../data/iso-kit';
 
 export const isoScenes = { roads: twoRoads, middleman, catapult };
 export type IsoKind = keyof typeof isoScenes;

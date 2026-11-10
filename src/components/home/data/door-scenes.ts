@@ -11,7 +11,7 @@
  * stands on the foot of its box, left-aligned with the words below it. No block hides or touches another (their
  * screen spans never overlap). The hover parts are `data-door-part`: CSS moves them with transform and opacity;
  * touch, no JavaScript, reduced motion and print show the rest frame. */
-import { M, P, block, node, plane, quad, mix, r2, card, navy, green, deep, type Box, type Material, type SvgNode, type Point } from './iso-kit';
+import { M, P, block, node, plane, quad, mix, r2, card, navy, green, deep, type Box, type Material, type SvgNode, type Point } from '../../../data/iso-kit';
 
 export type DoorKind = 'faq' | 'blog' | 'community';
 // The emblem's box in px at 1440, and the one scale its objects are drawn at.

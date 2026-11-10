@@ -1,5 +1,5 @@
 /* Melo's site chrome, ported from the web lab (chrome.css at 1b95a3a): the header and footer rules,
-   shared by every page and both homepage designs. PageLayout renders it inline before the announcement
+   shared by every page and the homepage. PageLayout renders it inline before the announcement
    bar, after the components' own styles, so it wins a specificity tie; every rule starts with .site-header
    or .site-footer. SiteHeader.astro carries the rest: the Resources rows' square mark, the Products lead
    card as one link, "Menu" and "Close", and headroom.ts. */

@@ -13,7 +13,7 @@ import ribbonScript from './ribbon.js?raw';
 import revealScript from './reveal.js?raw';
 import {isoTracks} from '../data/tenets-iso';
 import {howActs} from '../data/how-scenes';
-import {easing,timing,useCaseTimeline,howPathTimeline,roadmapTimeline,ribbonTimeline,revealTimeline} from '../motion/timelines';
+import {easing,timing,heroTimeline,useCaseTimeline,howPathTimeline,roadmapTimeline,ribbonTimeline,revealTimeline} from '../motion/timelines';
 // Comment lines and indentation are dropped; the line breaks stay, so the script parses as written.
 const compact = (js: string) => js.replace(/^\s*\/\/.*\n/gm, '').replace(/^[ \t]+/gm, '').trim();
 // `tenets` plays the isometric Why Augur scenes; `floor` the hero's live
