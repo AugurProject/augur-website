@@ -15,7 +15,7 @@ wait until its deploy is live and `npm run check:launch` passes before merging t
 
 ## Verification
 
-<!-- What you checked, against which revision, and the result: `npm run build`, `npm run check:designs`, `npm run check:launch`, browser checks. Say what you did not check. -->
+<!-- What you checked, against which revision, and the result: `npm run build`, `npm run check:launch`, browser checks. Say what you did not check. -->
 
 ## Notes
 

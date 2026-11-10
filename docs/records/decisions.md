@@ -6,7 +6,7 @@ Closed decisions, oldest first, one entry each, with who decided and where it wa
 
 - **Hover-edge record.** The Adaptations entry in [design reference](../reference/design.md#adaptations) (19 October 2026, Green at 50% opacity, now the design system's `--brand-hover-edge`) is the written record of the decision; no other record is needed. (jubalm)
 - **Adaptation approval records.** None are needed: not for the colour roles or the Green hover and pressed shades, which now come from the design system, nor for the Crimson error border or type and composition, which stay marked "Approval not found". (jubalm)
-- **Live homepage design.** `melo` replaces `current` as the live homepage design (`homeDesign` in `site.ts`); `current` stays buildable. (jubalm)
+- **Live homepage design.** `melo` replaces `current` as the live homepage design (`homeDesign` in `site.ts`); `current` stays buildable. (jubalm) Superseded 10 November 2026: `current` and the design switch were removed. (jubalm, "let's proceed with the cleanup")
 
 ## 30 October 2026
 

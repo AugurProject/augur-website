@@ -13,7 +13,7 @@ import {site} from '../../data/site';
 // footer heading is an h2, a peer of the contact title rather than nested under it.
 // On the homepage the footer settles in as one group, with no stagger (reveal-v2.js); every other page renders
 // it unchanged.
-const reveal=Astro.url.pathname==='/'&&site.homeDesign==='melo'?'':undefined;
+const reveal=Astro.url.pathname==='/'?'':undefined;
 // With the forms off (forms.enabled), the newsletter column points to where updates already appear.
 const follow:{label:string;href:string;logo?:string}[]=[{label:'Blog',href:links.archive.url},{label:'RSS feed',href:'/rss.xml'},{label:'X',href:links.x.url,logo:'x-logo'}];
 ---
