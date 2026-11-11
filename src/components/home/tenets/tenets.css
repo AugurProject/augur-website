@@ -1,0 +1,64 @@
+/* Tenets section styles (Home.astro renders this sheet inline with the others, scoped to .home-page). */
+/* Why Augur: heading row, the answer band and the cards, one heading gap apart (v1: 56 and 48). */
+.home-page #why-augur>.site-container:first-child{padding-block:0}
+.home-page #why-augur .tenet-grid{padding-block:var(--heading-gap) 0}
+/* Why Augur (Ryan 5 and 17, Augus 3). The cards carry the differentiators, so the claims get bolder
+   through type alone: H3 24/32 (DESIGN.md) wherever every claim line still fits on one line, H4 20/26
+   elsewhere, and both lines in Paper, since the first line is now a differentiator itself ("No
+   governance."), not a muted setup. The tab returns to 184 / 168 px: "Permissionless" is the longest
+   label again (the 200 px tab was for "Bribery-resistant", 18 Oct). Bodies balance, so no line ends on
+   a stray "No". Measured with the v2 copy at 1024–1440 (every 20–40 px), 1023, 900, 768 and 360–600:
+   the three cards and the two reader cells keep equal line counts, so none has an empty foot. */
+.home-page .tenet-card{--tab:184px}
+/* Ryan's lead runs to two lines at 1024 and on phones; balanced, it never leaves "paid." alone. */
+.home-page .tenets .lead{text-wrap:balance}
+.home-page .tenet-claim{font-size:20px;line-height:26px}
+.home-page .tenet-claim .setup{color:inherit}
+.home-page .tenet-body{text-wrap:balance}
+@media(min-width:1200px),(min-width:768px) and (max-width:1023px){.home-page .tenet-claim{font-size:24px;line-height:32px}}
+/* 1024–1199: three cards in a narrow row (a 229–300 px column). The insets tighten to 24 (the closer
+   keeps its text on the card text edge: 24 plus the 12 px half gutter) and the reader lines step down
+   to 18/27, as on phones, so both payoffs wrap at the same widths. */
+@media(min-width:1024px) and (max-width:1199px){.home-page .tenet-tab{padding:0 24px}.home-page .tenet-visual{padding:24px}.home-page .tenet-copy{padding:24px}.home-page .closer-line{font-size:18px;line-height:27px}}
+/* Tablet: the diagram sits beside the copy, and the shorter v2 copy would leave the copy column's
+   foot empty, so the copy centres against the diagram, as the diagram already does. */
+@media(max-width:1023px){.home-page .tenet-copy{justify-content:center}}
+@media(min-width:601px) and (max-width:767px){.home-page .closer-line{font-size:18px;line-height:27px}}
+/* Phones: the closer statement in H4 fits one line from 375 px; the gaps tighten to the scale's 16 / 12. */
+@media(max-width:600px){.home-page .tenet-card{--tab:168px}.home-page .tenet-grid{gap:16px}.home-page .tenet-visual{padding:12px 24px 16px}}
+/* Why Augur cards: isometric scenes (owner, 22 Oct 2026: "isometric for all three"): Two roads, Middleman
+   crumbles and the Catapult. IsoScene.astro draws each scene's resting frame from tenets-iso.ts;
+   tenets-iso.js plays the 12 s loop with transform and opacity only. Every moving part turns or scales
+   about its own box, the barrier arm about its post and the tower's cubes about their feet. The Catapult's
+   beam and trays turn about their own origin, which the drawing puts on the pin and on the beam's ends. The
+   drawing is clipped to its box. */
+.home-page .tenet-visual .tenet-iso{overflow:hidden}
+.tenet-iso [data-iso]{transform-box:fill-box;transform-origin:50% 50%}
+.tenet-iso [data-iso="roads-arm"]{transform-origin:100% 50%}
+.tenet-iso [data-iso^="mid-cube"]{transform-origin:50% 100%}
+.tenet-iso [data-iso].iso-pin{transform-box:view-box;transform-origin:0 0}
+/* Why Augur closer (owner, 23 Oct 2026; statement out of the panel, 25 Oct). The statement is the closer's
+   <h3>, set on the page 64 under the cards and 24 over a panel that holds only the readers, so it reads as
+   the section's last heading and the readers get the box. The readers are a list: equal halves from 1024,
+   stacked below, each with an <h4> label (the card tabs' label, scaled up), the setup in Pewter and the
+   payoff as the strongest line. Sizes step down where the halves narrow, so both keep one setup line and
+   one payoff line (Sora, measured 25 Oct: payoffs 484 px at 22 and 396 at 18, the longest setup 409 at 18
+   and 364 at 16, in 528 px columns at 1280 and 416 at 1024). Statement / label / setup / payoff: 28 / 20 /
+   18 / 22 from 1280, 24 / 16 / 16 / 18 at 1024–1279 and on phones (two payoff lines at 360), 24 / 18 / 16 /
+   20 on tablets. No hover edge, since nothing here is a control. Forced colours draw the panel's border, as
+   the cards'. */
+.home-page .tenet-closer{display:block;margin-top:40px;background:none}
+.home-page .tenet-closer::after{display:none}
+.home-page .closer-head{margin:0 0 24px;font-size:28px;line-height:34px;letter-spacing:-.005em;color:var(--foreground);text-wrap:balance}
+.home-page .closer-readers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;padding:0;list-style:none;background:var(--web-tile)}
+.home-page .closer-reader{padding:32px}
+.home-page .closer-reader+.closer-reader{border-left:1px solid var(--web-outline)}
+.home-page .closer-who{gap:10px;margin:0 0 16px;font-size:20px;line-height:26px;letter-spacing:0}
+.home-page .closer-who::before{width:8px;height:8px}
+.home-page .closer-line .setup{font-size:18px;line-height:28px;font-weight:400}
+.home-page .closer-line .payoff{margin-top:6px;font-size:22px;line-height:30px;font-weight:600}
+@media(max-width:1279px){.home-page .closer-head{font-size:24px;line-height:32px}.home-page .closer-who{gap:8px;margin-bottom:12px;font-size:16px;line-height:24px}.home-page .closer-who::before{width:6px;height:6px}.home-page .closer-line .setup{font-size:16px;line-height:24px}.home-page .closer-line .payoff{margin-top:4px;font-size:18px;line-height:27px}}
+@media(max-width:1199px){.home-page .closer-reader{padding:24px}}
+@media(max-width:1023px){.home-page .tenet-closer{margin-top:28px}.home-page .closer-head{margin-bottom:20px}.home-page .closer-readers{grid-template-columns:minmax(0,1fr)}.home-page .closer-reader{padding:24px 28px}.home-page .closer-reader+.closer-reader{border-left:0;border-top:1px solid var(--web-outline)}.home-page .closer-who{font-size:18px}.home-page .closer-line .payoff{font-size:20px;line-height:28px}}
+@media(max-width:600px){.home-page .tenet-closer{margin-top:24px}.home-page .closer-reader{padding:20px 24px}.home-page .closer-who{font-size:16px}.home-page .closer-line .payoff{font-size:18px;line-height:27px}}
+@media(forced-colors:active){.home-page .closer-readers{border:1px solid CanvasText}}

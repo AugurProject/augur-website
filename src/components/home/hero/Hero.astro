@@ -1,10 +1,10 @@
 ---
 import Button from '@/components/ui/Button.astro';
 import {links} from '@/site/links';
-import {heroTimeline} from '@/components/home/motion/timelines';
-import heroArrival from '@/components/home/scripts/hero-arrival.inline.js?raw';
-import {homeCopy} from '@/components/home/data/homepage';
-import heroFloor from '@/components/home/scripts/hero-floor.inline.js?raw';
+import {heroTimeline} from '@/components/home/timelines';
+import heroArrival from './hero-arrival.inline.js?raw';
+import {homeCopy} from '@/components/home/copy';
+import heroFloor from './hero-floor.inline.js?raw';
 // Each homepage version renders its own copy (homepage.ts). The versions change only the body's
 // last clause (Ryan 2); the headline and art stay (Ryan 1).
 // Ryan 16 swaps "See how it works" for three reader links, `hero.paths` (Ryan's and Melo's); on Ryan's

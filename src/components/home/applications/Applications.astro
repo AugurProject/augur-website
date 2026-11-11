@@ -1,7 +1,7 @@
 ---
-import { applications } from '@/components/home/data/applications';
+import { applications } from './cases';
 import Button from '@/components/ui/Button.astro';
-import {homeCopy} from '@/components/home/data/homepage';
+import {homeCopy} from '@/components/home/copy';
 // Each homepage version renders its own copy (homepage.ts). Augur's square mark stands in the case
 // tiles, with no builder icons, and the check glyph's own path in the answer chip. Its styles are
 // home-extra.css.
@@ -93,7 +93,7 @@ const cards=copy.applications.cards;
    <div class="builder-ask"><p><span class="ask-setup">{builder.ask[0]}</span> <span class="ask-payoff">{builder.ask[1]}</span></p><Button href="/contact/" variant="text">Talk to us</Button></div>
   </div>}
  </div>
-</section><script>import '@/components/home/scripts/use-cases.js';</script>
+</section><script>import './use-cases.js';</script>
 <style>
  /* What can Augur Lituus power? (was "What could you build?"; owner, 18–19 Oct 2026). Written for
     traders first; the heading names the product and the cases answer it. Organized as a list beside an

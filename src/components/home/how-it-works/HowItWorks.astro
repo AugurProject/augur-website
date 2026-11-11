@@ -3,8 +3,8 @@ import IsoNodes from '@/lib/iso/IsoNodes.astro';
 import { walkthrough, query, ledger, rep } from '@/lib/example';
 import Icon from '@/components/ui/Icon.astro';
 import Button from '@/components/ui/Button.astro';
-import {homeCopy} from '@/components/home/data/homepage';
-import {howScenes,howActs} from '@/components/home/data/how-scenes';
+import {homeCopy} from '@/components/home/copy';
+import {howScenes,howActs} from './scenes';
 // Each homepage version renders its own copy (homepage.ts).
 const copy=homeCopy,how=copy.howItWorks,holderCopy=copy.holder;
 // Owner, 25 Oct 2026, item 4: "build A on /2", sketch A of the item 4 board; 29 Oct 2026, sketch B of the How
@@ -43,7 +43,7 @@ const holderLead=holderPoints.find(point=>point.earn)??holderPoints[0]!,holderRe
   </div>
  </div>
  {holderPoints.some(point=>point.label)?<div class="holding has-labels" data-reveal><div class="holding-top"><h3 class="holding-title">{holderCopy.title}</h3><p class="holding-earn">{holderLead.label}</p><p class="holding-line">{holderLead.text}</p></div><div class="holding-foot"><ul class="holding-notes">{holderRest.map(point=><li><span class="holding-label">{point.label}</span> {point.text}</li>)}</ul><Button href="/rep/" variant="outline">{'link' in holderCopy?holderCopy.link:'Learn about REP'}</Button></div></div>:<div class="holding" data-reveal><div class="holding-head"><h3 class="holding-title">{holderCopy.title}</h3>{'link' in holderCopy?<Button href="/rep/" variant="outline">{holderCopy.link}</Button>:<Button href="/rep/" variant="text">Learn about REP</Button>}</div><ul class="holding-points">{holderCopy.points.map(point=><li class:list={['holding-point',{'is-act':'act' in point,'is-earn':'earn' in point}]}>{'label' in point?<span class="holding-label">{point.label}</span>:<i class="holding-mark" aria-hidden="true"></i>}<p>{'lead' in point&&<Fragment><strong>{point.lead}</strong> </Fragment>}{point.text}</p></li>)}</ul></div>}
-</div></section><script is:inline type="application/json" id="how-acts" set:html={JSON.stringify(howActs).replace(/</g,'\\u003c')}></script><script>import '@/components/home/scripts/how-path.js';</script>
+</div></section><script is:inline type="application/json" id="how-acts" set:html={JSON.stringify(howActs).replace(/</g,'\\u003c')}></script><script>import './how-path.js';</script>
 <style>
  /* One section answers “How do I take part, and how do I get paid?” (owner + Augus, 19 Oct 2026). The
     steps, their stage, the example and Holding REP are laid out in home-page.css and home-extra.css. */

@@ -5,7 +5,7 @@
 // stays open and the button stays hidden; reduced motion and print show the same. Timings and easings come from
 // timelines.ts (howPathTimeline, easing, revealTimeline.ready) and each scene's act from how-scenes.ts (howActs),
 // which HowItWorks.astro writes into the page as JSON (#how-acts). Transform and opacity only.
-import { easing, howPathTimeline, revealTimeline } from '@/components/home/motion/timelines';
+import { easing, howPathTimeline, revealTimeline } from '@/components/home/timelines';
 (() => {
 const T = { easing, timeline: howPathTimeline, ready: revealTimeline.ready, dwell: revealTimeline.dwell, acts: JSON.parse(document.getElementById('how-acts')?.textContent || '{}') }, E = T.easing, L = T.timeline, ACTS = T.acts, html = document.documentElement;
 // page-field.ts sizes its layer to the page's scrollHeight, which counts the layer itself, so the layer can

@@ -9,7 +9,7 @@
 // focus or key in it, a resize, print or page hide (the controller's tabssettled), a hidden page, the stops leaving the
 // screen or reduced motion settle it on the final frame, which is the markup. Transform and opacity only; timings and
 // easings come from timelines.ts (roadmapTimeline, timing, easing and revealTimeline.ready).
-import { easing, timing, roadmapTimeline, revealTimeline } from '@/components/home/motion/timelines';
+import { easing, timing, roadmapTimeline, revealTimeline } from '@/components/home/timelines';
 (() => {
 const T = { easing, timeline: roadmapTimeline, fadeOut: timing.fadeOut, ready: revealTimeline.ready, dwell: revealTimeline.dwell }, E = T.easing, L = T.timeline, root = document.querySelector('[data-roadmap]');
 if (!root) return;

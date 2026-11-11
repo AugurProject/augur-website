@@ -13,7 +13,7 @@
 // group (the Why Augur scenes, the use-case card) or under a section's lead (How it works' “paid” and scene, the roadmap's track)
 // waits for that group's "revealed" event, so a reveal and a scene never start together. Rendered once, after the
 // footer ([version].astro).
-import { easing, timing, revealTimeline } from '@/components/home/motion/timelines';
+import { easing, timing, revealTimeline } from './timelines';
 (() => {
 const T = { easing, timeline: revealTimeline, duration: timing.panel }, E = T.easing, R = T.timeline, groups = [...document.querySelectorAll('[data-reveal]')];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)'), forced = matchMedia('(forced-colors: active)'), nav = performance.getEntriesByType?.('navigation')[0];

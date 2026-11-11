@@ -1,0 +1,296 @@
+/* Applications section styles (Home.astro renders this sheet inline with the others, scoped to .home-page). */
+.home-page .builder-case{margin-top:var(--block-gap)}
+/* What can Augur Lituus power? (Ryan 9–11, Augus 1). Same markup and layout as v1; these rules only
+   fit the v2 copy. Ryan's one-sentence lead balances, so "world." is never left alone (it was at 1440). */
+.home-page .applications .lead{text-wrap:balance}
+/* Where the "Decided in the open…" line and the action's explanation wrap (phones), they balance, so no
+   line ends on a stray "No side." or "go live." (verification pass, 21 Oct: every tab at 360 and 390
+   left one or two words alone). From 768 they fit one line and balance changes nothing. */
+.home-page :is(.case-by,.case-explanation){text-wrap:balance}
+/* The builder's reasons balance too: v1's `pretty` still left "outcomes." alone at 360, and from 1024
+   each reason now breaks at its sentence ("Disputes settle in the open. / The project never…"). */
+.home-page .builder-point{text-wrap:balance}
+/* The owner's own design (22 Oct 2026: "keep working on this v2 (only) since this will be the version I'll
+   present as my suggestions"), on every review version since 26 Oct 2026 ("all versions should now be
+   similar to v2"). Loaded as a string after home-page.css on the review copies alone (Home.astro), so
+   it never reaches "/" or the inner pages. It follows home-page.css's specificity
+   rules: a one-compound component rule is matched directly, a longer one is tied and wins on order. The
+   header and footer rules are in chrome.css, which every page but "/" loads.
+
+   The icon trial (owner, 22 Oct 2026: the icons are "ugly, weird, generic"). Signals only: Augur's
+   square-cut glyphs replace Phosphor's arrows, chevron, close, check and plus (Icon.astro); pictograms
+   give way to Augur's square mark or to nothing; the phone menu buttons read "Menu" and "Close"; the
+   community logos stay. Since 26 Oct 2026 the trial's chrome, the header, the footer and the glyphs, is on
+   every page but "/" (chrome.css). */
+
+/* Use cases: the 8 px square mark, the header's product-row mark, centred on the name's first line in
+   place of the 44 px icon tile. Mist idle, Green picked (the selected state keeps its Green marker,
+   DESIGN.md); on hover it turns Paper and onto its corner, the menus' gesture. The square is the mark's
+   ::after, so only it turns. The mark itself never transforms: it holds the picked tab's Green line, and
+   a turning mark spun the line and, for the 200 ms it took to turn back after a click, made itself the
+   line's containing block, so the line jumped across the tab's name before landing in the gutter. */
+.home-page .case-label{padding-top:0}
+.home-page .case-mark{width:8px;height:8px;margin-top:calc((clamp(20px,1.67vw,24px) * 1.3 - 8px) / 2)}
+.home-page .case-mark::after{content:'';display:block;width:8px;height:8px;background:var(--mark-participant,#71728A);transition:background-color 240ms ease-out,transform 200ms var(--ease-reveal)}
+.home-page .case-tab[aria-selected="true"] .case-mark::after{background:var(--primary);transition-delay:140ms}
+@media(hover:hover) and (pointer:fine){.home-page .case-tab:not([aria-selected="true"]):hover .case-mark::after{background:var(--foreground);transform:rotate(45deg) scale(.9)}}
+.home-page .case-tab:not([aria-selected="true"]):active .case-mark::after{transform:rotate(45deg) scale(.75)}
+@media(max-width:1023px){.home-page .case-mark{margin-top:0}}
+@media(forced-colors:active){.home-page .case-mark::after{forced-color-adjust:none;background:CanvasText}.home-page .case-tab[aria-selected="true"] .case-mark::after{background:Highlight}}
+@media(prefers-reduced-motion:reduce){.home-page .case-mark::after{transition:none}}
+/* The builder reasons have no icon tiles: stacked, each is its claim over its point. */
+@media(max-width:1023px){.home-page .builder-case .builder-reasons li{grid-template-columns:minmax(0,1fr)}}
+/* What can Augur Lituus power? (item 3; owner, 25 Oct 2026, from the mock he approved: the old right box was
+   "trashy/noisy/ugly"). Applications.astro renders /2/'s cards; use-cases.js plays them. Gaps on the
+   scale: 4 8 12 16 24 32 48.
+   Tabs, from 1024: three tiles 8 apart, Dark 1 at rest. The picked tile turns Dark 2, the panel's colour,
+   and a 2 px Green line runs from it across the gutter into the panel, level with its mark (the connector
+   How it works draws between a step and its card); it draws in on a pick. Hover: Dark 3 and the half-Green
+   edge. Pressed: the picked colour. Focus: the ring inside. */
+.home-page .case-link{display:none}
+@media(min-width:1024px){
+.home-page .cases .case-tabs{gap:8px;padding-right:var(--case-gap);background:none}
+.home-page .case-tabs .case-tab{position:relative;padding:24px 32px;border:0;background:none;column-gap:16px;transition:color 180ms ease-out}
+.home-page .case-tabs .case-tab::before{content:'';position:absolute;inset:0;z-index:-2;background:var(--web-quiet);transition:background-color 180ms ease-out}
+.home-page .case-tabs .case-tab[aria-selected="true"]::before{background:var(--web-tile)}
+.home-page .case-tab[aria-selected="true"] .case-link{display:block;position:absolute;left:100%;width:var(--case-gap);height:2px;margin-top:3px;background:var(--primary);transform-origin:left}
+.home-page .case-tabs .case-tab:not([aria-selected="true"]):active::before{background:var(--web-tile)}
+.home-page .case-tabs .case-tab:focus-visible{outline:2px solid var(--ring);outline-offset:-2px}
+.home-page .case-stage .case-panel{padding:48px}
+}
+@media(min-width:1024px) and (hover:hover) and (pointer:fine){
+.home-page .case-tabs .case-tab:not([aria-selected="true"]):hover::before{background:var(--web-raised)}
+.home-page .case-tabs .case-tab:not([aria-selected="true"]):hover:not(:focus-visible){outline:1px solid var(--brand-hover-edge);outline-offset:-1px}
+}
+@media(min-width:1024px) and (max-width:1200px){.home-page .case-tabs .case-tab{padding:24px}.home-page .case-stage .case-panel{padding:32px}}
+/* The right box: a product running on Augur Lituus, as its users see it, and one paragraph for the
+   people who build it. The card is Navy like How it works' query card: its label and status, a title and
+   the product's part beside Augur Lituus's. Green shows only the
+   answer and what it changed. Each card is rendered answered; the waiting words sit under
+   it at opacity 0 for the play. */
+.home-page .case-card{align-self:stretch;margin-bottom:16px;padding:24px;background:var(--background)}
+.home-page .card-head{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:28px}
+.home-page .card-label{font:400 13px/16px var(--font-body);color:var(--muted-foreground)}
+.home-page .card-title{margin:16px 0 0;font:600 22px/28px var(--font-heading);letter-spacing:-.01em;color:var(--foreground);text-wrap:balance}
+/* Market: a query split in two (owner, 26 Oct 2026, design D of the use-case motion board: "Split it is").
+   The query's status in the card's corner (How it works' words); the market's price on the left; Augur
+   Lituus on the right, its answer and what the status means. The right cell is the wider (1 : 1.4), so the answer leads and both
+   cells sit side by side down to 1024; below a 340 px card they stack. A price near 100 is the market's
+   consensus, not settlement: the left cell pays only once the right one is Final. While a report is open to
+   challenge, a 2 px line fills under its note. Values are 40/48, so the card is 285 tall like the others.
+   Every changing value keeps its states in one cell, the resting one last. */
+.home-page [data-card-kind="query"]{container:query/inline-size}
+.home-page .card-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);margin-top:32px}
+.home-page .split-cell{display:grid;align-content:start;gap:8px;min-width:0;padding-right:24px}
+.home-page .split-cell.is-oracle{padding:0 0 0 24px;border-left:1px solid var(--web-outline)}
+.home-page .split-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:28px;margin:0 0 4px}
+.home-page .split-name{font:600 13px/16px var(--font-heading);color:var(--muted-foreground)}
+.home-page .split-by{display:inline-flex;align-items:center;gap:8px;font:600 13px/16px var(--font-heading);color:var(--foreground);white-space:nowrap}
+.home-page .split-by::before{content:'';flex:none;width:8px;height:8px;background:var(--primary)}
+.home-page .split-value{margin:0;font:600 40px/48px var(--font-heading);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.home-page .split-note{margin:0;font-size:15px;line-height:22px;color:var(--muted-foreground)}
+.home-page .split-states{display:inline-grid}
+.home-page .split-states>span{grid-area:1/1;display:inline-flex;align-items:center;gap:10px;white-space:nowrap;opacity:0}
+.home-page .split-states>span:last-child{opacity:1}
+/* An empty state (Augur Lituus before its report, the cover before it pays) still holds the line's baseline,
+   so its cell sits where a word would and the rows under it stay level (owner, 28 Oct 2026: no dash). */
+.home-page .split-states>span:empty::before{content:'\200b'}
+.home-page .split-win{color:var(--primary)}
+/* Final reads as final at a glance: a drawn seal beside the Green Yes, not a glyph (owner, 26 Oct 2026:
+   "polished instead of a character", then "something that reads as final or a check mark"). A 26 px Green
+   square, the brand's square, holds the check in Navy at a weight that matches the 40 px word; the note
+   under the answer says no one challenged it, level with the market's (owner, 28 Oct 2026: symmetry). */
+.home-page .card-check{width:14px;height:14px;overflow:visible}
+.home-page .card-check polyline{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-dasharray:1 3}
+.home-page .split-seal{display:inline-grid;place-items:center;flex:none;width:26px;height:26px;background:var(--primary);color:var(--background)}
+.home-page .split-seal .card-check{width:18px;height:18px}
+.home-page .split-seal .card-check polyline{stroke-width:2.6}
+/* Only the price's digits change (owner, 26 Oct 2026); the ¢ stays where it is. */
+.home-page .split-states>.split-price{gap:0}
+/* The status sits in the card's top right corner, where the other cards keep theirs (owner, 26 Oct 2026):
+   a 28 px square-cornered chip (Asked outlined and quiet, Reported in Pewter and Paper, Final Green with
+   Navy text). Asked is lit for a moment as the query is asked. */
+.home-page .split-status>span{justify-self:end;gap:8px;height:28px;padding:0 10px;font:600 13px/16px var(--font-heading)}
+.home-page .split-status i{flex:none;width:6px;height:6px}
+.home-page .st-ask{position:relative;box-shadow:inset 0 0 0 1px var(--web-outline);color:var(--muted-foreground)}
+.home-page .st-glow{position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--foreground);opacity:0;pointer-events:none}
+.home-page .st-ask i{background:var(--mark-participant,#71728A)}
+.home-page .st-rep{box-shadow:inset 0 0 0 1px var(--muted-foreground);color:var(--foreground)}
+.home-page .st-rep i{background:var(--foreground)}
+.home-page .st-fin{background:var(--primary);color:var(--background)}
+.home-page .st-fin i{background:var(--background)}
+.home-page .split-wait{position:relative;display:block;height:2px;margin-top:4px;background:var(--web-outline);opacity:0}
+.home-page .split-wait i{position:absolute;inset:0;background:var(--muted-foreground);transform-origin:left}
+/* A narrow card (1024–1100), where the question takes two lines: the split tightens so the card stays near
+   the others' 285. */
+@container query (width < 440px){
+.home-page .card-split{margin-top:24px}
+.home-page .split-top{margin-bottom:0}
+.home-page .split-value{font-size:36px;line-height:44px}
+.home-page .split-note{font-size:14px;line-height:20px}
+}
+@container query (width < 340px){
+.home-page .card-split{grid-template-columns:minmax(0,1fr);row-gap:20px}
+.home-page .split-cell{padding:0}
+.home-page .split-cell.is-oracle{padding:20px 0 0;border-left:0;border-top:1px solid var(--web-outline)}
+}
+/* Insurance: a relay (owner, 28 Oct 2026, "Relay it is", concept 3 of the Insurance sketch board). One 2 px
+   line through three stops, over three steps in equal columns: the flight, Augur Lituus and the cover. Each
+   step reads from the left edge of its column, under its own stop, as the other cards read from their left
+   edges (owner, 28 Oct 2026: "not aligned at all"), so names, values and notes share three level rows. The
+   line is Outline at rest; its first stretch runs Paper while the flight is in the air, the second fills
+   Pewter while the report is open to challenge, then runs Green to the cover as it pays. The middle stop
+   becomes the seal at Final, the card's one check; the cover's outlined stop fills Green. Values 28/36, so
+   the three read as one sentence (Landed, Yes, Paid); line and steps are the split's 132, so the card is 284
+   like the market card, and from 440 down both tighten alike (122), the notes to 13 px so the longest fits
+   its column. Below a 360 card the steps stack, each on its square, and the line is drawn at rest. */
+.home-page [data-card-kind="relay"]{container:relay/inline-size}
+/* A leg is one column and its gap, so each stop sits on its column's left edge. */
+.home-page .card-relay{--relay-gap:16px;--leg:calc((100% + var(--relay-gap)) / 3);margin-top:32px}
+.home-page .relay-line{position:relative;height:12px}
+.home-page .relay-line>span{position:absolute}
+.home-page :is(.relay-run,.relay-done,.relay-wait,.relay-paid){top:5px;height:2px;transform-origin:left}
+.home-page .relay-run{left:6px;width:calc(2 * var(--leg));background:var(--web-outline)}
+.home-page .relay-done{left:6px;width:var(--leg);background:var(--foreground)}
+.home-page :is(.relay-wait,.relay-paid){left:calc(var(--leg) + 6px);width:var(--leg)}
+.home-page .relay-wait{background:var(--muted-foreground);opacity:0}
+.home-page .relay-paid{background:var(--primary)}
+.home-page .relay-stop{top:0;width:12px;height:12px;background:var(--foreground)}
+.home-page .relay-stop.is-flight{left:0}
+.home-page .relay-stop.is-oracle{left:var(--leg);opacity:0}
+.home-page .relay-stop:is(.is-cover,.is-paid){left:calc(2 * var(--leg))}
+.home-page .relay-stop.is-cover{background:none;box-shadow:inset 0 0 0 2px var(--mark-participant,#71728A)}
+.home-page .relay-stop.is-paid{background:var(--primary)}
+.home-page .relay-seal{left:calc(var(--leg) - 3px);top:-3px;display:grid;place-items:center;width:18px;height:18px;background:var(--primary);color:var(--background)}
+.home-page .relay-seal .card-check{width:12px;height:12px}
+.home-page .relay-seal .card-check polyline{stroke-width:2.6}
+.home-page .relay-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--relay-gap);margin:32px 0 0;padding:0;list-style:none}
+.home-page .relay-step{display:grid;align-content:start;justify-items:start;row-gap:8px;min-width:0}
+.home-page .relay-name{font:600 13px/16px var(--font-heading);color:var(--muted-foreground);white-space:nowrap}
+.home-page .relay-name.split-by{color:var(--foreground)}
+.home-page .relay-value{font:600 28px/36px var(--font-heading);letter-spacing:-.02em}
+.home-page .relay-note{font-size:14px;line-height:20px;color:var(--muted-foreground)}
+@container relay (width < 440px){
+.home-page .card-relay{--relay-gap:12px;margin-top:24px}
+.home-page .relay-steps{margin-top:28px}
+.home-page .relay-step{row-gap:6px}
+.home-page .relay-value{font-size:24px;line-height:34px}
+.home-page .relay-note{font-size:13px}
+}
+@container relay (width < 360px){
+.home-page .relay-line{display:none}
+.home-page .relay-steps{grid-template-columns:minmax(0,1fr);row-gap:16px;margin-top:0}
+.home-page .relay-step{position:relative;padding-left:24px}
+.home-page .relay-step::before{content:'';position:absolute;left:0;top:2px;width:12px;height:12px;background:var(--foreground)}
+.home-page .relay-step:not(.is-flight)::before{background:var(--primary)}
+.home-page .relay-step:not(:last-child)::after{content:'';position:absolute;left:5px;top:20px;bottom:-14px;width:2px;background:var(--foreground)}
+.home-page .relay-step.is-oracle::after{background:var(--primary)}
+.home-page .relay-name.split-by::before{display:none}
+}
+/* DAOs: a switch (owner, 29 Oct 2026, "Polish, review then implement the Switch into /melo", concept 1 of the
+   DAO board's round 5). The DAO's part is one 44 px row: the treasury upgrade's go-live switch (a 64 × 32 track
+   with a 2 px Outline ring and the brand's square, 22 px, as its knob) beside the upgrade's name, its status at
+   20/26 and a note. Augur Lituus's part is the larger (owner, 29 Oct 2026: "None of them give enough importance
+   to the Augur Lituus process"), 16 below: its name, both answers as 80 × 36 chips like the site's answer chips
+   (so it reads as a yes/no), the note on where the query stands, and the line for the day it's open to
+   challenge, across the card. The vote turns the switch on (the knob slides right and turns Paper, the track's
+   ring lights); the report rings Yes; Final sweeps Yes Green with its check and No steps back to .4; then the
+   switch slides back off and its knob turns Green: Blocked. Row, gap and Augur Lituus's part are the split's 132,
+   so the card is 284 like the others, and from 440 down they tighten alike (122). Below 360 each note wraps under
+   its line. `--travel` is how far the knob slides (track, less its insets, less the knob), read by
+   use-cases.js. */
+.home-page [data-card-kind="switch"]{container:switch/inline-size}
+.home-page .card-switch{margin-top:32px}
+.home-page .switch-row{display:flex;align-items:center;gap:16px;min-height:44px}
+.home-page .switch-track{--travel:32px;position:relative;flex:none;width:64px;height:32px;box-shadow:inset 0 0 0 2px var(--web-outline)}
+.home-page .switch-track>i{position:absolute}
+.home-page .switch-on{inset:0;box-shadow:inset 0 0 0 2px var(--foreground);opacity:0}
+.home-page .switch-knob{left:5px;top:5px;width:22px;height:22px}
+.home-page .switch-knob>b{position:absolute;inset:0;background:var(--mark-participant,#71728A)}
+.home-page .switch-knob>b:nth-child(2){background:var(--foreground);opacity:0}
+.home-page .switch-knob>b:nth-child(3){background:var(--primary)}
+.home-page .switch-text{display:grid;row-gap:2px;min-width:0}
+.home-page .switch-name{font:600 13px/16px var(--font-heading);color:var(--muted-foreground)}
+.home-page .switch-line{display:flex;align-items:baseline;gap:12px}
+.home-page .switch-value{font:600 20px/26px var(--font-heading);letter-spacing:-.01em}
+.home-page .switch-note{font-size:14px;line-height:20px;color:var(--muted-foreground)}
+.home-page :is(.switch-value,.switch-note,.choice-note)>.split-states{display:grid}
+.home-page .choice{margin-top:16px}
+.home-page .choice-by{display:flex;min-height:16px;margin:0}
+.home-page .choice-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.home-page .choice-opt{position:relative;display:inline-grid;place-items:center;flex:none;min-width:80px;height:36px;padding:0 16px;box-shadow:inset 0 0 0 1px var(--web-outline);font:600 18px/1 var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
+.home-page .choice-opt>i,.home-page .choice-pick{position:absolute;inset:0}
+.home-page .choice-ring{box-shadow:inset 0 0 0 1px var(--foreground)}
+.home-page .choice-fill{background:var(--primary);transform-origin:left}
+.home-page .choice-pick{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--background)}
+.home-page .choice-pick .card-check{width:14px;height:14px}
+.home-page .choice-pick .card-check polyline{stroke-width:2.6}
+.home-page .choice-opt.is-other{opacity:.4}
+.home-page .choice-note{margin-left:8px;font-size:14px;line-height:20px;color:var(--muted-foreground)}
+.home-page .split-wait.choice-wait{margin-top:10px}
+@container switch (width < 440px){
+.home-page .card-switch{margin-top:24px}
+.home-page .choice{margin-top:12px}
+.home-page .choice-row{margin-top:6px}
+.home-page .choice-opt{height:32px}
+}
+@container switch (width < 360px){
+.home-page :is(.switch-line,.choice-row){flex-wrap:wrap;row-gap:0}
+.home-page .choice-note{flex-basis:100%;margin:4px 0 0}
+}
+/* For builders, in its own element (owner, 26 Oct 2026: "the 'for builders' should be inside an element"):
+   a 1 px outlined box, lighter than the Navy card so the example stays the hero, its boundary marking it as
+   a second message for a second audience (the Law of Common Region). The cue as the Why Augur closer's
+   labels, then one paragraph. The box sits on the panel's foot, at the same place on every tab, at least
+   16 under the card. The three paragraphs keep three lines from 1024 to 1440 and the cards match. */
+.home-page .case-builders{align-self:stretch;margin-top:auto;padding:20px 28px 24px;border:1px solid var(--web-outline)}
+@media(max-width:1200px){.home-page .case-builders{padding:18px 24px 20px}}
+.home-page .builders-cue{display:flex;align-items:center;gap:12px;margin:0;font:600 14px/20px var(--font-heading);color:var(--foreground)}
+.home-page .builders-cue::before{content:'';width:8px;height:8px;background:var(--primary)}
+.home-page .builders-line{max-width:34em;margin:8px 0 0;font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
+/* The builder block, on the Why Augur closer's pattern: the title on Navy, then one Dark 2 panel of three
+   cells split by hairlines. Each claim carries the 8 px Green square, as the closer's reader labels do; the
+   points are Sora 18/28 from 1280, 16/24 below. The ask closes the panel (owner, 26 Oct 2026: "this could be
+   in a better place"). Beside the title it asked before the reasons made the case and drew the eye from the
+   title; now it is the panel's foot under a hairline, its question on the cells' text edge and "Talk to us"
+   in the bottom-right corner, where reading the block ends. The DOM already put it last, so reading and
+   focus order are unchanged. "Talk to us" is a text action there (Applications.astro), as "Learn about
+   REP" is at the end of Holding REP's head: the 48 px outline box outweighed the two lines beside it (owner,
+   26 Oct 2026: "looks too big"). Its 48 px hit area stays, so the row keeps its height; stacked, it sits
+   8 under the question. No other hover: nothing here is a control but the link. */
+.home-page .builder-case{grid-template-areas:"title title" "reasons reasons" "ask ask";row-gap:0}
+.home-page .builder-case .builder-title{margin-bottom:24px;font-size:24px;line-height:32px}
+.home-page .builder-case .builder-ask{justify-content:space-between;row-gap:8px;margin:0;padding:24px 32px;border-top:1px solid var(--web-outline);background:var(--web-tile)}
+.home-page .builder-case .builder-ask p{font-size:16px;line-height:24px}
+.home-page .builder-case .builder-reasons{gap:0;background:var(--web-tile)}
+.home-page .builder-case .builder-reasons li{padding:32px;font-size:16px;line-height:24px}
+.home-page .builder-case .builder-reasons li+li{border-left:1px solid var(--web-outline)}
+.home-page .builder-case .builder-reasons strong{display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:20px;line-height:26px}
+.home-page .builder-case .builder-reasons strong::before{content:'';flex:none;width:8px;height:8px;background:var(--primary)}
+@media(min-width:1280px){.home-page .builder-case .builder-title{font-size:28px;line-height:34px}.home-page .builder-case .builder-reasons li{font-size:18px;line-height:28px}}
+@media(max-width:1200px){.home-page .builder-case :is(.builder-reasons li,.builder-ask){padding:24px}}
+@media(max-width:1023px){.home-page .builder-case .builder-reasons li+li{border-left:0;border-top:1px solid var(--web-outline)}}
+@media(forced-colors:active){
+.home-page .case-tabs .case-tab::before{display:none}
+.home-page .case-tabs .case-tab{outline:1px solid CanvasText;outline-offset:-1px}
+.home-page .case-link,.home-page .split-by::before,.home-page .builders-cue::before,.home-page .builder-reasons strong::before{forced-color-adjust:none;background:Highlight}
+.home-page .st-fin{forced-color-adjust:none;background:Highlight;color:HighlightText}
+.home-page :is(.st-ask,.st-rep){outline:1px solid CanvasText;outline-offset:-1px}
+.home-page .split-wait{forced-color-adjust:none;background:GrayText}
+.home-page .split-wait i{forced-color-adjust:none;background:CanvasText}
+.home-page .case-card,.home-page .builder-case :is(.builder-reasons,.builder-ask){outline:1px solid CanvasText}
+.home-page :is(.relay-done,.relay-wait,.relay-stop.is-flight,.relay-stop.is-oracle){forced-color-adjust:none;background:CanvasText}
+.home-page .relay-run{forced-color-adjust:none;background:GrayText}
+.home-page :is(.relay-paid,.relay-stop.is-paid,.relay-seal),.home-page .relay-step::before,.home-page .relay-step.is-oracle::after{forced-color-adjust:none;background:Highlight;color:HighlightText}
+.home-page .relay-stop.is-cover{forced-color-adjust:none;box-shadow:inset 0 0 0 2px CanvasText}
+.home-page .switch-track{forced-color-adjust:none;box-shadow:inset 0 0 0 2px GrayText}
+.home-page .switch-on{forced-color-adjust:none;box-shadow:inset 0 0 0 2px CanvasText}
+.home-page .switch-knob>b{forced-color-adjust:none;background:GrayText}
+.home-page .switch-knob>b:nth-child(2){background:CanvasText}
+.home-page .switch-knob>b:nth-child(3){background:Highlight}
+.home-page .choice-opt{forced-color-adjust:none;box-shadow:inset 0 0 0 1px GrayText;color:CanvasText}
+.home-page .choice-ring{forced-color-adjust:none;box-shadow:inset 0 0 0 1px CanvasText}
+.home-page .choice-fill{forced-color-adjust:none;background:Highlight}
+.home-page .choice-pick{forced-color-adjust:none;color:HighlightText}
+}
+@media(prefers-reduced-motion:reduce){.home-page .case-tabs .case-tab,.home-page .case-tabs .case-tab::before{transition:none}}

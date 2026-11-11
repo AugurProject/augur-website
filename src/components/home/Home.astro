@@ -1,12 +1,17 @@
 ---
-import Hero from './sections/Hero.astro';
-import Tenets from './sections/Tenets.astro';
-import Applications from './sections/Applications.astro';
-import HowItWorks from './sections/HowItWorks.astro';
-import Roadmap from './sections/Roadmap.astro';
-import LearnMore from './sections/LearnMore.astro';
-import homeStyle from './styles/home-page.css?inline';
-import homeExtraStyle from './styles/home-extra.css?inline';
+import Hero from './hero/Hero.astro';
+import Tenets from './tenets/Tenets.astro';
+import Applications from './applications/Applications.astro';
+import HowItWorks from './how-it-works/HowItWorks.astro';
+import Roadmap from './roadmap/Roadmap.astro';
+import LearnMore from './learn-more/LearnMore.astro';
+import baseStyle from './home.css?inline';
+import heroStyle from './hero/hero.css?inline';
+import tenetsStyle from './tenets/tenets.css?inline';
+import applicationsStyle from './applications/applications.css?inline';
+import howStyle from './how-it-works/how-it-works.css?inline';
+import roadmapStyle from './roadmap/roadmap.css?inline';
+import learnStyle from './learn-more/learn-more.css?inline';
 // Melo's design from the web lab (the lab's homepage, "/", at 795ca0c). Its sheets scope every rule to
 // `.home-page` and follow every component style (linked in the head), so they win ties, as in the lab. They
 // render before the sections: placed after them, they sat about 500 KB into the page, and the browser painted
@@ -14,11 +19,11 @@ import homeExtraStyle from './styles/home-extra.css?inline';
 // The section reveal (reveal.js) must see every section and the footer; the lab renders it after the footer
 // through its layout's "end" slot. Here it is an inline module, which runs once the whole document is parsed.
 ---
-{[homeStyle,homeExtraStyle].map(css=><style is:inline set:html={css}></style>)}
+{[baseStyle,heroStyle,tenetsStyle,applicationsStyle,howStyle,roadmapStyle,learnStyle].map(css=><style is:inline set:html={css}></style>)}
 <div class="home-page">
  <Hero/><Tenets/><Applications/><HowItWorks/><Roadmap/><LearnMore/>
 </div>
-<script>import './scripts/reveal.js';</script>
+<script>import './reveal.js';</script>
 <script>
  // The shared tabs controller binds the use cases, How it works' steps and the roadmap once; each section's own
  // motion is its own module in scripts/.

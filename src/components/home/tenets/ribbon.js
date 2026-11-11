@@ -8,7 +8,7 @@
 // so the answer comes after the question. Already on screen when this runs: the settled band. Reduced motion, print and
 // page hide settle it. Timings from timelines.ts (ribbonTimeline, easing);
 import { timeAt } from '@/lib/motion/timelines';
-import { easing, ribbonTimeline } from '@/components/home/motion/timelines';
+import { easing, ribbonTimeline } from '@/components/home/timelines';
 (() => {
 const T = { easing, timeline: ribbonTimeline }, E = T.easing, R = T.timeline;
 const band = document.querySelector('[data-answer-band]'), text = band?.querySelector('[data-answer]');

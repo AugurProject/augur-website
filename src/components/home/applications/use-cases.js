@@ -23,7 +23,7 @@
 // animation on a resize, so the loop is rebuilt where it was; print shows the finished card. Transform and
 // opacity only, so the loop runs off the main thread. Timings and easings come from timelines.ts
 // (useCaseTimeline, easing).
-import { easing, useCaseTimeline } from '@/components/home/motion/timelines';
+import { easing, useCaseTimeline } from '@/components/home/timelines';
 (() => {
 const T = { easing, timeline: useCaseTimeline }, E = T.easing, U = T.timeline, L = U.loop;
 const root = document.querySelector('[data-use-cases]');

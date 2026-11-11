@@ -1,0 +1,215 @@
+/* How it works section styles (Home.astro renders this sheet inline with the others, scoped to .home-page). */
+/* How it works (Ryan 12 and 13, Augus 2). Closed by default: the heading, a one-line lead with its
+   toggle, the four steps as a strip and the holder bar. The example is v1's walkthrough, unpinned.
+   Heading row from 1024: the toggle sits under the lead in the right column, beside the two-line
+   heading (lead 33 + 24 + toggle 48 = 105 against the heading's 96 at 1440), so the action stays with
+   its text and neither column ends early. Below 1024 the row stacks: heading, lead, toggle. Where the
+   lead wraps (1024–1199, phones) it balances into its two sentences. */
+.home-page .how-it-works .section-heading .lead{text-wrap:balance}
+@media(min-width:1024px){.home-page .how-it-works .section-heading{grid-template-areas:"title lead" "title action";row-gap:24px}.home-page .how-it-works h2{grid-area:title}.home-page .how-it-works .section-heading .lead{grid-area:lead}.home-page .how-toggle{grid-area:action}}
+/* The toggle is the section's one action, an outline button like the builder's "Talk to us". Its
+   words say what a press does next ("Walk through an example" / "Hide the example") and aria-expanded
+   carries the state; the chevron turns with it. Which words show is home-extra.css's (.how-more),
+   beside the box that keeps one width for both. */
+.home-page .how-toggle{justify-self:start}
+.home-page .how-toggle .web-icon{transition:transform 180ms var(--ease-reveal)}
+.home-page .how-toggle[aria-expanded=true] .web-icon{transform:rotate(180deg)}
+/* Closed, the example is hidden="until-found", so find in page and text fragments can still open it
+   (Chromium, Firefox). base.css's [hidden]{display:none!important} would defeat that, so this one
+   element gets its box back; the browser keeps its content unrendered (content-visibility). Without
+   JavaScript the script never closes it, and print always shows it, without the controls. */
+.home-page [data-how-demo][hidden=until-found]{display:block!important}
+@media print{.home-page [data-how-demo][hidden]{display:block!important;content-visibility:visible}.home-page :is(.how-toggle,.how-strip){display:none!important}}
+@media(prefers-reduced-motion:reduce){.home-page :is(.how-step,.how-step-index,.how-toggle .web-icon){transition:none}}
+/* Opening and closing (how-it-works.js): a same-document view transition, like the FAQ's, 380 ms
+   on the reveal ease. The strip's box eases to the example's height and clips the live example, so it
+   unrolls from where the strip was; the band grows with it, and the holder and the sections below
+   slide, so nothing jumps. Closing runs the same in reverse.
+   Names exist only while html[data-how-transition] is set; the strip and the open example share
+   "how-stage", and only one of them is rendered at a time. Reduced motion, arrivals (the hero's
+   "See how it works", #how-it-works) and browsers without view transitions change at once. */
+html[data-how-transition] .home-page #how-it-works{view-transition-name:how-band}
+html[data-how-transition] .home-page :is(.how-strip,[data-how-demo]:not([hidden])){view-transition-name:how-stage}
+html[data-how-transition] .home-page #roadmap{view-transition-name:how-roadmap}
+html[data-how-transition] .home-page #learn-more{view-transition-name:how-learn}
+::view-transition-group(how-band),::view-transition-group(how-stage),::view-transition-group(how-holder),::view-transition-group(how-roadmap),::view-transition-group(how-learn){animation-duration:380ms;animation-timing-function:cubic-bezier(.22,.61,.36,1)}
+/* The band's own box paints its colour, so a shrinking band never shows the page behind it. */
+::view-transition-group(how-band){overflow:clip;background:var(--web-band)}
+::view-transition-group(how-stage){overflow:clip}
+::view-transition-old(how-band),::view-transition-old(how-holder),::view-transition-old(how-roadmap),::view-transition-old(how-learn){display:none}
+::view-transition-new(how-band),::view-transition-new(how-holder),::view-transition-new(how-roadmap),::view-transition-new(how-learn){animation:none}
+/* The strip and the example are different views, so they fade through rather than cross: the outgoing
+   one is gone by 120 ms and the incoming one fades in from 100 ms as the box unrolls. A crossfade
+   (frames at 40–60 ms, 1440 and 390) laid the strip's titles over the example's step titles. Plain
+   blending, so the brief overlap never adds up brighter. */
+::view-transition-old(how-stage){mix-blend-mode:normal;animation:how-stage-out 120ms ease-in both}
+::view-transition-new(how-stage){mix-blend-mode:normal;animation:how-stage-in 240ms ease-out 100ms both}
+@keyframes how-stage-out{to{opacity:0}}
+@keyframes how-stage-in{from{opacity:0}}
+html[data-how-transition]::view-transition-old(root){display:none}
+html[data-how-transition]::view-transition-new(root){animation:none}
+/* How it works (item 4; owner, 25 Oct 2026: "build A on /2", sketch A of the item 4 board, after the four cards'
+   Green line read as weird and the cards didn't answer the pointer). HowItWorks.astro renders the heading row, then
+   the four steps as tabs beside one Navy stage, then the section's one button, the example it opens and Holding REP
+   on the heading row's grid. The tabs are the shared controller's (tabs.ts); how-path.js adds hover, the stage's
+   swap and each scene's act, and runs the button. Gaps on the scale: 4 8 12 16 20 24 32 48 64. */
+/* The heading row has no action on /2/, so it drops home-page.css's second row (24 px under a taller lead). */
+@media(min-width:1024px){.home-page .how-it-works .section-heading{grid-template-areas:"title lead";row-gap:0}}
+/* The steps and the stage sit on the heading row's grid (owner, 29 Oct 2026: sketch B, "steps beside the picture",
+   of the How it works board): the steps run down under the title as a timeline, the stage stands under the lead,
+   and the picked step reaches across the gap to it. */
+.home-page .how-path{display:grid;grid-template-columns:minmax(0,500fr) 80px minmax(0,668fr)}
+.home-page .how-path-tabs{grid-column:1/3;display:flex;flex-direction:column}
+.home-page .how-path-stage{grid-column:3}
+/* The steps: a vertical tablist (Up and Down, as well as Left and Right, move between them), each a numbered square
+   (the step's place in the story), the step's name and under it a short note (owner, 26 Oct 2026), so the list tells
+   the whole process before any step is picked. They share the stage's height, so the links between the squares grow
+   with it, and the picked one is Navy and runs into the stage, its square Green: the tab joined to its panel. Under a
+   fine pointer another step lifts to Dark 3 with the half-Green edge (the use cases' tab hover). Progress through one
+   question's life (owner, 29 Oct 2026: "it doesn't make it clear the progress") is a stepper's: a thin Outline link
+   between steps still ahead, a 2 px Green one up to the picked step, and every step before it outlined Green. It is a
+   state, never a timer: nothing advances on its own, and a pick draws the links between the two steps in order
+   (how-path.js). Each square is centred on its name's line, `--how-lift` above the row's middle (half the words'
+   height less half the name's line), so a link runs from 4 px under one square to 4 px above the next whatever the
+   rows' height. */
+.home-page .how-path-tab{--how-pad:24px;--how-lift:14px;position:relative;flex:1 1 0;display:grid;grid-template-columns:24px minmax(0,1fr);column-gap:16px;row-gap:4px;align-items:center;align-content:center;min-width:0;padding:20px 32px 20px var(--how-pad);border:0;background:none;color:var(--foreground);text-align:left;cursor:pointer;transition:background-color 180ms ease-out}
+.home-page .how-path-tab:not(:last-child)::before{content:'';position:absolute;left:calc(var(--how-pad) + 12px);top:calc(50% - var(--how-lift) + 16px);width:1px;height:calc(100% - 32px);background:var(--web-outline)}
+.home-page .how-path-rail{position:absolute;left:calc(var(--how-pad) + 11px);top:calc(50% - var(--how-lift) + 16px);width:2px;height:calc(100% - 32px);background:var(--primary);transform:scaleY(0);transform-origin:50% 0;pointer-events:none}
+.home-page .how-path-tab:last-child .how-path-rail{display:none}
+.home-page .how-path-tab:has(~[aria-selected="true"]) .how-path-rail{transform:none}
+.home-page .how-path-index{display:grid;place-items:center;width:24px;height:24px;box-shadow:inset 0 0 0 1px var(--web-outline);font:600 12px/1 var(--font-heading);font-variant-numeric:tabular-nums;color:var(--muted-foreground)}
+.home-page .how-path-tab:has(~[aria-selected="true"]) .how-path-index{box-shadow:inset 0 0 0 1px var(--primary);color:var(--foreground)}
+.home-page .how-path-name{min-width:0;font:600 24px/32px var(--font-heading);letter-spacing:-.01em}
+.home-page .how-path-note{grid-column:2;min-width:0;font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:balance}
+.home-page .how-path-tab[aria-selected="true"]{background:var(--background);cursor:default}
+.home-page .how-path-tab[aria-selected="true"] .how-path-index{background:var(--primary);box-shadow:none;color:var(--background)}
+.home-page .how-path-tab:not([aria-selected="true"]):hover{background:var(--web-raised)}
+.home-page .how-path-tab:not([aria-selected="true"]):hover:not(:focus-visible){outline:1px solid var(--brand-hover-edge);outline-offset:-1px}
+.home-page .how-path-tab:not([aria-selected="true"]):hover .how-path-index{color:var(--foreground);box-shadow:inset 0 0 0 1px var(--brand-hover-edge)}
+.home-page .how-path-tab:focus-visible{outline:2px solid var(--ring);outline-offset:-2px}
+/* The stage: one panel per step, the four sharing one grid cell (a hidden one keeps its place but is invisible, as
+   the use cases' cases do), so the stage is as tall as its tallest step and a pick never moves the page. A panel is
+   the step's scene (how-scenes.ts) over its words: the claim (setup Pewter, payoff Paper) and one
+   body line. */
+.home-page .how-path-stage{display:grid;background:var(--background)}
+.home-page .how-path-panel{grid-area:1/1;display:grid;grid-template-columns:minmax(0,1fr);row-gap:28px;align-content:start;min-width:0;padding:40px 48px 44px}
+.home-page .how-path-panel[hidden]{display:grid!important;visibility:hidden}
+.home-page .how-path-panel:focus-visible{outline:2px solid var(--ring);outline-offset:-2px}
+.home-page .how-scene{display:block;width:100%;height:auto;aspect-ratio:2/1;overflow:visible}
+/* A part of the magnet turns and scales about the origin how-scenes.ts writes into its transform, so its own origin
+   stays at 0 0 (as the tenet scenes' pinned parts). */
+.home-page .how-scene [data-how-part]{transform-box:view-box;transform-origin:0 0}
+.home-page .how-path-words{min-width:0}
+.home-page .how-claim{margin:0;font:600 28px/36px var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
+.home-page .how-claim span{display:block;text-wrap:balance}
+.home-page .how-claim .setup{color:var(--muted-foreground)}
+.home-page .how-body{max-width:30em;margin:16px 0 0;font-size:18px;line-height:28px;color:var(--muted-foreground);text-wrap:pretty}
+/* The section's one control, the site's outline button (hover, focus and press from base.css), under the stage.
+   The example opens below it, so it never moves; its chevron turns with it (home-page.css). It never changes size
+   either: both labels share one cell and the one not in use is only invisible, so the button keeps the longer
+   label's width open and closed, and a press changes only the words and the chevron. Swapped with display, it
+   shrank 64 px around "Hide the example". The shorter label is centred in the cell: at the start it left a hole
+   before the chevron that read as a select field. */
+.home-page .how-more{display:grid;grid-template-columns:auto auto;width:fit-content;margin-top:32px}
+.home-page .how-more :is(.how-toggle-open,.how-toggle-close){grid-area:1/1;text-align:center}
+.home-page .how-more[aria-expanded=true] .how-toggle-open,.home-page .how-more:not([aria-expanded=true]) .how-toggle-close{visibility:hidden}
+/* The example (owner, 29 Oct 2026: "I love the story in words", sketch D of the example board): one Navy card, like
+   the stage, holding one question's story in four plain sentences, one per step, each under that step's name in a
+   left column, so the card reads with the steps above it. Each name is Sora 600 18 in Paper (owner, 29 Oct 2026:
+   the names wanted more emphasis), the step a reader scans for; the sentences are Pewter, what's new in each is
+   Sora 600 in Paper (the site's figures) and your win is the one Green. Hairlines part the rows, and the card ends
+   on the last sentence (the whitepaper note under it went the same day). */
+.home-page .example{margin-top:24px;padding:32px;background:var(--background)}
+.home-page .example-story{display:grid;margin:0;padding:0;list-style:none}
+.home-page .example-step{display:grid;grid-template-columns:160px minmax(0,1fr);column-gap:32px;align-items:baseline;padding:20px 0;border-top:1px solid var(--web-outline)}
+.home-page .example-step:first-child{padding-top:0;border-top:0}
+.home-page .example-step:last-child{padding-bottom:0}
+.home-page .example-name{font:600 18px/28px var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
+.home-page .example-line{max-width:44em;margin:0;font-size:18px;line-height:28px;color:var(--muted-foreground);text-wrap:pretty}
+.home-page .example-line strong{font-family:var(--font-heading);font-size:.94em;font-weight:600;font-variant-numeric:tabular-nums;color:var(--foreground)}
+.home-page .example-line .is-win{color:var(--primary)}
+/* Holding REP? Under a hairline the question heads its two points, with "Learn about REP" (the section's one link,
+   underlined at rest) at the end of its row; the points sit on the heading row's grid, the first under the question,
+   the second on the lead's edge. The question alone in the 500 column left a 400 px hole beside two points squeezed
+   to 306 px, and a dead block under it once they stacked below 1280 (owner, 26 Oct 2026: "fix this"). Each point is
+   a mark, its lead in Paper on a line of its own and a Pewter line under it: a Pewter square for what you may do,
+   the hollow Green square of a move for the fork. */
+.home-page .holding{margin-top:64px;padding-top:24px;border-top:1px solid var(--web-outline)}
+.home-page .holding-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;column-gap:24px;margin-bottom:16px}
+.home-page .holding-head .button.text{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+.home-page .holding-title{margin:0;font:600 24px/32px var(--font-heading);letter-spacing:-.01em}
+.home-page .holding-points{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);column-gap:80px;row-gap:24px;margin:0;padding:0;list-style:none}
+.home-page .holding-point{display:grid;grid-template-columns:8px minmax(0,1fr);column-gap:16px;align-items:start}
+.home-page .holding-point p{margin:0;font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
+.home-page .holding-point strong{display:block;margin-bottom:4px;font:600 18px/26px var(--font-heading);color:var(--foreground)}
+/* Holding REP as one Navy card (owner, 29 Oct 2026, round 5 of the Holding REP board: text alone "looks weird"),
+   where a version's points carry a `label`, on one strict grid (owner, same day: "ALIGN THIS"). As spec rows its
+   terms read "too small, out of focus", and as two cells split by a hairline it was the Why Augur closer again
+   ("too similar", same day). So it takes the section's own opening form, a heading row, then a foot. The heading is
+   the question and its answer, setup and payoff as on the stage: "Holding REP?" in Pewter, then the earning point's
+   term in Green (both Sora 600 28/36), on the card's left edge; the point's sentence (18/28 Pewter) stands beside
+   them on the stage's words (580 + 48), as a lead stands beside its heading. The foot, under a hairline the card's
+   width: the other points, quieter as the fork should be, each term (Sora 600 Paper) run into its sentence (16/24
+   Pewter); then the outline button at the right, where reading ends. Versions without labels keep the squares. */
+.home-page .holding.has-labels{padding:0;border-top:0;background:var(--background)}
+.home-page .holding-top{display:grid;grid-template-columns:minmax(0,500fr) 80px minmax(0,668fr);align-items:center;padding:32px 0}
+.home-page .holding-top :is(.holding-title,.holding-earn){grid-column:1/3;margin:0;padding-left:48px;font:600 28px/36px var(--font-heading);letter-spacing:-.01em}
+.home-page .holding-top .holding-title{color:var(--muted-foreground)}
+.home-page .holding-earn{color:var(--primary)}
+.home-page .holding-line{grid-column:3;grid-row:1/3;margin:0;padding:0 48px;font-size:18px;line-height:28px;color:var(--muted-foreground);text-wrap:pretty}
+.home-page .holding-foot{display:flex;align-items:center;justify-content:space-between;gap:16px 32px;padding:20px 48px;border-top:1px solid var(--web-outline)}
+.home-page .holding-notes{display:grid;row-gap:8px;margin:0;padding:0;list-style:none;font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
+.home-page .holding-notes .holding-label{margin-right:4px;font-family:var(--font-heading);font-weight:600;color:var(--foreground)}
+.home-page .holding-foot .button{flex:none}
+/* Under 1280 the card's padding steps down, and Holding REP's heading to 24/32 and its sentence to 16/24. At 1200 and
+   under the heading row's gap is 48, so the steps reach across 48 to the stage, the stage tightens and Holding REP's
+   sentence follows its words. */
+@media(max-width:1279px){.home-page .example{padding:24px}.home-page .holding-top :is(.holding-title,.holding-earn){font-size:24px;line-height:32px}.home-page .holding-line{font-size:16px;line-height:24px}}
+@media(max-width:1200px){.home-page .holding-points{column-gap:48px}.home-page .holding-top{grid-template-columns:minmax(0,500fr) 48px minmax(0,668fr);padding:24px 0}.home-page .holding-top :is(.holding-title,.holding-earn){padding-left:32px}.home-page .holding-line{padding:0 32px}.home-page .holding-foot{padding:16px 32px}.home-page .how-path{grid-template-columns:minmax(0,500fr) 48px minmax(0,668fr)}.home-page .how-path-panel{padding:32px}}
+/* Below 1024 the steps stand over the stage, 4 px above it, each row as tall as its words; the scene is centred, at
+   most 440 px; the example's step names narrow to 120, and Holding REP's heading row keeps its two columns. Below 768
+   the example's names stand over their sentences, and Holding REP stacks: the heading, its sentence, then the foot's
+   points and the button under them. */
+@media(max-width:1023px){
+.home-page .how-path{grid-template-columns:minmax(0,1fr);row-gap:4px}
+.home-page :is(.how-path-tabs,.how-path-stage){grid-column:auto}
+.home-page .how-path-tab{--how-pad:16px;--how-lift:12px;flex:none;row-gap:2px;padding:14px 20px 14px var(--how-pad)}
+.home-page .how-path-name{font-size:20px;line-height:28px}
+.home-page .how-path-note{font-size:15px;line-height:22px}
+.home-page .how-path-panel{row-gap:24px}
+.home-page .how-scene{max-width:440px;justify-self:center}
+.home-page .example-step{grid-template-columns:120px minmax(0,1fr);column-gap:24px}
+.home-page .holding{margin-top:48px}
+.home-page .holding-points{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:767px){
+.home-page .how-path-panel{row-gap:20px;padding:24px 20px}
+.home-page .how-claim{font-size:22px;line-height:30px}
+.home-page .how-body{font-size:16px;line-height:24px}
+.home-page .example{padding:24px 20px}
+.home-page .example-step{grid-template-columns:minmax(0,1fr);row-gap:4px;padding:16px 0}
+.home-page .example-step:first-child{padding-top:0}
+.home-page .example-name{line-height:24px}
+.home-page .example-line{font-size:16px;line-height:24px}
+.home-page .holding-points{grid-template-columns:minmax(0,1fr)}
+.home-page .holding-top{display:block;padding:20px 20px 24px}
+.home-page .holding-top :is(.holding-title,.holding-earn){padding-left:0;font-size:22px;line-height:30px}
+.home-page .holding-line{margin-top:12px;padding:0}
+.home-page .holding-foot{flex-direction:column;align-items:flex-start;padding:20px 20px 24px}
+}
+@media(prefers-reduced-motion:reduce){.home-page .how-path-tab{transition:none}}
+@media(forced-colors:active){
+.home-page .how-path-tab{outline:1px solid CanvasText;outline-offset:-1px}
+.home-page .how-path-tab[aria-selected="true"]{outline:2px solid Highlight;outline-offset:-2px}
+.home-page .how-path-stage{outline:1px solid CanvasText}
+.home-page .how-path-index{box-shadow:none;outline:1px solid CanvasText;outline-offset:-1px}
+.home-page .how-path-tab[aria-selected="true"] .how-path-index{forced-color-adjust:none;outline:0;background:Highlight;color:HighlightText}
+.home-page .how-path-rail{forced-color-adjust:none;background:Highlight}
+.home-page .how-path-tab:not(:last-child)::before{forced-color-adjust:none;background:CanvasText}
+.home-page .example{outline:1px solid CanvasText}
+.home-page .holding.has-labels{outline:1px solid CanvasText}
+.home-page .paid-mark{forced-color-adjust:none;background:Highlight}
+}
+/* On paper every step prints, one after another, and the scenes keep their colours (backgrounds don't print by
+   default). */
+@media print{.home-page .how-path-stage{display:block}.home-page .how-path-panel[hidden]{visibility:visible}.home-page .how-path-panel{break-inside:avoid}.home-page :is(.how-scene,.holding-mark){-webkit-print-color-adjust:exact;print-color-adjust:exact}}

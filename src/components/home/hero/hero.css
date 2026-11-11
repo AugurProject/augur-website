@@ -1,0 +1,80 @@
+/* Hero section styles (Home.astro renders this sheet inline with the others, scoped to .home-page). */
+/* Hero (Ryan 1: kept). Its lead balances like every v2 lead: at 1200–1300 it left "one." alone. */
+.home-page .hero-lead{text-wrap:balance}
+/* The headline and the support line paint at once and only rise into place (the scroll-motion brief, 29 Oct 2026): a
+   fade from nothing held back the Largest Contentful Paint, the support paragraph on phones, by the length of the
+   fade. heroTimeline times them (Hero.astro); the underline, the actions and the art still fade in after them. */
+.home-page .home-hero[data-hero-arrival=entering] :is([data-hero-line],.hero-support){animation-name:hero-rise}
+@keyframes hero-rise{from{transform:translateY(8px)}to{transform:none}}
+/* Hero (item 24, first option from the 25 Oct audit): "decentralized" in Sora 400 against the headline's
+   600, so the word keeps its difference after the underline sweep has gone and under reduced motion,
+   print and no JavaScript. Sora 400 already loads, the word sits alone on its nowrap line, so nothing
+   rewraps; the sweep and the hover line stay as they are. */
+.home-page .hero-emphasis{font-weight:400}
+/* Hero background layer (owner, 22 Oct 2026: a full-screen hero video "like most websites", then a
+   series of generated loops, then "Let's try live first"; the motion-rule exception is in
+   AGENTS.md). It is the hero's only art at every width (owner, 3 Nov 2026: one hero image, the desktop
+   one; the lituus flock that phones and portrait tablets showed is gone). Hero.astro picks what it holds:
+   the live floor (hero-floor.js draws a tilted floor of royal navy squares on a canvas, where reports
+   run into one block that fills Green) or the generated video (hero-video.js). The markup is a still
+   (1920 or 2560 wide), so it paints first; the script lays its canvas or <video> over it on the same
+   frame. The canvas crops its 16:9 scene the way object-fit: cover at 90% 50% crops the still and the video.
+   From 1024 px the scene starts 30% in and runs to the right edge, anchored right. On heroes taller than
+   56vw (1024 x 768) the layer stops at that height and centres, so the cover crop never zooms the scene's
+   focus (the block, or the video's square) towards the copy. The scene reaches left of its focus, so a
+   Navy gradient holds over the layer up to the copy's right edge (26-28% of the layer at every width) and
+   clears just before the focus (44-53%): the copy keeps plain Navy.
+   Below 1024 px the cover crop would put the scene behind the copy, so the hero stacks: the copy, then the
+   layer edge to edge in a 4:3 box (no taller than 56svh), where the block sits just right of centre.
+   The scene's top third is empty Navy (the floor's far edge fades out), so the box rises by that much
+   under the copy, which stays above it; the scroll cue would sit on the floor, so it hides there.
+   Its top and bottom fade into Navy at every width, so no edge shows against the copy, the header or the
+   answer band. Arrival fades it in. Print and forced colours hide it. */
+/* Hero text breaks (22 Oct 2026). Where the lead takes two lines (1280 and below) it breaks after the
+   comma, "Real-world answers for onchain apps, / controlled by no one.", keeping "onchain apps" whole: the
+   clause is one unbreakable span and the lead wraps greedily instead of v2's balance, which split it
+   "…for onchain / apps, …". Phones keep "…onchain / apps, controlled by no one." The body keeps its
+   last five words together (Hero.astro), so it never ends on a widow such as "of a lie." at 1280. */
+.home-page .hero-lead{text-wrap:wrap}
+.home-page .hero-keep{white-space:nowrap}
+.home-page .hero-video{position:relative;z-index:0;display:block;opacity:var(--hero-video-opacity,.9);pointer-events:none;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 48px,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 48px,#000 calc(100% - 96px),transparent)}
+.home-page .hero-video img,.home-page .hero-video video{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:90% 50%}
+.home-page .hero-video canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+.home-page [data-hero-arrival=entering] .hero-video{animation:hero-video-in calc(var(--field-duration) * var(--hero-motion-factor,1)) var(--ease-reveal) calc(var(--field-start) * var(--hero-motion-factor,1)) backwards}
+@media(min-width:1024px){
+.home-page .hero-video{position:absolute;inset:max(0px,calc(50% - 28vw)) 0 max(0px,calc(50% - 28vw)) 30%}
+.home-page .hero-video::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--background) 0%,var(--background) 27%,transparent 45%)}
+}
+@media(max-width:1023px){
+.home-page .home-hero{flex-direction:column;align-items:stretch;justify-content:center;gap:16px;padding-bottom:0}
+.home-page .hero-video{order:1;width:100%;aspect-ratio:4/3;max-height:56svh;margin-top:calc(min(75vw,56svh) * -.3)}.home-page .hero-scroll{display:none}
+.home-page .hero-inner{grid-template-columns:minmax(0,1fr)}.home-page .hero-copy{max-width:620px}
+}
+@keyframes hero-video-in{from{opacity:0}}
+@media print{.home-page .hero-video{display:none}}
+@media(forced-colors:active){.home-page .hero-video{display:none}}
+/* Hero review (22 Oct 2026). From 1024 px the two actions keep the standard control: 48 px, Sora 600 16/24,
+   24 px insets and a 24 px gap (DESIGN.md), where v1 steps them down to 14 px below 1200. Both fit the 466 px
+   copy column at 1024 with 54 px to spare, and a primary action set smaller than the body copy above it
+   reads as the weaker element. */
+@media(min-width:1024px) and (max-width:1200px){.home-page .hero-actions{gap:24px}.home-page .hero-actions .button{font-size:16px;padding-inline:24px}.home-page .hero-actions .button.text{padding-inline:0}}
+/* Short laptop screens. A 1366 x 768 laptop leaves a viewport of about 615-650 px under the browser's bars,
+   where the copy ran past the fold ("See how it works" ended 1 px under it at 630 px, 16 px at 615). Under
+   700 px tall the hero's padding steps from 40 to 24 and the display headline also scales with the
+   viewport's height (10svh, never under 40 px), so the action stays on the first screen. Taller screens are
+   unchanged. */
+@media(min-width:1024px) and (max-height:700px){.home-page .home-hero{padding-block:24px}.home-page .home-hero .display{font-size:clamp(40px,min(5vw,10svh),72px)}}
+/* Hero fork (Ryan 16; Melo's too, owner, 29 Oct 2026; Ryan + Augus has none): three reader links in the
+   action area, so the page's main fork is on the first screen at every width. It takes the place of "See how it works" rather than adding to it: three
+   choices plus the whitepaper link, instead of five (Hick's law), in the place a hero's actions are
+   expected (Jakob's law). One Green link, the traders' (DESIGN.md: one Primary per view; AGENTS.md:
+   traders first), and two outline links, all 48 px tall and 12 px apart, so they read as one group;
+   the whitepaper link takes the next row, 16 px under it.
+   The three share one row where the copy column holds them (402 px at 14 px labels, 488 at 16;
+   410 leaves room for font differences). Narrower (768, 414–360), traders' link takes the full row
+   and the other two split the next, so no link is left alone on a row (no dead space) and each is a
+   wide target for a thumb (Fitts's law). */
+.home-page .hero-copy:has(.hero-paths){container-type:inline-size}
+.home-page .hero-actions:has(.hero-paths){flex-wrap:wrap;row-gap:16px}
+.home-page .hero-paths{display:flex;flex:1 0 100%;gap:12px}
+@container (width<410px){.home-page .hero-paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.home-page .hero-paths>:first-child{grid-column:1/-1}}

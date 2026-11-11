@@ -1,7 +1,7 @@
 ---
-import IsoScene from '@/components/home/art/diagrams/IsoScene.astro';
-import {homeCopy} from '@/components/home/data/homepage';
-import {isoTracks} from '@/components/home/data/tenets-iso';
+import IsoScene from './IsoScene.astro';
+import {homeCopy} from '@/components/home/copy';
+import {isoTracks} from './scenes';
 // Each homepage version renders its own copy (homepage.ts): its three cards and reader lines (v2:
 // Augus's cards and Ryan's reader lines, homepage.ts), on the same markup.
 const copy=homeCopy;
@@ -49,7 +49,7 @@ const paths=copy.why.paths;
    </li>)}</ul>
   </div>
  </div>
-</section><script is:inline type="application/json" id="iso-tracks" set:html={JSON.stringify(isoTracks).replace(/</g,'\\u003c')}></script><script>import '@/components/home/scripts/ribbon.js';import '@/components/home/scripts/tenets-iso.js';</script>
+</section><script is:inline type="application/json" id="iso-tracks" set:html={JSON.stringify(isoTracks).replace(/</g,'\\u003c')}></script><script>import './ribbon.js';import './scene-loop.js';</script>
 <style>
  .tenets{padding-top:64px}.tenets>.site-container:first-child{padding-top:72px;padding-bottom:56px}.section-heading{margin-bottom:0}.answer-band{position:relative;overflow:hidden;background:var(--primary);color:var(--background);padding:24px 0 28px}.answer-band p{font-family:var(--font-heading);font-size:clamp(26px,2.5vw,36px);font-weight:600;line-height:44px;letter-spacing:-.01em;text-wrap:balance}
  .tenet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-top:48px;padding-bottom:96px}
