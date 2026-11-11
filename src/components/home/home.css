@@ -14,24 +14,69 @@
    builder's case, the REP holder bar). The hero keeps its own fit to the first screen. Print keeps
    layout.css's 32, which the components' scoped paddings override. Ids out-score the longer scoped selectors
    (`.tenets[…]>.site-container[…]:first-child` is 0,5,0); class rules tie and win by coming later. */
-.home-page{--section-space:96px;--heading-gap:48px;--block-gap:64px}
-@media(max-width:1023px){.home-page{--section-space:72px}}
-@media(max-width:767px){.home-page{--section-space:64px;--heading-gap:32px;--block-gap:48px}}
-@media print{.home-page{--section-space:32px}}
-.home-page>:is(.applications,.how-it-works,.home-learn),.home-page :is(#why-augur,#roadmap){padding-block:var(--section-space)}
-.home-page .section-heading{margin-bottom:var(--heading-gap)}
+.home-page {
+  --section-space: 96px;
+  --heading-gap: 48px;
+  --block-gap: 64px;
+}
+@media (max-width: 1023px) {
+  .home-page {
+    --section-space: 72px;
+  }
+}
+@media (max-width: 767px) {
+  .home-page {
+    --section-space: 64px;
+    --heading-gap: 32px;
+    --block-gap: 48px;
+  }
+}
+@media print {
+  .home-page {
+    --section-space: 32px;
+  }
+}
+.home-page > :is(.applications, .how-it-works, .home-learn),
+.home-page :is(#why-augur, #roadmap) {
+  padding-block: var(--section-space);
+}
+.home-page .section-heading {
+  margin-bottom: var(--heading-gap);
+}
 /* The FAQ's own wraps: one word was left alone on a last line, the
    first answer's "own." from 768 up and at 360, the third's "window." at 360 and the first question's
    "markets?" at 390. Answers wrap pretty and questions balance; neither adds a line anywhere measured. */
-.home-page .faq-answer p{text-wrap:pretty}
-.home-page .faq-item summary>span:first-child{text-wrap:balance}
+.home-page .faq-answer p {
+  text-wrap: pretty;
+}
+.home-page .faq-item summary > span:first-child {
+  text-wrap: balance;
+}
 /* Print shows every answer, as it shows the How it works example: on paper nothing can be opened.
    Browsers without ::details-content print the questions, as before. */
-@media print{.home-page .faq-item::details-content{content-visibility:visible}.home-page .faq-toggle{display:none}}
+@media print {
+  .home-page .faq-item::details-content {
+    content-visibility: visible;
+  }
+  .home-page .faq-toggle {
+    display: none;
+  }
+}
 /* Section reveal (reveal.js). A group
    below the fold waits invisible under data-armed, which only the script sets, and lifts as the group lands, so without
    JavaScript nothing is ever armed. Print and forced colours show every group whatever the script is doing. The footer
    sits outside .home-page, so these rules are unscoped. */
-[data-armed]{opacity:0}
-@media print{:is([data-armed],[data-reveal]){opacity:1!important;transform:none!important}}
-@media(forced-colors:active){[data-armed]{opacity:1!important}}
+[data-armed] {
+  opacity: 0;
+}
+@media print {
+  :is([data-armed], [data-reveal]) {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+@media (forced-colors: active) {
+  [data-armed] {
+    opacity: 1 !important;
+  }
+}

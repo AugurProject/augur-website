@@ -6,5 +6,10 @@ export const site = {
   // GA4 property of the old augur.net, kept. PageLayout loads it on the canonical host only.
   analyticsId: 'G-4VLMY3QMC9',
   // Open Graph and Twitter card for every page, at the URL the old site used. Its text, for the alt.
-  shareImage: { path: '/og-image.png', width: 1200, height: 630, alt: 'Augur. The frontier of decentralized truth. Real-world answers for onchain apps, controlled by no one.' },
+  shareImage: {
+    path: '/og-image.png',
+    width: 1200,
+    height: 630,
+    alt: 'Augur. The frontier of decentralized truth. Real-world answers for onchain apps, controlled by no one.',
+  },
 } as const;

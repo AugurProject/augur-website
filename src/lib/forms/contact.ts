@@ -14,7 +14,8 @@ export const contact = {
     website: { required: false, maxLength: 2048 },
     message: { required: true, maxLength: 5000 },
   },
-  notice: 'We use your name and email only to reply. Your message is sent to the Augur team by email and isn’t stored on this website.',
+  notice:
+    'We use your name and email only to reply. Your message is sent to the Augur team by email and isn’t stored on this website.',
   /** Short messages for the page's status line; the result pages below say more. */
   messages: {
     sent: 'Message sent. We’ll reply to the email you gave.',
@@ -31,14 +32,23 @@ export type ContactResult = keyof typeof contact.messages;
 
 const singleLine = /^[^\r\n]*$/;
 const isWebsite = (value: string) => {
-  try { return ['https:', 'http:'].includes(new URL(value).protocol); } catch { return false; }
+  try {
+    return ['https:', 'http:'].includes(new URL(value).protocol);
+  } catch {
+    return false;
+  }
 };
 
 /** One field's error, or '' when it is acceptable. Values are already trimmed. Shared by the
  * page script and the Worker, so both accept the same input. */
 export function contactError(field: ContactField, value: string): string {
   const { required, maxLength } = contact.fields[field];
-  if (!value) return required ? { name: 'Enter your name.', email: 'Enter your email address.', message: 'Write your message.' }[field as 'name' | 'email' | 'message'] : '';
+  if (!value)
+    return required
+      ? { name: 'Enter your name.', email: 'Enter your email address.', message: 'Write your message.' }[
+          field as 'name' | 'email' | 'message'
+        ]
+      : '';
   if (value.length > maxLength) return `Keep this to ${maxLength} characters or fewer.`;
   if (field !== 'message' && !singleLine.test(value)) return 'Keep this to one line.';
   if (field === 'email' && !isEmail(value)) return 'Enter a valid email address, like you@example.com.';

@@ -6,7 +6,9 @@
    the questions' 25 px text inset, and the text link 32 px after it. Phones stack the two 16 apart, as
    the hero's actions do, the link padded onto the same inset; side by side they need 345 px. During the
    FAQ's morph the foot slides with the list instead of jumping (motion.css names the questions). */
-.home-page .home-learn .lead{text-wrap:balance}
+.home-page .home-learn .lead {
+  text-wrap: balance;
+}
 /* Learn more: three doors, the FAQ, the blog and
    Discord, and nothing else. Each door is a Navy well on the Dark 2 band, the three tiles' 400 / 24 grid
    at 1440, so they read as openings in the band rather than the hairline-split panel the Applications
@@ -19,42 +21,205 @@
    opacity only). Keyboard focus gets the same look and the 2 px Pewter ring, 3 px out, around the
    whole door. Pressed: Dark 3. Below 1024 the doors stack 12 apart: as rows (object, words, arrow) down to
    768, and as small tiles on phones, where a row would squeeze the line to four lines. */
-.home-page .doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin:0;padding:0;list-style:none}
-.home-page .door{position:relative;display:grid;grid-template-columns:104px minmax(0,1fr) 20px;grid-template-areas:"art . arrow" "title title title" "line line line";align-content:start;min-width:0;padding:32px;background:var(--web-well);border:1px solid var(--web-outline);transition:background-color 180ms ease-out,border-color 180ms ease-out}
-.home-page .door::before{content:"";position:absolute;inset:auto -1px -1px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform 240ms ease-out}
-.home-page .door-art{grid-area:art;display:block;width:104px;height:64px;overflow:visible}
-.home-page .door-art [data-door-part]{transition:transform 280ms cubic-bezier(.22,.61,.36,1),opacity 200ms ease-out}
-.home-page .door-arrow{grid-area:arrow;align-self:start;color:var(--muted-foreground);transition:transform 180ms ease-out,color 180ms ease-out}
-.home-page .door-title{grid-area:title;margin:24px 0 0;font:600 24px/32px var(--font-heading);letter-spacing:0}
-.home-page .door-link{color:var(--foreground);text-decoration:none}
-.home-page .door-link::after{content:"";position:absolute;inset:-1px}
-.home-page .door-line{grid-area:line;max-width:30em;margin:8px 0 0;font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
-.home-page .door-link:focus-visible{outline:none}
-.home-page .door-link:focus-visible::after{outline:2px solid var(--ring);outline-offset:3px}
-.home-page .door:has(.door-link:focus-visible){background:var(--web-quiet);border-color:var(--border)}
-.home-page .door:has(.door-link:focus-visible)::before{transform:none}
-.home-page .door:has(.door-link:focus-visible) .door-arrow{color:var(--foreground)}
-.home-page .door:has(.door-link:focus-visible) [data-door-part=ask]{opacity:0}
-.home-page .door:has(.door-link:focus-visible) [data-door-part=answer]{opacity:1}
-@media(hover:hover){
- .home-page .door:hover{background:var(--web-quiet);border-color:var(--border)}
- .home-page .door:hover::before{transform:none}
- .home-page .door:hover .door-arrow{color:var(--foreground)}
- .home-page .door:hover [data-door-part=ask]{opacity:0}
- .home-page .door:hover [data-door-part=answer]{opacity:1}
+.home-page .doors {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-@media(prefers-reduced-motion:no-preference){.home-page .door:has(.door-link:focus-visible) [data-door-part=lift]{transform:translateY(-3px)}}
-@media(hover:hover) and (prefers-reduced-motion:no-preference){.home-page .door:hover .door-arrow{transform:translateX(4px)}.home-page .door[data-external]:hover .door-arrow{transform:translate(3px,-3px)}.home-page .door:hover [data-door-part=lift]{transform:translateY(-3px)}}
-.home-page .door:active{background:var(--web-raised)}
-@media(max-width:1200px){.home-page .door{padding:24px}}
-@media(max-width:1023px){.home-page .doors{grid-template-columns:minmax(0,1fr);gap:12px}}
-@media(min-width:768px) and (max-width:1023px){
- .home-page .door{grid-template-columns:78px minmax(0,1fr) 20px;grid-template-areas:"art title arrow" "art line arrow";column-gap:24px;align-items:center}
- .home-page .door-art{width:78px;height:48px}
- .home-page .door-arrow{align-self:center}
- .home-page .door-title{margin:0}
- .home-page .door-line{margin-top:4px}
+.home-page .door {
+  position: relative;
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) 20px;
+  grid-template-areas: "art . arrow" "title title title" "line line line";
+  align-content: start;
+  min-width: 0;
+  padding: 32px;
+  background: var(--web-well);
+  border: 1px solid var(--web-outline);
+  transition:
+    background-color 180ms ease-out,
+    border-color 180ms ease-out;
 }
-@media(max-width:767px){.home-page .door{grid-template-columns:78px minmax(0,1fr) 20px;padding:20px}.home-page .door-art{width:78px;height:48px}.home-page .door-title{margin-top:16px;font-size:20px;line-height:28px}}
-@media(prefers-reduced-motion:reduce){.home-page :is(.door,.door::before,.door-arrow,.door-art [data-door-part]){transition:none}}
-@media(forced-colors:active){.home-page .door{border-color:CanvasText}.home-page .door::before{display:none}.home-page .door:hover{border-color:Highlight}.home-page .door-link:focus-visible::after{outline-color:Highlight}}
+.home-page .door::before {
+  content: "";
+  position: absolute;
+  inset: auto -1px -1px;
+  height: 2px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 240ms ease-out;
+}
+.home-page .door-art {
+  grid-area: art;
+  display: block;
+  width: 104px;
+  height: 64px;
+  overflow: visible;
+}
+.home-page .door-art [data-door-part] {
+  transition:
+    transform 280ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 200ms ease-out;
+}
+.home-page .door-arrow {
+  grid-area: arrow;
+  align-self: start;
+  color: var(--muted-foreground);
+  transition:
+    transform 180ms ease-out,
+    color 180ms ease-out;
+}
+.home-page .door-title {
+  grid-area: title;
+  margin: 24px 0 0;
+  font: 600 24px / 32px var(--font-heading);
+  letter-spacing: 0;
+}
+.home-page .door-link {
+  color: var(--foreground);
+  text-decoration: none;
+}
+.home-page .door-link::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+}
+.home-page .door-line {
+  grid-area: line;
+  max-width: 30em;
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--muted-foreground);
+  text-wrap: pretty;
+}
+.home-page .door-link:focus-visible {
+  outline: none;
+}
+.home-page .door-link:focus-visible::after {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+.home-page .door:has(.door-link:focus-visible) {
+  background: var(--web-quiet);
+  border-color: var(--border);
+}
+.home-page .door:has(.door-link:focus-visible)::before {
+  transform: none;
+}
+.home-page .door:has(.door-link:focus-visible) .door-arrow {
+  color: var(--foreground);
+}
+.home-page .door:has(.door-link:focus-visible) [data-door-part="ask"] {
+  opacity: 0;
+}
+.home-page .door:has(.door-link:focus-visible) [data-door-part="answer"] {
+  opacity: 1;
+}
+@media (hover: hover) {
+  .home-page .door:hover {
+    background: var(--web-quiet);
+    border-color: var(--border);
+  }
+  .home-page .door:hover::before {
+    transform: none;
+  }
+  .home-page .door:hover .door-arrow {
+    color: var(--foreground);
+  }
+  .home-page .door:hover [data-door-part="ask"] {
+    opacity: 0;
+  }
+  .home-page .door:hover [data-door-part="answer"] {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .home-page .door:has(.door-link:focus-visible) [data-door-part="lift"] {
+    transform: translateY(-3px);
+  }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .home-page .door:hover .door-arrow {
+    transform: translateX(4px);
+  }
+  .home-page .door[data-external]:hover .door-arrow {
+    transform: translate(3px, -3px);
+  }
+  .home-page .door:hover [data-door-part="lift"] {
+    transform: translateY(-3px);
+  }
+}
+.home-page .door:active {
+  background: var(--web-raised);
+}
+@media (max-width: 1200px) {
+  .home-page .door {
+    padding: 24px;
+  }
+}
+@media (max-width: 1023px) {
+  .home-page .doors {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .home-page .door {
+    grid-template-columns: 78px minmax(0, 1fr) 20px;
+    grid-template-areas: "art title arrow" "art line arrow";
+    column-gap: 24px;
+    align-items: center;
+  }
+  .home-page .door-art {
+    width: 78px;
+    height: 48px;
+  }
+  .home-page .door-arrow {
+    align-self: center;
+  }
+  .home-page .door-title {
+    margin: 0;
+  }
+  .home-page .door-line {
+    margin-top: 4px;
+  }
+}
+@media (max-width: 767px) {
+  .home-page .door {
+    grid-template-columns: 78px minmax(0, 1fr) 20px;
+    padding: 20px;
+  }
+  .home-page .door-art {
+    width: 78px;
+    height: 48px;
+  }
+  .home-page .door-title {
+    margin-top: 16px;
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-page :is(.door, .door::before, .door-arrow, .door-art [data-door-part]) {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .home-page .door {
+    border-color: CanvasText;
+  }
+  .home-page .door::before {
+    display: none;
+  }
+  .home-page .door:hover {
+    border-color: Highlight;
+  }
+  .home-page .door-link:focus-visible::after {
+    outline-color: Highlight;
+  }
+}

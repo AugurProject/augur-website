@@ -7,6 +7,6 @@ const { class: className } = Astro.props;
 <div class:list={['prose-card', className]}><slot /></div>
 <style>
  .prose-card{padding:24px 28px;border:1px solid var(--web-outline);background:var(--web-quiet)}
- .prose-card :global(>:first-child){margin-top:0}
+ .prose-card > :global(:first-child){margin-top:0}
  @media(max-width:767px){.prose-card{padding:20px}}
 </style>

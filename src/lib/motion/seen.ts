@@ -13,7 +13,11 @@ const navigation = performance.getEntriesByType?.('navigation')[0] as Performanc
 export const revisit = navigation?.type === 'reload' || navigation?.type === 'back_forward';
 
 const read = (): string[] => {
-  try { return JSON.parse(sessionStorage.getItem(STORE) ?? '[]') as string[]; } catch { return []; }
+  try {
+    return JSON.parse(sessionStorage.getItem(STORE) ?? '[]') as string[];
+  } catch {
+    return [];
+  }
 };
 
 /** A stable key for the next scene on this page, in document script order. */
@@ -32,5 +36,7 @@ export function markSeen(key: string) {
   try {
     const keys = read();
     if (!keys.includes(key)) sessionStorage.setItem(STORE, JSON.stringify([...keys, key]));
-  } catch { /* Storage unavailable: the scene may play again next time. */ }
+  } catch {
+    /* Storage unavailable: the scene may play again next time. */
+  }
 }

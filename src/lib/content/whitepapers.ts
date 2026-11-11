@@ -14,7 +14,16 @@ export const augurV2 = {
   pdf: links.whitepaperV2Pdf.url,
   source: links.whitepaperSource.url,
   // Reading order; `index` (the contents page) comes first and has no previous/next.
-  sectionOrder: ['abstract-and-introduction', 'how-augur-works', 'incentives-and-security', 'potential-issues-and-risks', 'acknowledgments', 'references', 'appendix-a-finalization-time-and-redistribution', 'appendix-b-bond-size-adjustments'],
+  sectionOrder: [
+    'abstract-and-introduction',
+    'how-augur-works',
+    'incentives-and-security',
+    'potential-issues-and-risks',
+    'acknowledgments',
+    'references',
+    'appendix-a-finalization-time-and-redistribution',
+    'appendix-b-bond-size-adjustments',
+  ],
 } as const;
 
 export const lituusPaper = {
@@ -29,7 +38,10 @@ export type Section = CollectionEntry<'whitepaperV2'>;
 /** The contents page first, then the sections in reading order. */
 export async function getSections(): Promise<Section[]> {
   const order: readonly string[] = ['index', ...augurV2.sectionOrder];
-  const rank = (section: Section) => { const at = order.indexOf(section.id); return at < 0 ? order.length : at; };
+  const rank = (section: Section) => {
+    const at = order.indexOf(section.id);
+    return at < 0 ? order.length : at;
+  };
   return (await getCollection('whitepaperV2')).sort((a, b) => rank(a) - rank(b));
 }
 
@@ -37,7 +49,9 @@ export async function getSections(): Promise<Section[]> {
 export const sectionHeading = (section: Section) => section.body?.match(/^#\s+(.+)$/m)?.[1]?.trim();
 export const sectionTitle = (section: Section) => sectionHeading(section) ?? 'References';
 /** Shorter label for the breadcrumb and rail, as on the old site. */
-export const sectionLabel = (section: Section) => section.id === 'abstract-and-introduction' ? 'Abstract' : sectionTitle(section);
-export const sectionPath = (section: Section) => section.id === 'index' ? augurV2.path : `${augurV2.path}${section.id}/`;
+export const sectionLabel = (section: Section) =>
+  section.id === 'abstract-and-introduction' ? 'Abstract' : sectionTitle(section);
+export const sectionPath = (section: Section) =>
+  section.id === 'index' ? augurV2.path : `${augurV2.path}${section.id}/`;
 /** The section's Markdown source, served at its old URL. */
 export const sectionMarkdownPath = (section: Section) => `${augurV2.path}${section.id}.md`;

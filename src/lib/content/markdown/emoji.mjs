@@ -4,5 +4,5 @@ const LEADING_EMOJI = /^(\p{Emoji_Presentation}|\p{Emoji}️|\p{Emoji}‍\p{Emoj
 
 /** Length of the leading emoji run in `text`, or 0 when it doesn't start with one. */
 export function leadingEmojiLength(text) {
-	return text.match(LEADING_EMOJI)?.[0].length ?? 0;
+  return text.match(LEADING_EMOJI)?.[0].length ?? 0;
 }

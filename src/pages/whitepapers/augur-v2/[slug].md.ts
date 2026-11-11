@@ -5,7 +5,7 @@ import { getSections, type Section } from '@/lib/content/whitepapers';
 // contents at index.md). The files have no frontmatter, so the entry body is the whole file less its
 // final newline, which is put back so the response matches the file byte for byte.
 export async function getStaticPaths() {
-  return (await getSections()).map(section => ({ params: { slug: section.id }, props: { section } }));
+  return (await getSections()).map((section) => ({ params: { slug: section.id }, props: { section } }));
 }
 
 export function GET({ props }: APIContext) {

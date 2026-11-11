@@ -9,59 +9,143 @@
 // easings come from timelines.ts (roadmapTimeline, timing, easing and revealTimeline.ready).
 import { easing, timing, roadmapTimeline, revealTimeline } from '@/components/home/timelines';
 (() => {
-const T = { easing, timeline: roadmapTimeline, fadeOut: timing.fadeOut, ready: revealTimeline.ready, dwell: revealTimeline.dwell }, E = T.easing, L = T.timeline, root = document.querySelector('[data-roadmap]');
-if (!root) return;
-const reduced = matchMedia('(prefers-reduced-motion: reduce)'), animates = typeof Element.prototype.animate === 'function';
-// Now's slow pulse (Roadmap.astro's CSS loop) rests while the roadmap is off screen (data-still, roadmap.css): its
-// ring restyled the page on every frame that anything else drew, up in the hero or while scrolling (measured).
-if ('IntersectionObserver' in window) { root.toggleAttribute('data-still', true); new IntersectionObserver(entries => root.toggleAttribute('data-still', !entries[entries.length - 1].isIntersecting)).observe(root); }
-root.addEventListener('tabschange', ({ detail: { index } }) => {
-root.style.setProperty('--selected', String(index));
-if (reduced.matches || !animates) return;
-root.querySelectorAll('[role="tabpanel"]')[index]?.querySelectorAll('[data-evidence-bar]').forEach(bar => {
-bar.getAnimations().forEach(animation => animation.cancel());
-bar.animate([{ transform: 'scaleX(0)' }, { transform: 'none' }], { delay: T.fadeOut, duration: L.evidence, easing: E.reveal, fill: 'backwards' });
-});
-});
-const STORE = 'augur:motion-seen', KEY = `${location.pathname}:roadmap:entrance`, nav = performance.getEntriesByType?.('navigation')[0];
-const read = () => { try { return JSON.parse(sessionStorage.getItem(STORE) ?? '[]'); } catch { return []; } };
-const stops = root.querySelector('[role="tablist"]'), lead = root.closest('section')?.querySelector('.section-heading .lead'), track = root.querySelector('[data-track-done]');
-// Phones show the milestones as a list with no track (below 768 px), so there the list simply stands under its heading.
-if (!stops || !track?.getClientRects().length || reduced.matches || !animates || !('IntersectionObserver' in window) || nav?.type === 'reload' || nav?.type === 'back_forward' || read().includes(KEY)) return;
-let motion = [], state = 'waiting', ready = false, timer = 0;
-const settle = () => { state = 'done'; clearTimeout(timer); motion.forEach(animation => animation.cancel()); motion = []; observer.disconnect(); };
-const go = (el, keyframes, delay, duration, easing = E.reveal) => { if (el) motion.push(el.animate(keyframes, { delay, duration, easing, fill: 'backwards' })); };
-const draw = [{ transform: 'scaleX(0)' }, { transform: 'none' }];
-// Built now and held on its first frame, so the track never shows, vanishes and draws again while the lead lands.
-go(track, draw, 0, L.track, E.draw);
-go(root.querySelector('[data-track-live]'), draw, L.track * 2 / 3, L.track / 3, E.draw);
-go(root.querySelector('[data-track-ahead]'), [{ opacity: 0 }, { opacity: 1 }], L.track * 3 / 5, L.track * 2 / 5);
-root.querySelectorAll('[data-stop]').forEach((stop, i) => go(stop, [{ opacity: 0, transform: 'scale(.3)' }, { opacity: 1, transform: 'none' }], i * L.stopStagger, L.stopDuration));
-motion.forEach(animation => animation.pause());
-const play = () => {
-state = 'playing';
-try { const keys = read(); if (!keys.includes(KEY)) sessionStorage.setItem(STORE, JSON.stringify([...keys, KEY])); } catch { /* Storage blocked: a later visit may play it again. */ }
-motion.forEach(animation => animation.play());
-Promise.all(motion.map(animation => animation.finished)).then(settle, () => {});
-};
-// The track waits for the lead (reveal.js) while it is still landing, and for the stops to stay on screen for
-// `dwell`, so a fly-by (End, a jump) never spends it off screen.
-const begin = () => {
-clearTimeout(timer);
-if (state !== 'waiting' || !ready || document.hidden) return;
-const group = lead?.closest('[data-armed]');
-if (group) { group.addEventListener('revealed', begin, { once: true }); return; }
-timer = setTimeout(() => { if (state === 'waiting' && ready && !document.hidden) play(); }, T.dwell);
-};
-const observer = new IntersectionObserver(entries => {
-const { isIntersecting, intersectionRatio, intersectionRect, rootBounds } = entries[entries.length - 1];
-ready = isIntersecting && (intersectionRatio >= T.ready || intersectionRect.height >= (rootBounds?.height ?? innerHeight) * T.ready);
-if (!isIntersecting && state === 'playing') { settle(); return; }
-begin();
-}, { threshold: [0, .25, .5, .75, T.ready] });
-observer.observe(stops);
-['pointerdown', 'focusin', 'keydown'].forEach(type => root.addEventListener(type, settle));
-root.addEventListener('tabssettled', settle);
-reduced.addEventListener('change', settle);
-document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'playing') settle(); });
+  const T = {
+      easing,
+      timeline: roadmapTimeline,
+      fadeOut: timing.fadeOut,
+      ready: revealTimeline.ready,
+      dwell: revealTimeline.dwell,
+    },
+    E = T.easing,
+    L = T.timeline,
+    root = document.querySelector('[data-roadmap]');
+  if (!root) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)'),
+    animates = typeof Element.prototype.animate === 'function';
+  // Now's slow pulse (Roadmap.astro's CSS loop) rests while the roadmap is off screen (data-still, roadmap.css): its
+  // ring restyled the page on every frame that anything else drew, up in the hero or while scrolling (measured).
+  if ('IntersectionObserver' in window) {
+    root.toggleAttribute('data-still', true);
+    new IntersectionObserver((entries) =>
+      root.toggleAttribute('data-still', !entries[entries.length - 1].isIntersecting),
+    ).observe(root);
+  }
+  root.addEventListener('tabschange', ({ detail: { index } }) => {
+    root.style.setProperty('--selected', String(index));
+    if (reduced.matches || !animates) return;
+    root
+      .querySelectorAll('[role="tabpanel"]')
+      [index]?.querySelectorAll('[data-evidence-bar]')
+      .forEach((bar) => {
+        bar.getAnimations().forEach((animation) => animation.cancel());
+        bar.animate([{ transform: 'scaleX(0)' }, { transform: 'none' }], {
+          delay: T.fadeOut,
+          duration: L.evidence,
+          easing: E.reveal,
+          fill: 'backwards',
+        });
+      });
+  });
+  const STORE = 'augur:motion-seen',
+    KEY = `${location.pathname}:roadmap:entrance`,
+    nav = performance.getEntriesByType?.('navigation')[0];
+  const read = () => {
+    try {
+      return JSON.parse(sessionStorage.getItem(STORE) ?? '[]');
+    } catch {
+      return [];
+    }
+  };
+  const stops = root.querySelector('[role="tablist"]'),
+    lead = root.closest('section')?.querySelector('.section-heading .lead'),
+    track = root.querySelector('[data-track-done]');
+  // Phones show the milestones as a list with no track (below 768 px), so there the list simply stands under its heading.
+  if (
+    !stops ||
+    !track?.getClientRects().length ||
+    reduced.matches ||
+    !animates ||
+    !('IntersectionObserver' in window) ||
+    nav?.type === 'reload' ||
+    nav?.type === 'back_forward' ||
+    read().includes(KEY)
+  )
+    return;
+  let motion = [],
+    state = 'waiting',
+    ready = false,
+    timer = 0;
+  const settle = () => {
+    state = 'done';
+    clearTimeout(timer);
+    motion.forEach((animation) => animation.cancel());
+    motion = [];
+    observer.disconnect();
+  };
+  const go = (el, keyframes, delay, duration, easing = E.reveal) => {
+    if (el) motion.push(el.animate(keyframes, { delay, duration, easing, fill: 'backwards' }));
+  };
+  const draw = [{ transform: 'scaleX(0)' }, { transform: 'none' }];
+  // Built now and held on its first frame, so the track never shows, vanishes and draws again while the lead lands.
+  go(track, draw, 0, L.track, E.draw);
+  go(root.querySelector('[data-track-live]'), draw, (L.track * 2) / 3, L.track / 3, E.draw);
+  go(root.querySelector('[data-track-ahead]'), [{ opacity: 0 }, { opacity: 1 }], (L.track * 3) / 5, (L.track * 2) / 5);
+  root.querySelectorAll('[data-stop]').forEach((stop, i) =>
+    go(
+      stop,
+      [
+        { opacity: 0, transform: 'scale(.3)' },
+        { opacity: 1, transform: 'none' },
+      ],
+      i * L.stopStagger,
+      L.stopDuration,
+    ),
+  );
+  motion.forEach((animation) => animation.pause());
+  const play = () => {
+    state = 'playing';
+    try {
+      const keys = read();
+      if (!keys.includes(KEY)) sessionStorage.setItem(STORE, JSON.stringify([...keys, KEY]));
+    } catch {
+      /* Storage blocked: a later visit may play it again. */
+    }
+    motion.forEach((animation) => animation.play());
+    Promise.all(motion.map((animation) => animation.finished)).then(settle, () => {});
+  };
+  // The track waits for the lead (reveal.js) while it is still landing, and for the stops to stay on screen for
+  // `dwell`, so a fly-by (End, a jump) never spends it off screen.
+  const begin = () => {
+    clearTimeout(timer);
+    if (state !== 'waiting' || !ready || document.hidden) return;
+    const group = lead?.closest('[data-armed]');
+    if (group) {
+      group.addEventListener('revealed', begin, { once: true });
+      return;
+    }
+    timer = setTimeout(() => {
+      if (state === 'waiting' && ready && !document.hidden) play();
+    }, T.dwell);
+  };
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const { isIntersecting, intersectionRatio, intersectionRect, rootBounds } = entries[entries.length - 1];
+      ready =
+        isIntersecting &&
+        (intersectionRatio >= T.ready || intersectionRect.height >= (rootBounds?.height ?? innerHeight) * T.ready);
+      if (!isIntersecting && state === 'playing') {
+        settle();
+        return;
+      }
+      begin();
+    },
+    { threshold: [0, 0.25, 0.5, 0.75, T.ready] },
+  );
+  observer.observe(stops);
+  ['pointerdown', 'focusin', 'keydown'].forEach((type) => root.addEventListener(type, settle));
+  root.addEventListener('tabssettled', settle);
+  reduced.addEventListener('change', settle);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && state === 'playing') settle();
+  });
 })();

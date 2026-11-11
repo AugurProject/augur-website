@@ -57,19 +57,34 @@ export const homeCopy = {
     tenets: [
       // "Ask" for "Submit" (the claim's verb and How it works' first step) and "a question" for
       // "a question about a real-world event". Anyone may ask, report or challenge (§2 p2, §4.4.1 p7).
-      { title: 'Permissionless', diagram: 'cross', claim: ['Anyone can ask.', 'Anyone can answer.'], body: 'Ask a question, report what happened or challenge an answer you believe is wrong.' },
+      {
+        title: 'Permissionless',
+        diagram: 'cross',
+        claim: ['Anyone can ask.', 'Anyone can answer.'],
+        body: 'Ask a question, report what happened or challenge an answer you believe is wrong.',
+      },
       // "A dispute" for "Augur's dispute process", which took it to four
       // lines at 1024. "No multisigs." sits in the claim. Abstract p1: truth "is not decided by token holders,
       // governance, multisigs, or anyone else"; §2 p2: "without any centralized backstops or vetoes". "No admin
       // keys" stays out: the whitepaper never mentions admin keys. The
       // middleman who falls away shows it.
-      { title: 'Trustless', diagram: 'authority', claim: ['No governance.', 'No multisigs.'], body: 'No company, developer or governing body can overrule the outcome of a dispute.' },
+      {
+        title: 'Trustless',
+        diagram: 'authority',
+        claim: ['No governance.', 'No multisigs.'],
+        body: 'No company, developer or governing body can overrule the outcome of a dispute.',
+      },
       // "Designed with" rather than "Built with", since the design isn't deployed, and "that set a new bar" for "some of the strongest …
       // of any oracle": the paper's "unprecedented security"
       // (Abstract p1), whose own estimate ranks it above all current offerings (Abstract p1; §3 p3, 134% of
       // FDV; §8 p20). "False outcomes" is the paper's "fraudulent outcome" (Abstract p1). No "money" or "bond"
       // in this section (house rule: nothing may suggest money buys the answer).
-      { title: 'Robust', diagram: 'mesh', claim: ['Harder to game.', 'Costlier to manipulate.'], body: 'Designed with economic defenses against false outcomes that set a new bar.' },
+      {
+        title: 'Robust',
+        diagram: 'mesh',
+        claim: ['Harder to game.', 'Costlier to manipulate.'],
+        body: 'Designed with economic defenses against false outcomes that set a new bar.',
+      },
     ],
     // The statement is "The answer is nobody’s call." It heads the closer, above a panel of
     // the two readers, so each payoff says what
@@ -80,10 +95,16 @@ export const homeCopy = {
       // Misresolution said outright ("misresolve"). "Probably" keeps the unsourced "many
       // traders" a guess about the reader, never a statistic; the payoff says no authority decides at all
       // (Abstract p1: not "token holders, governance, multisigs, or anyone else").
-      { who: 'For traders', line: ['You’ve probably seen a market misresolve.', 'Here, no authority decides the outcome.'] },
+      {
+        who: 'For traders',
+        line: ['You’ve probably seen a market misresolve.', 'Here, no authority decides the outcome.'],
+      },
       // Liability first (PR disasters from bad resolutions), then why it goes away: the builder's
       // team never rules on the outcome. "Your team" is scoped by "For builders" (AGENTS.md).
-      { who: 'For builders', line: ['One bad resolution can turn into a PR disaster.', 'With Augur Lituus, your team isn’t the judge.'] },
+      {
+        who: 'For builders',
+        line: ['One bad resolution can turn into a PR disaster.', 'With Augur Lituus, your team isn’t the judge.'],
+      },
     ],
   },
   applications: {
@@ -133,7 +154,11 @@ export const homeCopy = {
       // What the query cards share, one source: Augur Lituus's name, How it works' statuses (example.ts: a
       // report is "open to challenge") and a note for each step. At Final the check says it's final,
       // and the note says why, so the answer keeps a line under it as the market's $1 does.
-      query: { name: 'Augur Lituus', statuses: ['Asked', 'Reported', 'Final'], notes: ['Waiting for a report', 'Open to challenge', 'Not challenged'] },
+      query: {
+        name: 'Augur Lituus',
+        statuses: ['Asked', 'Reported', 'Final'],
+        notes: ['Waiting for a report', 'Open to challenge', 'Not challenged'],
+      },
       // The market card is a query split in two: the market's price beside Augur Lituus's answer. A price near 100 is the market's
       // consensus, not settlement, so the market pays only once the answer is Final. The statuses are How it
       // works' (example.ts: a report is "open to challenge"); this query isn't challenged, so it goes
@@ -144,11 +169,18 @@ export const homeCopy = {
       prediction: {
         label: 'Query',
         title: 'Will this year be the hottest on record?',
-        market: { name: 'Market', prices: [64, 71, 86, 99], paid: '$1', pending: 'Yes price', resolved: 'Paid per Yes share' },
+        market: {
+          name: 'Market',
+          prices: [64, 71, 86, 99],
+          paid: '$1',
+          pending: 'Yes price',
+          resolved: 'Paid per Yes share',
+        },
         // The notes under the answer are `query.notes`: the two waiting steps, then at Final, beside the check,
         // why it's final.
         oracle: { answer: 'Yes' },
-        builders: 'Markets settle once the answer is final, and no one on the team has to decide who won. A challenged result is settled in the open, so it isn’t the team’s to defend.',
+        builders:
+          'Markets settle once the answer is final, and no one on the team has to decide who won. A challenged result is settled in the open, so it isn’t the team’s to defend.',
       },
       // The insurance card is a relay: one line through three stops, the flight, Augur Lituus and the cover, under the query's
       // question. It is a parametric cover, as real delay covers are: it asks whether the flight was late, not
@@ -162,7 +194,8 @@ export const homeCopy = {
         flight: { name: 'Flight AB123', states: ['In the air', 'Landed'], notes: ['Due 14:05', '2 h 45 min late'] },
         oracle: { answer: 'Yes' },
         cover: { name: 'Delay cover', paid: 'Paid', notes: ['If over 2 h late', 'Every policyholder'] },
-        builders: 'Payouts run once the delay is confirmed, with no claims to review. An insurance app could also use a faster oracle and turn to Augur Lituus only when a claim is disputed.',
+        builders:
+          'Payouts run once the delay is confirmed, with no claims to review. An insurance app could also use a faster oracle and turn to Augur Lituus only when a claim is disputed.',
       },
       // The DAO card is a switch. The DAO's
       // part is one row: the treasury upgrade's go-live switch, which the vote turns on and the block turns off.
@@ -175,10 +208,15 @@ export const homeCopy = {
       governance: {
         label: 'Query',
         title: 'Does this upgrade break a DAO rule?',
-        upgrade: { name: 'Treasury upgrade', states: ['Voting', 'Passed'], notes: ['Open to members', 'Goes live in 2 days'] },
+        upgrade: {
+          name: 'Treasury upgrade',
+          states: ['Voting', 'Passed'],
+          notes: ['Open to members', 'Goes live in 2 days'],
+        },
         oracle: { answer: 'Yes', other: 'No' },
         outcome: { status: 'Blocked', note: 'It won’t go live' },
-        builders: 'Every upgrade is checked against the DAO’s own rules by a process the core team doesn’t control. Changes within the constitution can still go live.',
+        builders:
+          'Every upgrade is checked against the DAO’s own rules by a process the core team doesn’t control. Changes within the constitution can still go live.',
       },
     },
   },
@@ -224,10 +262,34 @@ export const homeCopy = {
       // fee per question in REP (§4.4.2 p7), a report stakes on an outcome (§4.1 p5), a challenge stakes on another
       // (§4.0.2 p4), rewards go to the outcome that becomes final (§4.3.1 p6). Short enough for one line from 1024.
       stops: [
-        { title: 'Ask', note: 'Pay a fee in REP', scene: 'ask', claim: ['Anyone can ask.', 'A fee funds the reward.'], body: 'The reward grows until someone reports what happened.' },
-        { title: 'Report', note: 'Stake on an answer', scene: 'report', claim: ['Report what you saw.', 'Stake REP on it.'], body: 'No challenge in time? Your stake comes back with the reward.' },
-        { title: 'Challenge', note: 'Back another answer', scene: 'challenge', claim: ['Think it’s wrong?', 'Stake double theirs.'], body: 'The time to challenge starts again on your answer.' },
-        { title: 'Get paid', note: 'If your answer holds', scene: 'paid', claim: ['No new stake in time?', 'The answer is final.'], body: 'Whoever backed it wins most of the losing stake.' },
+        {
+          title: 'Ask',
+          note: 'Pay a fee in REP',
+          scene: 'ask',
+          claim: ['Anyone can ask.', 'A fee funds the reward.'],
+          body: 'The reward grows until someone reports what happened.',
+        },
+        {
+          title: 'Report',
+          note: 'Stake on an answer',
+          scene: 'report',
+          claim: ['Report what you saw.', 'Stake REP on it.'],
+          body: 'No challenge in time? Your stake comes back with the reward.',
+        },
+        {
+          title: 'Challenge',
+          note: 'Back another answer',
+          scene: 'challenge',
+          claim: ['Think it’s wrong?', 'Stake double theirs.'],
+          body: 'The time to challenge starts again on your answer.',
+        },
+        {
+          title: 'Get paid',
+          note: 'If your answer holds',
+          scene: 'paid',
+          claim: ['No new stake in time?', 'The answer is final.'],
+          body: 'Whoever backed it wins most of the losing stake.',
+        },
       ],
       // The example as a story:
       // example.ts's question and amounts in four plain sentences, one per step above, each under that step's
@@ -285,8 +347,15 @@ export const homeCopy = {
     title: 'Holding REP?',
     link: 'How REP works',
     points: [
-      { label: 'Earn REP', text: 'Report or challenge when you know what happened, and get paid in REP when your answer holds.', earn: true },
-      { label: 'Stay in the loop', text: 'Holding is mostly hands-off. If a fork ever starts, there’s a window to move your REP to the answer you believe in.' },
+      {
+        label: 'Earn REP',
+        text: 'Report or challenge when you know what happened, and get paid in REP when your answer holds.',
+        earn: true,
+      },
+      {
+        label: 'Stay in the loop',
+        text: 'Holding is mostly hands-off. If a fork ever starts, there’s a window to move your REP to the answer you believe in.',
+      },
     ],
   },
   learnMore: {

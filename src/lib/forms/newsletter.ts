@@ -7,9 +7,11 @@ export const newsletter = {
   path: '/subscribe',
   consentVersion: '2026-10-31',
   /** Shown under the field; the contact address is appended by the footer. */
-  consent: 'We’ll keep your email to tell you about Augur’s progress. Nothing is sent yet; before any newsletter starts we’ll ask you to confirm. To be removed,',
+  consent:
+    'We’ll keep your email to tell you about Augur’s progress. Nothing is sent yet; before any newsletter starts we’ll ask you to confirm. To be removed,',
   messages: {
-    subscribed: 'Thanks, we’ve noted your interest. We haven’t sent anything; before any newsletter starts we’ll ask you to confirm.',
+    subscribed:
+      'Thanks, we’ve noted your interest. We haven’t sent anything; before any newsletter starts we’ll ask you to confirm.',
     invalid: 'Enter a valid email address, like you@example.com.',
     error: 'We couldn’t save your address. Please try again later.',
   },

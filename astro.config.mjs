@@ -28,18 +28,30 @@ let clientDir = '';
 const permanentTrailingSlash = {
   name: 'permanent-trailing-slash',
   hooks: {
-    'astro:config:done': ({ config }) => { clientDir = fileURLToPath(config.outDir).replace(/[\\/]$/, ''); },
+    'astro:config:done': ({ config }) => {
+      clientDir = fileURLToPath(config.outDir).replace(/[\\/]$/, '');
+    },
     'astro:build:done': () => {
       const file = join(clientDir, '_redirects');
       const existing = existsSync(file) ? readFileSync(file, 'utf8') : '';
-      const sources = new Set(existing.split('\n').map(line => line.trim().split(/\s+/)[0]).filter(source => source && !source.startsWith('#')));
+      const sources = new Set(
+        existing
+          .split('\n')
+          .map((line) => line.trim().split(/\s+/)[0])
+          .filter((source) => source && !source.startsWith('#')),
+      );
       const folders = readdirSync(clientDir, { recursive: true, withFileTypes: true })
-        .filter(entry => entry.isFile() && entry.name === 'index.html' && entry.parentPath !== clientDir)
-        .map(entry => `/${entry.parentPath.slice(clientDir.length).split(/[\\/]/).filter(Boolean).join('/')}`)
-        .filter(path => !sources.has(path) && !sources.has(`${path}/`)).sort();
+        .filter((entry) => entry.isFile() && entry.name === 'index.html' && entry.parentPath !== clientDir)
+        .map((entry) => `/${entry.parentPath.slice(clientDir.length).split(/[\\/]/).filter(Boolean).join('/')}`)
+        .filter((path) => !sources.has(path) && !sources.has(`${path}/`))
+        .sort();
       // Workers static assets allow 2,000 static redirects; fail here rather than lose rules at deploy.
-      if (sources.size + folders.length > 2000) throw new Error(`_redirects would hold ${sources.size + folders.length} rules; the limit is 2,000.`);
-      appendFileSync(file, `${existing && !existing.endsWith('\n') ? '\n' : ''}# Permanent trailing-slash redirects, added at build (astro.config.mjs).\n${folders.map(path => `${path} ${path}/ 301\n`).join('')}`);
+      if (sources.size + folders.length > 2000)
+        throw new Error(`_redirects would hold ${sources.size + folders.length} rules; the limit is 2,000.`);
+      appendFileSync(
+        file,
+        `${existing && !existing.endsWith('\n') ? '\n' : ''}# Permanent trailing-slash redirects, added at build (astro.config.mjs).\n${folders.map((path) => `${path} ${path}/ 301\n`).join('')}`,
+      );
     },
   },
 };
@@ -64,7 +76,16 @@ export default defineConfig({
   // gets no math, so prose like "You don't spend $2 to steal $1." stays text (the old site parsed it as
   // math); it keeps the old site's callouts and drops its decorative heading emoji. rehypePortedContent
   // only touches the ported collections.
-  markdown: { processor: unified({ remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex, rehypeWhitepaperLinks, rehypePortedContent] }) },
-  integrations: [mdx({ processor: unified({ rehypePlugins: [rehypeHeadingEmoji, rehypeCallouts, rehypePortedContent] }) }), sitemap({ filter: isIndexable }), permanentTrailingSlash],
-  vite: { plugins: [tailwindcss()] }
+  markdown: {
+    processor: unified({
+      remarkPlugins: [remarkMath],
+      rehypePlugins: [rehypeKatex, rehypeWhitepaperLinks, rehypePortedContent],
+    }),
+  },
+  integrations: [
+    mdx({ processor: unified({ rehypePlugins: [rehypeHeadingEmoji, rehypeCallouts, rehypePortedContent] }) }),
+    sitemap({ filter: isIndexable }),
+    permanentTrailingSlash,
+  ],
+  vite: { plugins: [tailwindcss()] },
 });

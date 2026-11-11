@@ -7,9 +7,12 @@ const review = { placeholder: z.boolean().default(false), needsReview: z.boolean
 const learn = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/learn' }),
   schema: z.object({
-    title: z.string(), description: z.string(), order: z.number().int().optional(),
+    title: z.string(),
+    description: z.string(),
+    order: z.number().int().optional(),
     group: z.enum(['Start here', 'For builders', 'Overview', 'Research']),
-    terms: z.array(z.string()).default([]), readingMinutes: z.number().int().positive().optional(),
+    terms: z.array(z.string()).default([]),
+    readingMinutes: z.number().int().positive().optional(),
     ...review,
   }),
 });
@@ -20,11 +23,16 @@ const learn = defineCollection({
 // Blog posts, one folder each: /blog/<folder>/. `featuredImage` feeds the index cards.
 const blog = defineCollection({
   loader: glob({ pattern: '*/index.mdx', base: './src/content/blog' }),
-  schema: ({ image }) => z.object({
-    title: z.string(), description: z.string(), author: z.string(),
-    publishDate: z.date(), updatedDate: z.date().optional(), tags: z.array(z.string()).optional(),
-    featuredImage: image(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      author: z.string(),
+      publishDate: z.date(),
+      updatedDate: z.date().optional(),
+      tags: z.array(z.string()).optional(),
+      featuredImage: image(),
+    }),
 });
 
 // The Augur v2 whitepaper, one file per section, with no frontmatter: /whitepapers/augur-v2/<file>/.
@@ -36,9 +44,14 @@ const whitepaperV2 = defineCollection({
 const forkGuides = defineCollection({
   loader: glob({ pattern: '*.mdx', base: './src/content/fork-guides' }),
   schema: z.object({
-    title: z.string(), description: z.string(), topic: z.literal('fork'), order: z.number().int().nonnegative(),
+    title: z.string(),
+    description: z.string(),
+    topic: z.literal('fork'),
+    order: z.number().int().nonnegative(),
     contentType: z.enum(['topic', 'lesson', 'guide', 'reference', 'case-study', 'historical-record']),
-    label: z.string(), historical: z.boolean(), status: z.enum(['available', 'archived', 'planned']),
+    label: z.string(),
+    historical: z.boolean(),
+    status: z.enum(['available', 'archived', 'planned']),
     presentation: z.enum(['standard', 'reference', 'case-study', 'historical-record']),
   }),
 });

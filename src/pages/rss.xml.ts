@@ -10,7 +10,7 @@ export async function GET(context: APIContext) {
     title: 'Augur Blog',
     description: 'Latest insights and updates from the Augur Project',
     site: context.site!,
-    items: posts.map(post => ({
+    items: posts.map((post) => ({
       title: post.data.title,
       pubDate: post.data.publishDate,
       description: post.data.description,

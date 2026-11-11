@@ -9,6 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
+    "lint": "biome ci .",
+    "format": "biome check --write .",
     "check:launch": "node scripts/check-launch.mjs",
     "supply": "node scripts/generate-supply.mjs",
     "preview": "astro build && astro preview",
@@ -36,6 +38,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@biomejs/biome": "2.6.6",
     "@types/node": "^26.6.5",
     "typescript": "^6.0.3",
     "wrangler": "^4.151.2"

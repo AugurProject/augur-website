@@ -1,23 +1,43 @@
 /* Roadmap section styles (Home.astro renders this sheet inline with the others, scoped to .home-page). */
-.home-page #roadmap>.site-container{padding-top:0}
+.home-page #roadmap > .site-container {
+  padding-top: 0;
+}
 /* Roadmap. Consistency only: the page rhythm above, the lead balanced like the
    others, and below 1024 each panel fits its own milestone, as the use-case stage does from the same
    width, instead of reserving 630 / 720 px (empty feet of up to 61 px at 768 and 91 at 390). Only what
    follows the panel moves when a tab changes; the default Now tab is already taller than 720 on phones. */
-.home-page .roadmap .lead{text-wrap:balance}
+.home-page .roadmap .lead {
+  text-wrap: balance;
+}
 /* The Now status left "2026" alone on its last line at 390 and 1024 ("…completed in July / 2026"), and
    at 360 the Now title split the name ("Building Augur / Lituus."); balanced: "Building / Augur Lituus."
    "The design, published." and "Ready for applications." still break before their last word at 360. */
-.home-page :is(.roadmap-status,.roadmap-story h3){text-wrap:balance}
-@media(max-width:1023px){.home-page .roadmap-panel{min-height:0}}
+.home-page :is(.roadmap-status, .roadmap-story h3) {
+  text-wrap: balance;
+}
+@media (max-width: 1023px) {
+  .home-page .roadmap-panel {
+    min-height: 0;
+  }
+}
 /* Where a milestone's two links wrap (phones), they stack 16 apart, like the hero's two actions and the
    Learn more foot, so each pair reads as one group. */
-.home-page .roadmap-links{row-gap:16px}
+.home-page .roadmap-links {
+  row-gap: 16px;
+}
 /* 768–919 (iPad portrait): six stops share 704–855 px, and "Implementation" (116 px at 14 px) ran 23 px
    past its tab at 768, butting into "Testing & audits" and the Now box's edge (in v1 too). Labels step
    down to 12/18 with 10 px insets there, so the longest ends 8 px inside its box; weight and colour still
    set them apart from the 12 px dates. `[role=tab]` outranks the scoped `.roadmap-tabs[…] button[…]`. */
-@media(min-width:768px) and (max-width:919px){.home-page .roadmap-tabs button[role=tab]{padding-inline:10px}.home-page .roadmap-label{font-size:12px;line-height:18px}}
+@media (min-width: 768px) and (max-width: 919px) {
+  .home-page .roadmap-tabs button[role="tab"] {
+    padding-inline: 10px;
+  }
+  .home-page .roadmap-label {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
 /* Roadmap. The
    evidence box fills the panel's height on every stop with its content centred, so switching stops no
    longer moves its foot (its height ran 190–258 px). From 1024 to 1279 the evidence column is 360 wide:
@@ -27,14 +47,42 @@
    (AGENTS.md); the panel's status square rests.
    Green stays on Now: the completed Moon Fork's bar is Paper. Labels and captions reach 14 px, and the
    box's padding and label gap sit on the scale. */
-@media(min-width:1024px){.home-page .roadmap-panel{min-height:376px}.home-page .roadmap-evidence{align-self:stretch;display:flex;flex-direction:column;justify-content:center;padding:24px}}
-@media(min-width:1024px) and (max-width:1279px){.home-page .roadmap-panel{grid-template-columns:minmax(0,1fr) 360px}}
-.home-page .roadmap-status.is-now>span::after{animation:none}
-.home-page .roadmap-evidence[data-evidence="fork"] .evidence-bar>span.is-accent{background:var(--foreground)}
-.home-page .roadmap-evidence :is(.evidence-label,.evidence-caption){font-size:14px;line-height:20px}
-.home-page .roadmap-evidence .evidence-label{margin-bottom:24px}
+@media (min-width: 1024px) {
+  .home-page .roadmap-panel {
+    min-height: 376px;
+  }
+  .home-page .roadmap-evidence {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .home-page .roadmap-panel {
+    grid-template-columns: minmax(0, 1fr) 360px;
+  }
+}
+.home-page .roadmap-status.is-now > span::after {
+  animation: none;
+}
+.home-page .roadmap-evidence[data-evidence="fork"] .evidence-bar > span.is-accent {
+  background: var(--foreground);
+}
+.home-page .roadmap-evidence :is(.evidence-label, .evidence-caption) {
+  font-size: 14px;
+  line-height: 20px;
+}
+.home-page .roadmap-evidence .evidence-label {
+  margin-bottom: 24px;
+}
 /* The roadmap's Now: one pulse marks it, on the track's stop; the panel's status
    square, which pulsed in step beside it, holds still. The stop's pulse rests while the roadmap is off screen
    (roadmap.js sets data-still): its ring restyled the page on every frame drawn anywhere else. */
-.home-page #roadmap .roadmap-status.is-now>span::after{animation:none}
-.home-page [data-roadmap][data-still] .roadmap-stop.is-now::after{animation-play-state:paused}
+.home-page #roadmap .roadmap-status.is-now > span::after {
+  animation: none;
+}
+.home-page [data-roadmap][data-still] .roadmap-stop.is-now::after {
+  animation-play-state: paused;
+}

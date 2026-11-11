@@ -36,7 +36,12 @@ const timeoutMs = 30_000;
 const selectors = { symbol: '0x95d89b41', decimals: '0x313ce567', totalSupply: '0x18160ddd' };
 
 const rpc = async (url, method, params) => {
-  const response = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }), signal: AbortSignal.timeout(timeoutMs) });
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }),
+    signal: AbortSignal.timeout(timeoutMs),
+  });
   if (!response.ok) throw new Error(`${method}: HTTP ${response.status}`);
   const { result, error } = await response.json();
   if (error) throw new Error(`${method}: ${error.message ?? JSON.stringify(error)}`);
@@ -45,7 +50,7 @@ const rpc = async (url, method, params) => {
 const call = (url, data, block) => rpc(url, 'eth_call', [{ to: token.address, data }, `0x${block.toString(16)}`]);
 
 /** An ABI-encoded `string` return value: offset, length, then the UTF-8 bytes. */
-const decodeString = hex => {
+const decodeString = (hex) => {
   const bytes = Buffer.from(hex.slice(2), 'hex');
   const offset = Number(BigInt(`0x${bytes.subarray(0, 32).toString('hex')}`));
   const length = Number(BigInt(`0x${bytes.subarray(offset, offset + 32).toString('hex')}`));
@@ -53,20 +58,23 @@ const decodeString = hex => {
 };
 
 /** Whole tokens as a bare decimal: no grouping, no exponent, no trailing zeros. */
-const formatWholeTokens = wei => {
+const formatWholeTokens = (wei) => {
   const base = 10n ** BigInt(decimals);
   const fraction = (wei % base).toString().padStart(decimals, '0').replace(/0+$/u, '');
   return fraction ? `${wei / base}.${fraction}` : `${wei / base}`;
 };
 
-const read = async url => {
+const read = async (url) => {
   const block = Number(BigInt(await rpc(url, 'eth_blockNumber', []))) - blockLag;
   const symbol = decodeString(await call(url, selectors.symbol, block));
-  if (symbol !== token.symbol) throw new Error(`on-chain symbol "${symbol}" is not "${token.symbol}"; refusing to publish`);
+  if (symbol !== token.symbol)
+    throw new Error(`on-chain symbol "${symbol}" is not "${token.symbol}"; refusing to publish`);
   const onChainDecimals = Number(BigInt(await call(url, selectors.decimals, block)));
-  if (onChainDecimals !== decimals) throw new Error(`on-chain decimals ${onChainDecimals} is not ${decimals}; refusing to publish`);
+  if (onChainDecimals !== decimals)
+    throw new Error(`on-chain decimals ${onChainDecimals} is not ${decimals}; refusing to publish`);
   const wei = BigInt(await call(url, selectors.totalSupply, block));
-  if (wei <= 0n || wei > maxSupplyWei) throw new Error(`supply ${wei} is outside (0, 11,000,000 REP]; refusing to publish`);
+  if (wei <= 0n || wei > maxSupplyWei)
+    throw new Error(`supply ${wei} is outside (0, 11,000,000 REP]; refusing to publish`);
   return { block, symbol, wei };
 };
 
@@ -74,7 +82,9 @@ let snapshot;
 for (const url of endpoints) {
   try {
     snapshot = await read(url);
-    console.log(`✓ ${snapshot.symbol} totalSupply at block ${snapshot.block}: ${formatWholeTokens(snapshot.wei)} (${new URL(url).host})`);
+    console.log(
+      `✓ ${snapshot.symbol} totalSupply at block ${snapshot.block}: ${formatWholeTokens(snapshot.wei)} (${new URL(url).host})`,
+    );
     break;
   } catch (error) {
     console.log(`✗ ${new URL(url).host}: ${error.message}`);
@@ -98,7 +108,14 @@ const meta = {
   generatedAt: new Date().toISOString(),
   blockNumber: snapshot.block,
   note: 'Circulating equals total: no locked, reserved, or treasury allocations.',
-  token: { address: token.address, symbol: snapshot.symbol, role: token.role, totalSupplyWei: snapshot.wei.toString(), totalSupply: value, circulatingSupply: value },
+  token: {
+    address: token.address,
+    symbol: snapshot.symbol,
+    role: token.role,
+    totalSupplyWei: snapshot.wei.toString(),
+    totalSupply: value,
+    circulatingSupply: value,
+  },
 };
 await writeFile(join(dir, 'meta.json'), `${JSON.stringify(meta, null, '\t')}\n`);
 console.log(`✓ Wrote ${dir}`);
