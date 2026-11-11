@@ -31,24 +31,7 @@ const head = currentRep.address.slice(0, 6), tail = currentRep.address.slice(-4)
  </div>
  <p class="token-note">Augur Lituus is being built around this token. Address checked on Etherscan, {currentRep.checked}.</p>
 </section>
-<script>
- // Copy the address; the label turns to “Copied” for a moment and a polite status confirms it.
- const status = document.querySelector<HTMLElement>('[data-copy-address-status]');
- for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy-address]')) {
-  let timer = 0;
-  button.addEventListener('click', async () => {
-   try {
-    await navigator.clipboard.writeText(button.dataset.copyAddress!);
-    button.dataset.copied = '';
-    if (status) status.textContent = 'Contract address copied';
-    clearTimeout(timer);
-    timer = window.setTimeout(() => { delete button.dataset.copied; if (status) status.textContent = ''; }, 2000);
-   } catch {
-    if (status) status.textContent = 'Could not copy. Select the address and copy it instead.';
-   }
-  });
- }
-</script>
+<script>import './copy-address';</script>
 <style>
  .token-card{align-self:center;background:var(--web-quiet);border:1px solid var(--web-outline);padding:28px}
  .token-head{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:16px}

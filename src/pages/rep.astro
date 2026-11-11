@@ -13,7 +13,7 @@ import { links } from '@/site/links';
 /** REP, rebuilt 19 October 2026. The story runs from what REP is for to
  * what it asks of the reader: why lying costs more each round, holding against taking part,
  * what a fork asks of holders, which REP is current, then holders' questions. The hero's token
- * card keeps the contract-reference job of augur.net/rep. Copy lives in src/data/rep.ts. */
+ * card keeps the contract-reference job of augur.net/rep. Copy lives in components/rep/rep.ts. */
 const questions = repFaq.ids.map(id => { const entry = faqEntries.find(item => item.id === id); if (!entry) throw new Error(`Unknown FAQ entry ${id}`); return entry; });
 ---
 <PageLayout title="REP | Augur’s token" description="What REP does, why it makes lying expensive, the current REPv2_Yes_1 contract, which REP you hold and what to do in a fork. Reporting and challenging are optional.">
