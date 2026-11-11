@@ -1,9 +1,9 @@
 import { links, type LinkKey } from '@/site/links';
-/** Figma 162:412, 104×136 cover cropped to its 100px chart window. */
+/** 104×136 cover cropped to its 100px chart window. */
 export const roadmapPaperSquares = [[14,18,true],[30,18,false],[62,18,false],[78,30,true],[14,46,false],[46,46,false],[86,58,false],[22,106,false],[54,118,true],[86,106,false],[70,94,false]] as const;
 type RoadmapLink = { label: string; key?: LinkKey; href?: string };
 export interface Milestone {id:string;date:string;label:string;status:string;title:string;body:string;links:RoadmapLink[];evidence:'reboot'|'paper'|'fork'|'tests'|'goals'|'quote'}
-/** Canonical copy 28:7 and all six states of Roadmap / Track 162:454.
+/** Roadmap milestones, all six states.
  * Refresh after each quarterly report; this snapshot is dated 5 October 2026. */
 export const roadmap:Milestone[]=[
  {id:'reboot',date:'2025',label:'Augur reboots',status:'Completed · 2025',title:'Augur starts again.',body:'The Lituus Foundation restarted Augur in March 2025. In May it proposed Generalized Augur: a universal, permissionless oracle for any application.',links:[{label:'Read the mission',href:'/about/'}],evidence:'reboot'},

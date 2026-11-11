@@ -22,7 +22,7 @@ strong{font:600 14px/20px var(--font-heading);white-space:nowrap}strong::before{
 .announcement-dismiss :global(.web-icon),.announcement-dismiss :global(svg){width:12px;height:12px}
 /* Below 900 px the one-line message would run under the ×, so it takes the stacked layout. */
 @media(max-width:899px){.announcement-inner{justify-content:flex-start}.announcement-message{flex:1;padding:10px 32px 10px 0;flex-wrap:wrap;gap:4px 10px}.announcement-message>span{order:3;text-align:center;width:100%}a{margin-left:0}}
-/* The drop-in (owner, 29 Oct 2026; announcement-state.js arms it on a fresh visit). Until it plays the
+/* The drop-in (announcement-state.inline.js arms it on a fresh visit). Until it plays the
    bar waits above the page and every element after it is lifted by the bar's height: translates only, so
    the layout is final from the first paint and nothing reflows. Three seconds in, once the hero has
    landed, they slide down together and the bar fades in as it comes. Print never sees the lift. */

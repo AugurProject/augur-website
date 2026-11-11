@@ -26,3 +26,6 @@ if (svg && !reduced.matches && 'IntersectionObserver' in window && typeof svg.an
   addEventListener('beforeprint', () => { printing = true; reset(); });
   addEventListener('afterprint', () => { printing = false; sync(); });
 }
+
+// Marks this file as a module, so its names stay out of the global scope.
+export {};

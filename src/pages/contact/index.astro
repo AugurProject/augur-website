@@ -5,8 +5,7 @@ import Button from '@/components/ui/Button.astro';
 import { links } from '@/site/links';
 import { forms } from '@/lib/forms/forms';
 import { contact } from '@/lib/forms/contact';
-// Layout, fields and copy follow the lab's contact page (augur-web-lab 1b95a3a), approved by jubalm
-// on 29 October 2026. The form posts to the augur-forms Worker, which emails the team and redirects
+// The form posts to the augur-forms Worker, which emails the team and redirects
 // to /contact/<result>/; without PUBLIC_FORMS_URL in a production build the form is offline.
 const socials = [{ key: 'telegram', label: 'Telegram', icon: 'telegram-logo' }, { key: 'github', label: 'GitHub', icon: 'github-logo' }, { key: 'x', label: 'X', icon: 'x-logo' }] as const;
 const email = links.contact.url.replace(/^mailto:/, '');

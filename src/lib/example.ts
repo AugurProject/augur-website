@@ -1,17 +1,15 @@
 /** How it works: one walkthrough of taking part, from a question opening to getting
- * paid (owner + Augus, 19 Oct 2026). Resolution / Walkthrough 146:470 was read on
- * 5 October 2026; the REP rows that were section 07 now live in each step's “Your REP”
+ * paid. The REP rows live in each step's “Your REP”
  * zone. Mechanism facts: January 2026 Augur Lituus whitepaper §2, §4.0.1–4.0.2,
  * §4.1, §4.3.1, §4.4.2–4.4.3 and §4.5 (docs/decisions.md). Draft copy: every string
  * below awaits the owner's approval (docs/launch-checklist.md). */
 export const walkthroughReview = { needsReview: true, source: 'Draft copy, 19 October 2026; January 2026 Augur Lituus whitepaper.' } as const;
 
-/** The example question, in the five fields every question has (owner, 19 Oct 2026): a title
+/** The example question, in the five fields every question has: a title
  * that states what is asked; a description of how each outcome connects to the question;
  * resolution criteria, the exact process for verifying the outcome; the outcome list (N
  * outcomes, here 3); and the information cutoff, after which new information is disregarded.
- * The terms are illustrative, written for the example (owner, 19 Oct 2026: “a good description
- * for whatever the question is”); they make no claim about Augur Lituus or the state of the
+ * The terms are illustrative, written for the example; they make no claim about Augur Lituus or the state of the
  * science. */
 export const query = {
   title: 'Has room-temperature superconductivity been independently demonstrated at ambient pressure?',
@@ -48,10 +46,10 @@ export type Square = 'bond' | 'share' | 'reward' | 'lost';
 /** `amount` is a REP tag; `detail` is a plain line in its place; `label` replaces the squares'
  * own numbers (the reward when its amount is known). */
 export interface Group { squares: Square[]; caption: string; amount?: string; detail?: string; label?: string }
-/** Every panel leads with its payoff (owner, 19 Oct 2026: “more selly … use %”): a
+/** Every panel leads with its payoff: a
  * label, a headline figure and a few words on what the figure is. The diagram under it
- * shows what you lock, what has to happen and what comes back, so no sentence repeats it
- * (owner, 19 Oct 2026: “too noisy”, so each fact is said once). Percentages are one question's payout in
+ * shows what you lock, what has to happen and what comes back, so each fact is said once.
+ * Percentages are one question's payout in
  * REP from the whitepaper rules and these example amounts, never a yield or a rate,
  * and the loss case always sits in the same panel. */
 interface Pitch { label: string; stat: string; statNote: string }

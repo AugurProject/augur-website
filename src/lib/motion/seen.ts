@@ -1,10 +1,9 @@
 import { replayMotion } from './debug';
 
-/** Entrance scenes play once per tab session (owner feedback, 5 and 6 Oct 2026:
- * pressing F5 must not replay any animation). A reload or a history visit
+/** Entrance scenes play once per tab session (pressing F5 must not replay any animation). A reload or a history visit
  * always shows every scene settled, read from the navigation type so it holds
- * even where storage is blocked (the 6 Oct report came from a browser that
- * denies `sessionStorage`). On a fresh visit a scene is recorded when it starts,
+ * even where storage is blocked (some browsers
+ * deny `sessionStorage`). On a fresh visit a scene is recorded when it starts,
  * so a later visit in the same session shows it settled while scenes the reader
  * has not reached yet still play. Without storage, a fresh visit plays them. */
 const STORE = 'augur:motion-seen';

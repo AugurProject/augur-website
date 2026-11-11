@@ -3,7 +3,7 @@
  * Without it a production build keeps the forms offline: they send nothing and say so.
  * The Worker imports this file too, so both sides agree on the honeypot field.
  *
- * `enabled` switches both forms off for the DevCon launch (jubalm, 2 November 2026): the footer
+ * `enabled` switches both forms off for the DevCon launch: the footer
  * shows follow links instead of the newsletter form, /contact/ offers a mailto link instead of the
  * message form, and the result pages are not built. Set it back to true to restore the forms.
  */

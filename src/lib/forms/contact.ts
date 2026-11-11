@@ -1,8 +1,6 @@
 /** The contact form on /contact/. It posts to the augur-forms Worker's `/contact` route, which
  * checks the same rules and emails the message to the team (workers/forms/src/contact.ts). The
  * Worker imports this file, so the page and the server share one set of fields, limits and messages.
- * Fields follow the lab's contact page (augur-web-lab 1b95a3a); the wording is jubalm's approval of
- * that page plus the notice and results recommended on #35.
  */
 import { isEmail } from './newsletter';
 

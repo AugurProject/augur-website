@@ -1,7 +1,4 @@
-/** The /2/ Trustless card: Middleman crumbles (owner, 22 Oct 2026: "maybe in trustless we can have like a bunch of
- * blocks communicating to each other without a central intermediary or something that breaks the central
- * intermediary", then "we using the middleman crushes", chosen from six network versions on the Tenet Motion
- * Options board).
+/** The Trustless card: Middleman crumbles.
  * - Six blocks on a ring, joined by dashed links on the floor, talk directly. A Green message slides along a link,
  *   under both blocks, so it shows only on its way; it lights its link, then the top of the block it reaches, with
  *   a Green outline pulse at that block's foot.
@@ -10,7 +7,7 @@
  * - The tower cracks and crumbles, its cubes falling, shrinking and fading. The links come back and the blocks
  *   talk directly again.
  * The resting frame, which no JavaScript, reduced motion and print show, is the ring with no one in the middle.
- * There are no words. iso-kit.ts has the drawing and keyframe rules shared with the other two cards. */
+ * There are no words. kit.ts has the drawing and keyframe rules shared with the other two cards. */
 import { E, M, P, block, quad, node, keyframes, fit, shift, navy, green, pewter, mark, type Key, type Point, type SvgNode } from '@/lib/iso/kit';
 
 const { tracks, animate } = keyframes('middleman');
@@ -85,7 +82,7 @@ function send(A: Spot, B: Spot, t: number, { fill = green, quiet = false, hide =
   }
   return at;
 }
-// Block to block, before the tower and after it. The board's last message left at 10.3 s for block 1 and lit it
+// Block to block, before the tower and after it. The last message left at 10.3 s for block 1 and lit it
 // past the loop's end; it goes to its neighbour, block 0, so every light is out before the loop closes.
 ([[0, 1, 300], [3, 5, 900], [1, 3, 1500], [4, 3, 2100], [5, 0, 2700], [2, 4, 8700], [0, 2, 9300], [3, 2, 9900], [5, 0, 10300]] as const).forEach(([a, b, t]) => send(spots[a], spots[b], t));
 // Through the middle while the tower stands: in Green, a wait, and out grey.

@@ -1,4 +1,4 @@
-/** Canonical glossary, Figma Learn 220:354. */
+/** Canonical glossary. */
 export const glossary = [
   { id: 'oracle', term: 'Oracle', definition: 'A service that tells a blockchain what happened in the real world.' },
   { id: 'report', term: 'Report', definition: 'A proposed answer to a question, backed by a REP bond.' },

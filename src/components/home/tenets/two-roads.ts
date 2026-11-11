@@ -1,12 +1,11 @@
-/** The /2/ Permissionless card: Two roads in cubes (owner, 22 Oct 2026: chosen over flat-square and figure
- * versions on the Tenet Motion Options board, then "lgtm" for v2).
+/** The Permissionless card: Two roads in cubes.
  * - At the back, a gated road: a line of cubes waits at a booth and a barrier. Once a loop the barrier lifts
  *   in its own upright plane, the front cube drives off, the rest step up and a new cube joins the back.
  * - In front, the Augur Lituus road, paved in the brand's deep accent green (--augur-color-accent-deep): cubes
  *   glide past at a steady pace, and each turns Green as
  *   it crosses a finish line of Paper and Navy squares, with a Green pulse on the ground.
  * The Augur glyph, painted small where the open road begins, says whose road it is; there are no words.
- * iso-kit.ts has the drawing and keyframe rules shared with the other two cards. The keyframes are exact: steady
+ * kit.ts has the drawing and keyframe rules shared with the other two cards. The keyframes are exact: steady
  * speeds, no cube ever trades places with another (each is drawn at its true depth), instant swaps only where
  * the frames just before and after are identical, and the loop's end matches its start shape for shape. */
 import { CYCLE, COS, E, M, P, block, quad, node, plane, rect, keyframes, fit, mix, r2, card, navy, mist, paper, green, deep, lane, screen, mark, type SvgNode } from '@/lib/iso/kit';
@@ -25,8 +24,7 @@ world.push(quad(x0, 40, L, 22, { fill: deep }));
 for (let x = x0 + 22; x < x1 - 6; x += 16) if (x + 7 < FIN - C - 2 || x > FIN + C + 2) world.push(quad(x, 50.4, 7, 1.2, { fill: green }));
 // The finish line: two rows of squares, Paper and Navy, across the Augur Lituus road.
 for (let r = 0; r < 2; r++) for (let k = 0; k < 8; k++) world.push(quad(FIN - C + r * C, 40 + k * C, C, C, { fill: (r + k) % 2 ? paper : navy }));
-// The Augur glyph, painted small where the Augur Lituus road begins, in place of its first Green mark (owner,
-// 22 Oct 2026: "the glyph gotta be extremely small make an exception like add in the street"; an exception to
+// The Augur glyph, painted small where the Augur Lituus road begins, in place of its first Green mark (an exception to
 // the brand's 50 px minimum). IsoScene.astro nests the supplied reversed master's
 // paths unchanged; this lays them flat on the road turned to face the viewer, as a decal on an isometric floor
 // shows: upright, its width times √1.5 and its height times √0.5. Cubes drive over it.

@@ -1,23 +1,18 @@
 /* Homepage base: the spacing scale and the rules more than one section shares. Every rule is scoped to
    .home-page. Home.astro renders this sheet and each section's own sheet inline, before the sections, in
    page order; they come after the components' own styles, so they win specificity ties. */
-/* Homepage v2 (owner, 21 Oct 2026), the UI system of every review version (/ryan/, /ryan-augus/, /melo/). Loaded as a string (inline.ts) and rendered
-   inline on those pages alone, so none of it reaches "/", not even as a CSP hash. Every rule starts with
-   .home-page (the review <main>; Ryan's adds .home-v3) and comes after the page's own styles, so it wins a specificity tie.
+/* Specificity. Every rule starts with
+   .home-page and comes after the components' own styles, so it wins a specificity tie.
    Astro adds one [data-astro-cid-…] to each compound of a component rule: `.tenet-card` ships as
    `.tenet-card[data-astro-cid-…]` and ties with `.home-page .tenet-card`, but `.answer-band p` ships as
    `.answer-band[…] p[…]` and beats `.home-page .answer-band p`. So override one-compound rules directly,
-   and give v2-only markup its own class names rather than out-scoring longer v1 selectors.
-   Component <style> blocks stay v1-only: a v2 rule there would ship on "/" too. */
+   and give new markup its own class names rather than out-scoring longer scoped selectors. */
 
-/* Page rhythm (21 Oct 2026). In v1 each section sets its own space, much of it left from the removed
-   hairlines (19 Oct): 136 above the Tenets and roadmap headings, 72 around the use cases,
-   96 around How it works, 72 / 96 around Learn more, 48 under every heading row even on phones. v2 puts
-   DESIGN.md's section scale on every section edge: 96 from 1024, 72 to 768, 64 on phones, so every gap
+/* Page rhythm. DESIGN.md's section scale sits on every section edge: 96 from 1024, 72 to 768, 64 on phones, so every gap
    between two sections is twice that, at a band edge or between two Navy sections alike. 48 (32 on
    phones) from a heading row to what it introduces, and 64 (48) above a section's second block (the
    builder's case, the REP holder bar). The hero keeps its own fit to the first screen. Print keeps
-   layout.css's 32, which v1's scoped paddings override. Ids out-score v1's longer scoped selectors
+   layout.css's 32, which the components' scoped paddings override. Ids out-score the longer scoped selectors
    (`.tenets[…]>.site-container[…]:first-child` is 0,5,0); class rules tie and win by coming later. */
 .home-page{--section-space:96px;--heading-gap:48px;--block-gap:64px}
 @media(max-width:1023px){.home-page{--section-space:72px}}
@@ -25,7 +20,7 @@
 @media print{.home-page{--section-space:32px}}
 .home-page>:is(.applications,.how-it-works,.home-learn),.home-page :is(#why-augur,#roadmap){padding-block:var(--section-space)}
 .home-page .section-heading{margin-bottom:var(--heading-gap)}
-/* The FAQ's own wraps (review fix, 21 Oct 2026): v1's copy left one word alone on a last line, the
+/* The FAQ's own wraps: one word was left alone on a last line, the
    first answer's "own." from 768 up and at 360, the third's "window." at 360 and the first question's
    "markets?" at 390. Answers wrap pretty and questions balance; neither adds a line anywhere measured. */
 .home-page .faq-answer p{text-wrap:pretty}
@@ -33,10 +28,10 @@
 /* Print shows every answer, as it shows the How it works example: on paper nothing can be opened.
    Browsers without ::details-content print the questions, as before. */
 @media print{.home-page .faq-item::details-content{content-visibility:visible}.home-page .faq-toggle{display:none}}
-/* Section reveal (owner, 29 Oct 2026: "content should appear little by little while scrolling"; reveal.js). A group
+/* Section reveal (reveal.js). A group
    below the fold waits invisible under data-armed, which only the script sets, and lifts as the group lands, so without
    JavaScript nothing is ever armed. Print and forced colours show every group whatever the script is doing. The footer
-   sits outside .home-page, so these rules are unscoped; only the review copies load this sheet. */
+   sits outside .home-page, so these rules are unscoped. */
 [data-armed]{opacity:0}
 @media print{:is([data-armed],[data-reveal]){opacity:1!important;transform:none!important}}
 @media(forced-colors:active){[data-armed]{opacity:1!important}}

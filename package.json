@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "check": "astro check",
     "check:launch": "node scripts/check-launch.mjs",
     "supply": "node scripts/generate-supply.mjs",
     "preview": "astro build && astro preview",
@@ -34,7 +35,9 @@
     "unist-util-visit": "^5.2.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.12",
     "@types/node": "^26.6.5",
+    "typescript": "^6.0.3",
     "wrangler": "^4.151.2"
   }
 }

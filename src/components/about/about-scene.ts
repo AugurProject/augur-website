@@ -1,10 +1,9 @@
-/** The About hero's scene (owner, 30 Oct 2026: "layers it is. polish a little bit then add it there", picked from
- * five isometric options on the About hero scenes board). Augur Lituus comes next, on top of Augur's earlier
- * versions: a dark base, a Mist layer and the Green block, a stepped stack in the Why Augur cards' kit (iso-kit.ts),
+/** The About hero's scene. Augur Lituus comes next, on top of Augur's earlier
+ * versions: a dark base, a Mist layer and the Green block, a stepped stack in the Why Augur cards' kit (kit.ts),
  * drawn at the kit's largest scale so its lines weigh what theirs do. Once a loop the Green block lifts off and is
  * set down again; while it is up, its footprint shows on the layer below. The resting frame, which no JavaScript,
  * reduced motion and print show, is the finished stack. There are no words. AboutScene.astro draws it and plays
- * the track on the site's 12 s cycle. It draws with Melo's iso kit, shared with the homepage. */
+ * the track on the site's 12 s cycle. It draws with the iso kit shared with the homepage. */
 import { CYCLE, E, M, P, block, quad, node, keyframes, shift, mix, r2, mist, card, paper, navy, type Box, type Material, type Point, type SvgNode } from '@/lib/iso/kit';
 
 const { tracks, animate } = keyframes('about');

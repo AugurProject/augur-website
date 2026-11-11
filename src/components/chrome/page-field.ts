@@ -1,8 +1,7 @@
 import { motionTime } from '@/lib/motion/debug';
 import { fieldTimeline as t } from '@/lib/motion/timelines';
 
-/** One heritage field for the whole site (owner, 19 Oct 2026: "homogenous across all website, even the
- * different backgrounds, except areas where there is text or stuff … subtle"). A single layer above the
+/** One heritage field for the whole site, subtle and the same on every page and background. A single layer above the
  * page draws 3 px squares on a page-wide 40 px grid, but only in cells that touch no text, no control,
  * no picture and no object (a tile, a chip, a light band), with a margin; so it shows on Navy and on the
  * darker bands alike and never sits on content. The pattern is a hash of each cell, so recomputing after

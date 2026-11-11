@@ -1,11 +1,9 @@
-/** How it works on /2/: the magnet made literal (owner, 26 Oct 2026, item 4 scenes board version 7: "make more
- * explicit … that each side represents a possible answer", "each block means REP", no words; then "keep blocks" and
- * "the small block should also jump!"). One machine for all four steps, drawn with iso-kit.ts.
+/** How it works: the magnet made literal. Blocks are REP and each side is a possible answer, with no words. The small block also jumps. One machine for all four steps, drawn with kit.ts.
  * - Two pedestals, one per answer, each with its sign on the face toward you: ✓ is Yes, ✗ is No. A sign lights
  *   (Paper) while its answer stands and turns Green when it is final.
- * - Blocks are REP, sized as in the example (walkthrough.ts): their report is one block (the 15 REP bond), your
+ * - Blocks are REP, sized as in the example (example.ts): their report is one block (the 15 REP bond), your
  *   challenge two (30 REP). At the end the top fifth of theirs burns (3 REP, the 20%) and the rest flies over onto
- *   yours (owner: "going to right … above the right blocks"), +12 REP, the 80%.
+ *   yours, +12 REP, the 80%.
  * - The reward, a small Paper block, rides a sled on the rail to whichever answer stands, and at the end jumps onto
  *   your stack. Its size is no figure: the example gives none.
  * - One clock on a post behind the rail: the time to challenge. Each new stake sends its hand back to twelve; when
@@ -14,7 +12,7 @@
  * - The steps are one story. State 0 is before Ask and state k is after step k. Each step's scene is drawn at its
  *   state (no JavaScript, reduced motion and print show it). Its act is a set of keyframe tracks from the state
  *   before, built here and played by how-path.js with transform and opacity only.
- * One camera for all four, the drawing about three quarters of the stage wide, as on the board. */
+ * One camera for all four, the drawing about three quarters of the stage wide. */
 import { M, E, P, block, quad, node, plane, mix, shift, r2, card, navy, mist, paper, green, pewter, type Material, type SvgNode, type Keyframe, type Point } from '@/lib/iso/kit';
 
 export type HowKind = 'ask' | 'report' | 'challenge' | 'paid';

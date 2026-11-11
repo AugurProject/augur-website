@@ -1,4 +1,4 @@
-/* Melo's site chrome, ported from the web lab (chrome.css at 1b95a3a): the header and footer rules,
+/* Site chrome: the header and footer rules,
    shared by every page and the homepage. PageLayout renders it inline before the announcement
    bar, after the components' own styles, so it wins a specificity tie; every rule starts with .site-header
    or .site-footer. SiteHeader.astro carries the rest: the Resources rows' square mark, the Products lead
@@ -8,15 +8,12 @@
    the cross (a labelled "Menu" is found more readily than the bare glyph, NN/g). */
 .site-header .mobile-open,.site-header .mobile-navigation .mobile-top button{width:auto;min-width:44px;padding:0 16px;font:600 16px/24px var(--font-heading);cursor:pointer}
 
-/* Header logo, a brand exception (owner, 22 Oct 2026: "Make a brand exception: shrink the /2/ header
-   logo to about 128 px"). 128 × 43 px, 15% under the Brand Foundation's 150 px minimum for the
+/* Header logo, a brand exception. 128 × 43 px, 15% under the Brand Foundation's 150 px minimum for the
    horizontal logo (02.6); the artwork itself is untouched. The phone menu's logo matches, so it keeps
    its size when the menu opens; the footer keeps 150. DESIGN.md records the exception. */
 .site-header .brand,.site-header .brand svg{width:128px}
 
-/* Products menu (owner, 22 Oct 2026: the lead card's whole surface was the link, yet a button sat inside
-   it, so the hit area didn't match what it looked like; then "the augur lituus should have more space like
-   it was before"). The card keeps its place and size, the left column over both rows, and is itself the
+/* Products menu: the lead card is itself the link, so the hit area matches what it looks like. The card keeps its place and size, the left column over both rows, and is itself the
    one link: a Dark 1 surface at rest that lifts to Dark 3 under the pointer like every menu row, its mark
    turning onto its corner. Its action is a text label at its foot, not a button: on hover a 2 px line
    draws under it and the arrow nudges 3 px, as on the site's text actions. The label lines up with the
@@ -35,7 +32,7 @@
 @media(prefers-reduced-motion:reduce){.site-header .nav-lead-label::after,.site-header .nav-lead-arrow{transition:none}}
 @media(forced-colors:active){.site-header .nav-lead>a{border:1px solid CanvasText}.site-header .nav-lead-label::after{forced-color-adjust:none;background:CanvasText}}
 
-/* Hide on the way down, back on the way up (owner, 22 Oct 2026; headroom.ts sets the attributes, so
+/* Hide on the way down, back on the way up (headroom.ts sets the attributes, so
    without JavaScript the header stays in the flow). Sticky at the top; slid up by its own height, a
    transform, when hidden. Once it has left its place under the announcement, a 1 px Outline line marks
    its foot so the page doesn't run into it unseen (no shadows). Reduced motion swaps the slide for a cut. */
@@ -45,7 +42,7 @@
 @media(prefers-reduced-motion:reduce){.site-header[data-headroom]{transition:none}}
 @media print{.site-header[data-headroom]{position:relative;transform:none}}
 
-/* Footer (item 7, from the 25 Oct audit). A hairline opens the link directory, so the contact band and
+/* Footer. A hairline opens the link directory, so the contact band and
    the links read as two groups (they shared one Navy with 48 px between them), and the funding line sits
    16 under the logo instead of 130 px lower at the column's foot. */
 .site-footer .directory{border-top:1px solid var(--web-outline)}

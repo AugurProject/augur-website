@@ -1,6 +1,4 @@
-/** The /2/ Robust card: the Catapult (owner, 22 Oct 2026: "I love the catapult … like always doubling and idk
- * destroying the losing side when the winning wins", then "it gotta start empty. then it fills", polished on the
- * Tenet Motion Options board). A seesaw on a small platform: the lie's tray on the left, its blocks dark grey,
+/** The Robust card: the Catapult. A seesaw on a small platform: the lie's tray on the left, its blocks dark grey,
  * and the truth's on the right, its blocks Green.
  * - They keep doubling each other, a batch at a time: one, two, four, eight, sixteen, thirty-two. Each stack fills
  *   out in doubling shapes (1 × 1, 1 × 2, 2 × 2, 2 × 4, 4 × 4, then a second 4 × 4 layer), and the beam tips each
@@ -9,7 +7,7 @@
  *   throws its sixteen off to the left, where each bursts into three pieces that fly apart and fade.
  * - The truth's stack clears block by block and the beam comes back level.
  * The loop starts and ends empty and level, which is also the resting frame that no JavaScript, reduced motion
- * and print show. There are no words. The doubling is the challenge rule (whitepaper §4.1). iso-kit.ts has the
+ * and print show. There are no words. The doubling is the challenge rule (whitepaper §4.1). kit.ts has the
  * drawing and keyframe rules shared with the other two cards. */
 import { COS, CYCLE, E, M, P, block, quad, node, keyframes, fit, shift, mix, r2, card, navy, paper, pewter, green, type Key, type Point, type State, type SvgNode } from '@/lib/iso/kit';
 

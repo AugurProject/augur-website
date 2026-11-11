@@ -4,7 +4,7 @@ import { showStatoblast, showZoltar } from '@/site/products';
 export type FaqCategory = 'Getting started' | 'How it works' | 'REP' | 'Building with Augur';
 export interface FaqEntry { id: string; question: string; pageQuestion?: string; answer: string; category: FaqCategory; homepage: boolean; needsReview: boolean; link: { href: string; label: string }; }
 export const faqCategories: FaqCategory[] = ['Getting started', 'How it works', 'REP', 'Building with Augur'];
-/** Homepage 28:7 is canonical. Additional answers use only approved Figma facts and require review. */
+/** Additional answers use only approved facts and require review. */
 export const faqEntries: FaqEntry[] = [
   { id: 'augur-today', category: 'Getting started', homepage: true, needsReview: false,
     question: "How does today's Augur relate to its earlier prediction markets?", pageQuestion: 'Is Augur still a prediction market?',
@@ -41,7 +41,7 @@ export const faqEntries: FaqEntry[] = [
   { id: 'rep-actions', category: 'REP', homepage: false, needsReview: true, question: 'What can I do with REP?',
     answer: 'Reporting and challenging are optional. Each one puts a bond at stake: being right pays, being wrong costs. If a dispute reaches a fork, holders need to move their REP to a universe they believe reflects reality; REP that isn’t moved loses its value.',
     link: { href: '/rep/', label: 'More about REP' } },
-  // REP holders' questions (19 Oct 2026), after the Lituus Foundation's FAQ on augur.net and the whitepaper.
+  // REP holders' questions, after the Lituus Foundation's FAQ on augur.net and the whitepaper.
   { id: 'rep-holding', category: 'REP', homepage: false, needsReview: true, question: 'Do I earn anything just for holding REP?',
     answer: 'No. Rewards go to people who report or challenge, and only when their answer holds. Holding asks nothing of you, except in a fork: then you need to move your REP to a new universe, or it loses its value.',
     link: { href: '/rep/#taking-part', label: 'Compare holding and taking part' } },

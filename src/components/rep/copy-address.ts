@@ -14,3 +14,6 @@ for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy-ad
   }
  });
 }
+
+// Marks this file as a module, so its names stay out of the global scope.
+export {};

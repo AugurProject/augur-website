@@ -1,4 +1,4 @@
-/* The first-visit veil (page-intro.js): Navy over everything, the glyph, and a Green line that draws under it
+/* The first-visit veil (page-intro.inline.js): Navy over everything, the glyph, and a Green line that draws under it
    while the fonts load; it dissolves as the hero's arrival starts. The page's own animations wait under it. */
 :root[data-intro]::before{content:'';position:fixed;inset:0;z-index:2147483646;background:#0e0e21 url(/brand/kit/glyph/augur-glyph-reversed.svg) center calc(50% - 12px)/44px auto no-repeat;pointer-events:none;transition:opacity 520ms cubic-bezier(.22,.61,.36,1)}
 :root[data-intro]::after{content:'';position:fixed;left:calc(50% - 28px);top:calc(50% + 30px);width:56px;height:2px;z-index:2147483647;background:#2ae7a8;transform:scaleX(0);transform-origin:left;pointer-events:none;animation:page-intro-line 1100ms cubic-bezier(.45,0,.2,1) 120ms forwards;transition:opacity 240ms ease-out}
@@ -6,8 +6,7 @@
 :root[data-intro=loading] .home-hero,:root[data-intro=loading] .home-hero *,:root[data-intro=loading] .home-hero *::before,:root[data-intro=loading] .home-hero *::after{animation-play-state:paused!important}
 @keyframes page-intro-line{to{transform:scaleX(1)}}
 @media print{:root[data-intro]::before,:root[data-intro]::after{display:none}}
-/* Behind the veil the hero stages its arrival (owner, 10 Nov 2026: "present the bg, then the hero text positions in
-   place"): the floor builds first, as the veil lifts; then the headline's lines fade and rise into place one after
+/* Behind the veil the hero stages its arrival: the floor builds first, as the veil lifts; then the headline's lines fade and rise into place one after
    another, the support line follows, then the actions; the underline draws once the headline has landed. The veil
    already holds the first paint, so here the text may start from nothing. Times run from the veil's lift. */
 :root[data-intro-played] .home-hero[data-hero-arrival=entering] [data-hero-line]{animation:page-intro-rise 760ms cubic-bezier(.16,1,.3,1) 450ms backwards}
@@ -19,7 +18,7 @@
 @keyframes page-intro-rise{from{opacity:0;transform:translateY(28px)}}
 @keyframes page-intro-rise-soft{from{opacity:0;transform:translateY(12px)}}
 @keyframes page-intro-fade{from{opacity:0;visibility:hidden}}
-/* A replay on scrolling back to the hero (hero-arrival.js sets data-hero-replay): no veil, so the text starts sooner, and the
+/* A replay on scrolling back to the hero (hero-arrival.inline.js sets data-hero-replay): no veil, so the text starts sooner, and the
    underline runs under its own keyframe names so it restarts. */
 :root[data-intro-played] .home-hero[data-hero-arrival=entering][data-hero-replay] [data-hero-line]{animation-delay:150ms}
 :root[data-intro-played] .home-hero[data-hero-arrival=entering][data-hero-replay] [data-hero-line]:nth-of-type(2){animation-delay:240ms}

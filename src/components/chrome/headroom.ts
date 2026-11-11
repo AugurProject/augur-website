@@ -1,4 +1,4 @@
-// Melo's header: a partially persistent header (NN/g): once the
+// The header: a partially persistent header (NN/g): once the
 // page has scrolled past the header's own place, scrolling down slides it out of view and any scroll up
 // brings it back. Native scroll throughout: this only reads scrollY and sets attributes; the slide is a
 // transform (chrome.css).

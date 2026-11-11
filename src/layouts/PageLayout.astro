@@ -14,7 +14,7 @@ import { links } from '@/site/links';
 // results. `footer={false}` keeps the announcement and header but drops the footer, whose contact
 // band would repeat the contact page. `class` sets <main>'s class for the inner pages. `canonical={false}`
 // drops the canonical link and og:url, for the 404 page, which answers every unknown path. `intro` arms the
-// first-visit veil (page-intro.js), the homepage only.
+// first-visit veil (page-intro.inline.js), the homepage only.
 interface Props { title?: string; description?: string; noindex?: boolean; bare?: boolean; footer?: boolean; canonical?: boolean; intro?: boolean; class?: string }
 const { title = 'Augur | The frontier of decentralized truth', description = 'Real-world answers for onchain apps, controlled by no one.', noindex = false, bare = false, footer = true, canonical = true, intro = false, class: className } = Astro.props;
 // Canonical and share URLs use `site` in astro.config.mjs (https://www.augur.net) on every host, so a
@@ -23,7 +23,7 @@ const canonicalUrl = canonical ? new URL(Astro.url.pathname, Astro.site).href : 
 const shareImage = new URL(site.shareImage.path, Astro.site).href;
 const xHandle = `@${new URL(links.x.url).pathname.slice(1)}`;
 // GA4 runs on the canonical host only, so workers.dev, previews and local builds are not counted. No consent
-// banner (jubalm, 30 October 2026). The configuration matches the old site's gtag snippet.
+// banner. The configuration matches the old site's gtag snippet.
 const analytics = { id: site.analyticsId, host: Astro.site!.hostname };
 // A page's plain Markdown copy sits in public/ at its path plus `.md` (home: /index.md). The link is
 // added only when that file exists, so pages without one (placeholder guides, result pages) get none.

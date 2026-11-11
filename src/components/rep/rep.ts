@@ -1,12 +1,12 @@
 import { links } from '@/site/links';
 import { rep as example } from '@/lib/example';
 
-/** The REP page (/rep/), rebuilt 19 October 2026. It is the token page
+/** The REP page (/rep/). It is the token page
  * for traders and beginners and, like augur.net/rep today, the contract reference that
  * exchanges, wallets and explorers check. Mechanism: January 2026 Augur Lituus whitepaper
  * (proposed design, §§ cited per item). Tokens and history: the Lituus Foundation's REP
  * contract reference and FAQ on augur.net, the Moon Fork report and the Q2 2026 report
- * (deployed history). Amounts are the whitepaper's §4.5 example, from walkthrough.ts. */
+ * (deployed history). Amounts are the whitepaper's §4.5 example, from example.ts. */
 export const repPageReview = { needsReview: true, source: 'Draft copy, 19 October 2026; sources in docs/sources.md.' } as const;
 
 const percent = (part: number, whole: number) => `${Math.round(part / whole * 100)}%`;
@@ -28,7 +28,7 @@ if (!links.repToken.url.endsWith(currentRep.address)) throw new Error('links.rep
 /** As wallets show it: the first six and last four characters. */
 export const shortAddress = `${currentRep.address.slice(0, 6)}…${currentRep.address.slice(-4)}`;
 
-/** The hero's clause, also /2/'s How it works lead (data/homepage.ts): one source for the fact. */
+/** The hero's clause, also the How it works lead (copy.ts): one source for the fact. */
 export const stakedBehind = 'Every Augur Lituus answer has REP staked behind it';
 export const hero = {
   title: 'REP makes lying expensive.',
@@ -55,7 +55,7 @@ export const ladder = {
  * plus 80% of the bond it overturned (§4.3.1). Holding earns nothing directly (§4.4.4) and, in a
  * fork, REP that isn't moved is effectively destroyed (§4.2.2). Never a rate or a yield. */
 export interface Cell { figure: string; note: string; gain?: boolean }
-/** The note's first and last sentences, which /2/'s How it works example repeats under its card. */
+/** The note's first and last sentences, which the How it works example repeats under its card. */
 export const exampleFigures = `Figures follow the whitepaper’s own example, a ${amount(example.bond)} fee.`;
 export const proposedRules = 'These are the proposed rules: Augur Lituus is in development.';
 export const participation = {

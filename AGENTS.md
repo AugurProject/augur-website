@@ -9,7 +9,7 @@ When starting the dev server, use background mode `astro dev --background`. `ast
 
 ## Verification
 
-A claim is verified when you have checked it against its source in the current session: a file, command output, or a live check. Report what you checked and what you did not. Run `npm run build` after implementation changes; it confirms the project compiles and nothing more. Responsive, keyboard/focus, no-JavaScript and reduced-motion states are verified only by checking them in a browser. Do not add or run tests unless requested.
+A claim is verified when you have checked it against its source in the current session: a file, command output, or a live check. Report what you checked and what you did not. Run `npm run build` and `npm run check` (type check) after implementation changes; they confirm the project compiles and type-checks and nothing more. Responsive, keyboard/focus, no-JavaScript and reduced-motion states are verified only by checking them in a browser. Do not add or run tests unless requested.
 
 ## Documenting
 

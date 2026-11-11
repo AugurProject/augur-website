@@ -8,7 +8,7 @@ import { brandKit, logoVariants, logoCompositions, logoFile, tokenIcon, clearspa
 const size = { horizontal: [360, 121], vertical: [224, 222], glyph: [108, 121] } as const;
 // The supplied paths, nested unchanged inside the clearspace diagram.
 const reversedPaths = reversedMaster.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
-// The recolor misuse example: brand values in the wrong places (Figma P8 matches).
+// The recolor misuse example: brand values in the wrong places.
 const recolored = colorMaster.replace('#2AE7A8', '#A1A1B8').replaceAll('#0E0E21', '#095E42');
 const pad = 36;
 const view = `${-c.aWidth - pad} ${-c.aHeight - pad} ${c.width + 2 * (c.aWidth + pad)} ${c.height + 2 * (c.aHeight + pad)}`;
@@ -189,7 +189,7 @@ const view = `${-c.aWidth - pad} ${-c.aHeight - pad} ${c.width + 2 * (c.aWidth +
  .pairings li{display:flex;align-items:flex-start;gap:16px;padding:16px;border:1px solid var(--web-outline);background:var(--web-quiet)}
  .pairings .sample{display:grid;place-items:center;flex:none;width:64px;height:64px;font:600 24px/32px var(--font-heading);border:1px solid var(--web-outline)}
  .pairings .note{margin-top:6px}
- /* Hover edge (owner, 19 Oct 2026): specimen cards light their border in the shared hover Green. */
+ /* Hover edge: specimen cards light their border in the shared hover Green. */
  @media(hover:hover) and (pointer:fine){.logo-tile:hover,.pairings li:hover,.typeface:hover,.misuse li:hover{border-color:var(--brand-hover-edge)}}
 
  /* Typography specimens. */

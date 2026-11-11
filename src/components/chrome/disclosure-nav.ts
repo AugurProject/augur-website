@@ -46,7 +46,7 @@ export function initNavigation() {
       const text=pen.measureText(label.textContent??'');
       left-=text.actualBoundingBoxLeft;right+=text.actualBoundingBoxRight-text.width;
     }
-    // Phosphor's caret is filled; Augur's own (the review copies) is a stroke,
+    // Phosphor's caret is filled; Augur's own is a stroke,
     // half of which lies outside its path.
     const glyph=item.querySelector<SVGSVGElement>('.nav-chevron svg'),view=glyph?.viewBox.baseVal;
     if(glyph&&view?.width){

@@ -1,23 +1,21 @@
-// The review copies' use cases (owner, 25 Oct 2026): product cards (Applications.astro renders this right after
+// The use cases: product cards (Applications.astro renders this right after
 // the section). Each card is rendered answered, so no JavaScript, reduced motion and print show the finished
-// card. Each card loops (owner, 28 Oct 2026: "all animations should be going in a loop"): one choreography on
-// a 12 s cycle that opens and closes on the finished card. The card resets softly, never a cut (owner, 28 Oct
-// 2026): it dims, and its values cross-fade back to the start. Then its query is asked, the app plays its part,
+// card. Each card loops: one choreography on
+// a 12 s cycle that opens and closes on the finished card. The card resets softly, never a cut: it dims, and its values cross-fade back to the start. Then its query is asked, the app plays its part,
 // Augur Lituus answers and goes Final, the app acts, and the finished card holds until the cycle ends. One part
-// is lit at a time (owner, 28 Oct 2026: "our eyes are not going to where it should be going"): the part in play
+// is lit at a time: the part in play
 // is lit, a part still to come waits at `dim` and a part that has played steps back to `past`. The status chip
 // in the corner is lit only while the query is asked, so its later changes never pull the eye away from the
 // card; at the end everything comes back up.
-// The market card is a query split in two (owner, 26 Oct 2026, "Split it is"): Asked while the market's price
+// The market card is a query split in two: Asked while the market's price
 // climbs to 99¢, then the report, open to challenge while a line fills, then Final, then the market pays. The
-// insurance card is the same query as a relay (owner, 28 Oct 2026, "Relay it is"): the flight's stretch runs
+// insurance card is the same query as a relay: the flight's stretch runs
 // while it's in the air, the next stretch fills while the report is open to challenge, and the line runs Green
-// to the cover as it pays. The DAO card is the same query as a switch (owner, 29 Oct 2026, "implement the Switch
-// into /melo"): the vote turns the upgrade's go-live switch on, Augur Lituus's larger part answers Yes on the
+// to the cover as it pays. The DAO card is the same query as a switch: the vote turns the upgrade's go-live switch on, Augur Lituus's larger part answers Yes on the
 // DAO's written rules, and the switch goes back off.
 // The loop starts once 60% of the stage is in view and runs while any of it is on screen; off screen or in a
 // hidden tab it pauses and resumes where it was. A pick starts the picked case from the top, and pressing the
-// case already shown restarts it (owner, 26 Oct 2026), its card dipping out and back in; a pick also draws the
+// case already shown restarts it, its card dipping out and back in; a pick also draws the
 // 2 px Green line from the tab and fades the words. A press, focus or key in the stage stops the loop on the
 // finished card until the next pick, or until the stage has left the screen. The tabs controller ends every
 // animation on a resize, so the loop is rebuilt where it was; print shows the finished card. Transform and

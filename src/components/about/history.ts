@@ -1,7 +1,6 @@
 import type { LinkKey } from '@/site/links';
 
-/** The About page story (website first, 19 October 2026; Figma About 218:258 waits for
- * "update figma", see figma-workflow.md). Every entry cites the primary source it rests on.
+/** The About page story. Every entry cites the primary source it rests on.
  * Dates use the source's own wording; `year` orders entries and spaces the line between them. */
 export interface HistoryEntry {
   date: string;

@@ -2,37 +2,32 @@
 import { applications } from './cases';
 import Button from '@/components/ui/Button.astro';
 import {homeCopy} from '@/components/home/copy';
-// Each homepage version renders its own copy (homepage.ts). Augur's square mark stands in the case
+// Augur's square mark stands in the case
 // tiles, with no builder icons, and the check glyph's own path in the answer chip. Its styles are
-// home-extra.css.
+// applications.css.
 const copy=homeCopy;
-// v2 (Ryan 8–11, Augus 1): the one-sentence lead, the DAO case's summary spread over the shared one (same
-// id and title) and Augus's builder block, liability first (title over
-// the reasons; the ask closes the reasons panel in home-extra.css). The lead's balance and the phone
-// spacing are in home-page.css.
-// v3 (Ryan 9–11) has the same lead, its own DAO case, and no builder block. v4 keeps v2's case and its own
-// builder copy.
+// The one-sentence lead, the DAO case's summary spread over the shared one (same
+// id and title) and the builder block, liability first (title over
+// the reasons; the ask closes the reasons panel in applications.css). The lead's balance and the phone
+// spacing are in home.css.
 const cases=applications.map(app=>app.id==='governance'?{...app,...copy.applications.governance}:app);
-// v3 (Ryan 11) removes the builder block: its copy has no `builder`, so the block isn't rendered and the
+// Without `builder` in the copy the block isn't rendered and the
 // section ends on the use-case example.
 const builder='builder' in copy.applications?copy.applications.builder:undefined;
 // The answer's check is Augur's check glyph's own centreline (assets/icons/augur/check.svg) drawn as a
 // stroke, so it can draw in.
 const check='4.5 10.5 8.25 14.25 15.5 7';
-// The right box (owner, 25 Oct 2026, from the item 3 mock): each case is a product card that waits, gets
-// its answer and acts, then a paragraph for builders (homepage.ts `cards`, home-extra.css,
+// The right box: each case is a product card that waits, gets
+// its answer and acts, then a paragraph for builders (copy.ts `cards`, applications.css,
 // use-cases.js). Arrow keys pick a tab (automatic activation); the root carries data-use-cases for its
 // script.
-// The market card is a query split in two (owner, 26 Oct 2026, "Split it is"): the market's price beside
-// Augur Lituus's status and answer. The insurance card is the same query as a relay (owner, 28 Oct 2026,
-// "Relay it is"): one line through the flight, Augur Lituus and the cover, an ordered list of three steps
-// under it. The DAO card is the same query as a switch (owner, 29 Oct 2026, "implement the Switch into
-// /melo"): one row for the upgrade and its go-live switch, then Augur Lituus's larger part, both answers as
-// chips over the line for the day it's open to challenge. Every review copy's DAO card is the switch (29 Oct
-// 2026: Ryan's had kept a proposal card). All three share the head and Augur Lituus's words (`cards.query`).
+// The market card is a query split in two: the market's price beside
+// Augur Lituus's status and answer. The insurance card is the same query as a relay: one line through the flight, Augur Lituus and the cover, an ordered list of three steps
+// under it. The DAO card is the same query as a switch: one row for the upgrade and its go-live switch, then Augur Lituus's larger part, both answers as
+// chips over the line for the day it's open to challenge. All three share the head and Augur Lituus's words (`cards.query`).
 // Each value that changes keeps every state in one cell, the resting one last and the others hidden from
 // screen readers, so no JavaScript, reduced motion and print show the end. Before the report Augur Lituus's
-// value is empty, never a dash (owner, 28 Oct 2026).
+// value is empty, never a dash.
 const cards=copy.applications.cards;
 // The section reveal (reveal.js): the heading, the lead, the picker and the card stage as one group, then
 // the builder block. The card's loop starts once the group has landed.
@@ -95,9 +90,9 @@ const cards=copy.applications.cards;
  </div>
 </section><script>import './use-cases.js';</script>
 <style>
- /* What can Augur Lituus power? (was "What could you build?"; owner, 18–19 Oct 2026). Written for
+ /* What can Augur Lituus power? Written for
     traders first; the heading names the product and the cases answer it. Organized as a list beside an
-    example (owner, 19 Oct 2026: "make this clear and organized"): on the left the three kinds of app,
+    example: on the left the three kinds of app,
     each with its name and what it covers, so a reader sees every case without clicking; on the right one
     worked example that reads top to bottom. Research: UMA's builder tabs make a real question the proof;
     SEDA gives each use case one small live picture; NN/g asks that the selected tab join its panel. */
@@ -116,7 +111,7 @@ const cards=copy.applications.cards;
  .case-label{display:grid;gap:8px;min-width:0;padding-top:6px}
  .case-name{font:400 clamp(20px,1.67vw,24px)/1.3 var(--font-heading);letter-spacing:-.01em;text-wrap:balance}
  .case-blurb{font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:pretty}
- /* The picked case is the example's surface (owner, 6 Oct 2026: never a side edge). Unpicked cases
+ /* The picked case is the example's surface (never a side edge). Unpicked cases
     brighten their name and take the hover edge. */
  .case-tab[aria-selected="true"]{color:var(--foreground);cursor:default;transition-delay:0ms,120ms}
  @media(hover:hover) and (pointer:fine){.case-tab:not([aria-selected="true"]):hover{color:var(--foreground)}}
@@ -128,18 +123,13 @@ const cards=copy.applications.cards;
  .case-panel[hidden]{display:flex!important;visibility:hidden}
  /* The list carries each case's summary from 1024 up; the example keeps it for screen readers. */
  .case-summary{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
- /* The builder's case (owner, 19 Oct 2026): the title heads the three reasons, which run across the
+ /* The builder's case: the title heads the three reasons, which run across the
     full width as three open columns, each an icon tile over its claim and point; the way in follows them.
-    A title alone in the 500 column beside the reasons left a dead block under it (owner: "the empty space
-    below is pretty weird"), so nothing here sits beside a taller neighbor. No boxes and no rules (owner:
-    rules over the columns didn't work, open columns did): the icon tiles anchor each reason, in the use-case
+    A title alone in the 500 column beside the reasons left a dead block under it, so nothing here sits beside a taller neighbor. No boxes and no rules: the icon tiles anchor each reason, in the use-case
     list's tile style (44 px, Dark 3), with a Green glyph that shows the benefit, never the thing the line
-    denies (owner, 19 Oct 2026: user-minus and gavel read as "remove user" and "you judge"): puzzle-piece
+    denies (user-minus and gavel read as "remove user" and "you judge"): puzzle-piece
     (it slots in), scales (a dispute, as in the REP rows' Challenge) and eye (anyone can see).
-    Later the same day the win-win became the title, in two lines over the reasons.
-    The ask (owner, 19 Oct 2026: "better place, better structured"): it trailed the reasons as a muted line,
-    a third "Talk to us" after the header's and before the footer's, while the 668 column beside the title
-    stood empty. From 1024 it is now the title's lead: the project's half takes the heading row every section
+    The ask: from 1024 it is the title's lead, so the 668 column beside the title is not left empty: the project's half takes the heading row every section
     has (title in 500, lead in 668), the invitation stays in view while the reasons are read, and the half
     ends on its evidence. Its question is muted and its offer Paper, the house setup and payoff, with the
     button right after the text. In the DOM, and stacked below 1024, the ask still follows the reasons, so

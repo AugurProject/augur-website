@@ -1,8 +1,8 @@
-// The isometric Why Augur scenes, /2/ only (owner, 22 Oct 2026): Two roads, Middleman crumbles and the
-// Catapult (tenets-iso.ts lists them; IsoScene.astro draws each one's resting frame). Every scene's
+// The isometric Why Augur scenes: Two roads, Middleman crumbles and the
+// Catapult (scenes.ts lists them; IsoScene.astro draws each one's resting frame). Every scene's
 // keyframes are built with it, at build time: Tenets.astro writes them into the page as JSON (#iso-tracks), as
 // { scene: [[data-iso name, keyframes], ...] }, and a track plays on every element of its scene with that name.
-// Same rules as the v1 loops (loop-scene.ts): every track is keyed on one 12 s cycle and opens and closes on the
+// Every track is keyed on one 12 s cycle and opens and closes on the
 // server-rendered frame, a scene runs while any part of it is on screen, pauses off-screen or in a hidden tab
 // and resumes where it was, print shows the resting frame, and reduced motion never starts it. Transform and
 // opacity only. The three scenes share one clock so they stay in step. A scene whose card is still settling in

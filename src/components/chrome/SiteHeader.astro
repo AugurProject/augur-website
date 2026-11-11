@@ -5,7 +5,7 @@ import Button from '@/components/ui/Button.astro';
 import {navigation,navigationGroups,pages,type NavigationItem} from '@/site/navigation';
 const groups=[{label:'Products',variant:'products',items:navigation.products},{label:'Resources',variant:'resources',items:navigation.resources},{label:'Community',variant:'community',items:navigation.community}];
 const path=Astro.url.pathname;
-// Melo's chrome (chrome.css): Resources rows take Augur's square mark instead of pictograms (community
+// Chrome (chrome.css): Resources rows take Augur's square mark instead of pictograms (community
 // logos stay), the Products lead card is itself the link with no button inside it, the header hides on the
 // way down and returns on the way up (headroom.ts), and the phone buttons read "Menu" and "Close".
 const own=true;
@@ -22,7 +22,7 @@ const isCurrent=(href:string)=>within(href)&&!href.includes('#');
       {groups.map((group,index)=><details class="nav-disclosure" name="site-nav" data-nav-disclosure data-current={group.items.some(item=>within(item.href))?'':undefined}>
         <summary class="nav-item" aria-controls={`nav-${index}`} aria-expanded="false"><span class="nav-item-label">{group.label}</span><Icon name="chevron-down" class="nav-chevron"/></summary>
         <div class="nav-panel" id={`nav-${index}`} data-variant={group.variant}><ul>{group.items.map((entry)=>{const item=entry as NavigationItem;const glyph=own?item.logo:item.logo??item.icon;
-          // The lead card's one link is its action; the whole card is its hit area. On /2/ the card itself
+          // The lead card's one link is its action; the whole card is its hit area. The card itself
           // is the link: no button inside it, its action a text label at its foot.
           if(item.cta&&own)return <li class="nav-lead"><a href={item.href} aria-current={isCurrent(item.href)?'page':undefined}>
             <span class="nav-feature-head"><span class="nav-mark" aria-hidden="true"></span><span class="nav-text"><span class="nav-label">{item.label}</span><span class="nav-description">{item.description}</span></span></span>

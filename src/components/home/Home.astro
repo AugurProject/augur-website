@@ -12,12 +12,11 @@ import applicationsStyle from './applications/applications.css?inline';
 import howStyle from './how-it-works/how-it-works.css?inline';
 import roadmapStyle from './roadmap/roadmap.css?inline';
 import learnStyle from './learn-more/learn-more.css?inline';
-// Melo's design from the web lab (the lab's homepage, "/", at 795ca0c). Its sheets scope every rule to
-// `.home-page` and follow every component style (linked in the head), so they win ties, as in the lab. They
+// The homepage sheets scope every rule to
+// `.home-page` and follow every component style (linked in the head), so they win ties. They
 // render before the sections: placed after them, they sat about 500 KB into the page, and the browser painted
 // the hero without them (the art in the flow, the copy below the fold) until the parser reached them.
-// The section reveal (reveal.js) must see every section and the footer; the lab renders it after the footer
-// through its layout's "end" slot. Here it is an inline module, which runs once the whole document is parsed.
+// The section reveal (reveal.js) must see every section and the footer. It is an inline module, which runs once the whole document is parsed.
 ---
 {[baseStyle,heroStyle,tenetsStyle,applicationsStyle,howStyle,roadmapStyle,learnStyle].map(css=><style is:inline set:html={css}></style>)}
 <div class="home-page">

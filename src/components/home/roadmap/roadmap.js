@@ -1,7 +1,5 @@
-// The roadmap on the review copies (Roadmap.astro renders this right after the section). The picker's motion, as
-// home-interactions.ts plays it on "/" (which binds only "/"'s [data-roadmap]): a pick moves the selected box and draws
-// the picked panel's evidence bars. And the track's entrance, chained in the section (owner's ask, 29 Oct 2026; the
-// scroll-motion brief): once the stops are on screen and the lead above them has landed (reveal.js), the track draws
+// The roadmap's motion (Roadmap.astro renders this right after the section). The picker's: a pick moves the selected box and draws
+// the picked panel's evidence bars. And the track's entrance, chained in the section: once the stops are on screen and the lead above them has landed (reveal.js), the track draws
 // to Now with its Green leg last, the road ahead fades in over the track's last two fifths and the stops pop in turn.
 // The shown panel's evidence bars no longer draw with it: three things moving at once pulled the eye three ways. Phones
 // (no track below 768 px) skip it.
@@ -14,8 +12,8 @@ import { easing, timing, roadmapTimeline, revealTimeline } from '@/components/ho
 const T = { easing, timeline: roadmapTimeline, fadeOut: timing.fadeOut, ready: revealTimeline.ready, dwell: revealTimeline.dwell }, E = T.easing, L = T.timeline, root = document.querySelector('[data-roadmap]');
 if (!root) return;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)'), animates = typeof Element.prototype.animate === 'function';
-// Now's slow pulse (Roadmap.astro's CSS loop) rests while the roadmap is off screen (data-still, home-extra.css): its
-// ring restyled the page on every frame that anything else drew, up in the hero or while scrolling (measured 29 Oct 2026).
+// Now's slow pulse (Roadmap.astro's CSS loop) rests while the roadmap is off screen (data-still, roadmap.css): its
+// ring restyled the page on every frame that anything else drew, up in the hero or while scrolling (measured).
 if ('IntersectionObserver' in window) { root.toggleAttribute('data-still', true); new IntersectionObserver(entries => root.toggleAttribute('data-still', !entries[entries.length - 1].isIntersecting)).observe(root); }
 root.addEventListener('tabschange', ({ detail: { index } }) => {
 root.style.setProperty('--selected', String(index));

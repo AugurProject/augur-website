@@ -2,11 +2,74 @@
 
 Closed decisions, oldest first, one entry each, with who decided and where it was recorded (pull request, or the owner's word where none exists). The log is append-only: add new entries at the end and do not edit past ones. If a decision is reversed, add an entry that names the one it replaces. The current facts each decision produced live in the reference docs; questions still open are in [open decisions](open-decisions.md).
 
+## 6 October 2026
+
+- **Hero underline and scroll cue.** The underline under "decentralized" is temporary and has no glow, and the hero's scroll cue is small, short and subtle. (jubalm)
+- **No replay on reload.** Entrance scenes play once per tab session: pressing F5 must not replay any animation. The answer ribbon is the one exception and plays on every load. (jubalm)
+- **Answer ribbon text.** The statement's words also move: each rises into place as the ribbon's front reaches it. (jubalm)
+- **Roadmap past milestones.** Past milestones are done, not alive: their leg of the track turns Graphite and their stops become checked squares. (jubalm)
+- **Picked use case.** The picked case is the example's surface, never a side edge. (jubalm)
+- **Insurance fallback use.** Insurance carries the fallback use, so one app's choice never reads as Augur Lituus's only use. (jubalm)
+
+## 18 October 2026
+
+- **Use cases one at a time.** The applications show one case at a time; the mechanism stays in How it works. (jubalm)
+- **Why Augur section.** "Why Augur" stays as the section's name for landmarks and the `#why-augur` anchor while the heading states the problem; every claim is a muted setup and a payoff in Paper. (jubalm)
+
+## 19 October 2026
+
+- **One field for the whole site.** The heritage field is "homogenous across all website, even the different backgrounds", subtle, and empty wherever there is text or an object. (jubalm)
+- **Applications as a list beside an example.** "What can Augur Lituus power?" (was "What could you build?") puts the three kinds of app on the left and one worked example on the right: "make this clear and organized". (jubalm)
+- **Builder's case.** The title heads the three reasons across the full width, with the ask in a "better place, better structured"; the reasons' glyphs show the benefit, never the thing the line denies. (jubalm)
+- **Use-case copy.** The question, both explanations and the fallback wording are approved; DAOs & governance replaces DAOs & grants; every question is Yes or No with no Invalid shown. (jubalm)
+- **Example panels.** The example question's terms are illustrative; every panel leads with its payoff ("more selly … use %") and says each fact once ("too noisy"). (jubalm)
+- **Use-case motion.** The motion should feel "polished, professional". (jubalm)
+- **REP page.** `/rep/` is rebuilt as the token page, keeping the contract-reference job of augur.net/rep for exchanges, wallets and explorers. (jubalm)
+- **How it works.** One section answers "How do I take part, and how do I get paid?". (jubalm)
+- **Roadmap current phase.** The current phase's bracket is Green like the box's top. (jubalm)
+
+## 22 October 2026
+
+- **Header logo exception.** Shrink the header logo to about 128 px, a brand exception 15% under the Brand Foundation's 150 px minimum for the horizontal logo; the footer keeps 150. (jubalm)
+- **Products menu and header.** The Products lead card is itself the link, with no button inside it; the header hides on the way down and returns on the way up. (jubalm)
+- **Icon trial.** The icons are "ugly, weird, generic": Augur's square-cut glyphs replace Phosphor's arrows, chevron, close, check and plus, and pictograms give way to Augur's square mark or to nothing. (jubalm)
+- **One design to work on.** Keep working on v2 only, as the version the owner presents as his suggestions; on 26 October all versions were to be similar to v2. (jubalm)
+- **Hero background.** A full-screen hero video "like most websites", then generated loops, then "Let's try live first": the live floor. (jubalm)
+- **Isometric Why Augur cards.** "Let's go with isometric for all three": Two roads in cubes, Middleman crumbles and the Catapult, each chosen on the Tenet Motion Options board. The Augur glyph on the Augur Lituus road is drawn extremely small, an exception to the brand's 50 px minimum. (jubalm)
+
+## 23 October 2026
+
+- **Why Augur closer.** The closer is a panel for the two readers; on 25 October the statement moved out of the panel. (jubalm)
+
+## 25 October 2026
+
+- **Use-case cards.** Replace the old right box ("trashy/noisy/ugly") with product cards that wait, get their answer and act, then a paragraph for builders. (jubalm)
+- **How it works cards.** Build option A of the item 4 board: four cards in the Why Augur cards' family ("nice boxes and green lines"), one scene each, with one question's real numbers behind "Walk through an example". (jubalm)
+- **Learn more.** Send people on to the FAQ, the blog and the community; on 26 October, three doors and no questions. (jubalm)
+
+## 26 October 2026
+
+- **Market card.** "Split it is": a query split in two, with the market's price beside Augur Lituus's status and answer. The label is "Query", only the price's digits change, the status sits in the card's corner, and Final reads as final with a drawn seal. (jubalm)
+- **For builders.** The "for builders" paragraph sits in its own element, and its ask closes the panel as a text action ("looks too big" as a button). (jubalm)
+- **Learn more doors.** No generic icons: each door is an isometric object from the site's own kit. (jubalm)
+- **How it works scenes.** The magnet made literal: blocks are REP and each side is a possible answer ("keep blocks", the small block jumps), with no words. Steps are picked by press or key, never hover, and a pick must show motion. (jubalm)
+- **Step notes.** Each step gets a short note under its name ("a tiny text below the 'Ask' 'Report' stuff"). (jubalm)
+
+## 28 October 2026
+
+- **Use-case loops.** "All animations should be going in a loop"; the reset is soft, never a cut, and one part is lit at a time because "our eyes are not going to where it should be going". (jubalm)
+- **Insurance card.** "Relay it is": one line through the flight, Augur Lituus and the cover, with names, values and notes on three level rows; an empty value is never a dash, and a short text under "Yes" keeps the symmetry. (jubalm)
+
 ## 29 October 2026
 
 - **Hover-edge record.** The Adaptations entry in [design reference](../reference/design.md#adaptations) (19 October 2026, Green at 50% opacity, now the design system's `--brand-hover-edge`) is the written record of the decision; no other record is needed. (jubalm)
 - **Adaptation approval records.** None are needed: not for the colour roles or the Green hover and pressed shades, which now come from the design system, nor for the Crimson error border or type and composition, which stay marked "Approval not found". (jubalm)
 - **Live homepage design.** `melo` replaces `current` as the live homepage design (`homeDesign` in `site.ts`); `current` stays buildable. (jubalm) Superseded 10 November 2026: `current` and the design switch were removed. (jubalm, "let's proceed with the cleanup")
+- **DAO card.** "Polish, review then implement the Switch": the DAO's go-live switch, with Augur Lituus's part the larger because "None of them give enough importance to the Augur Lituus process". (jubalm)
+- **Section reveal.** "Content should appear little by little while scrolling"; the How it works "ask" animation starts when the reader scrolls to it, and the timeline's green line goes down. (jubalm)
+- **Hero and closer copy.** "Define oracle in the hero, so that people know what it is before they keep reading"; the hero's three reader links carry no whitepaper link ("doesn't really make much sense there"). (jubalm)
+- **How it works layout.** Steps beside the picture, as a stepper that makes the progress clear. The example is a story ("I love the story in words") with emphasis marked by hand ("fix the bold and green"), and nothing sits under a scene or under the example. (jubalm)
+- **Holding REP.** Labels, not squares, in one full-width Navy card on one strict grid: text alone "looks weird" and took "too much space". (jubalm)
 
 ## 30 October 2026
 
@@ -30,6 +93,7 @@ From the launch interview of 30 October 2026, unless noted.
 - **Learn More.** The current two articles stay: "Augur: Q2 2026 report" and "The Moon Fork report". (jubalm)
 - **FAQ and walkthrough review flags.** Ship, and review after launch. The `needsReview` and `walkthroughReview` flags stay in the code. (jubalm)
 - **Privacy rewrite.** Someone else (legal) drafts it; the person is not named yet. Until then the old wording ships, flagged as inaccurate because the site now collects email addresses and runs GA4. The rewrite itself is open. (jubalm)
+- **About hero scene.** Not from the launch interview. "Layers it is. Polish a little bit then add it there": the stepped stack of layers, chosen from five isometric options. (jubalm)
 
 ## 31 October 2026
 
@@ -76,3 +140,6 @@ From the launch interview of 30 October 2026, unless noted.
 ## 11 November 2026
 
 - **One copy of each logo.** The four loose logo files in `public/brand/` (`glyph-color.svg`, `glyph-reversed.svg`, `horizontal-color.svg`, `horizontal-reversed.svg`) were byte-identical to the brand kit's and are removed; the site reads the kit's files, and `public/_redirects` sends the old URLs to them. GitHub Pages ignores `_redirects`, so on a Pages host the old URLs answer 404. (jubalm)
+- **Where code lives.** Code used by one page lives in that page's folder under `src/components/`; code used by several lives in `src/lib/`; facts about the whole site live in `src/site/`. The header, footer and announcement bar are `components/chrome/`, and `src/layouts/` keeps only the page shell. (jubalm)
+- **Scripts by timing.** A script tag in an `.astro` file only imports a module kept beside the component. Scripts that must run before first paint are named `*.inline.js`; the hero floor script stays one of them, since its timing was tuned. The homepage section scripts load as ordinary modules; loading them only when their section is visible is left for a later change. (jubalm)
+- **Design history in this log.** The history of who asked for what moves out of code comments and into this file; comments keep only what explains the code. (jubalm)

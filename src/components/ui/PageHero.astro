@@ -1,7 +1,7 @@
 ---
 interface Props { title: string; lead: string; }
 const { title, lead } = Astro.props;
-// An optional picture beside the words (About's stack, 30 Oct 2026). From 1024 it takes the empty space right of
+// An optional picture beside the words (About's stack). From 1024 it takes the empty space right of
 // the text, which gives up width only when it must; below that it sits under the text.
 const art = Astro.slots.has('art');
 ---

@@ -17,7 +17,7 @@ bar?.querySelector('[data-announcement-dismiss]')?.addEventListener('click',()=>
   const slides=followers.map(el=>el.animate([{transform:`translateY(${delta}px)`},{transform:'none'}],timing));
   slides[0]?.finished.finally(()=>bar.remove());
 });
-// The drop-in, armed by announcement-state.js. Every moving element runs the same CSS animation, started
+// The drop-in, armed by announcement-state.inline.js. Every moving element runs the same CSS animation, started
 // together here. Anything the reader does first settles it in place instead: the lift goes and the page
 // scrolls by the bar's height in the same frame, so nothing moves under the pointer or the eye, and the bar
 // is there above. Focus arriving in the bar itself (a screen reader, say) brings it down at once.
@@ -37,3 +37,6 @@ if(bar&&root.dataset.announcement==='arriving'){
   bar.addEventListener('focusin',()=>{if(waiting())for(const a of drops)a.currentTime=delay(a);},{signal});
   bar.addEventListener('animationend',event=>{if(event.target===bar)done();},{signal});
 }
+
+// Marks this file as a module, so its names stay out of the global scope.
+export {};

@@ -1,9 +1,9 @@
-// /2/ only (owner, 25 Oct 2026, item 4: "build A on /2", sketch A of the item 4 board): How it works' four steps over
+// How it works' four steps over
 // one stage, and "Walk through an example" (HowItWorks.astro imports this module, so it runs once the page is parsed). The steps are the shared tabs controller's (tabs.ts: press, arrows, Home/End, automatic
 // activation); this adds the stage's swap, each scene's act and the section's entrance ("paid", then the scene, which
 // acts again on every arrival). The markup is the rest state: without JavaScript, or if the CSP blocked this, the first step shows with its scene drawn, the example
 // stays open and the button stays hidden; reduced motion and print show the same. Timings and easings come from
-// timelines.ts (howPathTimeline, easing, revealTimeline.ready) and each scene's act from how-scenes.ts (howActs),
+// timelines.ts (howPathTimeline, easing, revealTimeline.ready) and each scene's act from scenes.ts (howActs),
 // which HowItWorks.astro writes into the page as JSON (#how-acts). Transform and opacity only.
 import { easing, howPathTimeline, revealTimeline } from '@/components/home/timelines';
 (() => {
@@ -34,7 +34,7 @@ set(false);
 toggle.hidden = false;
 }
 if (!root) return;
-// A step is picked only by a press or a key, never by hover (owner, 26 Oct 2026).
+// A step is picked only by a press or a key, never by hover.
 const tabs = [...root.querySelectorAll('[role="tab"]')], panels = [...root.querySelectorAll('[role="tabpanel"]')], stage = root.querySelector('.how-path-stage');
 const rails = tabs.map(tab => tab.querySelector('[data-how-rail]')), squares = tabs.map(tab => tab.querySelector('.how-path-index'));
 if (!animates || !('IntersectionObserver' in window)) return;
@@ -49,7 +49,7 @@ const step = i => panels[i]?.dataset.howStep;
 let motion = [], held = false, open = Math.max(0, tabs.findIndex(tab => tab.getAttribute('aria-selected') === 'true'));
 const go = (el, frames, delay, duration, easing = E.settle, fill = 'backwards') => { if (el) motion.push(el.animate(frames, { delay, duration, easing, fill })); };
 const settle = () => { motion.forEach(a => a.cancel()); motion = []; held = false; };
-// One step's act, from `at`: how-scenes.ts's tracks for that step, each [part, delay, duration, keyframes] from the
+// One step's act, from `at`: scenes.ts's tracks for that step, each [part, delay, duration, keyframes] from the
 // state before it, eased per keyframe. The scene's markup is the state after it, so a settled act leaves it as drawn.
 // Ask: the answers' signs light in turn and the reward lands on the sled. Report: their block lands on Yes and the
 // reward rides over to it while the clock runs. Challenge: your two blocks land on No, the hand goes back to twelve
@@ -58,9 +58,9 @@ const settle = () => { motion.forEach(a => a.cancel()); motion = []; held = fals
 const act = (i, at) => {
 (ACTS[step(i)] || []).forEach(([name, delay, duration, frames]) => go(panels[i]?.querySelector(`[data-how-part="${name}"]`), frames, at + delay, duration, 'linear'));
 };
-// The entrance, in the section's reading order (scroll-motion brief, 29 Oct 2026), one thing at a time: "paid" in the
+// The entrance, in the section's reading order, one thing at a time: "paid" in the
 // heading draws, once per tab session, as the lead lands (the section reveal, reveal.js), while the heading is on
-// screen; then the shown step's scene acts. A walk down the steps was built first and cut the same day: in two cold
+// screen; then the shown step's scene acts. A walk down the steps was tried and cut: in two cold
 // reads, light passing through the steps while the stage stayed on Ask read as a stepper that had lost its content,
 // or as focus moving on its own. "paid" waits undrawn from the first paint, so it never shows, vanishes and draws
 // again. A pick or print before then stands in for it, and it simply shows.
@@ -79,8 +79,7 @@ go(underline, [{ transform: 'scaleX(0)' }, { transform: 'none' }], 0, L.underlin
 inAt = performance.now() + L.underline;
 begin();
 };
-// The shown step's scene (Ask's, until a step is picked) acts each time the reader reaches the stage, a reload included
-// (owner, 29 Oct 2026: the "ask" animation should "start automatically … when the user scroll gets to them"): once the
+// The shown step's scene (Ask's, until a step is picked) acts each time the reader reaches the stage, a reload included, once the
 // stage has stayed on screen for `dwell`, so a fly-by (End, a jump) never spends it off screen, and, while the heading
 // is in view, once "paid" is in. Until then the act waits on its first frame, the state before the step, so the scene
 // never shows its end, jumps back and plays again; the stage leaving the screen sets it up again for the next arrival.
@@ -103,10 +102,10 @@ observer.observe(stage);
 if (heading && paid === 'waiting') observer.observe(heading);
 // A pick swaps the stage: the shown step fades out while it still holds the shared cell (a hidden panel there is
 // only invisible), then the picked one fades in and its scene acts, in place of the arrival's. Every pick plays it,
-// after a reload too (owner, 26 Oct 2026: changing steps "doesn't show any motion"): a pick is the reader asking for
+// after a reload too: a pick is the reader asking for
 // that step.
 // The links between the two steps draw in order with it (a step's rail is its link down to the next step), one run
-// down the timeline (owner, 29 Oct 2026: the green line going down): forward they fill top to bottom, each square
+// down the timeline: forward they fill top to bottom, each square
 // lighting as the line reaches it, the picked one last; back they empty bottom to top and the picked square lights
 // at once. Each link holds where it was until its turn, so a pick while they draw carries on from there, and the CSS
 // (aria-selected) is the state after. Where a link was is read as its scale, never its matrix: an empty link's

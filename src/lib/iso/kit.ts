@@ -1,8 +1,7 @@
-/** The isometric kit for the /2/ Why Augur cards (owner, 22 Oct 2026): Two roads (two-roads.ts), Middleman
- * crumbles (middleman.ts) and the Catapult (catapult.ts), each ported from its approved sketch on the Tenet
- * Motion Options board. A scene is a tree of SVG nodes drawn at its resting frame, which IsoScene.astro renders,
+/** The isometric kit for the Why Augur cards: Two roads (two-roads.ts), Middleman
+ * crumbles (middleman.ts) and the Catapult (catapult.ts). A scene is a tree of SVG nodes drawn at its resting frame, which IsoScene.astro renders,
  * so no JavaScript, reduced motion and print show it, and its loop's keyframes, built here at build time, one
- * track per `data-iso` name, which tenets-iso.js plays on one 12 s cycle. The keyframes are exact: each
+ * track per `data-iso` name, which scene-loop.js plays on one 12 s cycle. The keyframes are exact: each
  * track opens and closes on the resting frame, and only what changes is animated. Transform and opacity only. */
 
 export type Attrs = Record<string, string | number | undefined>;

@@ -1,5 +1,5 @@
-/** The Learn more doors on /2/ (owner, 26 Oct 2026: "we agreed on not using generic icons … Maybe an SVG?"). Each
- * door is marked by a small object from the site's own isometric kit (iso-kit.ts), the blocks of Why Augur and How it
+/** The Learn more doors. Each
+ * door is marked by a small object from the site's own isometric kit (kit.ts), the blocks of Why Augur and How it
  * works, drawn at rest at build time, with no words:
  * - FAQ: the answer pedestal from How it works, its sign a question mark. Hovered, the question gets its answer: the
  *   ? gives way to the ✓.

@@ -5,11 +5,10 @@ import {navigation} from '@/site/navigation';
 import {links,isExternal} from '@/site/links';
 import {doorScenes,doorBox} from './door-scenes';
 import Icon from '@/components/ui/Icon.astro';
-// Each homepage version renders its own copy (homepage.ts).
-// Item 6; owner, 26 Oct 2026: sketch A: no questions, three doors, the FAQ, the blog and Discord.
+// No questions here: three doors, the FAQ, the blog and Discord.
 // Each door is one link that fills its tile (the title's link stretches over it), so the accessible
 // name stays the title and the door's line describes it. Hrefs come from the navigation directory the
-// header and footer use, so the doors can't drift from those menus. No generic icons (owner): each door
+// header and footer use, so the doors can't drift from those menus. No generic icons: each door
 // is marked by its own object from the iso kit (door-scenes.ts), drawn here at rest like IsoScene.astro's.
 const keep=homeCopy.learnMore.keepGoing;
 // The blog is a page of this site again (ported from the old augur.net), so its door takes → like the FAQ's.

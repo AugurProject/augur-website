@@ -1,9 +1,7 @@
-// The answer band's ribbon on the review copies (Tenets.astro renders this right after the section): home-art.ts's
-// sweep, which "/" keeps, carried here so it can follow the section's lead (owner's ask, 29 Oct 2026: motion that leads
-// the eye in reading order; the scroll-motion brief). The band carries data-answer-band instead of "/"'s
-// data-answer-band, so home-art.ts leaves it alone. A Green ribbon grows from the left under the statement, led by three
+// The answer band's ribbon (Tenets.astro renders this right after the section). It follows the section's lead, so motion leads
+// the eye in reading order. A Green ribbon grows from the left under the statement, led by three
 // squares, and each word of the Navy copy rises into place as the front reaches it; the live statement underneath stays
-// one text node. Unlike the other entrances it plays on every load, a reload included (owner, 6 Oct 2026), once 60% of
+// one text node. Unlike the other entrances it plays on every load, a reload included, once 60% of
 // the band is in view; while the heading row above it is still settling in (reveal.js), it waits for the lead to land,
 // so the answer comes after the question. Already on screen when this runs: the settled band. Reduced motion, print and
 // page hide settle it. Timings from timelines.ts (ribbonTimeline, easing);

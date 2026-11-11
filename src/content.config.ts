@@ -2,7 +2,7 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
-// Learn guides, ported from the web lab. `needsReview` marks a guide whose content isn't approved yet.
+// Learn guides. `needsReview` marks a guide whose content isn't approved yet.
 const review = { placeholder: z.boolean().default(false), needsReview: z.boolean().default(false), source: z.string() };
 const learn = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/learn' }),

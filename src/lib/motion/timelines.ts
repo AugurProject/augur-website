@@ -1,11 +1,9 @@
-/** Motion source: Figma 121:152 and 250:717; owner brief §8; polish brief
- * (5 Oct 2026) for the shared easing and timing tokens.
- * Timings are milliseconds. */
+/** Shared easing and timing tokens. Timings are milliseconds. */
 export const easing = {
   reveal: 'cubic-bezier(.22,.61,.36,1)', hero: 'cubic-bezier(.22,.7,.22,1)',
   draw: 'cubic-bezier(.45,0,.2,1)', crossfade: 'cubic-bezier(.45,0,.55,1)',
   newcomer: 'cubic-bezier(.45,1.45,.8,1)',
-  /** Use cases (owner, 19 Oct 2026: "polished, professional"): `settle` lands fast and long, for text,
+  /** Use cases: `settle` lands fast and long, for text,
    * fills and rules; `travel` moves a mark from rest to rest; `approach` brakes hard into a stop. */
   settle: 'cubic-bezier(.16,1,.3,1)', travel: 'cubic-bezier(.65,0,.35,1)', approach: 'cubic-bezier(.5,0,.1,1)',
 } as const;
@@ -19,7 +17,7 @@ export function timeAt(curve:string,progress:number){
  for(let step=0;step<24;step++){const mid=(low+high)/2;if(at(y1,y2,mid)<progress)low=mid;else high=mid;}
  return at(x1,x2,(low+high)/2);
 }
-/** Sitewide field (owner, 19 Oct 2026): cells within `margin` px of text or an object stay empty; full-width
+/** Sitewide field: cells within `margin` px of text or an object stay empty; full-width
  * bands darker than `bandLuminance` count as background. A `density` share of the rest hold a 3 px square,
  * `green` of them Green, in `steps` opacity steps across `paperOpacity` / `greenOpacity`; redrawn `debounce`
  * ms after a size change. Trail: `pool` squares of `size` px, every `greenEvery`th Green, growing from `from`
