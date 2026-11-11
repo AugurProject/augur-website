@@ -1,7 +1,7 @@
 ---
 import {site} from '@/site/site';
 import {links} from '@/site/links';
-import Icon from '@/components/primitives/Icon.astro';
+import Icon from '@/components/ui/Icon.astro';
 import announcementState from './announcement-state.js?raw';
 const enabled=site.announcement.enabled&&(!site.announcement.until||Date.parse(site.announcement.until)>Date.now());
 ---

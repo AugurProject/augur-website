@@ -1,5 +1,5 @@
 ---
-import { glossary } from '@/data/glossary';
+import { glossary } from './glossary';
 interface Props { terms?: string[]; compact?: boolean; }
 const { terms, compact = false } = Astro.props;
 const entries = terms ? terms.flatMap(id => glossary.filter(term => term.id === id)) : glossary;

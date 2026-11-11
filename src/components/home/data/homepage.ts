@@ -13,7 +13,7 @@
  * and the flag would add launch blockers (check-launch).
  */
 
-import { stakedBehind } from '@/data/rep';
+import { stakedBehind } from '@/components/rep/rep';
 
 export const homeCopy = {
   hero: {

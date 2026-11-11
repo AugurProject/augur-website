@@ -1,8 +1,8 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import PageHero from '@/components/pages/PageHero.astro';
-import FaqItem from '@/components/content/FaqItem.astro';
-import { faqEntries, faqCategories } from '@/data/faq';
+import PageHero from '@/components/ui/PageHero.astro';
+import FaqItem from '@/components/faq/FaqItem.astro';
+import { faqEntries, faqCategories } from '@/components/faq/faq';
 const idFor=(value:string)=>value.toLowerCase().replaceAll(' ','-');
 const order=['augur-today','augur-lituus','trading','who-decides','disagreement','invalid','rep-role','rep-actions','rep-holding','rep-augur-ticker','rep-wallet','rep-missed-migration','honest-fork','build-today','talk-to-team'];
 ---

@@ -2,7 +2,7 @@
 // Header for the ported article pages (blog posts, whitepaper sections, fork guides, privacy, terms),
 // after the Learn guide header: breadcrumb trail, title, lead, and a slot for dates or actions.
 // `title` is optional because a whitepaper section brings its own h1 in the Markdown.
-import HeritageField from '@/components/art/HeritageField.astro';
+import HeritageField from './HeritageField.astro';
 export interface Crumb { label: string; href?: string }
 interface Props { crumbs?: Crumb[]; title?: string; subtitle?: string; lead?: string; eyebrow?: string }
 const { crumbs = [], title, subtitle, lead, eyebrow } = Astro.props;

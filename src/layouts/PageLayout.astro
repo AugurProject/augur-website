@@ -1,13 +1,13 @@
 ---
 import '@/styles/global.css';
-import AnnouncementBar from '@/components/layout/AnnouncementBar.astro';
-import SiteHeader from '@/components/layout/SiteHeader.astro';
-import SiteFooter from '@/components/layout/SiteFooter.astro';
-import chromeStyle from '@/styles/chrome.css?inline';
+import AnnouncementBar from '@/components/chrome/AnnouncementBar.astro';
+import SiteHeader from '@/components/chrome/SiteHeader.astro';
+import SiteFooter from '@/components/chrome/SiteFooter.astro';
+import chromeStyle from '@/components/chrome/chrome.css?inline';
 import headlineFont from '@fontsource/sora/files/sora-latin-600-normal.woff2?url';
 import bodyFont from '@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-400-normal.woff2?url';
-import introScript from '@/motion/page-intro.js?raw';
-import introStyle from '@/styles/page-intro.css?inline';
+import introScript from '@/components/chrome/page-intro.js?raw';
+import introStyle from '@/components/chrome/page-intro.css?inline';
 import { site } from '@/site/site';
 import { links } from '@/site/links';
 // `bare` drops the announcement, header and footer for one-off pages such as the newsletter
@@ -70,6 +70,6 @@ const markdown = !bare && !noindex && mdFiles.has(mdPath) ? mdPath : undefined;
   <main id="main" class={className} tabindex="-1"><slot /></main>
   {!bare && footer && <SiteFooter />}
   <div class="page-field" data-page-field aria-hidden="true"></div>
-  <script>import {initPageField} from '@/motion/page-field';initPageField();</script>
+  <script>import {initPageField} from '@/components/chrome/page-field';initPageField();</script>
  </body>
 </html>

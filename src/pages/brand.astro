@@ -1,10 +1,10 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import PageHero from '@/components/pages/PageHero.astro';
-import Icon from '@/components/primitives/Icon.astro';
+import PageHero from '@/components/ui/PageHero.astro';
+import Icon from '@/components/ui/Icon.astro';
 import reversedMaster from '../../public/brand/kit/horizontal/augur-horizontal-reversed.svg?raw';
 import colorMaster from '../../public/brand/kit/horizontal/augur-horizontal-color.svg?raw';
-import { brandKit, logoVariants, logoCompositions, logoFile, tokenIcon, clearspace as c, palette, pairings, typefaces, misuse, moreMisuse, goodUse } from '@/data/brand';
+import { brandKit, logoVariants, logoCompositions, logoFile, tokenIcon, clearspace as c, palette, pairings, typefaces, misuse, moreMisuse, goodUse } from '@/components/brand/brand';
 const size = { horizontal: [360, 121], vertical: [224, 222], glyph: [108, 121] } as const;
 // The supplied paths, nested unchanged inside the clearspace diagram.
 const reversedPaths = reversedMaster.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');

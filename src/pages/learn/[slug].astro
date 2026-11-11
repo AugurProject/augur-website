@@ -1,9 +1,9 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
-import HeritageField from '@/components/art/HeritageField.astro';
-import Glossary from '@/components/content/Glossary.astro';
-import GuideWalkthrough from '@/components/content/GuideWalkthrough.astro';
+import HeritageField from '@/components/article/HeritageField.astro';
+import Glossary from '@/components/learn/Glossary.astro';
+import GuideWalkthrough from '@/components/learn/GuideWalkthrough.astro';
 import { showStatoblast, showZoltar } from '@/site/products';
 // The products guide covers Zoltar and Augur Statoblast, so it is not built while either switch is off.
 export async function getStaticPaths() { return (await getCollection('learn')).filter(guide=>(showStatoblast&&showZoltar)||guide.id!=='how-the-products-fit-together').map(guide=>({params:{slug:guide.id},props:{guide}})); }

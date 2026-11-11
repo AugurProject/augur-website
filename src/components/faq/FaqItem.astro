@@ -1,5 +1,5 @@
 ---
-import type { FaqEntry } from '@/data/faq';
+import type { FaqEntry } from './faq';
 interface Props { entry: FaqEntry; open?: boolean; name?: string; pageQuestion?: boolean; }
 const { entry, open = false, name = 'page-faq', pageQuestion = false }=Astro.props;
 // A link to the page the reader is already on (“More about REP” on /rep/) is left out.

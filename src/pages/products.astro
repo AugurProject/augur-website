@@ -1,8 +1,8 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
-import PageHero from '@/components/pages/PageHero.astro';
+import PageHero from '@/components/ui/PageHero.astro';
 import { products, showStatoblast, showZoltar } from '@/site/products';
-import Icon from '@/components/primitives/Icon.astro';
+import Icon from '@/components/ui/Icon.astro';
 const showFit = showZoltar || showStatoblast;
 const names = ['Augur Lituus', ...(showZoltar ? ['Zoltar'] : []), ...(showStatoblast ? ['Augur Statoblast'] : [])];
 const description = `What ${names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names.at(-1) : names[0]} ${names.length > 1 ? 'do' : 'does'}, ${names.length > 1 ? 'their current status' : 'its current status'}, research and code.`;

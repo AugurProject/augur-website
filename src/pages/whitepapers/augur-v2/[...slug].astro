@@ -3,11 +3,11 @@
 import 'katex/dist/katex.min.css';
 import { render } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
-import ArticleHeader from '@/components/content/ArticleHeader.astro';
-import Prose from '@/components/content/Prose.astro';
-import SectionRail from '@/components/content/SectionRail.astro';
-import PagerNav from '@/components/content/PagerNav.astro';
-import Icon from '@/components/primitives/Icon.astro';
+import ArticleHeader from '@/components/article/ArticleHeader.astro';
+import Prose from '@/components/article/Prose.astro';
+import SectionRail from '@/components/article/SectionRail.astro';
+import PagerNav from '@/components/article/PagerNav.astro';
+import Icon from '@/components/ui/Icon.astro';
 import { augurV2, getSections, sectionHeading, sectionLabel, sectionMarkdownPath, sectionPath, sectionTitle, type Section } from '@/lib/content/whitepapers';
 // The Augur v2 whitepaper web edition at its old URLs: /whitepapers/augur-v2/ (contents, index.md) and
 // /whitepapers/augur-v2/<file>/. Each file's Markdown source is also served at <file>.md ([slug].md.ts).

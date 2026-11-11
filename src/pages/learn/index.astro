@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
-import PageHero from '@/components/pages/PageHero.astro';
-import Glossary from '@/components/content/Glossary.astro';
+import PageHero from '@/components/ui/PageHero.astro';
+import Glossary from '@/components/learn/Glossary.astro';
 import { showStatoblast, showZoltar } from '@/site/products';
 const guides = await getCollection('learn');
 const start = guides.filter(guide=>guide.data.order).sort((a,b)=>a.data.order!-b.data.order!);

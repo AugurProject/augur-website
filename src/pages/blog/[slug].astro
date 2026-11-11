@@ -1,9 +1,9 @@
 ---
 import { render } from 'astro:content';
 import PageLayout from '@/layouts/PageLayout.astro';
-import ArticleHeader from '@/components/content/ArticleHeader.astro';
-import Prose from '@/components/content/Prose.astro';
-import PagerNav from '@/components/content/PagerNav.astro';
+import ArticleHeader from '@/components/article/ArticleHeader.astro';
+import Prose from '@/components/article/Prose.astro';
+import PagerNav from '@/components/article/PagerNav.astro';
 import { getPosts, postPath, formatPostDate, isoDate, type Post } from '@/lib/content/blog';
 
 export async function getStaticPaths() {
