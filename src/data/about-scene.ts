@@ -5,7 +5,7 @@
  * set down again; while it is up, its footprint shows on the layer below. The resting frame, which no JavaScript,
  * reduced motion and print show, is the finished stack. There are no words. AboutScene.astro draws it and plays
  * the track on the site's 12 s cycle. It draws with Melo's iso kit, shared with the homepage. */
-import { CYCLE, E, M, P, block, quad, node, keyframes, shift, mix, r2, mist, card, paper, navy, type Box, type Material, type Point, type SvgNode } from './iso-kit';
+import { CYCLE, E, M, P, block, quad, node, keyframes, shift, mix, r2, mist, card, paper, navy, type Box, type Material, type Point, type SvgNode } from '@/lib/iso/kit';
 
 const { tracks, animate } = keyframes('about');
 // A shade darker than the kit's device grey, so the Mist layer's shaded face stays apart from the base's top.

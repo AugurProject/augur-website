@@ -1,12 +1,12 @@
 ---
-import Brand from '../primitives/Brand.astro';
-import Icon from '../primitives/Icon.astro';
-import Button from '../primitives/Button.astro';
-import {navigation,navigationGroups,pages,type NavigationItem} from '../../data/navigation';
-import {links,isExternal} from '../../data/links';
-import {newsletter} from '../../data/newsletter';
-import {forms} from '../../data/forms';
-import {site} from '../../data/site';
+import Brand from '@/components/primitives/Brand.astro';
+import Icon from '@/components/primitives/Icon.astro';
+import Button from '@/components/primitives/Button.astro';
+import {navigation,navigationGroups,pages,type NavigationItem} from '@/site/navigation';
+import {links,isExternal} from '@/site/links';
+import {newsletter} from '@/lib/forms/newsletter';
+import {forms} from '@/lib/forms/forms';
+import {site} from '@/site/site';
 // The address stays for the newsletter's consent line; the contact band no longer shows it.
 // Both rows sit on the site's 500 / 80 / 668 heading grid, so the newsletter and the first
 // link column share one edge with every section above. One footer nav landmark; every
@@ -42,7 +42,7 @@ const follow:{label:string;href:string;logo?:string}[]=[{label:'Blog',href:links
  // A form-urlencoded body keeps the cross-origin POST a simple request, with no CORS preflight.
  // Offline (no PUBLIC_FORMS_URL in the build), method="dialog" keeps submits local and the
  // script says plainly that nothing was sent.
- import {isEmail,newsletter} from '../../data/newsletter';
+ import {isEmail,newsletter} from '@/lib/forms/newsletter';
  const form=document.querySelector<HTMLFormElement>('[data-newsletter]');
  if(form){
   form.noValidate=true;

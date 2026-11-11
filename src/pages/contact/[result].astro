@@ -1,10 +1,10 @@
 ---
-import { forms } from '../../data/forms';
-import PageLayout from '../../layouts/PageLayout.astro';
-import Button from '../../components/primitives/Button.astro';
-import { links } from '../../data/links';
-import { pages } from '../../data/navigation';
-import { contact, type ContactResult } from '../../data/contact';
+import { forms } from '@/lib/forms/forms';
+import PageLayout from '@/layouts/PageLayout.astro';
+import Button from '@/components/primitives/Button.astro';
+import { links } from '@/site/links';
+import { pages } from '@/site/navigation';
+import { contact, type ContactResult } from '@/lib/forms/contact';
 // Where the contact form lands without JavaScript; the augur-forms Worker redirects here with its result.
 export function getStaticPaths() {
   // Not built while the forms are off (forms.enabled).

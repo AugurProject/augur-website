@@ -1,5 +1,5 @@
 ---
-import type { FaqEntry } from '../../data/faq';
+import type { FaqEntry } from '@/data/faq';
 interface Props { entry: FaqEntry; open?: boolean; name?: string; pageQuestion?: boolean; }
 const { entry, open = false, name = 'page-faq', pageQuestion = false }=Astro.props;
 // A link to the page the reader is already on (“More about REP” on /rep/) is left out.
@@ -13,8 +13,8 @@ const linkLabel=offSite?entry.link.label.slice(0,-2):entry.link.label;
  <div class="faq-answer"><p>{entry.answer}</p>{!linkHere&&<a class="line-link" href={entry.link.href}><span class="button-label">{linkLabel}</span>{offSite&&<span aria-hidden="true">↗</span>}</a>}</div>
 </details>
 <script>
- import {faqTimeline} from '../../motion/timelines';
- import {motionTime} from '../../motion/debug';
+ import {faqTimeline} from '@/lib/motion/timelines';
+ import {motionTime} from '@/lib/motion/debug';
  // Opening a question: the answer is revealed by an eased, clipped height
  // change (same-document view transition), the toggle turns from plus to
  // minus, a Green edge draws down and the answer rises in. Questions below

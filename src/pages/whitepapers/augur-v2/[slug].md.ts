@@ -1,5 +1,5 @@
 import type { APIContext } from 'astro';
-import { getSections, type Section } from '../../../data/whitepapers';
+import { getSections, type Section } from '@/lib/content/whitepapers';
 
 // Each whitepaper file's Markdown source at the old site's URL (/whitepapers/augur-v2/<file>.md, the
 // contents at index.md). The files have no frontmatter, so the entry body is the whole file less its

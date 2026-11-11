@@ -1,4 +1,4 @@
-import { isEmail, newsletter } from '../../../src/data/newsletter';
+import { isEmail, newsletter } from '../../../src/lib/forms/newsletter';
 import type { FormSpec } from './form';
 
 // Newsletter interest list: stores the address in D1 and sends nothing. New and existing

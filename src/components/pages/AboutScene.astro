@@ -1,15 +1,12 @@
 ---
-import { aboutScene } from '../../data/about-scene';
-import type { SvgNode } from '../../data/iso-kit';
+import IsoNodes from '@/lib/iso/IsoNodes.astro';
+import { aboutScene } from '@/data/about-scene';
 // The About hero's stack (about-scene.ts), drawn at rest, so no JavaScript, reduced motion and print show the
 // finished stack. The script plays its track; the lift rises above the box, so the svg lets it show.
 const { world, motion, width, height, transform } = aboutScene;
 ---
 <svg class="about-scene" viewBox={`0 0 ${width} ${height}`} width={width} height={height} data-about-scene={JSON.stringify(motion)} aria-hidden="true">
-  <g transform={transform}>{(function render(nodes: SvgNode[]): any { return nodes.map(({ tag, attrs, children }) => {
-    const Tag = tag as any;
-    return children ? <Tag {...attrs}>{render(children)}</Tag> : <Tag {...attrs}/>;
-  }); })(world)}</g>
+  <g transform={transform}><IsoNodes nodes={world}/></g>
 </svg>
 <script>
 // Loops like the Why Augur scenes: while the stack is on screen and the tab is visible it plays on the 12 s cycle,

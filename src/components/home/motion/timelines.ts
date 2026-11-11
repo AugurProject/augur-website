@@ -1,24 +1,9 @@
 /** Motion source: Figma 121:152 and 250:717; owner brief §8; polish brief
  * (5 Oct 2026) for the answer ribbon.
  * Timings are milliseconds. */
-export const easing = {
-  reveal: 'cubic-bezier(.22,.61,.36,1)', hero: 'cubic-bezier(.22,.7,.22,1)',
-  draw: 'cubic-bezier(.45,0,.2,1)', crossfade: 'cubic-bezier(.45,0,.55,1)',
-  newcomer: 'cubic-bezier(.45,1.45,.8,1)',
-  /** Use cases (owner, 19 Oct 2026: "polished, professional"): `settle` lands fast and long, for text,
-   * fills and rules; `travel` moves a mark from rest to rest; `approach` brakes hard into a stop. */
-  settle: 'cubic-bezier(.16,1,.3,1)', travel: 'cubic-bezier(.65,0,.35,1)', approach: 'cubic-bezier(.5,0,.1,1)',
-} as const;
-export const timing = { hover:180, fadeOut:160, panel:320, longPanel:850, stagger:110 } as const;
-/** The moment, as a fraction of the duration, at which a cubic-bezier easing
- * whose output rises steadily reaches `progress`. */
-export function timeAt(curve:string,progress:number){
- const [x1=0,y1=0,x2=1,y2=1]=(curve.match(/-?[\d.]+/g)??[]).map(Number);
- const at=(a:number,b:number,s:number)=>3*(1-s)**2*s*a+3*(1-s)*s**2*b+s**3;
- let low=0,high=1;
- for(let step=0;step<24;step++){const mid=(low+high)/2;if(at(y1,y2,mid)<progress)low=mid;else high=mid;}
- return at(x1,x2,(low+high)/2);
-}
+// The shared easing and timing tokens live in lib/motion; the homepage's own timelines follow.
+import { easing, timing } from '@/lib/motion/timelines';
+export { easing, timing };
 /** The hero's arrival (hero review, 22 Oct 2026; the scroll-motion brief, 29 Oct 2026; owner, 10 Nov 2026). The art's layer
  * (`field`) fades in briefly and the floor builds itself (`floor`, hero-floor.js): from `delay` after its first frame a
  * wave of light runs out from the block over `build`, and the loop starts at `phase`. The text values here (`lines`, `copy`,
@@ -99,12 +84,3 @@ export const howPathTimeline = { threshold:.6, underline:560, out:160, at:160, i
  * section's own scene (How it works' scene, the roadmap's track) starts once `ready` of it has stayed on screen for
  * `dwell`, so a fly-by (End, a jump) never spends it off screen, and the lead above it has landed. */
 export const revealTimeline = { line:.9, heading:400, headingRise:12, rise:8, stagger:80, itemStagger:60, ready:.9, dwell:120 } as const;
-/** Sitewide field (owner, 19 Oct 2026): cells within `margin` px of text or an object stay empty; full-width
- * bands darker than `bandLuminance` count as background. A `density` share of the rest hold a 3 px square,
- * `green` of them Green, in `steps` opacity steps across `paperOpacity` / `greenOpacity`; redrawn `debounce`
- * ms after a size change. Trail: `pool` squares of `size` px, every `greenEvery`th Green, growing from `from`
- * to full by `rise` of `fade` and peaking at `greenPeak` / `paperPeak`. */
-export const fieldTimeline = { margin:12, bandLuminance:.06, density:.22, green:.18, steps:4, paperOpacity:[.05,.12], greenOpacity:[.12,.26], debounce:200, pool:24, greenEvery:3, size:5, from:.4, rise:.18, fade:800, greenPeak:.5, paperPeak:.22 } as const;
-/** FAQ: the question box eases to its new height over `transition`; the toggle,
- * Green edge and answer text follow over `panel`, the answer lines `stagger` apart. */
-export const faqTimeline = { transition:380, panel:timing.panel, stagger:50 } as const;

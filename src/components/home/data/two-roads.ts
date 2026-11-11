@@ -9,7 +9,7 @@
  * iso-kit.ts has the drawing and keyframe rules shared with the other two cards. The keyframes are exact: steady
  * speeds, no cube ever trades places with another (each is drawn at its true depth), instant swaps only where
  * the frames just before and after are identical, and the loop's end matches its start shape for shape. */
-import { CYCLE, COS, E, M, P, block, quad, node, plane, rect, keyframes, fit, mix, r2, card, navy, mist, paper, green, deep, lane, screen, mark, type SvgNode } from '../../../data/iso-kit';
+import { CYCLE, COS, E, M, P, block, quad, node, plane, rect, keyframes, fit, mix, r2, card, navy, mist, paper, green, deep, lane, screen, mark, type SvgNode } from '@/lib/iso/kit';
 
 const { tracks, animate, loop } = keyframes('two-roads');
 

@@ -1,5 +1,5 @@
-import { links } from './links';
-import { rep as example } from './walkthrough';
+import { links } from '@/site/links';
+import { rep as example } from '@/lib/example';
 
 /** The REP page (/rep/), rebuilt 19 October 2026. It is the token page
  * for traders and beginners and, like augur.net/rep today, the contract reference that

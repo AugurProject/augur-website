@@ -1,11 +1,11 @@
 ---
-import { walkthrough, query, ledger, rep } from '../data/walkthrough';
-import Icon from '../../../components/primitives/Icon.astro';
-import Button from '../../../components/primitives/Button.astro';
-import {homeCopy} from '../data/homepage';
-import {howScenes} from '../data/how-scenes';
-import type {SvgNode} from '../../../data/iso-kit';
-import {homeInline} from '../scripts/inline';
+import IsoNodes from '@/lib/iso/IsoNodes.astro';
+import { walkthrough, query, ledger, rep } from '@/lib/example';
+import Icon from '@/components/primitives/Icon.astro';
+import Button from '@/components/primitives/Button.astro';
+import {homeCopy} from '@/components/home/data/homepage';
+import {howScenes} from '@/components/home/data/how-scenes';
+import {homeInline} from '@/components/home/scripts/inline';
 // Each homepage version renders its own copy (homepage.ts).
 const copy=homeCopy,how=copy.howItWorks,holderCopy=copy.holder;
 // Owner, 25 Oct 2026, item 4: "build A on /2", sketch A of the item 4 board; 29 Oct 2026, sketch B of the How
@@ -35,7 +35,7 @@ const holderLead=holderPoints.find(point=>point.earn)??holderPoints[0]!,holderRe
  <div class="section-heading"><h2 id="how-heading" data-paid-heading data-reveal>Know what happened?<br/>Get <span class="paid">paid<span class="paid-mark" aria-hidden="true"></span></span> to report it.</h2><p class="lead" data-reveal>{path.lead}</p></div>
  <div class="how-path" data-tabs data-how-path data-panel-swap data-activation="automatic" data-active="0">
   <div class="how-path-tabs" role="tablist" aria-orientation="vertical" aria-label={path.label}>{path.stops.map((stop,i)=><button type="button" role="tab" id={`how-tab-${stop.scene}`} aria-controls={`how-panel-${stop.scene}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} class="how-path-tab" aria-labelledby={`how-tab-${stop.scene}-name`} aria-describedby={`how-tab-${stop.scene}-note`}><span class="how-path-rail" aria-hidden="true" data-how-rail></span><span class="how-path-index" aria-hidden="true">{i+1}</span><span class="how-path-name" id={`how-tab-${stop.scene}-name`}>{stop.title}</span><span class="how-path-note" id={`how-tab-${stop.scene}-note`}>{stop.note}</span></button>)}</div>
-  <div class="how-path-stage">{path.stops.map((stop,i)=><div role="tabpanel" id={`how-panel-${stop.scene}`} aria-labelledby={`how-tab-${stop.scene}`} class="how-path-panel" tabindex="0" hidden={i!==0} data-how-step={stop.scene}><svg viewBox="0 0 336 168" width="336" height="168" class="how-scene" data-how-scene={stop.scene} aria-hidden="true"><g transform={howScenes.transform}>{(function render(nodes:SvgNode[]):any{return nodes.map(({tag,attrs,children})=>{const Tag=tag as any;return children?<Tag {...attrs}>{render(children)}</Tag>:<Tag {...attrs}/>;});})(howScenes.worlds[stop.scene])}</g></svg><div class="how-path-words"><p class="how-claim"><span class="setup">{stop.claim[0]}</span><span>{stop.claim[1]}</span></p><p class="how-body">{stop.body}</p></div></div>)}</div>
+  <div class="how-path-stage">{path.stops.map((stop,i)=><div role="tabpanel" id={`how-panel-${stop.scene}`} aria-labelledby={`how-tab-${stop.scene}`} class="how-path-panel" tabindex="0" hidden={i!==0} data-how-step={stop.scene}><svg viewBox="0 0 336 168" width="336" height="168" class="how-scene" data-how-scene={stop.scene} aria-hidden="true"><g transform={howScenes.transform}><IsoNodes nodes={howScenes.worlds[stop.scene]}/></g></svg><div class="how-path-words"><p class="how-claim"><span class="setup">{stop.claim[0]}</span><span>{stop.claim[1]}</span></p><p class="how-body">{stop.body}</p></div></div>)}</div>
  </div>
  <button type="button" class="button outline how-toggle how-more" aria-expanded="true" aria-controls="how-example" data-how-more hidden><span class="how-toggle-open">{how.open}</span><span class="how-toggle-close">{how.close}</span><Icon name="chevron-down"/></button>
  <div class="path-example" id="how-example" data-how-demo>

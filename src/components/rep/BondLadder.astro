@@ -1,5 +1,5 @@
 ---
-import { ladder } from '../../data/rep';
+import { ladder } from '@/data/rep';
 /** Lying gets more expensive every round. Each round's bond is drawn as Pewter squares, one per
  * 15 REP, so the area doubles round by round (the bond vocabulary of the How it works panels: a
  * bond is a Pewter square). Three panels group the rounds by stage (Report, Challenges, Fork) on
@@ -34,8 +34,8 @@ const [report, fork] = [ladder.stages[0]!, ladder.stages[2]!], challenges = ladd
  <p class="ladder-final"><i aria-hidden="true"></i>{ladder.final}</p>
 </div>
 <script>
- import { playOnce } from '../../motion/play-once';
- import { easing } from '../../motion/timelines';
+ import { playOnce } from '@/lib/motion/play-once';
+ import { easing } from '@/lib/motion/timelines';
  // Each round rises in after the one before, then the fork threshold (transform and opacity only).
  const root = document.querySelector('[data-ladder]');
  if (root) playOnce(root, animate => {

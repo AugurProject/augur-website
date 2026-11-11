@@ -1,4 +1,4 @@
-import { contact, contactErrors, type ContactResult, type ContactValues } from '../../../src/data/contact';
+import { contact, contactErrors, type ContactResult, type ContactValues } from '../../../src/lib/forms/contact';
 import { mailSender } from './mail';
 import type { FormSpec } from './form';
 

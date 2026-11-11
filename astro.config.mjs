@@ -11,11 +11,11 @@ import tailwindcss from '@tailwindcss/vite';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 
-import { site } from './src/data/site.ts';
-import rehypeCallouts from './src/markdown/rehype-callouts.mjs';
-import rehypeHeadingEmoji from './src/markdown/rehype-heading-emoji.mjs';
-import rehypePortedContent from './src/markdown/rehype-ported-content.mjs';
-import rehypeWhitepaperLinks from './src/markdown/rehype-whitepaper-links.mjs';
+import { site } from './src/site/site.ts';
+import rehypeCallouts from './src/lib/content/markdown/rehype-callouts.mjs';
+import rehypeHeadingEmoji from './src/lib/content/markdown/rehype-heading-emoji.mjs';
+import rehypePortedContent from './src/lib/content/markdown/rehype-ported-content.mjs';
+import rehypeWhitepaperLinks from './src/lib/content/markdown/rehype-whitepaper-links.mjs';
 
 // The build folder (dist), set once the config is final.
 let clientDir = '';

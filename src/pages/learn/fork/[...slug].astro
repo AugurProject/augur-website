@@ -1,10 +1,10 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import PageLayout from '../../../layouts/PageLayout.astro';
-import ArticleHeader from '../../../components/content/ArticleHeader.astro';
-import Prose from '../../../components/content/Prose.astro';
-import SectionRail from '../../../components/content/SectionRail.astro';
-import PagerNav from '../../../components/content/PagerNav.astro';
+import PageLayout from '@/layouts/PageLayout.astro';
+import ArticleHeader from '@/components/content/ArticleHeader.astro';
+import Prose from '@/components/content/Prose.astro';
+import SectionRail from '@/components/content/SectionRail.astro';
+import PagerNav from '@/components/content/PagerNav.astro';
 // The old augur.net fork guides at their old URLs: /learn/fork/ (index.mdx) and /learn/fork/<file>/.
 // Not listed on the Learn index (docs/reference/ported-content.md).
 type Guide = CollectionEntry<'forkGuides'>;

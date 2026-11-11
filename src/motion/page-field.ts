@@ -1,5 +1,5 @@
-import { motionTime } from './debug';
-import { fieldTimeline as t } from './timelines';
+import { motionTime } from '@/lib/motion/debug';
+import { fieldTimeline as t } from '@/lib/motion/timelines';
 
 /** One heritage field for the whole site (owner, 19 Oct 2026: "homogenous across all website, even the
  * different backgrounds, except areas where there is text or stuff … subtle"). A single layer above the

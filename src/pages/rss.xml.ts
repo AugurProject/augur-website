@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { getPosts, postPath } from '../data/blog';
+import { getPosts, postPath } from '@/lib/content/blog';
 
 // The old augur.net feed at the same URL, with the same channel and item fields, so existing
 // subscribers keep receiving posts (docs/reference/ported-content.md).

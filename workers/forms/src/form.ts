@@ -1,4 +1,4 @@
-import { forms } from '../../../src/data/forms';
+import { forms } from '../../../src/lib/forms/forms';
 
 // Shared steps for every form endpoint, in order: Origin, body, honeypot, rate limit,
 // validation, then the form's own submit. Success is reported only after submit resolves.

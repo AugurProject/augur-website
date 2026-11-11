@@ -11,7 +11,7 @@
  * The loop starts and ends empty and level, which is also the resting frame that no JavaScript, reduced motion
  * and print show. There are no words. The doubling is the challenge rule (whitepaper §4.1). iso-kit.ts has the
  * drawing and keyframe rules shared with the other two cards. */
-import { COS, CYCLE, E, M, P, block, quad, node, keyframes, fit, shift, mix, r2, card, navy, paper, pewter, green, type Key, type Point, type State, type SvgNode } from '../../../data/iso-kit';
+import { COS, CYCLE, E, M, P, block, quad, node, keyframes, fit, shift, mix, r2, card, navy, paper, pewter, green, type Key, type Point, type State, type SvgNode } from '@/lib/iso/kit';
 
 const { tracks, animate } = keyframes('catapult');
 const world: SvgNode[] = [];

@@ -1,10 +1,10 @@
 ---
-import Button from '../../../components/primitives/Button.astro';
-import {links} from '../../../data/links';
-import {heroTimeline} from '../motion/timelines';
-import heroArrival from '../../../motion/hero-arrival.js?raw';
-import {homeCopy} from '../data/homepage';
-import {homeInline} from '../scripts/inline';
+import Button from '@/components/primitives/Button.astro';
+import {links} from '@/site/links';
+import {heroTimeline} from '@/components/home/motion/timelines';
+import heroArrival from '@/motion/hero-arrival.js?raw';
+import {homeCopy} from '@/components/home/data/homepage';
+import {homeInline} from '@/components/home/scripts/inline';
 // Each homepage version renders its own copy (homepage.ts). The versions change only the body's
 // last clause (Ryan 2); the headline and art stay (Ryan 1).
 // Ryan 16 swaps "See how it works" for three reader links, `hero.paths` (Ryan's and Melo's); on Ryan's

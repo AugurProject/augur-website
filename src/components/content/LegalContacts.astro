@@ -1,7 +1,7 @@
 ---
 // The three community links that close the ported privacy and terms pages, as on the old site.
-import Icon from '../primitives/Icon.astro';
-import { links } from '../../data/links';
+import Icon from '@/components/primitives/Icon.astro';
+import { links } from '@/site/links';
 const contacts = [{ label: 'Discord', href: links.discord.url }, { label: 'Telegram', href: links.telegram.url }, { label: 'GitHub', href: links.github.url }];
 ---
 <ul class="legal-contacts">{contacts.map(contact => <li><a class="line-link" href={contact.href}><span class="button-label">{contact.label}</span><Icon name="arrow-up-right" /></a></li>)}</ul>

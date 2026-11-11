@@ -2,12 +2,12 @@
 
 `/contact/` lets a visitor email the Augur team. The page is static; the form posts to the separate `augur-forms` Worker in [workers/forms](../../workers/forms/), which checks the submission, emails it through Augur's Proton account and answers with a redirect back to the site or, for script submits, JSON. Nothing is stored.
 
-The form is off for now: with `forms.enabled` false ([forms.ts](../../src/data/forms.ts)) the page shows a mailto link in place of the form and the result pages are not built ([decisions](../records/decisions.md#2-november-2026)). The rest of this page describes the form when it is on.
+The form is off for now: with `forms.enabled` false ([forms.ts](../../src/lib/forms/forms.ts)) the page shows a mailto link in place of the form and the result pages are not built ([decisions](../records/decisions.md#2-november-2026)). The rest of this page describes the form when it is on.
 
 ## Page
 
 - [contact/index.astro](../../src/pages/contact/index.astro) renders the page with [PageLayout.astro](../../src/layouts/PageLayout.astro) and `footer={false}`, because the footer's contact band would repeat the page. Layout, fields and copy follow the lab's contact page (augur-web-lab `1b95a3a`), approved by the owner on 29 October 2026; the notice and result wording were recommended on Track #35 and approved the same day.
-- Fields, limits, the notice, the status messages and the field rules are in [contact.ts](../../src/data/contact.ts). The Worker imports the same file, so the page and the server accept the same input.
+- Fields, limits, the notice, the status messages and the field rules are in [contact.ts](../../src/lib/forms/contact.ts). The Worker imports the same file, so the page and the server accept the same input.
 
 | Field | `name` | Required | Limit and rule |
 |---|---|---|---|
@@ -19,7 +19,7 @@ The form is off for now: with `forms.enabled` false ([forms.ts](../../src/data/f
 
 - Every field has a visible label, `autocomplete` where one applies, and an error element linked by `aria-describedby`; the notice is linked to the required fields too. An off-screen honeypot field (`forms.honeypot`, `nickname`) is left empty by people.
 - Without JavaScript the browser enforces `required`, `maxlength`, `type` and `pattern` attributes that mirror the server's rules, then posts to the Worker. With JavaScript, the page script checks each field with `contactError`, shows an error summary and focuses the first invalid field, posts form-urlencoded with `Accept: application/json` (a simple cross-origin request, no preflight), and shows the Worker's message in the status line. Only `ok: true` clears the form.
-- Without `PUBLIC_FORMS_URL` in a production build the form is offline: `method="dialog"`, no honeypot, and a note that the form can't send and gives the email address instead. Development defaults to `http://localhost:8788` ([forms.ts](../../src/data/forms.ts)).
+- Without `PUBLIC_FORMS_URL` in a production build the form is offline: `method="dialog"`, no honeypot, and a note that the form can't send and gives the email address instead. Development defaults to `http://localhost:8788` ([forms.ts](../../src/lib/forms/forms.ts)).
 - [contact/[result].astro](../../src/pages/contact/[result].astro) prerenders the `noindex` result pages `/contact/sent/`, `/contact/invalid/`, `/contact/rate-limited/` and `/contact/error/`. Every result except `sent` also gives the email address. The `invalid` page says the browser's Back button usually returns to the form with what was written; it is reached only when the server rejects something the browser accepted.
 
 ## Worker route: `POST /contact`

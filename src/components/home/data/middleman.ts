@@ -11,7 +11,7 @@
  *   talk directly again.
  * The resting frame, which no JavaScript, reduced motion and print show, is the ring with no one in the middle.
  * There are no words. iso-kit.ts has the drawing and keyframe rules shared with the other two cards. */
-import { E, M, P, block, quad, node, keyframes, fit, shift, navy, green, pewter, mark, type Key, type Point, type SvgNode } from '../../../data/iso-kit';
+import { E, M, P, block, quad, node, keyframes, fit, shift, navy, green, pewter, mark, type Key, type Point, type SvgNode } from '@/lib/iso/kit';
 
 const { tracks, animate } = keyframes('middleman');
 const world: SvgNode[] = [];

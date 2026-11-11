@@ -1,4 +1,4 @@
-import { links } from './links';
+import { links } from '@/site/links';
 
 /** Brand assets page (/brand/). Every logo file is a supplied master copied
  * byte-for-byte into public/brand/kit (docs/asset-provenance.json); rules and

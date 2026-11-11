@@ -1,5 +1,5 @@
-import { easing } from './timelines';
-import { motionTime } from './debug';
+import { easing } from '@/lib/motion/timelines';
+import { motionTime } from '@/lib/motion/debug';
 
 /** Header disclosures: native details/summary, enhanced for fine pointers.
  * Hover opens a panel after a short intent delay; leaving the navigation closes

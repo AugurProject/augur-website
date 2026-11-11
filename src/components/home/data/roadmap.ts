@@ -1,4 +1,4 @@
-import { links, type LinkKey } from '../../../data/links';
+import { links, type LinkKey } from '@/site/links';
 /** Figma 162:412, 104×136 cover cropped to its 100px chart window. */
 export const roadmapPaperSquares = [[14,18,true],[30,18,false],[62,18,false],[78,30,true],[14,46,false],[46,46,false],[86,58,false],[22,106,false],[54,118,true],[86,106,false],[70,94,false]] as const;
 type RoadmapLink = { label: string; key?: LinkKey; href?: string };

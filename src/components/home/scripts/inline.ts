@@ -2,8 +2,8 @@
 // (Home.astro renders the sheets after the sections; each section renders its script after itself). The
 // sheets come after every component style, so their rules win specificity ties as they do in the lab.
 // `?inline` is processed, minified CSS; `?raw` is the file as written, with its data written in below.
-import homeStyle from '../styles/home-page.css?inline';
-import homeExtraStyle from '../styles/home-extra.css?inline';
+import homeStyle from '@/components/home/styles/home-page.css?inline';
+import homeExtraStyle from '@/components/home/styles/home-extra.css?inline';
 import tenetsIsoScript from './tenets-iso.js?raw';
 import floorScript from './hero-floor.js?raw';
 import useCasesScript from './use-cases.js?raw';
@@ -11,9 +11,9 @@ import howPathScript from './how-path.js?raw';
 import roadmapScript from './roadmap.js?raw';
 import ribbonScript from './ribbon.js?raw';
 import revealScript from './reveal.js?raw';
-import {isoTracks} from '../data/tenets-iso';
-import {howActs} from '../data/how-scenes';
-import {easing,timing,heroTimeline,useCaseTimeline,howPathTimeline,roadmapTimeline,ribbonTimeline,revealTimeline} from '../motion/timelines';
+import {isoTracks} from '@/components/home/data/tenets-iso';
+import {howActs} from '@/components/home/data/how-scenes';
+import {easing,timing,heroTimeline,useCaseTimeline,howPathTimeline,roadmapTimeline,ribbonTimeline,revealTimeline} from '@/components/home/motion/timelines';
 // Comment lines and indentation are dropped; the line breaks stay, so the script parses as written.
 const compact = (js: string) => js.replace(/^\s*\/\/.*\n/gm, '').replace(/^[ \t]+/gm, '').trim();
 // `tenets` plays the isometric Why Augur scenes; `floor` the hero's live

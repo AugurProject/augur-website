@@ -21,7 +21,7 @@ Decisions and owner actions still outstanding, checked against the code on 31 Oc
   - create the D1 database and replace `REPLACE_WITH_ID_FROM_WRANGLER_D1_CREATE` in [workers/forms/wrangler.jsonc](../../workers/forms/wrangler.jsonc);
   - set `SITE_URL` and `ALLOWED_ORIGINS` there: they say `https://augur.net` and `https://augur.net,https://www.augur.net`, while the canonical host is www (the forms setup asks for `SITE_URL=https://www.augur.net` and the workers.dev host in `ALLOWED_ORIGINS`);
   - Proton: a paid plan with the augur.net domain, the address `contact-form@augur.net` and its SMTP token (`PROTON_SMTP_TOKEN`);
-  - confirm that `contact@augur.net`, the contact form's `CONTACT_TO`, exists and is read; [links.ts](../../src/data/links.ts) still marks it unverified;
+  - confirm that `contact@augur.net`, the contact form's `CONTACT_TO`, exists and is read; [links.ts](../../src/site/links.ts) still marks it unverified;
   - deploy, then set `PUBLIC_FORMS_URL` for the site and redeploy it.
 - **Cutover.** www.augur.net still serves the old GitHub Pages site from `AugurProject/augur-reboot-website` (checked 2 November 2026). The switch moves its custom domain to this repository's Pages site and needs admin rights on both repositories; DNS doesn't change. Steps: [deploy](../guides/deploy.md#cut-over-to-wwwaugurnet).
 

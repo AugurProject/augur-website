@@ -1,8 +1,8 @@
 ---
-import Brand from '../primitives/Brand.astro';
-import Icon from '../primitives/Icon.astro';
-import Button from '../primitives/Button.astro';
-import {navigation,navigationGroups,pages,type NavigationItem} from '../../data/navigation';
+import Brand from '@/components/primitives/Brand.astro';
+import Icon from '@/components/primitives/Icon.astro';
+import Button from '@/components/primitives/Button.astro';
+import {navigation,navigationGroups,pages,type NavigationItem} from '@/site/navigation';
 const groups=[{label:'Products',variant:'products',items:navigation.products},{label:'Resources',variant:'resources',items:navigation.resources},{label:'Community',variant:'community',items:navigation.community}];
 const path=Astro.url.pathname;
 // Melo's chrome (chrome.css): Resources rows take Augur's square mark instead of pictograms (community
@@ -47,7 +47,7 @@ const isCurrent=(href:string)=>within(href)&&!href.includes('#');
   </dialog>
   <noscript><nav class="fallback-nav" aria-label="Navigation">{navigationGroups.flatMap(group=>group.items).map(item=><a href={item.href}>{item.label}{('external' in item && item.external)?' ↗':''}</a>)}</nav></noscript>
 </header>
-<script>import '../../motion/headroom';import {initNavigation} from '../../motion/disclosure-nav';initNavigation();</script>
+<script>import '@/motion/headroom';import {initNavigation} from '@/motion/disclosure-nav';initNavigation();</script>
 <style>
 .site-header{height:96px;background:var(--background);position:relative;z-index:20}
 /* Logo, centred navigation, actions: the outer columns share the free space. */

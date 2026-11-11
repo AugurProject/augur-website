@@ -26,15 +26,15 @@ The page renders through Astro components; browser scripts enhance the rendered 
 
 ## Content and destinations
 
-[navigation.ts](../../src/data/navigation.ts) links to the local pages (About, Contact through `pages.contact`, which every “Talk to us” uses, Brand assets, Products, FAQ, Learn through `pages.learn`, which the 404 page also uses, and REP), to the blog (`links.archive`, now the local `/blog/`) and to published resources (Whitepaper, community). `navigation.legal` puts Privacy (`/privacy/`) and Terms (`/terms/`) in the footer only, under the funding line. Products lists Augur Lituus, Zoltar and Augur Statoblast from [products.ts](../../src/data/products.ts), each marked `needsReview`. External destinations are centralized in [links.ts](../../src/data/links.ts).
+[navigation.ts](../../src/site/navigation.ts) links to the local pages (About, Contact through `pages.contact`, which every “Talk to us” uses, Brand assets, Products, FAQ, Learn through `pages.learn`, which the 404 page also uses, and REP), to the blog (`links.archive`, now the local `/blog/`) and to published resources (Whitepaper, community). `navigation.legal` puts Privacy (`/privacy/`) and Terms (`/terms/`) in the footer only, under the funding line. Products lists Augur Lituus, Zoltar and Augur Statoblast from [products.ts](../../src/site/products.ts), each marked `needsReview`. External destinations are centralized in [links.ts](../../src/site/links.ts).
 
 The Learn More section no longer renders a post selection: the unused `home-resources.ts`, which listed “Augur: Q2 2026 report” and “The Moon Fork report” (approved for launch, jubalm, 30 October 2026), was removed on 11 November 2026. Learn More currently links to the whitepaper and the blog (`/blog/`), whose two posts are now pages of this site.
 
-Review flags in [faq.ts](../../src/data/faq.ts), [products.ts](../../src/data/products.ts) and the Learn guides (`needsReview`, and `placeholder` on seven of the eight guides) and in [walkthrough.ts](../../src/data/walkthrough.ts) (`walkthroughReview`) are content markers. The owner approved shipping the flagged content and reviewing the FAQ and walkthrough after launch (jubalm, 30 October 2026), so the flags stay in the code until that review.
+Review flags in [faq.ts](../../src/data/faq.ts), [products.ts](../../src/site/products.ts) and the Learn guides (`needsReview`, and `placeholder` on seven of the eight guides) and in [example.ts](../../src/lib/example.ts) (`walkthroughReview`) are content markers. The owner approved shipping the flagged content and reviewing the FAQ and walkthrough after launch (jubalm, 30 October 2026), so the flags stay in the code until that review.
 
 ## Newsletter interest list
 
-The footer form collects addresses for a later newsletter; the site sends no email and uses no newsletter service. The site stays static: the form posts to the separate `augur-forms` Worker in [workers/forms](../../workers/forms/). Wording, the consent version and the shared address check are in [newsletter.ts](../../src/data/newsletter.ts); the Worker's address and the honeypot field name are in [forms.ts](../../src/data/forms.ts). The Worker imports both files.
+The footer form collects addresses for a later newsletter; the site sends no email and uses no newsletter service. The site stays static: the form posts to the separate `augur-forms` Worker in [workers/forms](../../workers/forms/). Wording, the consent version and the shared address check are in [newsletter.ts](../../src/lib/forms/newsletter.ts); the Worker's address and the honeypot field name are in [forms.ts](../../src/lib/forms/forms.ts). The Worker imports both files.
 
 - [SiteFooter.astro](../../src/components/layout/SiteFooter.astro) posts `email`, plus an off-screen honeypot field `nickname`, to `PUBLIC_FORMS_URL` + `/subscribe`. With JavaScript, its script validates first, posts form-urlencoded with `Accept: application/json` (a simple cross-origin request, no preflight) and shows the returned message in the status or error element.
 - Without `PUBLIC_FORMS_URL` in a production build, the form is offline: `method="dialog"`, no consent line, and the script says nothing was sent or saved. Development defaults to `http://localhost:8788`.
@@ -48,9 +48,9 @@ Deploy, database, export and removal commands are in [deploy](../guides/deploy.m
 ## Interactions and assets
 
 
-[timelines.ts](../../src/motion/timelines.ts) holds shared timing; the homepage's [motion](../../src/components/home/motion/) folder defines its timelines. Reuse [play-once.ts](../../src/motion/play-once.ts) to preserve session and visibility behavior. In development, [debug.ts](../../src/motion/debug.ts) supports `?motion=slow` for five-times-longer timings and `?motion=replay` for replay comparisons. Production ignores both controls.
+[timelines.ts](../../src/lib/motion/timelines.ts) holds shared timing; the homepage's [motion](../../src/components/home/motion/) folder defines its timelines. Reuse [play-once.ts](../../src/lib/motion/play-once.ts) to preserve session and visibility behavior. In development, [debug.ts](../../src/lib/motion/debug.ts) supports `?motion=slow` for five-times-longer timings and `?motion=replay` for replay comparisons. Production ignores both controls.
 
-[tabs.ts](../../src/motion/tabs.ts) reveals a selected panel after explicit interaction at widths up to 767px. [FaqItem.astro](../../src/components/content/FaqItem.astro) similarly reveals an opened question. Scrolling respects reduced-motion preferences.
+[tabs.ts](../../src/lib/motion/tabs.ts) reveals a selected panel after explicit interaction at widths up to 767px. [FaqItem.astro](../../src/components/content/FaqItem.astro) similarly reveals an opened question. Scrolling respects reduced-motion preferences.
 
 Brand assets are in [public/brand](../../public/brand/) and article illustrations in [public/images/blog](../../public/images/blog/). The hero renders component/data geometry; it does not use `public/brand/oracle-field.svg`.
 

@@ -1,9 +1,9 @@
 ---
-import { roadmap, roadmapHref, roadmapPaperSquares } from '../data/roadmap';
-import { links, isExternal } from '../../../data/links';
-import Icon from '../../../components/primitives/Icon.astro';
-import {homeCopy} from '../data/homepage';
-import {homeInline} from '../scripts/inline';
+import { roadmap, roadmapHref, roadmapPaperSquares } from '@/components/home/data/roadmap';
+import { links, isExternal } from '@/site/links';
+import Icon from '@/components/primitives/Icon.astro';
+import {homeCopy} from '@/components/home/data/homepage';
+import {homeInline} from '@/components/home/scripts/inline';
 // A version may set its own two-line heading (`roadmap.heading`; Augus's "Coming soon?", homepage-v4.ts);
 // the others keep the literal one.
 // The section reveal (reveal.js) settles in the heading and the lead, and the track's entrance follows the

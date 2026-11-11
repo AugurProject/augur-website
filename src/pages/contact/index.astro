@@ -1,10 +1,10 @@
 ---
-import PageLayout from '../../layouts/PageLayout.astro';
-import Icon from '../../components/primitives/Icon.astro';
-import Button from '../../components/primitives/Button.astro';
-import { links } from '../../data/links';
-import { forms } from '../../data/forms';
-import { contact } from '../../data/contact';
+import PageLayout from '@/layouts/PageLayout.astro';
+import Icon from '@/components/primitives/Icon.astro';
+import Button from '@/components/primitives/Button.astro';
+import { links } from '@/site/links';
+import { forms } from '@/lib/forms/forms';
+import { contact } from '@/lib/forms/contact';
 // Layout, fields and copy follow the lab's contact page (augur-web-lab 1b95a3a), approved by jubalm
 // on 29 October 2026. The form posts to the augur-forms Worker, which emails the team and redirects
 // to /contact/<result>/; without PUBLIC_FORMS_URL in a production build the form is offline.
@@ -50,7 +50,7 @@ const describedBy = (field: string) => `contact-${field}-error${live ? ' contact
  // Without JavaScript the browser checks the fields and the form posts to the Worker, which redirects
  // to a result page. Here the script checks each field with the Worker's own rules, posts in place and
  // shows the Worker's answer: only `ok` means the message was accepted for delivery.
- import { contact, contactError, type ContactField } from '../../data/contact';
+ import { contact, contactError, type ContactField } from '@/lib/forms/contact';
  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
  if (form) {
   form.noValidate = true;

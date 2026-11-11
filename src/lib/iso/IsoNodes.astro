@@ -1,0 +1,9 @@
+---
+import type { SvgNode } from './kit';
+// Draws a list of iso-kit nodes as SVG elements, children first to last. The one renderer for every isometric
+// scene: the caller supplies the <svg> and the group that carries the scene's transform. `html` maps a node's
+// class to markup written into that node unchanged (the Augur glyph's paths on the Two roads scene).
+interface Props { nodes: SvgNode[]; html?: Record<string, string> }
+const { nodes, html = {} } = Astro.props;
+---
+{nodes.map(({ tag, attrs, children }) => { const Tag = tag as any; const raw = html[String(attrs.class)]; return raw !== undefined ? <Tag {...attrs} set:html={raw}/> : children ? <Tag {...attrs}><Astro.self nodes={children} html={html}/></Tag> : <Tag {...attrs}/>; })}

@@ -1,5 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { links } from './links';
+import { links } from '@/site/links';
 
 /** The whitepapers listed at /whitepapers/, ported from the old augur.net (src/lib/whitepaper.ts at
  * ba18725; docs/reference/ported-content.md). Only Augur v2 has a web edition. */

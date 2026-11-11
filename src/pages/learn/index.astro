@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
-import PageLayout from '../../layouts/PageLayout.astro';
-import PageHero from '../../components/pages/PageHero.astro';
-import Glossary from '../../components/content/Glossary.astro';
-import { showStatoblast, showZoltar } from '../../data/products';
+import PageLayout from '@/layouts/PageLayout.astro';
+import PageHero from '@/components/pages/PageHero.astro';
+import Glossary from '@/components/content/Glossary.astro';
+import { showStatoblast, showZoltar } from '@/site/products';
 const guides = await getCollection('learn');
 const start = guides.filter(guide=>guide.data.order).sort((a,b)=>a.data.order!-b.data.order!);
 const moreIds=['writing-questions','when-a-question-cannot-be-answered',...(showStatoblast&&showZoltar?['how-the-products-fit-together']:[]),'reading-the-whitepaper'];

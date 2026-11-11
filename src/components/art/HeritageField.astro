@@ -1,7 +1,7 @@
 ---
 // Shared copy for the Learn guide headers; each homepage design keeps its own.
-import {heritageFields} from '../../data/heritage-fields';
-import {makeHeritage} from '../../data/heritage';
+import {heritageFields} from '@/data/heritage-fields';
+import {makeHeritage} from '@/data/heritage';
 interface Props {seed?:number;width?:number;height?:number;glow?:boolean;id?:string;class?:string;}
 const {seed=2020,width=1440,height=764,glow=false,id='heritage',class:className}=Astro.props;
 const exact=seed===2020&&width===1440&&height===764?heritageFields['2020']:seed===2026&&width===1440&&height===424?heritageFields['2026']:undefined;

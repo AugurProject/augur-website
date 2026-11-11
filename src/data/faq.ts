@@ -1,6 +1,6 @@
-import { links } from './links';
+import { links } from '@/site/links';
 import { currentRep } from './rep';
-import { showStatoblast, showZoltar } from './products';
+import { showStatoblast, showZoltar } from '@/site/products';
 export type FaqCategory = 'Getting started' | 'How it works' | 'REP' | 'Building with Augur';
 export interface FaqEntry { id: string; question: string; pageQuestion?: string; answer: string; category: FaqCategory; homepage: boolean; needsReview: boolean; link: { href: string; label: string }; }
 export const faqCategories: FaqCategory[] = ['Getting started', 'How it works', 'REP', 'Building with Augur'];

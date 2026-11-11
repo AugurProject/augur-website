@@ -1,7 +1,7 @@
 ---
-import { fork, moonFork } from '../../data/rep';
-import Icon from '../primitives/Icon.astro';
-import { isExternal } from '../../data/links';
+import { fork, moonFork } from '@/data/rep';
+import Icon from '@/components/primitives/Icon.astro';
+import { isExternal } from '@/site/links';
 /** If a fork happens. Left: the proposed Augur Lituus steps on a rail, the step that asks
  * something of holders marked by a hollow Green square (the How it works holder note's “act”
  * mark). Right: the split as a picture, then the one fork that has happened, Augur v2's Moon
@@ -36,8 +36,8 @@ const total = moonFork.phases.reduce((sum, phase) => sum + phase.days, 0);
  </div>
 </div>
 <script>
- import { playOnce } from '../../motion/play-once';
- import { easing } from '../../motion/timelines';
+ import { playOnce } from '@/lib/motion/play-once';
+ import { easing } from '@/lib/motion/timelines';
  // The branches draw out of the fork node (SVG stroke draw), then the REP slides along them into
  // each universe, one square after another; the square left behind stays put.
  const root = document.querySelector('[data-fork-diagram]');

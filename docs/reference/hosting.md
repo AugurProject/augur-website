@@ -34,14 +34,14 @@ These come from `_headers`, so only the Cloudflare host sends them. The one that
 ## Page metadata
 
 - [PageLayout.astro](../../src/layouts/PageLayout.astro) emits `<link rel="canonical">` and `og:url` from `site` in `astro.config.mjs` (`https://www.augur.net`) and the page path, on every host. The 404 page passes `canonical={false}`, because it answers every unknown path. `noindex` pages keep their robots meta and also get a canonical.
-- Open Graph and Twitter (`summary_large_image`) tags carry the page title, description and `shareImage` from [site.ts](../../src/data/site.ts); `twitter:site` comes from the X link in [links.ts](../../src/data/links.ts).
+- Open Graph and Twitter (`summary_large_image`) tags carry the page title, description and `shareImage` from [site.ts](../../src/site/site.ts); `twitter:site` comes from the X link in [links.ts](../../src/site/links.ts).
 - [og-image.png](../../public/og-image.png) is 1200 × 630, the URL the old site used. It was made on 30 October 2026 from the brand kit: the reversed horizontal logo and `oracle-field.svg` from `public/brand/`, the Brand Foundation palette in [brand.ts](../../src/data/brand.ts), and Sora 600/400 and Schibsted Grotesk 400 from Fontsource, with the homepage headline and site description. It was rendered in headless Chrome and recompressed with sharp; no source file is kept.
 - The sitemap ([@astrojs/sitemap](../../astro.config.mjs)) leaves out every page whose HTML has `<meta name="robots" content="noindex">` (the newsletter and contact result pages) and the 404 page. [robots.txt](../../public/robots.txt) allows everything and names `https://www.augur.net/sitemap-index.xml`.
 - Indexing depends on the host, not the build: the same build serves www.augur.net and workers.dev, so there is no build-time indexing switch (`PUBLIC_SITE_INDEXABLE` was removed).
 
 ## Analytics
 
-Google Analytics 4, property `G-4VLMY3QMC9` (`analyticsId` in [site.ts](../../src/data/site.ts)), the old augur.net's property. An inline script in `PageLayout.astro` loads gtag.js only when `location.hostname` is the host of `site` (`www.augur.net`), so workers.dev, previews and local builds are not counted. Its `config` call matches the old site's snippet, including `allow_google_signals` and `allow_ad_personalization_signals`; the old snippet's `astro:page-load` listener is left out because this site has no client-side router. There is no consent banner (jubalm, 30 October 2026).
+Google Analytics 4, property `G-4VLMY3QMC9` (`analyticsId` in [site.ts](../../src/site/site.ts)), the old augur.net's property. An inline script in `PageLayout.astro` loads gtag.js only when `location.hostname` is the host of `site` (`www.augur.net`), so workers.dev, previews and local builds are not counted. Its `config` call matches the old site's snippet, including `allow_google_signals` and `allow_ad_personalization_signals`; the old snippet's `astro:page-load` listener is left out because this site has no client-side router. There is no consent banner (jubalm, 30 October 2026).
 
 ## REP supply endpoints
 

@@ -15,7 +15,7 @@
  *   state (no JavaScript, reduced motion and print show it). Its act is a set of keyframe tracks from the state
  *   before, built here and played by how-path.js with transform and opacity only.
  * One camera for all four, the drawing about three quarters of the stage wide, as on the board. */
-import { M, E, P, block, quad, node, plane, mix, shift, r2, card, navy, mist, paper, green, pewter, type Material, type SvgNode, type Keyframe, type Point } from '../../../data/iso-kit';
+import { M, E, P, block, quad, node, plane, mix, shift, r2, card, navy, mist, paper, green, pewter, type Material, type SvgNode, type Keyframe, type Point } from '@/lib/iso/kit';
 
 export type HowKind = 'ask' | 'report' | 'challenge' | 'paid';
 // A part's state: its screen offset, opacity, turn in degrees and scale, the last two about its origin.
