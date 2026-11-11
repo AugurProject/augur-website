@@ -35,7 +35,7 @@
 @media(prefers-reduced-motion:reduce){.site-header .nav-lead-label::after,.site-header .nav-lead-arrow{transition:none}}
 @media(forced-colors:active){.site-header .nav-lead>a{border:1px solid CanvasText}.site-header .nav-lead-label::after{forced-color-adjust:none;background:CanvasText}}
 
-/* Hide on the way down, back on the way up (owner, 22 Oct 2026; header.js sets the attributes, so
+/* Hide on the way down, back on the way up (owner, 22 Oct 2026; headroom.ts sets the attributes, so
    without JavaScript the header stays in the flow). Sticky at the top; slid up by its own height, a
    transform, when hidden. Once it has left its place under the announcement, a 1 px Outline line marks
    its foot so the page doesn't run into it unseen (no shadows). Reduced motion swaps the slide for a cut. */

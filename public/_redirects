@@ -4,3 +4,8 @@
 /mission/ /about/ 301
 /team /about/ 301
 /team/ /about/ 301
+# Loose logo copies removed in favour of the brand kit (owner, 11 November 2026).
+/brand/glyph-color.svg /brand/kit/glyph/augur-glyph-color.svg 301
+/brand/glyph-reversed.svg /brand/kit/glyph/augur-glyph-reversed.svg 301
+/brand/horizontal-color.svg /brand/kit/horizontal/augur-horizontal-color.svg 301
+/brand/horizontal-reversed.svg /brand/kit/horizontal/augur-horizontal-reversed.svg 301
