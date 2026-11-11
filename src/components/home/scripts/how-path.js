@@ -1,13 +1,13 @@
 // /2/ only (owner, 25 Oct 2026, item 4: "build A on /2", sketch A of the item 4 board): How it works' four steps over
-// one stage, and "Walk through an example" (HowItWorks.astro renders this right after the section, so it runs while
-// the page parses). The steps are the shared tabs controller's (tabs.ts: press, arrows, Home/End, automatic
+// one stage, and "Walk through an example" (HowItWorks.astro imports this module, so it runs once the page is parsed). The steps are the shared tabs controller's (tabs.ts: press, arrows, Home/End, automatic
 // activation); this adds the stage's swap, each scene's act and the section's entrance ("paid", then the scene, which
 // acts again on every arrival). The markup is the rest state: without JavaScript, or if the CSP blocked this, the first step shows with its scene drawn, the example
 // stays open and the button stays hidden; reduced motion and print show the same. Timings and easings come from
 // timelines.ts (howPathTimeline, easing, revealTimeline.ready) and each scene's act from how-scenes.ts (howActs),
-// written in at build time (inline.ts). Transform and opacity only.
+// which HowItWorks.astro writes into the page as JSON (#how-acts). Transform and opacity only.
+import { easing, howPathTimeline, revealTimeline } from '@/components/home/motion/timelines';
 (() => {
-const T = __HOW_PATH__, E = T.easing, L = T.timeline, ACTS = T.acts, html = document.documentElement;
+const T = { easing, timeline: howPathTimeline, ready: revealTimeline.ready, dwell: revealTimeline.dwell, acts: JSON.parse(document.getElementById('how-acts')?.textContent || '{}') }, E = T.easing, L = T.timeline, ACTS = T.acts, html = document.documentElement;
 // page-field.ts sizes its layer to the page's scrollHeight, which counts the layer itself, so the layer can
 // grow but never shrink. Opening or closing the example changes the page's height, so when the content
 // changes height the layer drops to it first.

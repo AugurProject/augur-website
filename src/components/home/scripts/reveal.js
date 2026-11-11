@@ -2,7 +2,7 @@
 // scroll-motion brief). Each section settles in once, in reading order, as the reader reaches it: its heading, its lead,
 // its main block and its foot, each a [data-reveal] group ("item" marks one card of a row). A group fades in as it rises,
 // a beat after the group before it in its section, once its top passes 90% of the screen (revealTimeline and easing from
-// timelines.ts, written in at build time by inline.ts). The markup is the settled page: this arms (hides) only
+// timelines.ts). The markup is the settled page: this arms (hides) only
 // groups that lie wholly below the fold, under data-armed (home-extra.css), and lifts it as each group lands, so no
 // JavaScript, reduced motion, forced colours, print and whatever is already on screen show everything at once.
 // seen.ts's rules, mirrored under its storage key: a reload or a history visit shows everything (read from the navigation
@@ -13,8 +13,9 @@
 // group (the Why Augur scenes, the use-case card) or under a section's lead (How it works' “paid” and scene, the roadmap's track)
 // waits for that group's "revealed" event, so a reveal and a scene never start together. Rendered once, after the
 // footer ([version].astro).
+import { easing, timing, revealTimeline } from '@/components/home/motion/timelines';
 (() => {
-const T = __REVEAL__, E = T.easing, R = T.timeline, groups = [...document.querySelectorAll('[data-reveal]')];
+const T = { easing, timeline: revealTimeline, duration: timing.panel }, E = T.easing, R = T.timeline, groups = [...document.querySelectorAll('[data-reveal]')];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)'), forced = matchMedia('(forced-colors: active)'), nav = performance.getEntriesByType?.('navigation')[0];
 if (!groups.length || reduced.matches || forced.matches || location.hash || nav?.type === 'reload' || nav?.type === 'back_forward' || !('IntersectionObserver' in window) || typeof Element.prototype.animate !== 'function') return;
 const STORE = 'augur:motion-seen', key = group => `${location.pathname}:reveal:${index.get(group)}`;

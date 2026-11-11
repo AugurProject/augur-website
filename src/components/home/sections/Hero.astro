@@ -2,9 +2,9 @@
 import Button from '@/components/ui/Button.astro';
 import {links} from '@/site/links';
 import {heroTimeline} from '@/components/home/motion/timelines';
-import heroArrival from '@/components/home/scripts/hero-arrival.js?raw';
+import heroArrival from '@/components/home/scripts/hero-arrival.inline.js?raw';
 import {homeCopy} from '@/components/home/data/homepage';
-import {homeInline} from '@/components/home/scripts/inline';
+import heroFloor from '@/components/home/scripts/hero-floor.inline.js?raw';
 // Each homepage version renders its own copy (homepage.ts). The versions change only the body's
 // last clause (Ryan 2); the headline and art stay (Ryan 1).
 // Ryan 16 swaps "See how it works" for three reader links, `hero.paths` (Ryan's and Melo's); on Ryan's
@@ -33,6 +33,8 @@ const keep='keep' in copy.hero?copy.hero.keep:5;
 const intro='intro' in copy.hero?copy.hero.intro:'Augur Lituus is the next generation of Augur’s oracle, one of the most robust ways to put data onchain.';
 // A copy may also set the second sentence's opening (Melo's adds "Anyone can ask").
 const bodyStart='bodyStart' in copy.hero?copy.hero.bodyStart:'Anyone can answer, anyone can challenge, and ';
+// The floor draws the first frame, so it stays inline with its timings written in (heroTimeline.floor).
+const floorScript=heroFloor.replace('__FLOOR__',JSON.stringify(heroTimeline.floor));
 const arrivalScript=heroArrival.replace('__DEV__',String(import.meta.env.DEV));
 // The arrival (heroTimeline): the headline and the support line only rise, under 300 ms, so they paint at
 // once (home-extra.css swaps their keyframes); the underline draws before the actions arrive and retracts
@@ -51,7 +53,7 @@ const style=`--line-duration:${lines[0].end}ms;--copy-start:${t.copy.start}ms;--
   </div>
  </div>
  <span class="hero-scroll" aria-hidden="true" data-scroll-cue><span class="hero-scroll-dot"></span></span>
-</section><script is:inline set:html={homeInline.scripts[layer]}></script>
+</section><script is:inline set:html={floorScript}></script>
 <script>
 // The scroll cue has done its job once the page scrolls: it fades out and stops.
 const cue=document.querySelector<HTMLElement>('[data-scroll-cue]');

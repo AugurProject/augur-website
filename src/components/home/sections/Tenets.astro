@@ -1,7 +1,7 @@
 ---
 import IsoScene from '@/components/home/art/diagrams/IsoScene.astro';
 import {homeCopy} from '@/components/home/data/homepage';
-import {homeInline} from '@/components/home/scripts/inline';
+import {isoTracks} from '@/components/home/data/tenets-iso';
 // Each homepage version renders its own copy (homepage.ts): its three cards and reader lines (v2:
 // Augus's cards and Ryan's reader lines, homepage.ts), on the same markup.
 const copy=homeCopy;
@@ -23,7 +23,6 @@ const paths=copy.why.paths;
 // head row (a button inside the <h3> would join the heading's name); the definition is a native popover
 // (click, tap, Enter, Space, Esc and click-outside need no script), described by the button, and anchored
 // under the tab (home-v3.css). The version's `tips` script (tenet-tips-v3.js) adds hover and focus.
-const tips=cards.some(card=>'tip' in card)?homeInline.scripts.tips:undefined;
 // The section reveal (reveal.js): the heading, the lead, the three cards left to right and the closer
 // settle in as the reader reaches them; each scene keeps looping once its card has landed. The answer band keeps its
 // own ribbon, which follows the lead (ribbon.js; the band carries data-answer-band).
@@ -50,7 +49,7 @@ const tips=cards.some(card=>'tip' in card)?homeInline.scripts.tips:undefined;
    </li>)}</ul>
   </div>
  </div>
-</section>{tips&&<script is:inline set:html={tips}></script>}<script is:inline set:html={homeInline.scripts.ribbon}></script><script is:inline set:html={homeInline.scripts.tenets}></script>
+</section><script is:inline type="application/json" id="iso-tracks" set:html={JSON.stringify(isoTracks).replace(/</g,'\\u003c')}></script><script>import '@/components/home/scripts/ribbon.js';import '@/components/home/scripts/tenets-iso.js';</script>
 <style>
  .tenets{padding-top:64px}.tenets>.site-container:first-child{padding-top:72px;padding-bottom:56px}.section-heading{margin-bottom:0}.answer-band{position:relative;overflow:hidden;background:var(--primary);color:var(--background);padding:24px 0 28px}.answer-band p{font-family:var(--font-heading);font-size:clamp(26px,2.5vw,36px);font-weight:600;line-height:44px;letter-spacing:-.01em;text-wrap:balance}
  .tenet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-top:48px;padding-bottom:96px}

@@ -22,9 +22,10 @@
 // finished card until the next pick, or until the stage has left the screen. The tabs controller ends every
 // animation on a resize, so the loop is rebuilt where it was; print shows the finished card. Transform and
 // opacity only, so the loop runs off the main thread. Timings and easings come from timelines.ts
-// (useCaseTimeline, easing), written in at build time (inline.ts).
+// (useCaseTimeline, easing).
+import { easing, useCaseTimeline } from '@/components/home/motion/timelines';
 (() => {
-const T = __USE_CASES__, E = T.easing, U = T.timeline, L = U.loop;
+const T = { easing, timeline: useCaseTimeline }, E = T.easing, U = T.timeline, L = U.loop;
 const root = document.querySelector('[data-use-cases]');
 if (!root || typeof Element.prototype.animate !== 'function' || !('IntersectionObserver' in window)) return;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');

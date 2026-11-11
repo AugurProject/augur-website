@@ -1,6 +1,6 @@
 /* The owner's own design (22 Oct 2026: "keep working on this v2 (only) since this will be the version I'll
    present as my suggestions"), on every review version since 26 Oct 2026 ("all versions should now be
-   similar to v2"). Loaded as a string after home-page.css on the review copies alone (inline.ts), so
+   similar to v2"). Loaded as a string after home-page.css on the review copies alone (Home.astro), so
    it never reaches "/" or the inner pages. It follows home-page.css's specificity
    rules: a one-compound component rule is matched directly, a longer one is tied and wins on order. The
    header and footer rules are in chrome.css, which every page but "/" loads.

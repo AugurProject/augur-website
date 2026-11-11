@@ -8,10 +8,10 @@
 // seen.ts's rules, mirrored under its storage key: once per tab session, never on a reload or a history visit. A press,
 // focus or key in it, a resize, print or page hide (the controller's tabssettled), a hidden page, the stops leaving the
 // screen or reduced motion settle it on the final frame, which is the markup. Transform and opacity only; timings and
-// easings come from timelines.ts (roadmapTimeline, timing, easing and revealTimeline.ready), written in at build time
-// (inline.ts).
+// easings come from timelines.ts (roadmapTimeline, timing, easing and revealTimeline.ready).
+import { easing, timing, roadmapTimeline, revealTimeline } from '@/components/home/motion/timelines';
 (() => {
-const T = __ROADMAP__, E = T.easing, L = T.timeline, root = document.querySelector('[data-roadmap]');
+const T = { easing, timeline: roadmapTimeline, fadeOut: timing.fadeOut, ready: revealTimeline.ready, dwell: revealTimeline.dwell }, E = T.easing, L = T.timeline, root = document.querySelector('[data-roadmap]');
 if (!root) return;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)'), animates = typeof Element.prototype.animate === 'function';
 // Now's slow pulse (Roadmap.astro's CSS loop) rests while the roadmap is off screen (data-still, home-extra.css): its

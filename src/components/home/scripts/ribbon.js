@@ -6,16 +6,16 @@
 // one text node. Unlike the other entrances it plays on every load, a reload included (owner, 6 Oct 2026), once 60% of
 // the band is in view; while the heading row above it is still settling in (reveal.js), it waits for the lead to land,
 // so the answer comes after the question. Already on screen when this runs: the settled band. Reduced motion, print and
-// page hide settle it. Timings from timelines.ts (ribbonTimeline, easing), written in at build time (inline.ts);
-// timeAt is timelines.ts's, copied.
+// page hide settle it. Timings from timelines.ts (ribbonTimeline, easing);
+import { timeAt } from '@/lib/motion/timelines';
+import { easing, ribbonTimeline } from '@/components/home/motion/timelines';
 (() => {
-const T = __RIBBON__, E = T.easing, R = T.timeline;
+const T = { easing, timeline: ribbonTimeline }, E = T.easing, R = T.timeline;
 const band = document.querySelector('[data-answer-band]'), text = band?.querySelector('[data-answer]');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 if (!band || !text || reduced.matches || !('IntersectionObserver' in window) || typeof band.animate !== 'function') return;
 const box = band.getBoundingClientRect();
 if (box.bottom > 0 && box.top < innerHeight) return;
-const timeAt = (curve, progress) => { const [x1 = 0, y1 = 0, x2 = 1, y2 = 1] = (curve.match(/-?[\d.]+/g) || []).map(Number); const at = (a, b, s) => 3 * (1 - s) ** 2 * s * a + 3 * (1 - s) * s ** 2 * b + s ** 3; let low = 0, high = 1; for (let step = 0; step < 24; step++) { const mid = (low + high) / 2; if (at(y1, y2, mid) < progress) low = mid; else high = mid; } return at(x1, x2, (low + high) / 2); };
 const fill = document.createElement('div'); fill.className = 'ribbon-fill';
 const overlay = document.createElement('div'); overlay.className = 'ribbon-overlay'; overlay.setAttribute('aria-hidden', 'true'); overlay.append(text.cloneNode(true));
 const copy = overlay.querySelector('[data-answer]'); copy?.removeAttribute('data-answer');
