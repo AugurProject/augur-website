@@ -26,7 +26,7 @@ const xHandle = `@${new URL(links.x.url).pathname.slice(1)}`;
 // banner (jubalm, 30 October 2026). The configuration matches the old site's gtag snippet.
 const analytics = { id: site.analyticsId, host: Astro.site!.hostname };
 // A page's plain Markdown copy sits in public/ at its path plus `.md` (home: /index.md). The link is
-// added only when that file exists, so pages without one (placeholder guides, result pages) get none.
+// added only when that file exists, so pages without one (result pages) get none.
 const mdFiles = new Set(Object.keys(import.meta.glob('/public/**/*.md')).map(file => file.slice('/public'.length)));
 const mdPath = `${Astro.url.pathname.replace(/\/$/, '') || '/index'}.md`;
 const markdown = !bare && !noindex && mdFiles.has(mdPath) ? mdPath : undefined;

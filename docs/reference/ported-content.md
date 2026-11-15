@@ -18,13 +18,13 @@ The pages are reachable by URL and through links that already existed. They are 
 | `/learn/fork/` and 5 guides | [src/content/fork-guides](../../src/content/fork-guides/), [learn/fork/[...slug].astro](../../src/pages/learn/fork/[...slug].astro) | `src/content/learn/fork` |
 | `/privacy/`, `/terms/` | [privacy.astro](../../src/pages/privacy.astro), [terms.astro](../../src/pages/terms.astro) | same files |
 
-Not ported: `/`, `/faq/`, `/learn/` and `/rep/` (this site has its own), `/mission/` and `/team/` (redirected to `/about/`), the 404 page, `robots.txt`, `llms.txt`, the fork-risk monitor and `/data/*`.
+Not ported: `/`, `/faq/` and `/rep/` (this site has its own), `/learn/` (this site's own Learn index and guides were removed in November 2026; only the fork guides remain under it), `/mission/` and `/team/` (redirected to `/about/`), the 404 page, `robots.txt`, `llms.txt`, the fork-risk monitor and `/data/*`.
 
 ## Collections and rendering
 
 - [content.config.ts](../../src/content.config.ts) defines `blog` (one folder per post; `featuredImage` is an `image()` used by the index cards), `whitepaperV2` (no frontmatter) and `forkGuides` (the old Learn frontmatter: `order`, `label`, `status`, `presentation` and so on). `learn` is unchanged.
 - [blog.ts](../../src/data/blog.ts) orders posts newest first and formats dates in UTC for the index, the post pages and the feed. [whitepapers.ts](../../src/data/whitepapers.ts) holds the edition facts (release `v2.0.16`, source revision `69accf6`), the section order and each section's title, taken from its `#` heading ("References" has none).
-- [astro.config.mjs](../../astro.config.mjs) sets the processors with `unified()` from `@astrojs/markdown-remark`. `.md` (the whitepaper and the Learn guides) gets `remark-math`, `rehype-katex` and the whitepaper link rewrite. `.mdx` (posts and fork guides) gets no math, so `$` in prose stays text.
+- [astro.config.mjs](../../astro.config.mjs) sets the processors with `unified()` from `@astrojs/markdown-remark`. `.md` (the whitepaper) gets `remark-math`, `rehype-katex` and the whitepaper link rewrite. `.mdx` (posts and fork guides) gets no math, so `$` in prose stays text.
 - [src/markdown](../../src/markdown/): `rehype-whitepaper-links` turns `file.md#x` links into `/whitepapers/augur-v2/file/#x`; `rehype-callouts` turns a post paragraph that starts with an emoji (👉) into a `.callout`; `rehype-heading-emoji` drops the emoji that open post headings; `rehype-ported-content` adds ↗ to off-site links and wraps tables in a focusable scroll box, in the three ported collections only. Links to `augur.net` or `www.augur.net` count as internal.
 - `katex` is pinned to `^0.16`, the version `rehype-katex` renders with; the 0.18 stylesheet renames KaTeX's classes and breaks the layout. Only the whitepaper route imports its CSS.
 - Shared components in [src/components/content](../../src/components/content/): `Prose` (reading styles for all ported pages), `ProseCard` (framed note used inside MDX), `ArticleHeader`, `SectionRail` (document pages and headings), `PagerNav` (previous and next) and `LegalContacts`. Images go through `astro:assets`.

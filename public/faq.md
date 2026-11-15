@@ -24,13 +24,13 @@ Review flag: this answer still needs review.
 
 ### Who decides whether an outcome is true?
 
-No committee, multisig or veto picks the answer. Anyone can report an answer or challenge one. Every report is backed by a bond. A fork is the last resort. [How Augur answers a question](/learn/how-augur-answers-a-question.md)
+No committee, multisig or veto picks the answer. Anyone can report an answer or challenge one. Every report is backed by a bond. A fork is the last resort. [Fork guides](/learn/fork/)
 
 Review flag: this answer still needs review.
 
 ### What if people disagree about the result?
 
-Anyone can back a different outcome with double the REP bond. A completed challenge opens another appeal period. When an appeal period ends without a new challenge, the latest outcome becomes final. Guide: Disputes, bonds and forks (a placeholder guide on the HTML site, with no Markdown copy yet).
+Anyone can back a different outcome with double the REP bond. A completed challenge opens another appeal period. When an appeal period ends without a new challenge, the latest outcome becomes final. [Fork guides](/learn/fork/)
 
 Review flag: this answer still needs review.
 
