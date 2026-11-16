@@ -140,20 +140,19 @@ const filters: { value: Topic | 'all'; label: string }[] = [
  }
 </script>
 <style>
- /* The topic filters sit on one row over a rule. */
- .blog-tools{display:flex;align-items:center;padding-bottom:16px;border-bottom:1px solid var(--web-outline)}
+ .blog-tools{display:flex;align-items:center}
  .blog-tools[hidden]{display:none}
- .topics{display:flex;flex-wrap:wrap;gap:4px}
- .topics button{min-height:40px;padding:8px 14px;border:1px solid transparent;background:none;color:var(--muted-foreground);font:400 15px/22px var(--font-heading);cursor:pointer;transition:color 140ms ease-out,border-color 140ms ease-out,background-color 140ms ease-out}
- .topics button:hover{color:var(--foreground);border-color:var(--web-outline)}
- .topics button[aria-pressed=true]{color:var(--primary-foreground);background:var(--primary);border-color:var(--primary);font-weight:600}
+ .topics{display:flex;flex-wrap:wrap;gap:4px 24px}
+ .topics button{position:relative;min-height:44px;padding:10px 0 12px;border:0;background:none;color:var(--muted-foreground);font:400 15px/22px var(--font-heading);cursor:pointer;transition:color 140ms ease-out}
+ .topics button::after{content:'';position:absolute;inset-inline:0;bottom:2px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform 180ms var(--ease-reveal)}
+ .topics button:hover,.topics button[aria-pressed=true]{color:var(--foreground)}
+ .topics button[aria-pressed=true]::after{transform:none}
  .topics button:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 
- .featured-post{padding-top:40px}
+ .featured-post,.all-posts[data-filtering]{padding-top:32px}
  .blog-tools[hidden]+.featured-post{padding-top:0}
  .featured-post[hidden]{display:none}
  .all-posts{padding-block:56px 120px}
- .all-posts[data-filtering]{padding-top:40px}
  /* Topic changes: a short glide for cards that move, a fade for the rest. */
  :global(html[data-blog-transition]::view-transition-group(*)){animation-duration:320ms;animation-timing-function:cubic-bezier(.22,.61,.36,1)}
  :global(html[data-blog-transition]::view-transition-old(root)),:global(html[data-blog-transition]::view-transition-new(root)){animation:none}
@@ -177,11 +176,12 @@ const filters: { value: Topic | 'all'; label: string }[] = [
  @media(max-width:767px){
   /* The topics wrap onto a second line rather than scrolling sideways, where the last one sat off-screen with
      nothing to show it was there. */
-  .topics button{padding-inline:10px;font-size:14px}
-  .featured-post{padding-top:28px}
+  .topics{column-gap:20px}
+  .topics button{font-size:14px}
+  .featured-post,.all-posts[data-filtering]{padding-top:24px}
   .all-posts{padding-block:48px 80px}
   .post-grid{grid-template-columns:1fr;gap:20px}
  }
- @media(prefers-reduced-motion:reduce){.topics button,.pager :global(a){transition:none}}
- @media(forced-colors:active){.topics button[aria-pressed=true]{border-color:Highlight;color:Highlight}}
+ @media(prefers-reduced-motion:reduce){.topics button,.topics button::after,.pager :global(a){transition:none}}
+ @media(forced-colors:active){.topics button[aria-pressed=true]::after{forced-color-adjust:none;background:Highlight}}
 </style>

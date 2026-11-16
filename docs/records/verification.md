@@ -464,3 +464,14 @@ Checked on 24 October 2026 against `main` with the `0.2.0` tarball installed fro
 ## 19 October 2026: landing page and icon migration
 
 `npm run build` passed for the landing page and after the icon package migration. Desktop review covered rendering, use-case selection and the combined walkthrough/REP display. The icon migration compared 25 previously copied SVGs with packaged shapes and matched all 82 rendered icon instances before and after replacement.
+
+## 15 November 2026 — content dividers and blog filters
+
+Checked the working tree on `feat/consistent-page-headers`, based on `e887ff3`, from a local production build in Chromium 156. `npm run build` passed.
+
+- Rendered the site at 1440px and 390px and checked for horizontal overflow and remaining divider borders. Visually inspected the homepage groups, blog filters and featured post, article contents menu, REP comparisons, product facts, About principles, contact columns, brand examples and a fork guide table.
+- Tab and Enter selected all four blog topics. The active topic had a Green underline, a transparent background and a visible keyboard focus ring. The topic query and displayed posts updated. The filters wrapped at 320px without horizontal overflow.
+- The article contents menu opened with an opaque quiet surface. Escape closed it and returned focus to its summary. The sticky site header used the quiet surface after scrolling.
+- With JavaScript disabled, the blog filters stayed hidden, the page headings and product link rendered, and a FAQ disclosure opened from the keyboard. Reduced motion settled the blog underline, forced colors rendered its selection mark, and print media hid the article contents menu and rendered the article's thematic break with a zero-width border.
+
+Safari, Firefox, real phones, screen readers and a deployed site were not checked in this pass.

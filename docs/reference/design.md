@@ -28,6 +28,10 @@ Each adaptation is a source-level fact, not a claim of rendered conformity. "App
 
 [PageHero.astro](../../src/components/pages/PageHero.astro) renders the title and summary on the blog index, FAQ, Products, About, Brand assets and Whitepapers. The title, summary and links share the same left edge. The summary spans up to 58ch. The default slot holds actions or supporting copy. About uses the `art` slot for its illustration, which sits beside the text from 1024px wide and below it on smaller screens.
 
+## Content grouping
+
+Spacing and quiet surfaces group sections, lists and article endings throughout the site. The blog topic filters mark the selected topic with a Green underline. The sticky site header and mobile article contents menu use the quiet surface. Markdown tables use a filled header and alternating row shading. Shared table and thematic-break styles live in [global.css](../../src/styles/global.css).
+
 ## Design-system alignment
 
 The site declares a design-system role only where its value differs from the package's. With `0.3.0` none differ: the site no longer redeclares `--card`, `--border`, `--font-sans`, `--font-heading`, the link focus rule, or its own hover-edge and filled-button colours. Site-only roles (`--web-*`, `--mark-*`) stay in [global.css](../../src/styles/global.css).
