@@ -6,7 +6,9 @@
 export const newsletter = {
   path: '/subscribe',
   consentVersion: '2026-10-31',
-  /** Shown under the field; the contact address is appended by the footer. */
+  /** Not shown at present: the footer dropped this line from under the field (melo, 15 November 2026). The
+   * Worker still stamps each stored row with `consentVersion`, so before the field is connected either show
+   * this wording again (the footer appended a link to the contact page) or change what the Worker records. */
   consent: 'We’ll keep your email to tell you about Augur’s progress. Nothing is sent yet; before any newsletter starts we’ll ask you to confirm. To be removed,',
   messages: {
     subscribed: 'Thanks, we’ve noted your interest. We haven’t sent anything; before any newsletter starts we’ll ask you to confirm.',
