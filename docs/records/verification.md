@@ -475,3 +475,11 @@ Checked the working tree on `feat/consistent-page-headers`, based on `e887ff3`, 
 - With JavaScript disabled, the blog filters stayed hidden, the page headings and product link rendered, and a FAQ disclosure opened from the keyboard. Reduced motion settled the blog underline, forced colors rendered its selection mark, and print media hid the article contents menu and rendered the article's thematic break with a zero-width border.
 
 Safari, Firefox, real phones, screen readers and a deployed site were not checked in this pass.
+
+## 15 November 2026 — blog folder tabs
+
+Checked the working tree based on `7e346c8` in Chromium 156. `npm run build` passed. At 1440, 1024, 768, 600, 390 and 320px, the folder shapes measured 50px tall, the labels stayed on one line and the page had no horizontal overflow. The tabs wrapped onto additional rows at smaller widths.
+
+Tab and Enter selected all four topics with a visible focus ring, updated the topic query and displayed the corresponding posts. Reduced motion settled the underline, forced colors rendered the selection mark, and print media displayed all four labels. With JavaScript disabled, the filters stayed hidden and the posts rendered.
+
+Safari, Firefox, real phones and screen readers were not checked in this pass.

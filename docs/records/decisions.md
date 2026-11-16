@@ -231,6 +231,7 @@ From the launch interview of 30 October 2026, unless noted.
 - **The Green square before every closing contact heading.** "Let's keep the consistency, please. By that I mean the green square on similar sections!" The blog's contact call had the square; the FAQ's "Still have a question?" and, on the owner's "add", the footer's "Talk to the Augur team." now carry it too. (melo, in the blog contact session)
 - **Landing page titles and the blog feed.** Remove the Green square from the shared page titles and the RSS feed button from the blog index. Feed readers can discover `/rss.xml` through the blog’s HTML metadata. (melo, in the page header review)
 - **Content dividers and blog filters.** Remove gray line dividers throughout the site. Use spacing and quiet surfaces to group content, and row shading for tables. The blog topic filters use a Green underline for the selected topic. (melo requested the removal, delegated the replacement design and specified the underline in the page header review)
+- **Blog folder tabs.** Shape the blog topic filters as folders using the stepped corner shown in the owner’s reference. The implementation follows the homepage’s three-step folder geometry and uses the Green selection underline with single-line labels. (melo, in the page header review)
 
 ## 16 November 2026
 

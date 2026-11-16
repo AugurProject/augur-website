@@ -24,7 +24,7 @@ const filters: { value: Topic | 'all'; label: string }[] = [
 
  <div class="site-container blog-tools" data-blog-tools data-enter hidden>
   <div class="topics" role="group" aria-label="Filter posts by topic">
-   {filters.map(filter => <button type="button" data-topic-filter={filter.value} aria-pressed={filter.value === 'all' ? 'true' : 'false'}>{filter.label}</button>)}
+   {filters.map(filter => <button type="button" data-topic-filter={filter.value} aria-pressed={filter.value === 'all' ? 'true' : 'false'}><span class="topic-label">{filter.label}</span></button>)}
   </div>
  </div>
 
@@ -142,12 +142,71 @@ const filters: { value: Topic | 'all'; label: string }[] = [
 <style>
  .blog-tools{display:flex;align-items:center}
  .blog-tools[hidden]{display:none}
- .topics{display:flex;flex-wrap:wrap;gap:4px 24px}
- .topics button{position:relative;min-height:44px;padding:10px 0 12px;border:0;background:none;color:var(--muted-foreground);font:400 15px/22px var(--font-heading);cursor:pointer;transition:color 140ms ease-out}
- .topics button::after{content:'';position:absolute;inset-inline:0;bottom:2px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform 180ms var(--ease-reveal)}
- .topics button:hover,.topics button[aria-pressed=true]{color:var(--foreground)}
- .topics button[aria-pressed=true]::after{transform:none}
- .topics button:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+ .topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+ }
+ .topics button {
+  --step: 6px;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 10px 36px 14px 16px;
+  border: 0;
+  background: none;
+  color: var(--muted-foreground);
+  font: 400 15px/22px var(--font-heading);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 140ms ease-out;
+ }
+ /* The homepage's three-step corner lives on the background so the focus ring stays visible. */
+ .topics button::before {
+  content: '';
+  position: absolute;
+  inset: 3px 0;
+  z-index: -1;
+  background: var(--web-quiet);
+  clip-path: polygon(
+   0 0,
+   calc(100% - var(--step) * 3) 0,
+   calc(100% - var(--step) * 3) var(--step),
+   calc(100% - var(--step) * 2) var(--step),
+   calc(100% - var(--step) * 2) calc(var(--step) * 2),
+   calc(100% - var(--step)) calc(var(--step) * 2),
+   calc(100% - var(--step)) calc(var(--step) * 3),
+   100% calc(var(--step) * 3),
+   100% 100%,
+   0 100%
+  );
+  transition: background-color 140ms ease-out;
+ }
+ .topics button:hover::before,
+ .topics button[aria-pressed=true]::before {
+  background: var(--web-tile);
+ }
+ .topic-label { position: relative; }
+ .topic-label::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms var(--ease-reveal);
+ }
+ .topics button:hover,
+ .topics button[aria-pressed=true] {
+  color: var(--foreground);
+ }
+ .topics button[aria-pressed=true] .topic-label::after { transform: none; }
+ .topics button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 
  .featured-post,.all-posts[data-filtering]{padding-top:32px}
  .blog-tools[hidden]+.featured-post{padding-top:0}
@@ -174,14 +233,11 @@ const filters: { value: Topic | 'all'; label: string }[] = [
   .post-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
  }
  @media(max-width:767px){
-  /* The topics wrap onto a second line rather than scrolling sideways, where the last one sat off-screen with
-     nothing to show it was there. */
-  .topics{column-gap:20px}
-  .topics button{font-size:14px}
+  .topics button{--step:5px;padding-inline:14px 28px;font-size:14px}
   .featured-post,.all-posts[data-filtering]{padding-top:24px}
   .all-posts{padding-block:48px 80px}
   .post-grid{grid-template-columns:1fr;gap:20px}
  }
- @media(prefers-reduced-motion:reduce){.topics button,.topics button::after,.pager :global(a){transition:none}}
- @media(forced-colors:active){.topics button[aria-pressed=true]::after{forced-color-adjust:none;background:Highlight}}
+ @media(prefers-reduced-motion:reduce){.topics button,.topics button::before,.topic-label::after,.pager :global(a){transition:none}}
+ @media(forced-colors:active){.topics button::before{background:Canvas}.topics button[aria-pressed=true] .topic-label::after{forced-color-adjust:none;background:Highlight}}
 </style>
