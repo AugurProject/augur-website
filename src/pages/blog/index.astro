@@ -1,12 +1,10 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/pages/PageHero.astro';
-import Button from '../../components/primitives/Button.astro';
 import BlogMotion from '../../components/blog/BlogMotion.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import BlogContact from '../../components/blog/BlogContact.astro';
 import { getPosts, topics, type Topic } from '../../data/blog';
-import { pages } from '../../data/navigation';
 // The old augur.net blog index ("The Augur Arc"): a short header, a row of topic filters, the newest post as a
 // featured card, then every other post in a grid, nine to a page. Without JavaScript the filters and page links stay
 // hidden and every post shows. With it, the filters pick a topic and the links turn pages; ?topic= and ?page= keep
@@ -22,9 +20,7 @@ const filters: { value: Topic | 'all'; label: string }[] = [
 ---
 <PageLayout title="The Augur Arc | Augur blog" description={description} feed contactBand={false}>
  <BlogMotion />
- <PageHero title="The Augur Arc" lead={description}>
-  <Button variant="outline" href={pages.rss}>RSS feed</Button>
- </PageHero>
+ <PageHero title="The Augur Arc" lead={description} />
 
  <div class="site-container blog-tools" data-blog-tools data-enter hidden>
   <div class="topics" role="group" aria-label="Filter posts by topic">

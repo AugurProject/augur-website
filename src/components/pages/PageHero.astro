@@ -30,21 +30,10 @@ const hasArt = Astro.slots.has('art');
     min-inline-size: 0;
   }
   h1 {
-    position: relative;
     font-size: clamp(2rem, 1.5rem + 3vw, 3.75rem);
     line-height: 1.1;
     letter-spacing: -.03em;
     overflow-wrap: anywhere;
-  }
-  /* Hang the mark in the gutter so the title and summary share a left edge. */
-  h1::before {
-    content: '';
-    position: absolute;
-    inset-inline-end: calc(100% + .2em);
-    inset-block-start: calc((1lh - .2em) / 2);
-    inline-size: .2em;
-    block-size: .2em;
-    background: var(--primary);
   }
   .page-hero-lead {
     margin-block-start: clamp(.75rem, 1.25vw, 1rem);
@@ -66,6 +55,5 @@ const hasArt = Astro.slots.has('art');
   }
   @media print {
     .page-hero { padding-block: 0 1.5rem; break-inside: avoid; }
-    h1::before { display: none; }
   }
 </style>

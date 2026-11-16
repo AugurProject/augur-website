@@ -26,7 +26,7 @@ Each adaptation is a source-level fact, not a claim of rendered conformity. "App
 
 ## Landing page headers
 
-[PageHero.astro](../../src/components/pages/PageHero.astro) renders the title and summary on the blog index, FAQ, Products, About, Brand assets and Whitepapers. A Green square hangs beside the first line of the title so the title, summary and links share the page gutter. The summary spans up to 58ch. The default slot holds actions or supporting copy. About uses the `art` slot for its illustration, which sits beside the text from 1024px wide and below it on smaller screens.
+[PageHero.astro](../../src/components/pages/PageHero.astro) renders the title and summary on the blog index, FAQ, Products, About, Brand assets and Whitepapers. The title, summary and links share the same left edge. The summary spans up to 58ch. The default slot holds actions or supporting copy. About uses the `art` slot for its illustration, which sits beside the text from 1024px wide and below it on smaller screens.
 
 ## Design-system alignment
 
