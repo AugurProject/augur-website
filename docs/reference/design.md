@@ -24,6 +24,10 @@ Each adaptation is a source-level fact, not a claim of rendered conformity. "App
 - **Type and composition.** Display text scales to 72px with a 78px line height (`.display`). Sora 400/600 and Schibsted Grotesk 400 (upright and italic, so `<em>` is a real italic) load through Fontsource. `font-sans` (Schibsted Grotesk) and `font-heading` (Sora) come from the package's Tailwind bridge. Content width, gutters, section grids and artwork are owned by shared CSS and the [home components](../../src/designs/current/sections/). Approval not found.
 - **Integration.** The site uses native Astro controls and local CSS, not a React runtime. [AGENTS.md](../../AGENTS.md) requires a scoped request before adding one.
 
+## Landing page headers
+
+[PageHero.astro](../../src/components/pages/PageHero.astro) renders the title and summary on the blog index, FAQ, Products, About, Brand assets and Whitepapers. A Green square hangs beside the first line of the title so the title, summary and links share the page gutter. The summary spans up to 58ch. The default slot holds actions or supporting copy. About uses the `art` slot for its illustration, which sits beside the text from 1024px wide and below it on smaller screens.
+
 ## Design-system alignment
 
 The site declares a design-system role only where its value differs from the package's. With `0.3.0` none differ: the site no longer redeclares `--card`, `--border`, `--font-sans`, `--font-heading`, the link focus rule, or its own hover-edge and filled-button colours. Site-only roles (`--web-*`, `--mark-*`) stay in [global.css](../../src/styles/global.css).

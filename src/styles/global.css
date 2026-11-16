@@ -89,6 +89,9 @@
 }
 @utility section { padding-block:var(--section-space); }
 
+/* PageHero supplies the space before the first content section. */
+.page-hero + section.site-container { padding-block-start:0; }
+
 @layer components {
   .section-heading { @apply grid items-start gap-20; grid-template-columns:minmax(0,500fr) minmax(0,668fr); margin-bottom:var(--heading-gap); }
   .display { font:600 clamp(40px,5vw,72px)/1.083333 var(--font-heading); }

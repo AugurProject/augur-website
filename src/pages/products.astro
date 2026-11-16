@@ -1,6 +1,7 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import PageHero from '../components/pages/PageHero.astro';
+import Button from '../components/primitives/Button.astro';
 import { products, showStatoblast, showZoltar } from '../data/products';
 import Icon from '../components/primitives/Icon.astro';
 const showFit = showZoltar || showStatoblast;
@@ -12,7 +13,11 @@ const diagramLabel = showStatoblast
  : 'Any app can ask Augur Lituus to resolve a real-world question. Separately, Zoltar is a forkable oracle ledger. REP secures the designs; this does not imply Augur Lituus runs on Zoltar.';
 ---
 <PageLayout title="Augur products" description={description}>
- <PageHero title="Products" lead={lead}><nav class="actions" aria-label="Products">{products.map(product=><a class="button outline" href={`#${product.id}`}>{product.name}</a>)}</nav></PageHero>
+ <PageHero title="Products" lead={lead}>
+  <nav class="flex flex-wrap gap-3" aria-label="Products">
+   {products.map(product => <Button variant="outline" href={`#${product.id}`}>{product.name}</Button>)}
+  </nav>
+ </PageHero>
  {showFit&&<section class="section site-container ruled">
   <div class="section-heading"><h2>How they fit together</h2><p class="lead">Each product has its own job. REP, Augur’s token, secures all of them.</p></div>
   <div class="roles" role="img" aria-label={diagramLabel}>
