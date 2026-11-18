@@ -15,10 +15,14 @@ import {site} from '../../data/site';
 // it unchanged.
 const reveal=Astro.url.pathname==='/'?'':undefined;
 // With the forms off (forms.enabled), the newsletter column points to where updates already appear.
+// `band={false}` drops the contact band (and with it the newsletter column) for a page that ends with its own
+// contact block, so the two don't stack: the FAQ's "Still have a question?" (owner, 15 Nov 2026).
+interface Props { band?: boolean }
+const { band = true } = Astro.props;
 const follow:{label:string;href:string;logo?:string}[]=[{label:'Blog',href:links.archive.url},{label:'RSS feed',href:'/rss.xml'},{label:'X',href:links.x.url,logo:'x-logo'}];
 ---
 <footer class="site-footer" data-reveal={reveal}>
-  <div id="contact" class="contact-band">
+  {band && <div id="contact" class="contact-band">
     <div class="site-container footer-grid">
       <div class="contact-copy"><h2 id="contact-title">Talk to the Augur team.</h2><p>Ask about the protocol or share feedback. Building on it? Tell us what your project needs.</p><div class="contact-actions"><Button href={pages.contact}>Talk to us</Button></div></div>
       <div class="newsletter"><h2 id="newsletter-title">Follow Augur's progress</h2><p>Research, development and product updates.</p>
@@ -30,7 +34,7 @@ const follow:{label:string;href:string;logo?:string}[]=[{label:'Blog',href:links
           {forms.url && <p class="newsletter-consent" id="newsletter-consent">{newsletter.consent} <a href={pages.contact}>contact us</a>.</p>}
         </form> : <ul class="follow-links">{follow.map(item=><li><a class="line-link" href={item.href}>{item.logo&&<Icon name={item.logo} class="social-logo"/>}<span class="button-label">{item.label}</span>{isExternal(item.href)&&<Icon name="arrow-up-right"/>}</a></li>)}</ul>}</div>
     </div>
-  </div>
+  </div>}
   <div class="site-container footer-grid directory">
     <div class="identity"><a href="/" aria-label="Augur home"><Brand /></a><p>Augur's work is funded and coordinated by the <a href={links.foundation.url}>Lituus Foundation<Icon name="arrow-up-right"/></a>.</p><ul class="legal-links" aria-label="Legal">{navigation.legal.map(item=><li><a href={item.href}>{item.label}</a></li>)}</ul></div>
     <nav class="footer-links" aria-label="Footer">{navigationGroups.map(group=><div><h2>{group.label}</h2><ul>{group.items.map(item=><li><a class="line-link" href={item.href}>{(item as NavigationItem).logo&&<Icon name={(item as NavigationItem).logo!} class="social-logo"/>}<span class="button-label">{item.label}</span>{('external' in item && item.external)&&<Icon name="arrow-up-right"/>}</a></li>)}</ul></div>)}</nav>
