@@ -30,7 +30,7 @@ Each adaptation is a source-level fact, not a claim of rendered conformity. "App
 
 ## Content grouping
 
-Spacing and quiet surfaces group sections, lists and article endings throughout the site. The blog topic filters use compact folder tabs with three square steps at the top-right corner, following the homepage’s folder geometry. The selected topic has a brighter surface and a Green underline. Labels stay on one line, and the tabs wrap onto additional rows at smaller widths. The sticky site header and mobile article contents menu use the quiet surface. Markdown tables use a filled header and alternating row shading. Shared table and thematic-break styles live in [global.css](../../src/styles/global.css).
+Spacing and quiet surfaces group sections, lists and article endings throughout the site, except the REP page, which keeps its dividers until its redesign (melo, 18 November 2026). The blog topic filters use compact folder tabs with three square steps at the top-right corner, following the homepage’s folder geometry. The selected topic has a brighter surface and a Green underline. Labels stay on one line, and the tabs wrap onto additional rows at smaller widths. The sticky site header and mobile article contents menu use the quiet surface. Markdown tables use a filled header and alternating row shading. Shared table and thematic-break styles live in [global.css](../../src/styles/global.css).
 
 ## Design-system alignment
 

@@ -252,3 +252,4 @@ From melo's review of the footer branches on 18 November 2026.
 - **Footer arrangement signed off.** "i've signed it off". The rebuilt footer ([homepage reference](../reference/homepage.md#footer)) is no longer awaiting review.
 - **No copyright line.** "keep as it is". The footer carries no copyright notice.
 - **No consent wording for the newsletter field.** "remove the consent line. privacy/terms covers this i guess". The unused `newsletter.consent` wording is deleted; sign-ups rely on the privacy policy and terms, whose rewrite is still open ([open decisions](open-decisions.md)).
+- **REP page left out of the divider removal.** "the new rep page is going tru a redesign so yeah do not include /rep stuff". `rep.astro` and `src/components/rep/` keep their dividers; the redesign replaces them. Shared components such as `FaqItem` still change on that page.
