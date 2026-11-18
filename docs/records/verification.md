@@ -15,6 +15,286 @@ Dated checks, newest first, with what each did and did not cover. A check is evi
 - The contact form against Proton's real SMTP server and a deployed `augur-forms` Worker; it has been checked only locally, with the `log` provider and a fake SMTP server (29 October 2026).
 - Live inspection of the Figma file, and a visual-conformity audit against it. Hover, focus, error, reduced-motion and responsive states need browser checks before conformity with the design is claimed.
 
+## 16 November 2026: the FAQ copy edits rebased onto main
+
+The two commits of the FAQ copy session were rebased onto `main` at `921552e`, which had removed the Learn pages since the branch was cut. Three answers conflicted and were resolved by hand: "Is Augur back?" keeps "Moon Fork" as plain text; "How does Augur Lituus resolve an outcome?" keeps `main`'s ending without the worked example and adds "to the truthful universe"; and the token history keeps `main`'s link to `/learn/fork/moon-fork/` with the $REP and $AUGUR wording. After the resolution `npm run build` completes with 46 pages, and `dist/faq.md` lists 20 questions, no review flag and eight links outside the official channels list. In a Chromium-based browser against the dev server, at one width of about 800px, after the rebase: `/faq/` shows 20 questions with no bare REP in its text, `/faq/#fork` opens `who-decides`, whose answer ends "to the truthful universe.", the token history's "Moon Fork" is the only Moon Fork link on the page, and `/learn/fork/moon-fork/` loads. Other widths, no-JavaScript, reduced motion and print were not checked. The two entries below describe the checks made before the rebase, against the branch's old base.
+
+## 16 November 2026: the security answer approved
+
+After the owner approved "What secures Augur Lituus?", `npm run build` completes with 51 pages on `feat/new-faq-page`, with the changes uncommitted on top of `c9b854d`, and `dist/faq.md` lists 20 questions and no review flag. Not looked at in a browser again: only the entry's `needsReview` flag and its notes changed since the check below.
+
+## 16 November 2026: the FAQ copy edits, 20 questions
+
+`npm run build` completes with 51 pages on `feat/new-faq-page`, with the changes uncommitted on top of `c9b854d`. `dist/faq.md` lists 20 questions (Augur 6, Augur Lituus 9, $REP 5) and one review flag, on "What secures Augur Lituus?"; the seven sentences and links removed on 16 November are gone from it, and "Moon Fork" in "Is Augur back?" is plain text. A search of `dist/faq/index.html` for REP that is neither $REP nor part of a versioned symbol (REPv1, REPv2, REPv2_Yes_1, REPv2_No_1) finds none in the page's text, its header and footer or its structured data. In a Chromium-based browser against the dev server, at one width of about 800px: `/faq/` shows 20 questions and the lead "Short answers about Augur, $REP and Augur Lituus."; `/faq/#fork` opens `who-decides` and `/faq/#rep-action` opens `rep-holding`; and "What secures Augur Lituus?" opens with the new answer. Not checked: `lituus-rep-holders` and `lituus-token` in a browser, `/rep/`, whose two shared answers did not change, other widths, no-JavaScript, reduced motion and print.
+
+## 15 November 2026: the sentence under "Still have a question?"
+
+After the owner chose the new sentence, `npm run build` completes with 51 pages on `feat/new-faq-page`, with the changes uncommitted on top of `4874179`, and `dist/faq/index.html` carries "Come ask us on Discord. The team is active there and happy to take any question about Augur. Building something? We'd love to hear about it." Not looked at in a browser.
+
+## 15 November 2026: the FAQ ending with two buttons
+
+`npm run build` completes with 51 pages on `feat/new-faq-page`, with the changes uncommitted on top of `4874179`, and `dist/faq/index.html` no longer contains "Browse Learn". In the Browser pane against the dev server at `http://localhost:4321`, dark scheme: at 1440px the two buttons under "Still have a question?" are 326px wide and 48px tall, their outer edges level with the question boxes above (670px and 1329px from the left), and the row is centred on the heading and its sentence; at 768px they sit side by side at 341px each; at 375px they stack at the full 327px, with no horizontal overflow. Not checked: hover, focus and pressed states of the buttons at their new width, and everything listed as not checked in the entry below.
+
+## 15 November 2026: the FAQ page's new layout
+
+`npm run build` completes with 51 pages on `feat/new-faq-page`, with the changes uncommitted on top of `4874179`. In `dist/faq/index.html` there are 21 questions sharing `name="faq-question"`, each marked `data-reveal="item"`, three Green square marks and no contact band; `dist/index.html`, `dist/learn/index.html` and `dist/rep/index.html` keep the contact band, and `dist/rep/index.html` has no `data-reveal`.
+
+In the Browser pane against the dev server at `http://localhost:4321`, dark scheme, at 1440×900 and 375×812: `/faq/` has no horizontal overflow at either width. At 1440px a section's name is 48px with a 12px Green square (8px at 375px), its centre level with the centre of the first question's row, and it holds 32px from the top while its questions scroll; no section or question has a border; a closed question's box is `rgb(22, 22, 41)` and an open one's `rgb(29, 29, 48)`, with a Green minus. The first question starts 497px down at 1440px and 531px at 375px, and the three sections together are 1,876px tall collapsed at 1440px. A fresh visit armed 19 of the 26 reveal groups, those below the fold; an arrival at `/faq/#rep-role` armed none and opened that question; a `hashchange` settled all 19. Tab moved focus from one question to the next with a 2px Green outline, 2px off the box. The page ends with "Still have a question?" 96px above the footer's directory, and `/rep/` still shows "Talk to the Augur team." and its framed accordion (32px toggle, no `data-reveal`). One earlier check, made before the questions became boxes and not repeated: with `document.startViewTransition` replaced by a stub that runs its callback at once, clicking a question opened it, closed the one that was open and left no transition names behind.
+
+Not checked: any animation as it plays, meaning a question opening or closing, the fill easing on hover and the reveal as the page scrolls. The Browser pane was hidden for the whole session, where view transitions, CSS transitions and `IntersectionObserver` callbacks did not advance; the homepage's reveal and the REP page's accordion stalled there in the same way. Also not checked: no JavaScript, reduced motion, forced colours and print; widths between 375px and 1440px; Safari and Firefox; a screen reader.
+
+## 15 November 2026: the REP tokens answer approved
+
+After the owner approved the corrected last sentence of "Why is there more than one REP token?", `npm run build` completes with 51 pages on `feat/new-faq-page`, with the changes uncommitted on top of `4874179`, and `dist/faq.md` lists 21 questions with no review flag on any answer. Nothing else was re-checked.
+
+## 15 November 2026: the reviewed FAQ, 21 questions in three sections
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In `dist/faq/index.html` there are 21 questions under three headings (Augur 6, Augur Lituus 9, $REP 6) and FAQPage structured data with 21 questions, and the alias map sends `build-today` to `lituus-status`, `mica` and `mica-white-paper` to `buy-rep`, `old-markets` to `trading`, `finality-time` to `who-decides`, `invalid` to `integration-flow`, `guarantee` and `compare` to `lituus-security`, `fork` and `lituus-rep-holders` to `rep-action`, the old missed-migration anchor and `rep-scams` to `rep-missed-migration`, and `security-reports` and `builders` to the `product` section. `dist/faq.md` lists the same 21 questions and one review flag, on "Why is there more than one REP token?". Every local destination an answer links exists in `dist`: `/rep/` with its `fork` and `versions` sections, `/learn/fork/moon-fork/`, `/learn/how-augur-answers-a-question/`, `/contact/` and `/blog/`. `dist/rep/index.html` carries the two changed sentences of the shared questions, and `public/rep.md` was edited to match. In the Browser pane against the dev server at `http://localhost:4321`, 1024px wide, dark scheme: `/faq/` shows the 21 questions and a three-link topic rail with no horizontal overflow; `/faq/#mica` rewrites to `#buy-rep` and opens it; `#security-reports` rewrites to `#product`; `#i-didnt-migrate-in-time-is-there-anything-i-can-do` rewrites to `#rep-missed-migration` and opens it; the "official channels" link in "Do $REP holders need to take any action?" opens "What are Augur's official channels?"; ten off-site links carry the ↗. At 375 by 812 there is no horizontal overflow, no answer overflows its box, and the three topic links sit two and one in the two-column list. `/faq/`, `/rep/`, `/faq.md`, `/`, `/products/`, the two Learn destinations and `/contact/` return 200 from the dev server. Not checked: the Browser pane was hidden, so opening animations, the scroll position after a question closes, focus order and reduced motion were not observed; keyboard use, rendering without JavaScript and print; browsers other than the pane's; the off-site destinations, which were not requested again; `/rep/` in the browser beyond its built HTML. The dev server logged `FAQ id "build-today" is used twice` while the files were mid-edit; it did not recur once the edit was complete.
+
+## 15 November 2026: the FAQ page's title and description
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In `dist/faq/index.html` the title, `og:title` and `twitter:title` read "Frequently asked questions | Augur", the wording the owner chose after a first rewrite, and the description, `og:description` and `twitter:description` read "Answers to common questions about Augur, Augur Lituus and $REP."; `dist/llms.txt` has the new FAQ line. In the Browser pane against the dev server at `http://localhost:4321`, `/faq/` shows the new title and description, 17 questions, and the two-sentence MiCA answer and the two-sentence buy answer as approved. Not checked: how the title and description appear in a search result or a link preview, and phone widths.
+
+## 15 November 2026: the polished FAQ in a browser, and the MiCA question added
+
+In the Browser pane against the dev server already running at `http://localhost:4321`, at a viewport 1009px wide, dark scheme, before the MiCA question was added: `/faq/` shows 16 questions under four headings (General 7, Product 4, The Token 4, Builders 1) with no review-flag text and no horizontal overflow; `/faq/#integration-flow` rewrites to `#build-today` and opens "Can developers build with Augur Lituus today?", whose two links read "GitHub ↗" and "blog"; the Builders section with one question and the topic rail, which marks Builders as current, look as the other sections do. `/rep/` shows the two shared questions and the current token's address, with no horizontal overflow. `npm run build` then completes with 51 pages with "Does $REP have a MiCA white paper?" added: `dist/faq.md` has 17 questions (The Token 5), the new one 44 words at first and 13 after the owner removed its second sentence, flagged for review until the owner approved it, after which no answer in `dist/faq.md` carries a review flag; answers then average about 67 words and thirteen of the 17 are under 100. Back in the browser at the same width, `/faq/` shows 17 questions (The Token 5), `/faq/#mica` rewrites to `#mica-white-paper` and opens the new answer, and there is still no horizontal overflow; that check ran on the 44-word version, and the 13-word version was checked in the build output only. Not checked: phone and tablet widths, keyboard and focus order, no-JavaScript, reduced motion, light scheme and print for these pages in this session, and the MiCA white paper's status since the Q2 2026 report (the answer rests on that report and the owner's request).
+
+## 15 November 2026: Builders cut to one answer
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, "Can developers build with Augur Lituus today?" is one paragraph of 36 words with two links on words (GitHub, off-site with ↗, and the blog at `/blog/`), and was the last answer flagged for review until the owner approved it: no answer in `dist/faq.md` carries a review flag now. `dist/faq.md` and the structured data in `dist/faq/index.html` have 16 questions (General 7, Product 4, The Token 4, Builders 1), with five links on words outside the channels list; answers average about 70 words and twelve of the 16 are under 100. Neither deleted Builders title appears in `dist/faq.md`, `dist/faq/index.html` or `dist/rep/index.html`, and the alias map sends `integration-flow`, `costs`, `chains`, `failure-cases`, `choosing-an-oracle` and `security-reports` to `build-today`. No file in `src` or `public` links to those fragments. `parked.ts`, now fourteen entries, and `src/data/faq/building.ts` parse as TypeScript (esbuild). Not checked: the two link targets by opening them, the Lituus-CS repository again for this change (the answer relies on the read cited for "Is Augur Lituus live?"), and the page in a browser, including how the Builders section and the topic rail look with one question.
+
+## 15 November 2026: the buy $REP answer shortened
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq.md` has 18 questions with three flagged for review, the three Builders answers. "Where can I buy $REP?" was first cut to two short paragraphs that kept the contract address, then, to the owner's model, to one sentence naming Kraken and Uniswap, with no link to either, which the owner approved; a second sentence, on the Foundation working toward more listings, was then added at the owner's request and approved, then reworded at the owner's request to say the Foundation is working to make the token more accessible, making 24 words; the owner approved that wording, and the answer carries no review flag. The contract address no longer appears in `dist/faq.md` or `dist/faq/index.html`; `dist/rep/index.html` and `dist/rep.md` still give it. Counted from `dist/faq.md`, answers average about 78 words and thirteen of the 18 are under 100. Read in a browser the same day: CoinGecko's markets for the contract address list Kraken (AUGUR/USD) and Uniswap V4 on Ethereum and no other exchange, and GeckoTerminal's pool list shows Uniswap v4 pools named REPv2_Yes_1 against USDC, USDS and ETH. Not checked: Kraken's own listing page, the pools on Uniswap or Etherscan directly, whether an exchange CoinGecko does not track lists the token, and the page in a browser.
+
+## 15 November 2026: the REP tokens answer rewritten around REPv2_Yes_1
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, "Why is there more than one REP token?" was first rewritten with the contract address and approved, then rejected by the owner; the draft now in place, written to the owner's outline, is a three-item history and a closing paragraph, about 110 words, with no address and no link (the address remains in "Where can I buy $REP?"), the current symbol in bold. The owner then approved it: it carries no review flag in `dist/faq.md`, and four answers remain flagged ("Where can I buy $REP?" and the three Builders answers). Not checked: the page in a browser.
+
+## 15 November 2026: the earn answer approved, and four Token questions deleted
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq.md` and the structured data in `dist/faq/index.html` have 18 questions (General 7, Product 4, The Token 4, Builders 3), with five flagged for review and four links on words in answers outside the channels list; "Does holding $REP earn rewards?" is the two-bullet answer, without a review flag; none of the four deleted titles appears on `/faq/` or `/rep/`; the alias map sends their ids and old anchors to `rep-lineage` or `rep-role`; `/rep/` shows the two remaining shared questions and still shows the current token's address; `dist/rep.md` lists the same two questions. `parked.ts`, now twelve entries, `src/data/faq/rep.ts` and `src/data/rep.ts` parse as TypeScript (esbuild). No page in `src` or `public` links to the deleted fragments. Not checked: either page in a browser, and the layout of the REP page's question section with two questions.
+
+## 15 November 2026: "Does holding $REP earn rewards?" shortened
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq.md` has "Does holding $REP earn rewards?" with the new 37-word answer, flagged for review; `dist/rep/index.html` shows the same question and answer; `dist/rep.md` carries them; the alias map sends `governance` to `override`. Not checked: either page in a browser, and the rest of `public/rep.md`'s question list, which was already out of step with `/rep/`.
+
+## 15 November 2026: the REP role question rewritten
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq.md` has the question, retitled "What is $REP's role in Augur?" later the same day, with the two-paragraph answer the owner chose from five versions, 89 words, approved and without a review flag; `dist/rep/index.html` shows the same question and answer first in its question list, without the old title; `dist/rep.md` carries the new text; and "$REP" renders as written on both pages. The whitepaper sections in its `sources` were taken from the parked entries, not re-read. Not checked: either page in a browser, and the rest of `public/rep.md`'s question list, which was already out of step with `/rep/`.
+
+## 15 November 2026: the oracle comparison removed for now
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq.md` and the structured data in `dist/faq/index.html` have 22 questions (General 7, Product 4, The Token 8, Builders 3), the comparison's title appears in neither, the page's alias map sends `compare` to `augur-lituus` and the seven parked security ids to `override`, five links remain on words in answers outside the channels list, and 10 answers are flagged for review. `parked.ts`, now eight entries, and `product.ts` parse as TypeScript (esbuild). Not checked: opening the fragments in a browser, and everything listed as not checked below.
+
+## 15 November 2026: the oracle comparison recreated, and "onchain" in the applications answer
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built `dist/faq.md`, the last Product question is "How is Augur Lituus different from other oracles?", with the new two-paragraph answer of 66 words, flagged for review; no answer names Chainlink, Pyth, UMA or Kleros; `/faq/#compare` is still its id; and "What applications can Augur Lituus power?" opens "Any onchain application". The two sentences the answer leans on were read in the Foundation's posts of 29 January and 21 July 2026 in this session. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: the override answer rewritten
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built `dist/faq.md`, "Can the Lituus Foundation or the developers override an outcome?" is the new 46-word answer, mentions neither Augur v2 nor the Moon Fork nor the Foundation's REP, and, once the owner approved it, carries no review flag. The claim that the design has no admin key rests on the Lituus-CS reading of 11 November 2026, which was not repeated. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "What was the Moon Fork?" deleted
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq.md` and the structured data in `dist/faq/index.html` have 23 questions (General 7, Product 5, The Token 8, Builders 3), the title appears in neither, the page's alias map sends the ten Moon Fork ids to `rep-missed-migration` and the five "What is a fork?" ids to `rep-role`, five links remain on words in answers outside the channels list, and 12 answers are flagged for review. No page in `src` or `public` links to any of those fragments. Not checked: opening the fragments in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "What applications can Augur Lituus power?" rewritten
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built `dist/faq.md`, the answer is the one-paragraph text of 60 words written after the owner found the first versions too generic, names no kind of application, states no limits, and, once the owner approved it, carries no review flag. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "Is Augur Lituus live?" simplified
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built `dist/faq.md`, the answer is the new 35-word text with two links, to the blog and to the Lituus-CS repository, with no mention of audits, testing or ChainSafe, and, once the owner approved it, carries no review flag; the alias map sends `lituus-builders` to `is-augur-back`; six links remain on words in answers outside the channels list. The second half of 2027 is the owner's date and was not checked against a published report; the homepage roadmap says 2027 only. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "What is Augur Lituus?" rewritten
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built `dist/faq.md`, after the owner's cuts the answer is two paragraphs of 53 words, after the owner later cut the sentence on stakes, with no link, names no person or firm, and, once the owner approved it, carries no review flag; "$REP" renders as written on the page; the alias map sends `lituus-builders` and `rules-final` to `lituus-status`; five links remain on words in answers outside the channels list. The whitepaper sections in its `sources` were taken from the parked entries, not re-read. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: seven Product answers parked
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq.md` and the structured data in `dist/faq/index.html` have 24 questions (General 7, Product 6, The Token 8, Builders 3), none of the seven titles appears in either file, the page's alias map sends all 18 of their ids and aliases to `augur-lituus`, `moon-fork` or `compare`, six links remain on words in answers outside the channels list, and 16 answers are flagged for review. `parked.ts` and `product.ts` parse as TypeScript (esbuild); `parked.ts` is not imported, so the build does not exercise it. No page in `src` or `public` links to any of the 18 fragments. Not checked: opening the fragments in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "Can I trade on Augur today?" removed
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq.md` and the structured data in `dist/faq/index.html` have 31 questions, seven of them in General, the title appears in neither file, the page's alias map sends `trading`, `what-can-i-do-today`, `can-i-use-augur-today` and `old-markets` to `is-augur-back`, and nine links remain on words in answers outside the channels list. Not checked: opening those fragments in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "Does Augur Lituus compete with Polymarket and Kalshi?" rewritten
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built `dist/faq.md`, the answer is the new two-paragraph text, mentions neither UMA nor how Kalshi settles, ends "handles the resolution layer" after the owner's later edits, and, once the owner approved it, carries no review flag; the page's alias map sends `need-rep` to `rep-holding`; UMA appears in the FAQ only in Product's comparison of oracles. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "How does Augur Lituus differ from Augur v1 and v2?" simplified
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built `dist/faq.md`, the answer is the new two-paragraph text, 72 words after the owner cut its last sentence, without the scope, fees and forks bullets, and, once the owner approved it, carries no review flag. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "Who is behind Augur?" rewritten
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built `dist/faq.md`, after the owner's cut of two sentences, the answer is one paragraph on the Foundation's role, names no team, has no link and no mention of the crowdsale or fundraising, and, once the owner approved it, carries no review flag; the FAQ has ten links on words in answers outside the channels list, which has seven. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "Who is behind Augur?" names only the Lituus Foundation
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, the answer in `dist/faq/index.html` and `dist/faq.md` names neither ChainSafe nor the whitepaper's authors and ends "Neither the Foundation nor the teams decide what the oracle answers"; `/faq.md` still flags it for review. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "Why build a decentralized, permissionless and trustless oracle?" removed
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq.md` and the structured data in `dist/faq/index.html` have 32 questions, the title appears in neither file, and the page's alias map sends `why-decentralized` to `what-is-an-oracle`. Not checked: opening `/faq/#why-decentralized` in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "It can make mistakes" and Dark Florist in "Is Augur back?"
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq/index.html` and `dist/faq.md` carry "It can make mistakes" in "What is a blockchain oracle?", with no "It can err", and the Dark Florist sentence in "Is Augur back?" before the blog sentence. "Dark Florist" appears in no other FAQ answer and has no link, and neither answer carries a review flag in `/faq.md`. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "What is Augur?" reworded
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. In the built output, `dist/faq/index.html` carries the new answer at `#what-is-augur` and in the structured data, with "$REP" as written and none of the old text, and `dist/faq.md` carries it as two paragraphs. Not checked: the page in a browser, and everything listed as not checked below.
+
+## 15 November 2026: "Why is there more than one REP token?" added
+
+`npm run build` completes with 51 pages, on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. On the dev server, the question is fifth in The Token, after "Which REP token is current?"; `/faq/#rep-lineage` and `#rep-versions` open it; `/faq/`, its structured data and `/faq.md` have 33 questions, with no duplicate ids; the page has no horizontal overflow at 375px and no console errors. Not checked: `/rep/`, which this change does not touch, and everything listed as not checked below.
+
+## 15 November 2026: five FAQ questions added
+
+Checked on `feat/new-faq-page` with the changes uncommitted on top of `4874179`. `npm run build` completes with 51 pages. On the dev server, in the built-in Chromium-based pane:
+
+- `/faq/` has 32 questions: General 9, Product 13, The Token 7, Builders 3, with no duplicate ids; the FAQPage structured data and `/faq.md` have 32.
+- `#who-is-behind`, `#lituus-status`, `#polymarket-kalshi`, `#lituus-rep-holders` and `#value-secured` open their questions; `#roadmap`, `#audits` and `#faq-lituus-status` open the status question, `#need-rep` the Polymarket and Kalshi question and `#lituus-token` the REP holders question.
+- Eleven links sit in answers outside the channels list; `/about/` returns 200 and has the `who` section the new link targets.
+- At 375px the page has no horizontal overflow with the Polymarket and Kalshi question open. `/rep/` still shows its five questions. No console errors.
+
+Not checked: keyboard on the new entries (the component is unchanged since the check below), without JavaScript, reduced motion, print, other browsers and the external link destinations.
+
+## 15 November 2026: FAQ editorial audit
+
+Checked on `feat/new-faq-page` with the audit's changes uncommitted on top of `4874179`. `npm run build` completes with 51 pages. On the dev server, in the built-in Chromium-based pane:
+
+- `/faq/` has 27 questions: General 7, Product 11, The Token 6, Builders 3, all closed on load, with no duplicate ids; the FAQPage structured data has 27 entries, and `/faq.md` lists the same 27.
+- Fragments: `#moon-fork`, `#finality-time`, `#trading` open their questions; `#rep-augur-ticker` and `#faq-rep-augur-ticker` open "Which REP token is current?"; `#faq-trading` and `#can-i-use-augur-today` open the trading question; `#lituus-vs-v2` opens the v1 and v2 question; `#faq-invalid` and `#writing-questions` open the ambiguous-question entry; `#what-was-the-moon-fork` opens the Moon Fork question. One question was open after each.
+- Links: the nine links in answers outside the channels list are present, and the local ones (`/blog/`, `/learn/how-augur-answers-a-question/`, `/learn/fork/what-to-do/`, `/learn/fork/moon-fork/`, `/contact/`) return 200.
+- Keyboard: Enter on a focused question opens it; Tab moves through the link in the open answer to the next question; Space opens that one and closes the first.
+- At 375px the page has no horizontal overflow with "Which REP token is current?" open; the contract addresses wrap.
+- `/rep/` shows five questions, the first open, and "See all questions" goes to `/faq/#rep`.
+- No console errors.
+
+Not checked: without JavaScript, reduced motion, print, light scheme, other browsers, a real phone, and the external link destinations. `npm run check:launch` was not run. The answers' facts were checked against the sources in the [research record](faq-research.md#15-november-2026-audit), not by the owner.
+
+## 15 November 2026: "Where can I buy $REP?"
+
+`npm run build` completes. On the dev server, the question reads "Where can I buy $REP?", `/faq/#buy-rep`, `#buy-augur` and `#where-to-buy` open it, and the answer names AUGUR only as Kraken's ticker; `/faq.md` shows the same text.
+
+## 15 November 2026: "Where can I buy AUGUR?" added
+
+`npm run build` completes. On the dev server, the question is fourth in The Token, after "Is AUGUR the same token as REPv2_Yes_1?", `/faq/#buy-augur` opens it, and it carries no links; `/faq/` and `/faq.md` have 23 questions, `/faq.md` flags it for review, and `/rep/` still shows its six questions.
+
+## 15 November 2026: "What applications can Augur Lituus power?" added
+
+`npm run build` completes. On the dev server, the question is second in Product, `/faq/#lituus-applications` and `/faq/#lituus-uses` open it, "What is Augur Lituus?" no longer carries the use-case paragraph, and `/faq/` and `/faq.md` have 22 questions; `/faq.md` flags it for review.
+
+## 15 November 2026: "Why a decentralized, permissionless, trustless oracle?" added
+
+`npm run build` completes. On the dev server, the question is third in General, `/faq/#why-decentralized` opens it, and `/faq/` and `/faq.md` have 21 questions; `/faq.md` flags it for review.
+
+## 15 November 2026: Augur Lituus questions named and moved
+
+`npm run build` completes. On the dev server, General has 4 questions and Product 7, with "How does Augur Lituus resolve outcomes?" second in Product; `#who-decides`, `#invalid` and `#question-lifecycle` open it. The renamed questions show on `/faq/`, in `/faq.md`, and on `/rep/` for "How is REP used in Augur Lituus?".
+
+## 13 November 2026: Product before The Token
+
+`npm run build` completes. On the dev server, the topic rail and the sections run General, Product, The Token, Builders, and `/faq.md` follows the same order.
+
+## 13 November 2026: FAQ in a professional register
+
+`npm run build` completes. Every answer in `src/data/faq/` is free of contractions apart from possessives, every entry keeps its aliases (compared with the previous commit), `/faq/` and `/faq.md` show the renamed questions, and `/rep/` shows its six shared questions with the new wording. Not checked: a full read of every answer on a phone.
+
+## 13 November 2026: official channels as a list
+
+`npm run build` completes. On the dev server, "What are Augur's official channels?" is a list of seven links named Discord, Telegram, X, Blog, GitHub, Lituus Foundation and Contact page, each followed by what it's for, with no intro line or warning; the five off-site links carry ↗.
+
+## 13 November 2026: official channels merged
+
+`npm run build` completes. The built `/faq/` and `/faq.md` have 20 questions: General 5, The Token 6, Product 6, Builders 3. On the dev server, "What are Augur's official channels?" lists seven channels, each a link whose text is its address; the five off-site ones carry ↗ and the blog and contact links do not. `#follow-development`, `#contribute`, `#talk-to-team` and `#faq-follow-development` open it.
+
+## 13 November 2026: FAQ at 21 questions
+
+`npm run build` completes. The built `/faq/` and `/faq.md` have 21 questions: General 6, The Token 6, Product 6, Builders 3, and "What can I do with Augur today?" is gone. On the dev server, `#what-can-i-do-today`, `#faq-what-can-i-do-today`, `#trading`, `#can-i-use-augur-today` and `#old-markets` open "Is Augur back?", and `#need-rep` opens "What can I do with REP, and does holding it earn anything?" on `/faq/`.
+
+## 13 November 2026: blog link in "Is Augur back?"
+
+`npm run build` completes. On the dev server, the answer ends "The Foundation publishes quarterly progress reports on the blog.", with "blog" linking to `/blog/` and no ↗; `/faq.md` carries the same link.
+
+## 13 November 2026: "Is Augur back?" rewritten
+
+`npm run build` completes. On the dev server, `/faq/#is-augur-back` opens the question, renamed from "Is Augur back, and who's behind it?", with the two-paragraph answer; `#who-is-behind` and `#what-happened` open it too, and `/faq.md` carries the new text without a review flag.
+
+## 13 November 2026: FAQ at 22 questions
+
+`npm run build` completes. The built `/faq/` and `/faq.md` have 22 questions: General 7, The Token 6, Product 6, Builders 3, and "What happened to Augur after it launched?" is gone. On the dev server, `#what-happened` and `#faq-what-happened` open "Is Augur back, and who's behind it?", and `#old-markets` opens "What can I do with Augur today?".
+
+## 13 November 2026: "How does Augur decide what happened?" rewritten
+
+`npm run build` completes. On the dev server, `/faq/#who-decides` opens the question with the four-step answer, `/faq/#invalid` opens it too, and `/faq.md` carries the new text without a review flag.
+
+## 13 November 2026: "What is an oracle?" rewritten
+
+`npm run build` completes. On the dev server, `/faq/#what-is-an-oracle` opens the question with the new answer, `/faq/#prediction-market-or-oracle` opens "What is Augur?", and `/faq.md` carries the new text without a review flag.
+
+## 13 November 2026: "What is Augur?" rewritten
+
+`npm run build` completes. On the dev server, `/faq/#what-is-augur` opens the question with the new answer, and `/faq.md` carries the same text without a review flag.
+
+## 11 November 2026: FAQ topic rail without counts
+
+`npm run build` completes. The built `/faq/` topic rail lists General, The Token, Product and Builders with no question counts.
+
+## 11 November 2026: FAQ at 23 questions
+
+`npm run build` completes. The built `/faq/` and `/faq.md` have 23 questions: General 8, The Token 6, Product 6, Builders 3. All 99 earlier fragments resolve; the seven removed questions' ids open "What is Augur Lituus?", "How does Augur decide what happened?", "How would an app use Augur Lituus, and what would it cost?" or "Which REP token is current?". Five answers carry one inline link each.
+
+## 11 November 2026: FAQ sections without intros
+
+`npm run build` completes. The built `/faq/` and `/faq.md` show each section's name with no intro line under it.
+
+## 11 November 2026: FAQ in four sections
+
+`npm run build` completes. The built `/faq/` and `/faq.md` have the sections General (8), The Token (7), Product (11) and Builders (4). All 96 earlier fragments resolve, every old topic id through an alias, and the REP page's `/faq/#rep` link still opens The Token.
+
+## 11 November 2026: FAQ without "As of" dates
+
+`npm run build` completes. None of the built `/faq/`, `/rep/` or `/faq.md` contains the "As of 11 November 2026" line. Two answers still open a sentence with "As of" in their text ("As of the Q2 2026 report", "As of November 2026, CoinGecko…").
+
+## 11 November 2026: FAQ regrouped into five topics
+
+`npm run build` completes. The built `/faq/` has 30 questions in five topics (The basics 5; Augur, then and now 8; REP token 6; How answers are settled 7; Building with Augur 4), and `/faq.md` the same 30. All 96 fragments the FAQ answered before (question ids, aliases, the old site's anchors, `faq-` ids and topic ids, now including `security`) resolve on the built page. Six answers carry one link each, three internal and three off-site with ↗, in `/faq.md` as on the page; `www.augur.net` stays text. The REP page shows `rep-augur-ticker` in place of `honest-fork`. In the browser, `#which-rep` opened under the REP token topic with its Etherscan link.
+
+## 11 November 2026: FAQ cut to 35 questions
+
+`npm run build` completes. The built `/faq/` has 35 questions in six topics, and `/faq.md` the same 35. Every one of the 96 fragments the FAQ answered before the cut (question ids, aliases, the old site's anchors, `faq-` ids and topic ids) resolves to a question or topic on the built page. In the browser, `#moon-fork-proves` opened "What was the Moon Fork?". With smooth scrolling turned off, `#following` was rewritten to `#history` and scrolled to it, and `#rep-augur-ticker` opened "Which REP token is current" at the top; smooth scrolling didn't run while the browser pane was hidden. The REP page shows its six questions, `which-rep` in place of the merged ticker question, with no links in its answers.
+
+## 11 November 2026: FAQ answers as text only
+
+After the links were removed, `npm run build` completes. In the built `/faq/index.html` none of the 65 answers contains an `<a>`; nor do the six answers on `/rep/`; `/faq.md` has no Markdown links. `www.augur.net` in the channels answer renders as text, not as GFM's autolink. In the browser, `#official-channels` opened that question with the channel addresses as plain text.
+
+## 11 November 2026: FAQ without search, Start here or Copy link
+
+Checked after the controls were removed and the questions made exclusive, against the working tree on the dev server. `npm run build` completes. The page has no search field, Start here block, Open all or Copy link, and its 65 questions share `name="faq-question"`. With real clicks, opening a second question closed the first; following `#which-rep` opened that question and closed the open one. Firing `beforeprint` opened all 65 and `afterprint` restored the one that was open and the shared name. No script errors were logged. At 375px there was no horizontal overflow. Not checked: the items listed under the FAQ rewrite entry below.
+
+## 11 November 2026: FAQ rewrite
+
+Checked on `feat/new-faq-page` against the working tree, with `npm run build` and the dev server, in the Claude desktop app's built-in Chromium-based browser.
+
+- **Build.** `npm run build` completes and writes `/faq/index.html` and `/faq.md`. Lightning CSS warns that `:target-current` is not a known pseudo-class and keeps the rule. The duplicate-fragment guard in [index.ts](../../src/data/faq/index.ts) failed a build once, on an alias that matched a topic id, before it was removed.
+- **Deep links.** `/faq/#question-lifecycle` opened that question. The old fragment `#faq-rep-wallet` was rewritten to `#rep-wallet`, opened, and scrolled to 48px from the top, and the topic rail marked REP. A Start here link, followed with the keyboard, opened its question, and the next Tab moved into it.
+- **Search.** "wallet" matched 5 questions, "fork window" 7 and "chainlink" 1, with the count announced in the status line and `?q=` in the address; "zzzz" showed the empty state; clearing restored all questions. The CSS Custom Highlight API marked the matches.
+- **Open all.** It opened all 65 questions and then closed them, and its label and `aria-expanded` followed.
+- **Print.** Firing `beforeprint` opened all 65 questions; `afterprint` restored the one that was open. Print preview itself was not checked.
+- **Copy link.** In the browser pane the clipboard write was refused, even on a real click, so the fallback ran: the label and the live region said "Link is in the address bar", and the address held the question's fragment. Each link's accessible name includes its question. A successful copy was not observed.
+- **Keyboard.** The Tab order ran search, Open all, the nine topic links, the Start here links, then the questions. Enter on a question opened it, and the next Tab reached its links and Copy link.
+- **Widths.** At 375px with every answer open, and at 768px, there was no horizontal overflow. At 375px the topics sit in two columns.
+- **No JavaScript.** Scripts were blocked with a `script-src 'none'` header on a static server over `dist/`. The page rendered with every question listed and closed, the search hidden, and "Link to this answer" as a plain anchor; `#which-rep` scrolled to its question, which stayed closed.
+- **Contrast.** Computed against solid backgrounds at 768px, the page's text ranged from 7.03:1 (Start here labels) to 17.49:1.
+- **REP page.** `/rep/#questions` still shows its six questions from the same entries, as an exclusive accordion with `faq-` ids; its links back to `/rep/` are dropped, and the wallet answer shows "As of".
+- **Content.** Every answer was checked against the sources in its `sources` field. A second reviewer then read the whole FAQ against the whitepaper, the Lituus-CS code, the blog and the fork guides and reported 21 findings. The material ones were fixed: the supply-restoration amount, the token answer (the code has protocol tokens, and the Foundation sent holders a notification token), current REP's exposure to another Augur v2 fork, "Augur v2 still runs" without a warning that no trading app has relaunched, turnout against the whitepaper's 90% assumption, the Foundation's reported REP holdings, and the code's further differences from the paper. Overlap between answers was kept where a reader landing on one answer needs it ([FAQ research](faq-research.md)).
+
+Not checked: reduced motion in a browser (the code skips the transitions and the CSS removes them under `prefers-reduced-motion`, but the setting wasn't emulated), Safari and Firefox (including Find in page opening closed answers), a real phone, screen readers, forced colors, print preview, a successful clipboard write, and the production host.
+
 ## 31 October 2026: production after the deploy race
 
 PR #1 (merge `e4939a0`) and PR #2 (merge `1cd2034`) were merged into `main` seconds apart, and Workers Builds built each merge. The two builds raced: PR #1's build, which did not contain PR #2, finished last and its deploy replaced production with the old site. Production was restored by deploying the already-built version `8824ad7a-d85a-4ef2-b6db-1562feeb4917` to 100% with `cf workers deployments create`; nothing was rebuilt. The recovery steps and the one-at-a-time merge rule are in [deploy](../guides/deploy.md#one-deploy-at-a-time).
