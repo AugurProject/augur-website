@@ -10,7 +10,7 @@ Augur Lituus is the next generation of Augur's oracle. Anyone can answer, anyone
 - [About](/about.md): What Augur is, its history from 2015, and who does what: the Lituus Foundation, ChainSafe and REP holders.
 - [Products](/products.md): Augur Lituus and its status (in development).
 - [REP](/rep.md): The REP token: which version is current, the contract address, how bonds and forks work, and what holders can do.
-- [FAQ](/faq.md): Short answers about Augur, how questions get settled, REP and building with Augur.
+- [FAQ](/faq.md): Short answers about Augur, its history and revival, Augur Lituus and its status, REP and where to buy it, and building with Augur Lituus.
 - [Learn](/learn.md): The guide list (only one guide is written so far) and key terms.
 - [Brand](/brand.md): Logo, color and typeface guidance, and the brand asset download.
 - [Contact](/contact.md): A form page: the fields it asks for, the notice about how messages are used, and other ways to reach the team.
