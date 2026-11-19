@@ -17,13 +17,13 @@ Decisions and owner actions still outstanding, checked against the code on 31 Oc
 
 ## Deployment
 
+- **Website standby.** No Workers standby for this repository has been verified. The Worker named in `wrangler.jsonc` is connected to another repository. Confirm the intended target before enabling [Workers deploys](../guides/deploy.md#deploy-to-cloudflare-workers).
 - **Forms Worker.** Both forms are offline on production: `augur-forms` is not deployed and `PUBLIC_FORMS_URL` is not set in the Workers Builds environment, so the footer form renders `data-newsletter="offline"` and the contact form `method="dialog"` (checked 31 October 2026). Left, by the owner ([deploy](../guides/deploy.md#forms-worker-augur-forms)):
   - create the D1 database and replace `REPLACE_WITH_ID_FROM_WRANGLER_D1_CREATE` in [workers/forms/wrangler.jsonc](../../workers/forms/wrangler.jsonc);
-  - set `SITE_URL` and `ALLOWED_ORIGINS` there: they say `https://augur.net` and `https://augur.net,https://www.augur.net`, while the canonical host is www (the forms setup asks for `SITE_URL=https://www.augur.net` and the workers.dev host in `ALLOWED_ORIGINS`);
+  - set `SITE_URL` and `ALLOWED_ORIGINS` there: they say `https://augur.net` and `https://augur.net,https://www.augur.net`, while the canonical host is www (the forms setup asks for `SITE_URL=https://www.augur.net` and any configured site origin in `ALLOWED_ORIGINS`);
   - Proton: a paid plan with the augur.net domain, the address `contact-form@augur.net` and its SMTP token (`PROTON_SMTP_TOKEN`);
   - confirm that `contact@augur.net`, the contact form's `CONTACT_TO`, exists and is read; [links.ts](../../src/data/links.ts) still marks it unverified;
   - deploy, then set `PUBLIC_FORMS_URL` for the site and redeploy it.
-- **Cutover.** www.augur.net still serves the old GitHub Pages site from `AugurProject/augur-reboot-website` (checked 2 November 2026). The switch moves its custom domain to this repository's Pages site and needs admin rights on both repositories; DNS doesn't change. Steps: [deploy](../guides/deploy.md#cut-over-to-wwwaugurnet).
 
 ## Design
 

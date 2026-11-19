@@ -1,6 +1,6 @@
 # Deploy
 
-The site builds to static files in `dist/`, with no adapter, and the same build deploys to two hosts from `main`: GitHub Pages, which serves www.augur.net once the [cutover](#cut-over-to-wwwaugurnet) is done, and the Cloudflare Worker `augur-website-next`, built by Workers Builds, which serves its workers.dev URL, pull request previews and a standby copy. Forms post to a separate Worker, `augur-forms`, deployed by hand; see [Forms Worker](#forms-worker-augur-forms). Configuration facts are in [wrangler.jsonc](../../wrangler.jsonc), [astro.config.mjs](../../astro.config.mjs) and [the Pages workflow](../../.github/workflows/pages.yml); what each host serves differently is in [hosting reference](../reference/hosting.md); deployment steps still open are in [open decisions](../records/open-decisions.md#deployment).
+The site builds to static files in `dist/`, with no adapter. [GitHub Pages](#deploy-to-github-pages) deploys `main` to www.augur.net. The same output can be hosted on [Cloudflare Workers](#deploy-to-cloudflare-workers) if a Worker is configured for this repository. Forms use a [separate Worker](#forms-worker-augur-forms). See [hosting reference](../reference/hosting.md) for host-specific behavior and [open decisions](../records/open-decisions.md#deployment) for outstanding setup.
 
 ## Build
 
@@ -10,16 +10,12 @@ The site builds to static files in `dist/`, with no adapter, and the same build 
 
 ## Deploy to Cloudflare Workers
 
-Worker name: `augur-website-next` (from `wrangler.jsonc`).
+1. In the Cloudflare dashboard, confirm the intended Worker belongs to this site, then connect it to this repository through the Git integration. If no Worker is configured for this repository, skip this section.
+2. Set the production branch to `main`. Verify the `name` in [wrangler.jsonc](../../wrangler.jsonc) matches the intended Worker before enabling deploys. The name in the file is not proof of ownership.
+3. Set the preview build command to `npx wrangler preview` if branch and pull request previews are needed.
+4. Set the deploy command to `npx wrangler deploy`. Use the URL shown for that Worker in the Cloudflare dashboard to verify the deploy.
 
-1. In the Cloudflare dashboard, connect the Worker to this repository through the Git integration.
-2. Set the production branch to `main`.
-3. Set the preview build command to `npx wrangler preview`.
-4. Set the deploy command to `npx wrangler deploy`.
-
-Other branches and pull requests then get preview builds.
-
-To deploy from a local machine, run `npm run deploy`. It requires Cloudflare access.
+For a manual deploy, `npm run deploy` requires Cloudflare access and uses the name in `wrangler.jsonc`. Do not run it until the target is verified.
 
 The Worker has no script: `wrangler.jsonc` points Workers static assets at `dist/`, which serves [\_headers](../../public/_headers) and [\_redirects](../../public/_redirects). A checkout that was built before the adapter was removed can hold a stale `.wrangler/deploy/config.json` that sends Wrangler to `dist/client/wrangler.json`; delete `.wrangler/deploy/` if `wrangler dev` or `wrangler deploy` says that file doesn't exist.
 
@@ -39,11 +35,11 @@ The site assumes it is served from the root of its host, so there is no base pat
 
 ### One deploy at a time
 
-Every merge to `main` starts its own Workers Build, and the build that finishes last becomes the Worker's production, whatever its commit. Two merges close together can race: on 31 October 2026 PR #1's build finished after PR #2's and put the old site back on production ([verification](../records/verification.md#31-october-2026-production-after-the-deploy-race)). The Pages workflow doesn't race: its runs queue in one `concurrency` group, and each builds the commit it was started for.
+When Workers Builds is connected to this repository, every merge to `main` starts a Workers Build, and the build that finishes last becomes the Worker's active version, whatever its commit. Two merges close together can race: on 31 October 2026 PR #1's build finished after PR #2's and put the old site back on production ([verification](../records/verification.md#31-october-2026-production-after-the-deploy-race)). The Pages workflow doesn't race: its runs queue in one `concurrency` group, and each builds the commit it was started for.
 
 1. Merge one pull request.
-2. Wait until its Workers Build has deployed and its Pages run has finished.
-3. Run `npm run check:launch -- https://www.augur.net` and `npm run check:launch -- https://augur-website-next.<account-subdomain>.workers.dev`. No row may fail.
+2. Wait for the Pages deploy and any configured Workers deploy of this repository to finish for that merge.
+3. Run `npm run check:launch -- https://www.augur.net`. If this repository also has a Workers deployment, run the same command against its verified URL from the dashboard. No row may fail on either applicable host.
 4. Merge the next pull request.
 
 If an older build has overwritten production:
@@ -67,7 +63,7 @@ www.augur.net moves from `AugurProject/augur-reboot-website` (the old site) to t
 
 Before, with the old site still live:
 
-1. The [Pages workflow](#deploy-to-github-pages) has deployed `main` at least once, and `npm run check:launch -- https://augur-website-next.<account-subdomain>.workers.dev` passes (it serves the same build).
+1. Confirm that the [Pages workflow](#deploy-to-github-pages) has deployed `main` at least once. If a Workers deployment is configured for this repository, verify the same build there with `npm run check:launch` against its dashboard URL.
 2. Pick a quiet hour. Between steps 3 and 4 www.augur.net serves GitHub's 404 page, and the certificate check in step 5 can add time.
 
 Switch:

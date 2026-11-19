@@ -1,13 +1,13 @@
 # Hosting reference
 
-How the two hosts serve the build, the metadata every page carries, and the REP supply endpoints. Deploy, cutover and refresh steps are in [deploy](../guides/deploy.md).
+How GitHub Pages and a configured Workers deployment serve the build, the metadata every page carries, and the REP supply endpoints. Deploy, cutover and refresh steps are in [deploy](../guides/deploy.md).
 
 ## Serving
 
-The site is a plain static build in `dist/` with no adapter: every page is prerendered and there is no server code. One build deploys to two hosts from `main`:
+The site is a plain static build in `dist/` with no adapter: every page is prerendered and there is no server code.
 
-- **GitHub Pages**, from [pages.yml](../../.github/workflows/pages.yml), serves www.augur.net once the [cutover](../guides/deploy.md#cut-over-to-wwwaugurnet) is done (owner, 2 November 2026).
-- **Cloudflare Workers static assets**, the Worker `augur-website-next` built by Workers Builds, serves its workers.dev URL, pull request previews and a standby copy. [wrangler.jsonc](../../wrangler.jsonc) has no Worker script, so static assets answer every request, previews included.
+- **GitHub Pages**, from [pages.yml](../../.github/workflows/pages.yml), serves www.augur.net.
+- **Cloudflare Workers static assets** can serve the same build, including previews, when configured for this repository. [wrangler.jsonc](../../wrangler.jsonc) has no Worker script. Use the Cloudflare dashboard to identify the deploy target; see [Deploy to Cloudflare Workers](../guides/deploy.md#deploy-to-cloudflare-workers).
 
 | | Cloudflare | GitHub Pages |
 |---|---|---|
@@ -27,7 +27,7 @@ These come from `_headers`, so only the Cloudflare host sends them. The one that
 
 - Every path: `Strict-Transport-Security: max-age=86400` (no preload), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY`, `Permissions-Policy: camera=(), microphone=(), geolocation=()` and a `Content-Security-Policy-Report-Only`.
 - The CSP allows `'self'`, inline scripts and styles (the pages use inline `<script>`, `<style>` and `style` attributes), the GA4 hosts (`www.googletagmanager.com`, `*.google-analytics.com`, `*.analytics.google.com`) and `https://*.workers.dev` for the forms Worker in `connect-src` and `form-action`, because `PUBLIC_FORMS_URL` is not set yet. Blog links to X posts are static cards and do not load third-party assets. It names no report endpoint, so violations show only in the browser console.
-- `X-Robots-Tag: noindex` on `https://:worker.:account.workers.dev/*`, which matches the Worker's workers.dev host and its preview hosts, so only the canonical host is indexed. On the production workers.dev host every response carries it alongside the other `_headers` headers, and Cloudflare's own `/cdn-cgi/trace` there does not, so it comes from this rule. Cloudflare adds `X-Robots-Tag: noindex` to preview hosts by itself, including the preview Worker's plain 404.
+- `X-Robots-Tag: noindex` on `https://:worker.:account.workers.dev/*`, which matches the Worker's workers.dev host and its preview hosts, so only the canonical host is indexed. Cloudflare adds `X-Robots-Tag: noindex` to preview hosts by itself, including the preview Worker's plain 404.
 - Caching: HTML keeps the Workers default, `public, max-age=0, must-revalidate`. `/_astro/*` is `public, max-age=31536000, immutable`, because Astro names those files by content hash. `/images/*`, the files directly in `/brand/` (`/brand/:file`, so not the `/brand/` page) and `/brand/kit/*` are `public, max-age=86400`.
 - A header set by two matching rules is joined with a comma, so two rules must not set the same header for one path.
 
@@ -37,7 +37,7 @@ These come from `_headers`, so only the Cloudflare host sends them. The one that
 - Open Graph and Twitter (`summary_large_image`) tags carry the page title, description and `shareImage` from [site.ts](../../src/data/site.ts); `twitter:site` comes from the X link in [links.ts](../../src/data/links.ts). Blog posts pass their own share image (their cover, rendered as a 1200 × 630 JPEG), `og:type` `article` with `article:published_time` (and `article:modified_time` when the post has an update date). `/blog/` and the posts add an RSS discovery link to `/rss.xml`.
 - [og-image.png](../../public/og-image.png) is 1200 × 630, the URL the old site used. It was made on 30 October 2026 from the brand kit: the reversed horizontal logo and `oracle-field.svg` from `public/brand/`, the Brand Foundation palette in [brand.ts](../../src/data/brand.ts), and Sora 600/400 and Schibsted Grotesk 400 from Fontsource, with the homepage headline and site description. It was rendered in headless Chrome and recompressed with sharp; no source file is kept.
 - The sitemap ([@astrojs/sitemap](../../astro.config.mjs)) leaves out every page whose HTML has `<meta name="robots" content="noindex">` (the newsletter and contact result pages) and the 404 page. [robots.txt](../../public/robots.txt) allows everything and names `https://www.augur.net/sitemap-index.xml`.
-- Indexing depends on the host, not the build: the same build serves www.augur.net and workers.dev, so there is no build-time indexing switch (`PUBLIC_SITE_INDEXABLE` was removed).
+- Indexing depends on the host, not the build: the same build can serve www.augur.net and a configured workers.dev host, so there is no build-time indexing switch (`PUBLIC_SITE_INDEXABLE` was removed).
 
 ## Analytics
 
