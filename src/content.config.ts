@@ -2,20 +2,8 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
-// Learn guides, ported from the web lab. `needsReview` marks a guide whose content isn't approved yet.
-const review = { placeholder: z.boolean().default(false), needsReview: z.boolean().default(false), source: z.string() };
-const learn = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/learn' }),
-  schema: z.object({
-    title: z.string(), description: z.string(), order: z.number().int().optional(),
-    group: z.enum(['Start here', 'For builders', 'Overview', 'Research']),
-    terms: z.array(z.string()).default([]), readingMinutes: z.number().int().positive().optional(),
-    ...review,
-  }),
-});
-
 // Ported from the old augur.net (docs/reference/ported-content.md). Served at their old URLs and not
-// linked from the header, homepage or Learn index.
+// linked from the header or homepage.
 
 // Blog posts, one folder each: /blog/<folder>/. `featuredImage` is the cover on the index and the post page;
 // post bodies don't repeat it. `topic` groups posts on /blog/ (labels in src/data/blog.ts).
@@ -45,4 +33,4 @@ const forkGuides = defineCollection({
   }),
 });
 
-export const collections = { learn, blog, whitepaperV2, forkGuides };
+export const collections = { blog, whitepaperV2, forkGuides };

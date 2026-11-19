@@ -1,16 +1,21 @@
 ---
 import type { FaqEntry } from '../../data/faq';
-interface Props { entry: FaqEntry; open?: boolean; name?: string; pageQuestion?: boolean; }
-const { entry, open = false, name = 'page-faq', pageQuestion = false }=Astro.props;
-// A link to the page the reader is already on (“More about REP” on /rep/) is left out.
-const linkHere=entry.link.href===Astro.url.pathname;
-// The line draws under the words only; an off-site arrow sits beside it.
-const offSite=entry.link.label.endsWith(' ↗');
-const linkLabel=offSite?entry.link.label.slice(0,-2):entry.link.label;
+import { renderFaqMarkdown } from '../../markdown/faq';
+// One question. `idPrefix` keeps a borrowed question's id clear of the host page's own (the REP page uses
+// `faq-`; /faq/ uses none, so /faq/#rep-role opens it). Questions that share a `name` open one at a time.
+// `quiet` is the /faq/ list: each question a borderless box on a faint fill, with a lighter question and a bare
+// plus that turns into a Green minus. The REP page keeps the framed default. `reveal` marks the question as one
+// item of the host page's scroll reveal (reveal.js), which the host page has to load.
+interface Props { entry: FaqEntry; open?: boolean; name?: string; idPrefix?: string; quiet?: boolean; reveal?: boolean }
+const { entry, open = false, name, idPrefix = 'faq-', quiet = false, reveal = false } = Astro.props;
+const id = `${idPrefix}${entry.id}`;
+const html = await renderFaqMarkdown(entry.answer);
 ---
-<details name={name} open={open} class="faq-item" id={`faq-${entry.id}`}>
- <summary><span>{pageQuestion&&entry.pageQuestion?entry.pageQuestion:entry.question}</span><span class="faq-toggle" aria-hidden="true"></span></summary>
- <div class="faq-answer"><p>{entry.answer}</p>{!linkHere&&<a class="line-link" href={entry.link.href}><span class="button-label">{linkLabel}</span>{offSite&&<span aria-hidden="true">↗</span>}</a>}</div>
+<details name={name} open={open} class:list={['faq-item', { quiet }]} id={id} data-reveal={reveal ? 'item' : undefined}>
+ <summary><span class="faq-question">{entry.question}</span><span class="faq-toggle" aria-hidden="true"></span></summary>
+ <div class="faq-answer">
+  <div class="faq-prose" set:html={html} />
+ </div>
 </details>
 <script>
  import {faqTimeline} from '../../motion/timelines';
@@ -20,11 +25,16 @@ const linkLabel=offSite?entry.link.label.slice(0,-2):entry.link.label;
  // minus, a Green edge draws down and the answer rises in. Questions below
  // slide rather than jump. Native details keep keyboard and exclusive-group
  // behaviour; without view transitions the change is instant apart from the
- // small CSS transitions. Nothing animates on page load.
+ // small CSS transitions. Nothing animates on page load, or when a script
+ // opens a question (a link to it, search, print).
+ // The transition's scope is the nearest [data-faq-scope] (the /faq/ list, whose topic headings carry
+ // data-faq-flow so they slide too) or .faq-accordion (the REP page's framed list, which also eases its
+ // frame). Only what is on or near the screen is named, so a long list snapshots a handful of boxes.
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const transitions=typeof document.startViewTransition==='function';
  const root=document.documentElement;
  root.style.setProperty('--faq-transition-time',`${motionTime(faqTimeline.transition)}ms`);
+ const nearScreen=(element:Element)=>{const box=element.getBoundingClientRect();return box.bottom>-innerHeight*.5&&box.top<innerHeight*1.5;};
  document.querySelectorAll<HTMLDetailsElement>('.faq-item').forEach(item=>{
   if(item.dataset.faqMotion!==undefined)return;
   item.dataset.faqMotion=transitions?'transition':'';
@@ -32,7 +42,7 @@ const linkLabel=offSite?entry.link.label.slice(0,-2):entry.link.label;
   item.style.setProperty('--faq-answer-stagger',`${motionTime(faqTimeline.stagger)}ms`);
   let revealOnOpen=false;
   // Keep the question and start of its answer visible after a mobile expansion.
-  item.addEventListener('toggle', event => {
+  item.addEventListener('toggle', () => {
    const requested=revealOnOpen;revealOnOpen=false;
    if (!requested || !item.open || !matchMedia('(max-width: 767px)').matches) return;
    requestAnimationFrame(() => {
@@ -49,21 +59,25 @@ const linkLabel=offSite?entry.link.label.slice(0,-2):entry.link.label;
    if(opening){item.dataset.faqOpening='';window.setTimeout(()=>delete item.dataset.faqOpening,motionTime(faqTimeline.transition+faqTimeline.panel));}
    if(!transitions)return;
    event.preventDefault();
-   // Name every question in this accordion (and its frame) for the transition only.
-   const scope=item.closest('.faq-accordion');
-   const items=[...(scope??document).querySelectorAll<HTMLDetailsElement>('.faq-item')];
-   items.forEach((other,i)=>other.style.setProperty('view-transition-name',`faq-${i}`));
-   scope?.setAttribute('style','view-transition-name:faq-frame');
+   // Name the questions (and topic headings) on or near the screen for the transition only.
+   const scope=item.closest('[data-faq-scope]')??item.closest('.faq-accordion');
+   const frame=scope?.matches('.faq-accordion')?scope:null;
+   const moving=[...(scope??document).querySelectorAll<HTMLElement>('.faq-item,[data-faq-flow]')].filter(nearScreen);
+   moving.forEach((other,i)=>other.style.setProperty('view-transition-name',`faq-${i}`));
+   frame?.setAttribute('style','view-transition-name:faq-frame');
    root.dataset.faqTransition='';
-   const tidy=()=>{items.forEach(other=>other.style.removeProperty('view-transition-name'));scope?.removeAttribute('style');delete root.dataset.faqTransition;};
+   const tidy=()=>{moving.forEach(other=>other.style.removeProperty('view-transition-name'));frame?.removeAttribute('style');delete root.dataset.faqTransition;};
    const transition=document.startViewTransition(()=>{item.open=opening;});
+   // A transition the browser skips (another one starting, the tab hidden) rejects `ready`; the question
+   // still opens, so there's nothing to report.
+   transition.ready.catch(()=>{});
    transition.finished.then(tidy,tidy);
   });
  });
 </script>
 <style>
  @keyframes faq-answer-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
- .faq-item{position:relative;border-left:2px solid transparent;padding:0 16px 0 22px;transition:background-color 180ms ease-out,border-color 180ms ease-out}
+ .faq-item{position:relative;border-left:2px solid transparent;padding:0 16px 0 22px;scroll-margin-top:24px;transition:background-color 180ms ease-out,border-color 180ms ease-out}
  /* The Green edge draws down from the question when it opens. */
  .faq-item::before{content:'';position:absolute;left:-2px;top:0;bottom:0;width:2px;background:var(--primary);transform:scaleY(0);transform-origin:top;transition:transform var(--faq-answer-time,320ms) cubic-bezier(.22,.61,.36,1)}
  .faq-item[open]::before{transform:scaleY(1)}
@@ -74,9 +88,44 @@ const linkLabel=offSite?entry.link.label.slice(0,-2):entry.link.label;
  .faq-toggle{position:relative;display:block;width:32px;height:32px;flex:none;border:1px solid var(--web-outline);transition:transform var(--faq-answer-time,320ms) cubic-bezier(.22,.61,.36,1),background-color 180ms ease-out,border-color 180ms ease-out}
  .faq-toggle::before,.faq-toggle::after{content:'';position:absolute;left:9px;top:14px;width:12px;height:1.5px;background:var(--foreground);transition:transform var(--faq-answer-time,320ms) cubic-bezier(.22,.61,.36,1),background-color 180ms ease-out}.faq-toggle::after{transform:rotate(90deg)}
  summary:hover .faq-toggle{border-color:var(--muted-foreground)}details[open] .faq-toggle{background:var(--primary);border-color:var(--primary);transform:rotate(180deg)}details[open]>summary:hover .faq-toggle{background:var(--primary-hover);border-color:var(--primary-hover)}details[open] .faq-toggle::before,details[open] .faq-toggle::after{background:var(--primary-foreground)}details[open] .faq-toggle::after{transform:rotate(0)}
- .faq-answer{padding-bottom:24px;font-size:16px;line-height:26px;color:var(--muted-foreground);overflow-wrap:break-word}.faq-answer a{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-top:12px;font:600 14px/20px var(--font-heading);color:var(--foreground)}
+ .faq-answer{max-width:720px;padding-bottom:28px;font-size:17px;line-height:28px;color:var(--foreground);overflow-wrap:break-word}
+ /* Answers are Markdown (src/markdown/faq.ts), rendered outside this component's scope. */
+ .faq-prose :global(:where(p,ul,ol,blockquote,.table-scroll)+*){margin-top:14px}
+ .faq-prose :global(:where(ul,ol)){padding-left:22px}
+ .faq-prose :global(:where(ul)){list-style:square}.faq-prose :global(:where(ol)){list-style:decimal}
+ .faq-prose :global(:where(li+li)){margin-top:6px}
+ .faq-prose :global(:where(li)::marker){color:var(--muted-foreground)}
+ .faq-prose :global(:where(strong)){font-weight:600}
+ .faq-prose :global(:where(a)){color:var(--foreground);text-decoration:underline;text-decoration-thickness:1px;text-decoration-color:var(--primary);text-underline-offset:4px}
+ .faq-prose :global(:where(a:hover)){text-decoration-thickness:2px}
+ .faq-prose :global(:where(.offsite-mark)){display:inline-block;margin-left:3px;font-size:.85em;text-decoration:none}
+ .faq-prose :global(:where(code)){font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82em;padding:1px 5px;background:var(--web-tile);overflow-wrap:anywhere}
+ /* A worked example or a caution: a quiet panel with the Green edge. */
+ .faq-prose :global(:where(blockquote)){padding:14px 18px;border-left:2px solid var(--primary);background:var(--web-quiet)}
+ .faq-prose :global(:where(blockquote>*+*)){margin-top:10px}
+ .faq-prose :global(:where(.table-scroll)){overflow-x:auto;max-width:100%}
+ .faq-prose :global(:where(.table-scroll:focus-visible)){outline:2px solid var(--ring);outline-offset:2px}
+ .faq-prose :global(:where(table)){width:100%;border-collapse:collapse;font-size:15px;line-height:22px}
+ .faq-prose :global(:where(th,td)){padding:10px 16px 10px 0;border-bottom:1px solid var(--web-outline);text-align:left;vertical-align:top}
+ .faq-prose :global(:where(th)){font:600 14px/20px var(--font-heading);color:var(--muted-foreground);border-bottom-color:var(--muted-foreground)}
  /* Only a question the reader opens animates its answer; the open one on load does not. */
  @media(prefers-reduced-motion:no-preference){.faq-item[data-faq-opening][open] .faq-answer>*{animation:faq-answer-enter var(--faq-answer-time,320ms) cubic-bezier(.22,.61,.36,1) calc(var(--faq-answer-stagger,50ms) * 2) both}.faq-item[data-faq-opening][open] .faq-answer>*+*{animation-delay:calc(var(--faq-answer-stagger,50ms) * 3)}}
  @media(prefers-reduced-motion:reduce){.faq-item,.faq-item::before,.faq-toggle,.faq-toggle::before,.faq-toggle::after{transition:none}}
+ @media(max-width:767px){.faq-answer{font-size:16px;line-height:26px}summary{font-size:17px;line-height:24px;gap:16px}}
+ /* The quiet variant (/faq/): a borderless box on a faint fill, with no edge and no outlined toggle. Hovering
+    eases the fill up a step and brightens the plus; the open question keeps the lifted fill and shows a Green
+    minus. */
+ .faq-item.quiet{border-left:0;padding:0 20px 0 24px;background:var(--web-quiet);transition:background-color 240ms ease-out}
+ .faq-item.quiet::before{content:none}
+ .faq-item.quiet[open]{background:var(--card)}
+ .faq-item.quiet:has(>summary:focus-visible){outline-offset:2px}
+ .faq-item.quiet>summary{align-items:flex-start;padding:22px 0;font-weight:400;font-size:20px;line-height:28px}
+ .faq-item.quiet .faq-toggle{width:24px;height:24px;margin-top:2px;border:0}
+ .faq-item.quiet .faq-toggle::before,.faq-item.quiet .faq-toggle::after{left:4px;top:11px;width:16px;height:1.75px;background:var(--muted-foreground)}
+ .faq-item.quiet>summary:hover .faq-toggle::before,.faq-item.quiet>summary:hover .faq-toggle::after{background:var(--foreground)}
+ details.faq-item.quiet[open] .faq-toggle,details.faq-item.quiet[open]>summary:hover .faq-toggle{background:none}
+ details.faq-item.quiet[open] .faq-toggle::before,details.faq-item.quiet[open] .faq-toggle::after,details.faq-item.quiet[open]>summary:hover .faq-toggle::before,details.faq-item.quiet[open]>summary:hover .faq-toggle::after{background:var(--primary)}
+ .faq-item.quiet .faq-answer{max-width:580px;padding-bottom:28px}
+ @media(max-width:767px){.faq-item.quiet{padding:0 14px 0 16px}.faq-item.quiet>summary{padding:18px 0;font-size:18px;line-height:26px}}
  @media(forced-colors:active){details[open]{border-color:Highlight}.faq-item::before{background:Highlight}.faq-toggle{border-color:ButtonText}.faq-item:has(>summary:focus-visible){outline-color:Highlight}}
 </style>

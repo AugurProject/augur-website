@@ -2,9 +2,9 @@
 
 Ask, report, challenge, final answer: one example from start to finish.
 
-Review flag: this guide still needs review. It is guide 2 of 4 in "Start here", about a 6 minute read.
+Review flag: this guide still needs review.
 
-Every Augur Lituus answer follows the same four steps. This guide follows one example question from the moment it's asked to the moment an application can use the answer.
+This example follows a question through the proposed Augur Lituus design, from the moment it’s asked to the moment an application can use the answer. The REP amounts are illustrative.
 
 ## The example question
 
@@ -22,4 +22,4 @@ Every Augur Lituus answer follows the same four steps. This guide follows one ex
 - **Bond.** REP put at risk behind an answer. Wrong answers lose most of their bond to the winners.
 - **Challenge.** A different answer posted with a larger bond. It reopens the question.
 
-More terms are on the [Learn page](/learn.md).
+See also the [FAQ](/faq.md).

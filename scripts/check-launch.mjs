@@ -33,8 +33,8 @@ const oldSitemap = [
   '/whitepapers/augur-v2/appendix-b-bond-size-adjustments/', '/whitepapers/augur-v2/how-augur-works/',
   '/whitepapers/augur-v2/incentives-and-security/', '/whitepapers/augur-v2/potential-issues-and-risks/', '/whitepapers/augur-v2/references/',
 ];
-// Old pages folded into /about/ (owner, 30 October 2026).
-const movedToAbout = new Set(['/mission/', '/team/']);
+// Moved legacy routes retain their redirects on Workers and forwarding pages on GitHub Pages.
+const movedPaths = { '/mission/': '/about/', '/team/': '/about/', '/learn/': '/faq/' };
 
 const PASS = 'PASS', FAIL = 'FAIL', WARN = 'WARN', SKIP = 'SKIP';
 /** A check is { check: label, run: async () => ({ status, detail }) }; a thrown error fails it. */
@@ -208,7 +208,13 @@ const apex = check('https://augur.net/ redirects permanently to https://www.augu
 });
 
 const checks = [
-  ...oldSitemap.map(path => movedToAbout.has(path) ? moved(path, '/about/', `${path} (old sitemap) ${onPages ? 'forwards' : '301'} to /about/`) : expectStatus(path, 200, `${path} (old sitemap) returns 200`)),
+  ...oldSitemap.map(path => {
+    const to = movedPaths[path];
+    return to ? moved(path, to, `${path} (old sitemap) ${onPages ? 'forwards' : '301'} to ${to}`) : expectStatus(path, 200, `${path} (old sitemap) returns 200`);
+  }),
+  moved('/learn', '/faq/'),
+  expectStatus('/learn/how-augur-answers-a-question/', 200),
+  expectStatus('/learn/how-augur-answers-a-question.md', 200),
   moved('/mission', '/about/', `/mission ${onPages ? 'forwards' : '301'} to /about/`),
   moved('/team', '/about/', `/team ${onPages ? 'forwards' : '301'} to /about/`),
   supplyField('total'),

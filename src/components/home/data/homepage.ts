@@ -318,7 +318,7 @@ export const homeCopy = {
     // stays v1's ("Learn more about Augur.", on two lines in LearnMore.astro), and the section gets the
     // shared heading row like every other one: this lead is the published /faq/ lead (faq.astro), so it
     // says what the list holds. One line from 1024 up.
-    lead: 'Short answers, each with a link to go deeper.',
+    lead: 'Short answers about Augur, REP and Augur Lituus.',
     // A text link beside the outline "View all questions" (DESIGN.md: the outline button ends a list
     // that continues on its own page; the blog is a second, lighter way on). PRODUCT.md: the homepage
     // points to writing and FAQs.

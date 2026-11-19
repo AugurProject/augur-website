@@ -1,7 +1,6 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import Button from '../components/primitives/Button.astro';
-import { pages } from '../data/navigation';
 // Builds to dist/404.html. Workers static assets (`assets.not_found_handling` in wrangler.jsonc) and GitHub
 // Pages both serve it, with status 404, for any path that matches no file, so its links must be root-relative.
 ---
@@ -11,7 +10,7 @@ import { pages } from '../data/navigation';
   <p>There’s no page at this address. It may have moved, or the link may be mistyped.</p>
   <div class="not-found-actions">
    <Button href="/">Back to the homepage</Button>
-   <Button href={pages.learn} variant="outline">Learn about Augur</Button>
+   <Button href="/faq/" variant="outline">Read the FAQ</Button>
   </div>
  </section>
 </PageLayout>
