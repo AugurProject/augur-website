@@ -1,7 +1,7 @@
 import { links } from './links';
 /** Dark Florist's products (Augur Statoblast and its interface, Statoblast Trading) are off the live site
  * for now (jubalm, 4 November 2026, AUG72). Set to true to bring them back everywhere that reads this:
- * the Products menu, the products page, the FAQ answer, the About entry and the Learn guide. The
+ * the Products menu, the products page, the About entry and the Learn guide. The
  * hand-written Markdown pages under public/ cannot read it; docs/records/decisions.md lists their restore edits.
  */
 export const showStatoblast = false;

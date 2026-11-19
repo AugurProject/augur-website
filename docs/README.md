@@ -9,12 +9,14 @@ Documents are grouped by type. What each type is for, and how to tell them apart
 ## Guides
 
 - [Deploy](guides/deploy.md): Build, preview and deploy to GitHub Pages and Cloudflare Workers, check a deployment with `check:launch`, cut over to www.augur.net, refresh the REP supply endpoints, and the `augur-forms` Worker behind the forms.
+- [Update the FAQ](guides/update-faq.md): Add, change, merge or retire a question, and the quarterly review of time-sensitive answers.
 - [Update the design system](guides/update-design-system.md): Upgrade the `@augurproject/design-system` package, or change a shared token or control.
 - [Refresh X post snapshots](guides/refresh-x-posts.md): Update blog excerpts in a manual GitHub Actions run or locally.
 
 ## Reference
 
 - [Homepage](reference/homepage.md): Homepage structure, build inputs, content sources, interactions and assets.
+- [FAQ](reference/faq.md): The FAQ's entries and fields, topics, deep links and aliases, the generated `/faq.md`, structured data and the REP page's shared questions.
 - [Contact page](reference/contact.md): The contact page, its fields and result pages, the Worker's `POST /contact` route and the swappable mail sender.
 - [Hosting](reference/hosting.md): What the Worker serves: response headers, redirects, the 404 page, canonical and share metadata, the sitemap, GA4 and the static REP supply endpoints.
 - [Markdown pages](reference/markdown-pages.md): Where the hand-written `.md` copy of each page and `/llms.txt` live, and keeping them in step with the page.
@@ -23,6 +25,7 @@ Documents are grouped by type. What each type is for, and how to tell them apart
 
 ## Explanation
 
+- [FAQ content strategy](explanation/faq-content-strategy.md): Why the FAQ is organised as it is: its audiences, topics, question selection, writing rules, layout and interaction choices.
 - [Design ownership](explanation/design-ownership.md): Why the website and the design system are separate owners, and how the site's CSS sits on top of the package.
 
 ## Records
@@ -30,6 +33,9 @@ Documents are grouped by type. What each type is for, and how to tell them apart
 - [Decisions](records/decisions.md): Dated log of closed decisions, who made each one and where it was recorded. Append-only.
 - [Open decisions](records/open-decisions.md): Questions and owner actions still open: content, analytics and headers, the forms Worker and cutover, and design.
 - [Verification](records/verification.md): Dated checks and what is not yet checked.
+- [FAQ research](records/faq-research.md): Sources read for the November 2026 FAQ rewrite and the 15 November audit, discrepancies found, competitor FAQs studied and what is unverified.
+- [FAQ editorial audit](records/faq-audit.md): The 15 November 2026 audit: what happened to each question, which audience each answer serves, what the research changed and what the owner still has to review.
+- [FAQ review](records/faq-review.md): The second review of 15 November 2026, of the 17-question FAQ: coverage by audience, a verdict on each question, a proposed structure, rewrites and UX changes, the recorded decisions they would reverse, and the outcome: which answers the owner approved and what is still open.
 
 ## Content and organization
 

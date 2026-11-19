@@ -25,6 +25,13 @@ export const currentRep = {
 } as const;
 // One source for the address: the explorer link must point at the same contract.
 if (!links.repToken.url.endsWith(currentRep.address)) throw new Error('links.repToken must point at currentRep.address');
+/** The legacy tokens, so a holder can tell which one they have: the Moon Fork record
+ * (src/content/fork-guides/migration.mdx), confirmed on-chain on 11 November 2026. None is current REP. */
+export const legacyRep = [
+  { symbol: 'REPv1', role: 'Augur’s original token', address: '0x1985365e9f78359a9B6AD760e32412f4a445E862' },
+  { symbol: 'REPv2', role: 'Augur v2’s token from before the Moon Fork', address: '0x221657776846890989a759BA2973e427DfF5C9bB' },
+  { symbol: 'REPv2_No_1', role: 'the REP of the Moon Fork’s losing No universe', address: '0x2F4005456c2F098358213f01DbE34abDAa2989A4' },
+] as const;
 /** As wallets show it: the first six and last four characters. */
 export const shortAddress = `${currentRep.address.slice(0, 6)}…${currentRep.address.slice(-4)}`;
 
@@ -137,5 +144,5 @@ export const versions = {
 /** Questions shown on the REP page, in order (entries live in faq.ts). */
 export const repFaq = {
   title: 'Questions about REP',
-  ids: ['rep-role', 'rep-holding', 'rep-augur-ticker', 'rep-wallet', 'rep-missed-migration', 'honest-fork'],
+  ids: ['rep-role', 'rep-holding'],
 };

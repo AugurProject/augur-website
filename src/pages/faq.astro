@@ -2,14 +2,118 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import PageHero from '../components/pages/PageHero.astro';
 import FaqItem from '../components/content/FaqItem.astro';
-import { faqEntries, faqCategories } from '../data/faq';
-const idFor=(value:string)=>value.toLowerCase().replaceAll(' ','-');
-const order=['augur-today','augur-lituus','trading','who-decides','disagreement','invalid','rep-role','rep-actions','rep-holding','rep-augur-ticker','rep-wallet','rep-missed-migration','honest-fork','build-today','talk-to-team'];
+import Icon from '../components/primitives/Icon.astro';
+import { faqCategories, faqEntries, faqAliases } from '../data/faq';
+import { links } from '../data/links';
+import { pages } from '../data/navigation';
+import { renderFaqMarkdown } from '../markdown/faq';
+import { homeInline } from '../components/home/scripts/inline';
+// The FAQ (docs/reference/faq.md). Every question is a native disclosure, so the page reads, links and finds
+// (Ctrl+F opens a closed answer) without JavaScript. Questions share one `name`, so opening one closes the
+// one that was open. Each topic sits on the site's 500/668 section grid, its name on the left and its questions
+// on the right as quiet boxes (FaqItem's `quiet` variant); there is no topic rail and no rule between topics.
+// The script opens a question from its link. Topics and questions settle in as the reader reaches them, with the
+// homepage's own section reveal (reveal.js: once per tab session, never on a reload or an arrival at a #question,
+// and not at all without JavaScript or with reduced motion). Each topic's name carries Augur's Green square.
+// The page ends with one contact block, "Still have a question?": the footer's own contact band is left out here.
+// FAQPage structured data repeats the visible questions and answers. Google shows FAQ rich results only for a
+// few authoritative sites, so this is for any reader of the markup, with no rich result expected.
+const structured = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: await Promise.all(faqEntries.map(async entry => ({ '@type': 'Question', name: entry.question, acceptedAnswer: { '@type': 'Answer', text: await renderFaqMarkdown(entry.answer) } }))),
+};
+const structuredJson = JSON.stringify(structured).replaceAll('<', '\\u003c');
 ---
-<PageLayout title="Frequently asked questions | Augur" description="Short answers about Augur, how its oracle works, REP and building with Augur Lituus.">
- <PageHero title="Frequently asked questions" lead="Short answers, each with a link to go deeper." />
- <div class="site-container faq-layout"><nav aria-label="Question groups">{faqCategories.map(category=><a href={`#${idFor(category)}`}>{category}</a>)}</nav><div>{faqCategories.map((category,index)=><section id={idFor(category)} class="faq-group"><h2>{category}</h2>{order.flatMap(id=>faqEntries.filter(entry=>entry.id===id&&entry.category===category)).map((entry,entryIndex)=><FaqItem entry={entry} open={index===0&&entryIndex===0} pageQuestion />)}</section>)}</div></div>
+<PageLayout title="Frequently asked questions | Augur" description="Answers to common questions about Augur, Augur Lituus and $REP." contactBand={false}>
+ <script type="application/ld+json" slot="head" set:html={structuredJson} />
+ <div class="faq-page" data-faq data-faq-aliases={JSON.stringify(faqAliases)}>
+  <PageHero title="Frequently asked questions" lead="Short answers about Augur, $REP and Augur Lituus." />
+  <div class="site-container faq-main" data-faq-scope>
+   {faqCategories.map(category => <section id={category.id} class="faq-topic" aria-labelledby={`${category.id}-heading`} tabindex="-1">
+    <header data-faq-flow><h2 id={`${category.id}-heading`} data-reveal><span class="faq-mark" aria-hidden="true"></span>{category.title}</h2></header>
+    <div class="faq-list">{category.entries.map(entry => <FaqItem entry={entry} idPrefix="" name="faq-question" quiet reveal />)}</div>
+   </section>)}
+   <section class="faq-more" aria-labelledby="faq-more-heading" data-faq-flow>
+    <div data-reveal>
+     <h2 id="faq-more-heading">Still have a question?</h2>
+     <p>Come ask us on Discord. The team is active there and happy to take any question about Augur. Building something? We'd love to hear about it.</p>
+    </div>
+    <div class="actions" data-reveal>
+     <a class="button" href={links.discord.url}><Icon name="discord-logo" /><span class="button-label">Ask on Discord</span><Icon name="arrow-up-right" /></a>
+     <a class="button outline" href={pages.contact}><span class="button-label">Talk to us</span></a>
+    </div>
+   </section>
+  </div>
+ </div>
+ <script is:inline type="module" set:html={homeInline.scripts.reveal}></script>
 </PageLayout>
+<script>
+ // Progressive enhancement only: every question is a native <details> with its own id, so links, Find in
+ // page and reading all work without this.
+ const root=document.querySelector<HTMLElement>('[data-faq]');
+ if(root){
+  const items=[...root.querySelectorAll<HTMLDetailsElement>('details.faq-item')];
+  const aliases:Record<string,string>=JSON.parse(root.dataset.faqAliases??'{}');
+
+  // A link to a question opens it; an old fragment (faq-<id>, a merged question) is rewritten first and
+  // scrolled to, since the browser found nothing to scroll to.
+  const reveal=()=>{
+   let id=decodeURIComponent(location.hash.slice(1));
+   if(!id)return;
+   const alias=aliases[id];
+   if(alias&&!document.getElementById(id)){id=alias;history.replaceState(history.state,'',`#${id}`);}
+   const target=document.getElementById(id);
+   if(!target||!root.contains(target))return;
+   if(target instanceof HTMLDetailsElement)target.open=true;
+   if(alias)target.scrollIntoView({block:'start'});
+  };
+  addEventListener('hashchange',reveal);
+  reveal();
+
+  // Printing shows every answer, then puts them back. The shared name is lifted while printing, or each
+  // question opened would close the one before.
+  let printed:HTMLDetailsElement[]=[];
+  addEventListener('beforeprint',()=>{printed=items.filter(item=>!item.open);items.forEach(item=>item.removeAttribute('name'));printed.forEach(item=>{item.open=true;});});
+  addEventListener('afterprint',()=>{printed.forEach(item=>{item.open=false;});items.forEach(item=>item.setAttribute('name','faq-question'));printed=[];});
+ }
+</script>
 <style>
- .faq-layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:80px;padding-block:72px 96px}.faq-layout nav{position:sticky;top:32px;align-self:start}.faq-layout nav a{display:flex;align-items:center;min-height:52px;padding:12px 16px;border-left:1px solid transparent;text-decoration:none;font:400 16px/24px var(--font-heading);color:var(--muted-foreground)}.faq-layout nav a:hover,.faq-layout nav a:focus-visible{background:var(--web-quiet);border-color:var(--primary);color:var(--foreground)}.faq-group h2{font-size:28px;line-height:36px;margin-bottom:20px}.faq-group+.faq-group{margin-top:64px}@media(max-width:1023px){.faq-layout{grid-template-columns:1fr;gap:48px}.faq-layout nav{position:static;display:flex;flex-wrap:wrap;gap:8px}.faq-layout nav a{border:1px solid var(--web-outline)}}@media(max-width:600px){.faq-layout{padding-block:48px 64px}.faq-layout nav a{font-size:14px}.faq-group h2{font-size:24px}}
+ /* Space alone separates the topics: no rules between them. */
+ .faq-main{padding-bottom:96px}
+ .faq-topic,.faq-more{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);gap:80px}
+ .faq-topic+.faq-topic,.faq-more{margin-top:96px}
+ .faq-topic{scroll-margin-top:32px}
+ .faq-topic:focus{outline:0}
+ /* The topic's name stays beside its questions while they scroll, in place of the old rail, and sits centred on
+    the first question's row (72px tall). */
+ .faq-topic header{position:sticky;top:32px;align-self:start;display:flex;align-items:center;min-height:72px}
+ .faq-topic h2{display:flex;align-items:center;gap:.32em;font-size:clamp(34px,3.34vw,48px);line-height:1.1;letter-spacing:-.02em}
+ /* Augur's square mark, as before the homepage's tab titles; it scales with the name. */
+ .faq-mark{flex:none;width:.25em;height:.25em;background:var(--primary)}
+ /* The reveal (reveal.js) hides only what it has armed below the fold; print and forced colours show everything. */
+ :global([data-armed]){opacity:0}
+ @media print{:global(:is([data-armed],[data-reveal])){opacity:1!important;transform:none!important}}
+ @media(forced-colors:active){:global([data-armed]){opacity:1!important}.faq-mark{background:Highlight}}
+ .faq-list{display:grid;gap:8px}
+ /* The ending: the question and its sentence on the left; on the right the two actions as equal halves of the
+    questions' column, so they line up under the boxes above. Where a half would be under 240px they stack. */
+ .faq-more{align-items:center}
+ .faq-more h2{font-size:28px;line-height:36px}
+ .faq-more p{max-width:440px;margin-top:12px;font-size:18px;line-height:28px;color:var(--muted-foreground)}
+ .faq-more .actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+ @media(max-width:1200px){.faq-topic,.faq-more{gap:48px}}
+ @media(max-width:1023px){
+  .faq-topic,.faq-more{grid-template-columns:minmax(0,1fr);gap:20px}
+  .faq-more{row-gap:28px}
+  .faq-topic header{position:static;min-height:0}
+ }
+ @media(max-width:767px){
+  .faq-main{padding-bottom:64px}
+  .faq-topic+.faq-topic,.faq-more{margin-top:64px}
+  .faq-topic,.faq-more{gap:16px}
+  .faq-more{row-gap:24px}
+  .faq-topic h2{font-size:30px}
+  .faq-more h2{font-size:24px;line-height:32px}
+ }
+ @media print{.faq-more .actions{display:none!important}.faq-topic,.faq-more{display:block}}
 </style>
