@@ -9,6 +9,7 @@ featuredImage: ./featured-image.webp
 ---
 
 import ProseCard from '../../../components/content/ProseCard.astro'
+import XPostCard from '../../../components/blog/XPostCard.astro';
 
 <ProseCard>
 **MIGRATION CLOSED** — The migration window described in this report ended on August 3, 2026. This post is preserved as published; treat it as a historical record, not as current guidance. The window cannot be reopened, so anyone offering to migrate or recover REP now is running a scam. For where things stand, see the [FAQ](/faq/).
@@ -61,7 +62,7 @@ After the migration window closes, we will have a clearer picture of how much RE
 
 The foundation partnered with ChainSafe to build Augur Lituus, using the whitepaper as the technical foundation. We are working closely with them to turn that architecture into protocol software, with their team focused on implementation while our team keeps the work consistent with the outlined design.
 
-[Tweet announcement from @AugurProject](https://x.com/AugurProject/status/2048817619525083436)
+<XPostCard post="chainsafe-announcement" />
 
 The new design builds on Augur's fork-based oracle model. REP still sits at the center of the system: participants dispute proposed resolutions and, if a fork is triggered, migrate into the universe they believe reflects reality. The main changes are in the post-fork state, especially around active REP supply and attack resistance. We will soon publish a separate post explaining the whitepaper, the design changes, and why they matter.
 

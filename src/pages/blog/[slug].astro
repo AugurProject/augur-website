@@ -94,21 +94,6 @@ const shareData = JSON.stringify({ markdown: postMarkdown(post, Astro.site!), ur
   addEventListener('resize',update);
   update();
  }
- // X's widgets.js loads only on a post with an embedded X post (rehype-tweets), once one comes within reach of the
- // screen; it swaps each blockquote.twitter-tweet for the post. Without it the blockquotes stay as links.
- const embeds=[...document.querySelectorAll('blockquote.twitter-tweet')];
- if(embeds.length){
-  const load=()=>{
-   if(document.querySelector('script[data-x-widgets]'))return;
-   const script=document.createElement('script');
-   script.src='https://platform.twitter.com/widgets.js';script.async=true;script.charset='utf-8';script.dataset.xWidgets='';
-   document.head.append(script);
-  };
-  if('IntersectionObserver' in window){
-   const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();load();}},{rootMargin:'800px 0px'});
-   embeds.forEach(embed=>observer.observe(embed));
-  }else load();
- }
 </script>
 <style>
  /* One grid for the whole article: the "On this page" rail runs beside the title and the text; the header, cover
@@ -158,7 +143,7 @@ const shareData = JSON.stringify({ markdown: postMarkdown(post, Astro.site!), ur
     gaps close to a full line. Section headings carry a small green square in the margin. Anchors land below the
     site header when it slides back in. */
  .post-text :global(.prose-article.post-prose){--post-text:color-mix(in srgb,var(--foreground) 86%,var(--background));font-size:18px;line-height:1.7;color:var(--post-text)}
- .post-text :global(.prose-article.post-prose :where(p,ul,ol,blockquote,pre,figure,hr,.table-scroll,.callout,img,.prose-card,.twitter-tweet)+*){margin-top:28px}
+ .post-text :global(.prose-article.post-prose :where(p,ul,ol,blockquote,pre,figure,hr,.table-scroll,.callout,img,.prose-card)+*){margin-top:28px}
  .post-text :global(.prose-article.post-prose :where(h2,h3)){color:var(--foreground);scroll-margin-top:128px;text-wrap:balance}
  .post-text :global(.prose-article.post-prose :where(h2)){position:relative;font-size:28px;line-height:36px;letter-spacing:-.01em;margin-top:72px}
  .post-text :global(.prose-article.post-prose :where(h2)::before){content:'';position:absolute;left:-26px;top:14px;width:8px;height:8px;background:var(--primary)}
@@ -189,16 +174,6 @@ const shareData = JSON.stringify({ markdown: postMarkdown(post, Astro.site!), ur
     own width, or less where it would be taller than 760px). Wide charts fill the column, small screenshots stay at
     their own size, portrait diagrams fit about a screen, and the size is known before the image loads. */
  .post-text :global(.prose-article.post-prose img){width:100%;max-width:min(100%,var(--image-max,100%));height:auto;margin-inline:auto}
-
- /* X posts (rehype-tweets): X's embed replaces each blockquote, centred (data-align); until it loads, or without it,
-    the blockquote is a small linked panel, centred the same way. */
- .post-text :global(.prose-article.post-prose blockquote.twitter-tweet){max-width:550px;margin-inline:auto;padding:18px 22px;border:1px solid var(--web-outline);background:var(--web-quiet);color:var(--muted-foreground);font-size:16px;line-height:26px}
- .post-text :global(.prose-article.post-prose blockquote.twitter-tweet>*+*){margin-top:6px}
- .post-text :global(.prose-article.post-prose blockquote.twitter-tweet a){font:600 15px/22px var(--font-heading);text-decoration:none}
- .post-text :global(.prose-article.post-prose blockquote.twitter-tweet a:hover){text-decoration:underline;text-underline-offset:4px}
- /* X's frame holds a light-scheme document; giving the frame the same scheme stops the browser painting its
-    square corners white around the rounded post on this dark page. */
- .post-text :global(.prose-article.post-prose .twitter-tweet-rendered iframe){color-scheme:light}
 
  .keep-reading{border-top:1px solid var(--web-outline);padding-block:72px 112px}
  .keep-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:32px}
@@ -231,7 +206,7 @@ const shareData = JSON.stringify({ markdown: postMarkdown(post, Astro.site!), ur
   .post-byline{font-size:14px;line-height:20px;flex-direction:column;gap:4px}
   .post-byline>span:first-child::after{content:none}
   .post-text :global(.prose-article.post-prose){font-size:17px}
-  .post-text :global(.prose-article.post-prose :where(p,ul,ol,blockquote,pre,figure,hr,.table-scroll,.callout,img,.prose-card,.twitter-tweet)+*){margin-top:24px}
+  .post-text :global(.prose-article.post-prose :where(p,ul,ol,blockquote,pre,figure,hr,.table-scroll,.callout,img,.prose-card)+*){margin-top:24px}
   .post-text :global(.prose-article.post-prose :where(h2)){font-size:24px;line-height:32px;margin-top:56px}
   .post-text :global(.prose-article.post-prose :where(h2)::before){left:-16px;top:12px;width:6px;height:6px}
   .post-text :global(.prose-article.post-prose :where(h3)){font-size:19px;line-height:28px;margin-top:36px}
