@@ -10,6 +10,7 @@ Documents are grouped by type. What each type is for, and how to tell them apart
 
 - [Deploy](guides/deploy.md): Build, preview and deploy to GitHub Pages and Cloudflare Workers, check a deployment with `check:launch`, cut over to www.augur.net, refresh the REP supply endpoints, and the `augur-forms` Worker behind the forms.
 - [Update the design system](guides/update-design-system.md): Upgrade the `@augurproject/design-system` package, or change a shared token or control.
+- [Refresh X post snapshots](guides/refresh-x-posts.md): Update blog excerpts in a manual GitHub Actions run or locally.
 
 ## Reference
 
