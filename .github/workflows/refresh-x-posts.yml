@@ -1,0 +1,72 @@
+name: Refresh X post snapshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      post:
+        description: Optional key from src/data/x-posts.ts (leave blank for all posts)
+        type: string
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh-x-posts
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    if: github.ref_type == 'branch' && github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Refresh checked-in excerpts
+        id: snapshot
+        env:
+          POST_KEY: ${{ inputs.post }}
+        run: |
+          npm run refresh:x-posts -- "$POST_KEY"
+          if git diff --quiet -- src/data/x-post-snapshots.json; then
+            echo 'No snapshot changes.' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify the site builds with the new snapshots
+        if: steps.snapshot.outputs.changed == 'true'
+        run: npm run build
+
+      - name: Open a draft PR (never push to the default branch)
+        if: steps.snapshot.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="automation/x-posts-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- src/data/x-post-snapshots.json
+          git commit -m 'Refresh X post snapshots'
+          gh auth setup-git --hostname github.com
+          git push origin "HEAD:refs/heads/$branch"
+          compare="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/$GITHUB_REF_NAME...$branch?expand=1"
+          if pr=$(gh pr create --repo "$GITHUB_REPOSITORY" --base "$GITHUB_REF_NAME" --head "$branch" --draft \
+            --title 'chore(blog): refresh X post snapshots' \
+            --body 'Refresh the checked-in excerpts from official X oEmbed. The site built successfully. Review wording and any historical instructions before merging. No site request to X is added.'); then
+            printf 'Draft PR: %s\n' "$pr" >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf 'Automatic PR creation failed. [Open the PR manually](%s).\n' "$compare" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi

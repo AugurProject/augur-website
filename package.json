@@ -14,7 +14,8 @@
     "astro": "astro",
     "generate-types": "wrangler types",
     "deploy": "astro build && wrangler deploy",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "refresh:x-posts": "node scripts/refresh-x-posts.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.5",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
+    "hast-util-from-html": "2.0.3",
     "wrangler": "^4.151.2"
   }
 }
