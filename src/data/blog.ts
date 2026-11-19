@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { leadingEmojiLength } from '../markdown/emoji.mjs';
+import { getXPost } from './x-posts';
 
 /** The blog ported from the old augur.net (docs/reference/ported-content.md). Shared by /blog/,
  * the post pages and /rss.xml so all three agree on order and paths. */
@@ -61,13 +62,17 @@ export function readingQueue(post: Post, posts: Post[], count = 3): { post: Post
 }
 
 /** The post as Markdown for "Copy for AI": title, description, byline and source link, then the body without
- * MDX imports or components, with heading and callout emoji dropped, site links made absolute and local images
- * reduced to their alt text. */
+ * MDX imports or components. X post cards contribute their source link; heading and callout emoji are dropped,
+ * site links made absolute and local images reduced to their alt text. */
 export function postMarkdown(post: Post, site: URL): string {
   const url = new URL(postPath(post), site).href;
   const { title, description, author, publishDate } = post.data;
   const body = (post.body ?? '')
     .replace(/^import .*$/gm, '')
+    .replace(/^<XPostCard post="([a-z0-9-]+)"\s*\/>$/gm, (_, key: string) => {
+      const { label, url } = getXPost(key);
+      return `[${label} on X](${url})`;
+    })
     .replace(/<\/?[A-Z][^>]*>/g, '')
     .replace(/!\[([^\]]*)\]\(\.\/[^)]*\)/g, (_, alt: string) => alt ? `[Image: ${alt}]` : '')
     .replace(/\]\((\/[^)]*)\)/g, (_, path: string) => `](${new URL(path, site).href})`)
