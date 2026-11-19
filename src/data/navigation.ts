@@ -7,7 +7,7 @@ import { products, showStatoblast, showZoltar } from './products';
 export type NavigationItem = { label: string; href: string; external?: boolean; linkKey?: LinkKey; icon?: string; logo?: string; description?: string; cta?: string };
 const external = (label: string, linkKey: LinkKey, extra: Partial<NavigationItem> = {}): NavigationItem => ({ label, href: links[linkKey].url, external: true, linkKey, ...extra });
 /** Local pages other than the homepage. */
-export const pages = { contact: '/contact/', learn: '/learn/', rep: '/rep/' } as const;
+export const pages = { contact: '/contact/', fork: '/learn/fork/', rep: '/rep/' } as const;
 const tagline = (id: (typeof products)[number]['id']) => products.find(product => product.id === id)!.tagline;
 
 /** Header and footer consume this same directory. The blog is local (`/blog/`), ported from the old augur.net. */
@@ -22,7 +22,7 @@ export const navigation = {
   ],
   resources: [
     { label: 'Blog', href: links.archive.url, linkKey: 'archive', icon: 'newspaper' }, { label: 'FAQ', href: '/faq/', icon: 'question' },
-    { label: 'Learn', href: pages.learn, icon: 'book-open' }, { label: '$REP', href: pages.rep, icon: 'coins' },
+    { label: '$REP', href: pages.rep, icon: 'coins' },
     external('Whitepaper', 'whitepaper', { icon: 'file-text' }),
   ],
   // Community logos identify each destination wherever it is listed (Figma 43:153).

@@ -21,11 +21,11 @@ const { title, presentation } = guide.data;
 const isIndex = guide.id === 'index';
 // The migration record keeps the old site's archive header in place of its title.
 const archive = presentation === 'historical-record';
-const crumbs = [{ label: 'Learn', href: '/learn/' }, ...(isIndex ? [{ label: 'Fork' }] : [{ label: 'Fork', href: '/learn/fork/' }, { label: title }])];
+const crumbs = [...(isIndex ? [{ label: 'Fork' }] : [{ label: 'Fork', href: '/learn/fork/' }, { label: title }])];
 const items = guides.map(item => ({ href: guidePath(item), label: item.data.title, current: item.id === guide.id, note: item.data.status === 'archived' ? 'Archived' : undefined }));
 const pagerLink = (item: Guide | undefined, kicker: string) => item && { href: guidePath(item), kicker, title: item.data.title };
 ---
-<PageLayout title={`${title} | Learn`} description={guide.data.description}>
+<PageLayout title={`${title} | Augur`} description={guide.data.description}>
  {archive
   ? <ArticleHeader crumbs={crumbs} eyebrow="Archive · Migration closed" title="Moon Fork migration is closed" subtitle="Historical procedure and evidence only" lead="This page preserves the completed migration record, screenshots, and historical interfaces. It is not an active guide or a recommendation to connect a wallet or submit a transaction." />
   : <ArticleHeader crumbs={crumbs} title={title} />}

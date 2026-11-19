@@ -26,7 +26,7 @@ const oldSitemap = [
   '/blog/augur-testing-past-building-future/', '/blog/augurs-decade/', '/blog/augurs-revival/', '/blog/augurs-rising/',
   '/blog/generalized-augur/', '/blog/micahs-augur-fork/', '/blog/phase-1-the-escalation-game/', '/blog/phase-2-the-fork-migration/',
   '/blog/post-fork-announcements/', '/blog/q1-2026-progress-report/', '/blog/q2-2026-progress-report/', '/blog/the-augur-fork-is-here/',
-  '/blog/the-augur-lituus-whitepaper/', '/faq/', '/learn/', '/learn/fork/', '/learn/fork/disputes-and-bonds/',
+  '/blog/the-augur-lituus-whitepaper/', '/faq/', '/learn/fork/', '/learn/fork/disputes-and-bonds/',
   '/learn/fork/migration-mechanics/', '/learn/fork/migration/', '/learn/fork/moon-fork/', '/learn/fork/what-to-do/', '/mission/',
   '/privacy/', '/rep/', '/team/', '/terms/', '/whitepapers/', '/whitepapers/augur-v2/', '/whitepapers/augur-v2/abstract-and-introduction/',
   '/whitepapers/augur-v2/acknowledgments/', '/whitepapers/augur-v2/appendix-a-finalization-time-and-redistribution/',
