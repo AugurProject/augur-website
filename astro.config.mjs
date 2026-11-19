@@ -12,6 +12,7 @@ import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 
 import { site } from './src/data/site.ts';
+import { pages } from './src/data/navigation.ts';
 import rehypeCallouts from './src/markdown/rehype-callouts.mjs';
 import rehypeHeadingEmoji from './src/markdown/rehype-heading-emoji.mjs';
 import rehypePortedContent from './src/markdown/rehype-ported-content.mjs';
@@ -60,8 +61,8 @@ export default defineConfig({
   // GitHub Pages (docs/reference/hosting.md). Every page is prerendered.
   // Old pages folded into /about/ (owner, 30 October 2026). Cloudflare answers these with the 301s in
   // public/_redirects before reaching the files; GitHub Pages serves the meta-refresh page Astro writes here.
-  redirects: { '/mission': '/about/', '/team': '/about/' },
-  // Ported content from the old augur.net (docs/reference/ported-content.md). `.md` (Learn guides and the
+  redirects: { '/mission': '/about/', '/team': '/about/', '/learn': pages.faq },
+  // Ported content from the old augur.net (docs/reference/ported-content.md). `.md` (the worked example and the
   // whitepaper) gets KaTeX math and the whitepaper's cross-file links. `.mdx` (blog posts and fork guides)
   // gets no math, so prose like "You don't spend $2 to steal $1." stays text (the old site parsed it as
   // math); it keeps the old site's callouts and drops its decorative heading emoji. rehypePortedContent

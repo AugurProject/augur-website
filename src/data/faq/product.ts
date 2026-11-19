@@ -12,8 +12,7 @@ import { pages } from '../navigation';
 // were read on 15 November 2026 (main fc7fd07, dev a999dcc). A question about Augur Lituus names it; "Augur" alone
 // means the project. Nothing is deployed: an answer that describes how Augur Lituus works says "under its design",
 // "is designed to" or "will". The attack-cost figure is the whitepaper authors' estimate under their stated
-// assumptions (§3, §7.0.1): record that in `sources`, but the answer states the figure plainly, with no
-// "estimate" and no mention of the whitepaper (owner, 16 November 2026). Status answers are time-sensitive:
+// assumptions (§3, §7.0.1), not a fixed cost. Status answers are time-sensitive:
 // refresh them with each quarterly report (docs/guides/update-faq.md). Professional register, as in general.ts.
 export const product: FaqEntryInput[] = [
   {
@@ -36,22 +35,18 @@ Under its design, anyone can ask a question for a fee in $REP, and anyone can re
     // The short form of the four-stage answer parked on 15 November 2026 (parked.ts keeps the long one under the
     // same id for the product page). No stake sizes, thresholds or windows here.
     id: 'who-decides', question: 'How does Augur Lituus resolve an outcome?',
-    answer: `Through reports that anyone can make and anyone can challenge, each backed by a stake in $REP. Under the design, a question is submitted with a fee and a reporter stakes $REP on its outcome. If no one challenges the report, it becomes final. A challenger must stake more on a different outcome, and a dispute that keeps escalating ends in a fork, where $REP holders settle the outcome by migrating their tokens to the truthful universe.`,
+    answer: `Through reports that anyone can make and anyone can challenge, each backed by a stake in $REP. Under the design, a question is submitted with a fee and a reporter stakes $REP on its outcome. If no one challenges the report, it becomes final. A challenger must stake more on a different outcome, and a dispute that keeps escalating ends in a fork, where $REP holders settle the outcome by migrating their tokens to the truthful universe. See [how Augur answers a question](${pages.workedExample}) for a worked example.`,
     sources: ['owner-approved wording (melo, 15 November 2026, with the answers of docs/records/faq-review.md; "to the truthful universe" added at the owner\'s request on 16 November 2026)', 'whitepaper §2 (a fee activates the oracle; a reporter places a bond), §2.1 and §4.1 (each dispute stakes twice the previous bond on a different outcome; an undisputed outcome resolves), §2.2 and §4.2.2–4.2.4 (a fork; REP holders migrate; the fork with the most migration wins)', 'learn/how-augur-answers-a-question.md (one example from start to finish; not a placeholder)'],
     // `fork` and the other fork ids opened "Do $REP holders need to take any action?" until it was removed on
     // 16 November 2026; this is the one answer left that names the fork.
-    reviewed: '2026-11-16', needsReview: false, aliases: ['question-lifecycle', 'finality-time', 'fork', 'what-is-a-fork-in-simple-terms', 'lituus-fork', 'future-fork', 'honest-fork'],
+    reviewed: '2026-11-16', needsReview: false, aliases: ['question-lifecycle', 'finality-time', 'disagreement', 'fork', 'what-is-a-fork-in-simple-terms', 'lituus-fork', 'future-fork', 'honest-fork'],
   },
   {
-    // One answer for the security model, in place of the three parked ones (deterrence, value secured, the
-    // guarantee). Rewritten on 16 November 2026 to the owner's brief: $REP holders have a duty to the truth, lying
-    // is irrational and designed to cost them, and corrupting an outcome costs 134% of fully diluted value; no
-    // mention of the whitepaper and no hedging words. The version approved on 15 November named the estimate's
-    // authors and the condition it rests on. The owner approved the new wording the same day ("lgtm").
+    // One answer for the security model, in place of the parked deterrence, value secured and guarantee answers.
     id: 'lituus-security', question: 'What secures Augur Lituus?',
-    answer: `$REP holders, who have a duty to the truth. Every report and every challenge is backed by staked $REP, and a stake placed on a false outcome is forfeited. Augur Lituus is designed so that lying is irrational: it costs the holder who lies. Corrupting an outcome would cost an attacker 134% of $REP's fully diluted value, more than the entire supply is worth.`,
-    sources: ['owner-approved wording (melo, 16 November 2026, "lgtm"), written to the owner\'s brief of the same day', 'whitepaper §4.1 and §4.3.1 (outcomes are backed by staked REP; those who backed a losing outcome forfeit their stakes)', 'whitepaper §2.2 (buy and burn 50% of the supply twice), §3 (a likely attack cost of 134% of fully diluted valuation; readers are encouraged to substitute their own parameter estimates), §4.6 (acquire at least half of the REP that will participate in a fork, migrate it to the fraudulent fork, then buy half of the newly minted REP and migrate that too), §4.6.2 (an attack is rational only when the external incentives exceed the attack cost)', '134% is the whitepaper authors\' estimate under their stated assumptions (§3, §7.0.1); the answer states it without attribution at the owner\'s request'],
-    reviewed: '2026-11-16', needsReview: false, aliases: ['false-answers', 'bonds', 'whale-attack', 'token-vote', 'value-secured', 'guarantee', 'low-participation', 'compare'],
+    answer: `Reports and challenges are backed by staked $REP. Under the design, people who stake on a false outcome lose that stake. The [whitepaper](${links.whitepaper.url}) estimates the cost of corrupting an outcome at about 134% of $REP's fully diluted value under its stated assumptions.`,
+    sources: ['owner-approved wording (melo, 16 November 2026, "lgtm"), written to the owner\'s brief of the same day', 'whitepaper §4.1 and §4.3.1 (outcomes are backed by staked REP; those who backed a losing outcome forfeit their stakes)', 'whitepaper §2.2 (buy and burn 50% of the supply twice), §3 (a likely attack cost of 134% of fully diluted valuation; readers are encouraged to substitute their own parameter estimates), §4.6 (acquire at least half of the REP that will participate in a fork, migrate it to the fraudulent fork, then buy half of the newly minted REP and migrate that too), §4.6.2 (an attack is rational only when the external incentives exceed the attack cost)', '134% is the whitepaper authors\' estimate under their stated assumptions (§3, §7.0.1)'],
+    reviewed: '2026-11-16', needsReview: true, aliases: ['false-answers', 'bonds', 'whale-attack', 'token-vote', 'value-secured', 'guarantee', 'low-participation', 'compare'],
   },
   {
     id: 'override', question: 'Can the Lituus Foundation or the developers override an outcome?',

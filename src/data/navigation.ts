@@ -7,7 +7,7 @@ import { products, showStatoblast, showZoltar } from './products';
 export type NavigationItem = { label: string; href: string; external?: boolean; linkKey?: LinkKey; icon?: string; logo?: string; description?: string; cta?: string };
 const external = (label: string, linkKey: LinkKey, extra: Partial<NavigationItem> = {}): NavigationItem => ({ label, href: links[linkKey].url, external: true, linkKey, ...extra });
 /** Local pages other than the homepage. */
-export const pages = { contact: '/contact/', fork: '/learn/fork/', rep: '/rep/' } as const;
+export const pages = { contact: '/contact/', faq: '/faq/', fork: '/learn/fork/', rep: '/rep/', workedExample: '/learn/how-augur-answers-a-question/' } as const;
 const tagline = (id: (typeof products)[number]['id']) => products.find(product => product.id === id)!.tagline;
 
 /** Header and footer consume this same directory. The blog is local (`/blog/`), ported from the old augur.net. */
@@ -21,7 +21,7 @@ export const navigation = {
     ...(showStatoblast ? [{ label: 'Augur Statoblast', href: '/products/#augur-statoblast', description: tagline('augur-statoblast') }] : []),
   ],
   resources: [
-    { label: 'Blog', href: links.archive.url, linkKey: 'archive', icon: 'newspaper' }, { label: 'FAQ', href: '/faq/', icon: 'question' },
+    { label: 'Blog', href: links.archive.url, linkKey: 'archive', icon: 'newspaper' }, { label: 'FAQ', href: pages.faq, icon: 'question' },
     { label: '$REP', href: pages.rep, icon: 'coins' },
     external('Whitepaper', 'whitepaper', { icon: 'file-text' }),
   ],

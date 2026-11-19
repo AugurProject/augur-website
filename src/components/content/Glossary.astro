@@ -1,0 +1,10 @@
+---
+import { glossary } from '../../data/glossary';
+interface Props { terms?: string[]; compact?: boolean; }
+const { terms, compact = false } = Astro.props;
+const entries = terms ? terms.flatMap(id => glossary.filter(term => term.id === id)) : glossary;
+---
+<div class:list={['glossary', { compact }]}>{(compact?[entries]:[entries.slice(0,4),entries.slice(4)]).map(column=><dl>{column.map(item => <div id={`term-${item.id}`}><dt>{item.term}</dt><dd>{item.definition}</dd></div>)}</dl>)}</div>
+<style>
+ .glossary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px;margin:0}.glossary dl{margin:0}.glossary dl>div{padding:24px 0;border-top:1px solid var(--border-quiet)}dt{font-family:var(--font-heading,'Sora',sans-serif);font-size:20px;line-height:26px;font-weight:600}dd{color:var(--muted-foreground);font-size:17px;line-height:26px;margin:8px 0 0}.compact{display:block}.compact dl>div{display:grid;grid-template-columns:120px 1fr;gap:24px;padding:16px 0}.compact dt,.compact dd{font-size:16px;line-height:24px;margin:0}@media(max-width:767px){.glossary{grid-template-columns:1fr}.compact dl>div{grid-template-columns:1fr;gap:8px}}
+</style>
