@@ -11,8 +11,9 @@ const enabled = false;
 /** The footer's newsletter field has its own switch (melo, 15 November 2026: the field is back in the footer,
  * with the sending side to be settled later). It shows the field while `enabled` keeps the contact form off, and
  * builds the /newsletter/ result pages. Without PUBLIC_FORMS_URL a production build keeps the field offline, as above.
- * Set it to false to drop the field: the footer then shows the logo alone in that column. */
-const newsletter = true;
+ * Set it to false to drop the field: the footer then shows the logo alone in that column. Off until the forms Worker
+ * is connected and the privacy policy is rewritten (jubalm, 24 November 2026). */
+const newsletter = false;
 // `?.` because the Worker bundles this file without Vite's import.meta.env.
 const configured = String(import.meta.env?.PUBLIC_FORMS_URL ?? '').replace(/\/+$/, '');
 const address = configured || (import.meta.env?.DEV ? 'http://localhost:8788' : null);

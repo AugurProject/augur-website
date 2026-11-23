@@ -253,3 +253,7 @@ From melo's review of the footer branches on 18 November 2026.
 - **No copyright line.** "keep as it is". The footer carries no copyright notice.
 - **No consent wording for the newsletter field.** "remove the consent line. privacy/terms covers this i guess". The unused `newsletter.consent` wording is deleted; sign-ups rely on the privacy policy and terms, whose rewrite is still open ([open decisions](open-decisions.md)).
 - **REP page left out of the divider removal.** "the new rep page is going tru a redesign so yeah do not include /rep stuff". `rep.astro` and `src/components/rep/` keep their dividers; the redesign replaces them. Shared components such as `FaqItem` still change on that page.
+
+## 24 November 2026
+
+- **Newsletter field held off.** The footer's newsletter field stays off (`newsletter = false` in [forms.ts](../../src/data/forms.ts)) until the `augur-forms` Worker is connected and the privacy policy is rewritten. The footer shows the logo alone in that column, and the `/newsletter/` result pages are not built. Resolves "Newsletter field at launch" in [open decisions](open-decisions.md). (jubalm)
