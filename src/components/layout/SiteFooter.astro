@@ -145,10 +145,10 @@ const url=forms.newsletterUrl;
 .footer-links li a{display:flex;align-items:center;gap:4px;min-height:40px;line-height:24px}.footer-links :global(.web-icon),.footer-links :global(.web-icon svg){width:14px;height:14px}
 /* Community destinations carry their logo before the name. */
 .footer-links :global(.social-logo),.footer-links :global(.social-logo svg){width:18px;height:18px}.footer-links :global(.social-logo){margin-right:6px;color:var(--muted-foreground);transition:color 180ms ease-out}.footer-links a:hover :global(.social-logo){color:var(--foreground)}
-/* The base line: Privacy, Terms and the way back up under the link columns, in the funding sentence's size and
-   colour. Space alone sets it off from the directory. */
+/* The base line: Privacy and Terms on the page's left edge, the way back up on its right, in the funding
+   sentence's size and colour. Space alone sets it off from the directory. */
 .base{align-items:baseline;margin-top:72px;font-size:14px;line-height:22px;color:var(--muted-foreground)}
-.base-links{grid-column:2;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px}
+.base-links{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px}
 .legal-links{display:flex;flex-wrap:wrap;gap:4px 24px;list-style:none;padding:0;margin:0}
 .legal-links a,.to-top{display:inline-flex;align-items:center;min-height:24px;color:var(--muted-foreground);text-decoration:none}.legal-links a:hover,.to-top:hover{color:var(--foreground)}
 /* The design system's arrow, turned to point up. */
@@ -158,13 +158,13 @@ const url=forms.newsletterUrl;
 /* Down to 1024 the footer keeps the desktop arrangement, the logo left of the link columns, on the same
    500 / 668 grid as the section headings, whose gap it follows (48 from 1200). Below 1024 it is two equal
    halves: the logo and the newsletter side by side over four equal link columns with the same gap, so the
-   newsletter's edge lands on the third column; the base line splits on that edge too. */
+   newsletter's edge lands on the third column. */
 @media(max-width:1200px){.footer-grid{gap:48px}}
 /* There the link columns are too narrow to share one width ("Telegram ↗" overran the edge at 1024), so each
    column takes its longest link and the space left over is shared out between them. */
 @media(min-width:1024px) and (max-width:1279px){.footer-links{grid-template-columns:repeat(4,max-content);justify-content:space-between;column-gap:24px}}
 @media(max-width:1023px){.contact-copy{gap:24px}.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.directory{grid-template-columns:minmax(0,1fr);row-gap:56px}.identity{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;width:100%}.newsletter{max-width:none}.footer-links{gap:48px}}
-@media(max-width:767px){.footer-main{padding-block:56px 32px}.footer-grid{grid-template-columns:minmax(0,1fr)}.directory{row-gap:48px}.identity{grid-template-columns:minmax(0,1fr);gap:32px}.footer-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}.footer-links li a{min-height:44px}.base{margin-top:48px}.base-links{grid-column:auto}}
+@media(max-width:767px){.footer-main{padding-block:56px 32px}.footer-grid{grid-template-columns:minmax(0,1fr)}.directory{row-gap:48px}.identity{grid-template-columns:minmax(0,1fr);gap:32px}.footer-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}.footer-links li a{min-height:44px}.base{margin-top:48px}}
 /* Under 375 px the joined button would clip the placeholder: both give up some padding. */
 @media(max-width:374px){.newsletter .field input{padding-inline:10px}.newsletter-submit{padding-inline:12px}}
 @media(forced-colors:active){.footer-main{border-top:1px solid CanvasText}}
