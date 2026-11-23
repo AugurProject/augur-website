@@ -154,11 +154,15 @@ const url=forms.newsletterUrl;
 .to-top{gap:6px}.to-top :global(.web-icon),.to-top :global(.web-icon svg){width:14px;height:14px}.to-top :global(.web-icon){transform:rotate(-90deg);transition:transform 180ms ease-out}
 @media(hover:hover) and (prefers-reduced-motion:no-preference){.to-top:hover :global(.web-icon){transform:rotate(-90deg) translateX(3px)}}
 @media(prefers-reduced-motion:reduce){.to-top :global(.web-icon){transition:none}}
-/* Below 1280 the footer is two equal halves: the logo and the newsletter side by side over four equal link
-   columns with the same gap, so the newsletter's edge lands on the third column; the base line splits on that
-   edge too. */
-@media(max-width:1279px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}.directory{grid-template-columns:minmax(0,1fr);row-gap:56px}.identity{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;width:100%}.newsletter{max-width:none}.footer-links{gap:48px}}
-@media(max-width:1023px){.contact-copy{gap:24px}}
+/* Down to 1024 the footer keeps the desktop arrangement, the logo left of the link columns, on the same
+   500 / 668 grid as the section headings, whose gap it follows (48 from 1200). Below 1024 it is two equal
+   halves: the logo and the newsletter side by side over four equal link columns with the same gap, so the
+   newsletter's edge lands on the third column; the base line splits on that edge too. */
+@media(max-width:1200px){.footer-grid{gap:48px}}
+/* There the link columns are too narrow to share one width ("Telegram ↗" overran the edge at 1024), so each
+   column takes its longest link and the space left over is shared out between them. */
+@media(min-width:1024px) and (max-width:1279px){.footer-links{grid-template-columns:repeat(4,max-content);justify-content:space-between;column-gap:24px}}
+@media(max-width:1023px){.contact-copy{gap:24px}.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.directory{grid-template-columns:minmax(0,1fr);row-gap:56px}.identity{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;width:100%}.newsletter{max-width:none}.footer-links{gap:48px}}
 @media(max-width:767px){.footer-main{padding-block:56px 32px}.footer-grid{grid-template-columns:minmax(0,1fr)}.directory{row-gap:48px}.identity{grid-template-columns:minmax(0,1fr);gap:32px}.footer-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}.footer-links li a{min-height:44px}.base{row-gap:12px;margin-top:48px}}
 /* Under 375 px the joined button would clip the placeholder: both give up some padding. */
 @media(max-width:374px){.newsletter .field input{padding-inline:10px}.newsletter-submit{padding-inline:12px}}
