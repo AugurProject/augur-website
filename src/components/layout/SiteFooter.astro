@@ -36,7 +36,7 @@ const url=forms.newsletterUrl;
   <div class="footer-main">
     <div class="site-container footer-grid directory">
       <div class="identity">
-        <a href="/" aria-label="Augur home"><Brand /></a>
+        <div class="identity-head"><a href="/" aria-label="Augur home"><Brand /></a><p class="funding">Augur's work is funded and coordinated by the <a href={links.foundation.url}>Lituus Foundation<Icon name="arrow-up-right"/></a>.</p></div>
         {forms.newsletter && <div class="newsletter"><h2 id="newsletter-title">Follow Augur's progress</h2><p>Research, development and product updates, by email.</p>
           <form class="newsletter-form" action={url ? url+newsletter.path : undefined} method={url ? 'post' : 'dialog'} aria-labelledby="newsletter-title" data-newsletter={url ? 'live' : 'offline'}>
             <div class="field"><label for="newsletter-email">Email address</label><div class="newsletter-control"><input type="email" id="newsletter-email" name="email" autocomplete="email" inputmode="email" enterkeyhint="send" autocapitalize="none" spellcheck="false" placeholder="you@example.com" required maxlength="254" aria-describedby="newsletter-email-error" /><button type="submit" class="button newsletter-submit">Subscribe</button></div></div>
@@ -49,7 +49,6 @@ const url=forms.newsletterUrl;
       <nav class="footer-links" aria-label="Footer">{navigationGroups.map(group=><div><h2>{group.label}</h2><ul>{group.items.map(item=><li><a class="line-link" href={item.href}>{(item as NavigationItem).logo&&<Icon name={(item as NavigationItem).logo!} class="social-logo"/>}<span class="button-label">{item.label}</span>{('external' in item && item.external)&&<Icon name="arrow-up-right"/>}</a></li>)}</ul></div>)}</nav>
     </div>
     <div class="site-container footer-grid base">
-      <p>Augur's work is funded and coordinated by the <a href={links.foundation.url}>Lituus Foundation<Icon name="arrow-up-right"/></a>.</p>
       <div class="base-links"><ul class="legal-links" aria-label="Legal">{navigation.legal.map(item=><li><a href={item.href}>{item.label}</a></li>)}</ul><a class="to-top" href="#top">Back to top<Icon name="arrow-right"/></a></div>
     </div>
   </div>
@@ -115,9 +114,12 @@ const url=forms.newsletterUrl;
 .footer-main{padding-block:80px 40px;background:var(--web-quiet)}
 .footer-grid{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,668fr);gap:80px}
 .directory{align-items:start}
-/* The logo heads the first column, level with the link headings; the newsletter sits under it, no wider than
-   its field reads well. */
+/* The logo heads the first column, level with the link headings, with the funding sentence 16 under it; the
+   newsletter sits under both, no wider than its field reads well. */
 .identity{display:grid;justify-items:start;gap:40px}
+.identity-head{display:grid;justify-items:start;gap:16px}
+.funding{max-width:300px;font-size:14px;line-height:22px;color:var(--muted-foreground)}
+.funding a{color:var(--foreground);white-space:nowrap}.funding a:hover{text-decoration-thickness:2px}.funding :global(.web-icon),.funding :global(.web-icon svg){width:12px;height:12px}.funding :global(.web-icon){margin-left:2px;vertical-align:-1px}
 .newsletter{width:100%;max-width:440px}
 .newsletter h2{font-size:20px;line-height:26px;letter-spacing:0;margin-bottom:8px}.newsletter>p{color:var(--muted-foreground);margin-bottom:20px}
 /* The field and its button are one control: a Navy well, a step darker than the band, with the design system's
@@ -143,11 +145,10 @@ const url=forms.newsletterUrl;
 .footer-links li a{display:flex;align-items:center;gap:4px;min-height:40px;line-height:24px}.footer-links :global(.web-icon),.footer-links :global(.web-icon svg){width:14px;height:14px}
 /* Community destinations carry their logo before the name. */
 .footer-links :global(.social-logo),.footer-links :global(.social-logo svg){width:18px;height:18px}.footer-links :global(.social-logo){margin-right:6px;color:var(--muted-foreground);transition:color 180ms ease-out}.footer-links a:hover :global(.social-logo){color:var(--foreground)}
-/* The base line: the funding sentence under the logo's column; Privacy, Terms and the way back up under the
-   link columns, in one size and colour. Space alone sets it off from the directory. */
+/* The base line: Privacy, Terms and the way back up under the link columns, in the funding sentence's size and
+   colour. Space alone sets it off from the directory. */
 .base{align-items:baseline;margin-top:72px;font-size:14px;line-height:22px;color:var(--muted-foreground)}
-.base p a{color:var(--foreground);white-space:nowrap}.base p a:hover{text-decoration-thickness:2px}.base p :global(.web-icon),.base p :global(.web-icon svg){width:12px;height:12px}.base p :global(.web-icon){margin-left:2px;vertical-align:-1px}
-.base-links{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px}
+.base-links{grid-column:2;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px}
 .legal-links{display:flex;flex-wrap:wrap;gap:4px 24px;list-style:none;padding:0;margin:0}
 .legal-links a,.to-top{display:inline-flex;align-items:center;min-height:24px;color:var(--muted-foreground);text-decoration:none}.legal-links a:hover,.to-top:hover{color:var(--foreground)}
 /* The design system's arrow, turned to point up. */
@@ -163,7 +164,7 @@ const url=forms.newsletterUrl;
    column takes its longest link and the space left over is shared out between them. */
 @media(min-width:1024px) and (max-width:1279px){.footer-links{grid-template-columns:repeat(4,max-content);justify-content:space-between;column-gap:24px}}
 @media(max-width:1023px){.contact-copy{gap:24px}.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.directory{grid-template-columns:minmax(0,1fr);row-gap:56px}.identity{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;width:100%}.newsletter{max-width:none}.footer-links{gap:48px}}
-@media(max-width:767px){.footer-main{padding-block:56px 32px}.footer-grid{grid-template-columns:minmax(0,1fr)}.directory{row-gap:48px}.identity{grid-template-columns:minmax(0,1fr);gap:32px}.footer-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}.footer-links li a{min-height:44px}.base{row-gap:12px;margin-top:48px}}
+@media(max-width:767px){.footer-main{padding-block:56px 32px}.footer-grid{grid-template-columns:minmax(0,1fr)}.directory{row-gap:48px}.identity{grid-template-columns:minmax(0,1fr);gap:32px}.footer-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}.footer-links li a{min-height:44px}.base{margin-top:48px}.base-links{grid-column:auto}}
 /* Under 375 px the joined button would clip the placeholder: both give up some padding. */
 @media(max-width:374px){.newsletter .field input{padding-inline:10px}.newsletter-submit{padding-inline:12px}}
 @media(forced-colors:active){.footer-main{border-top:1px solid CanvasText}}
