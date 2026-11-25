@@ -6,7 +6,7 @@ The form is off for now: with `forms.enabled` false ([forms.ts](../../src/data/f
 
 ## Page
 
-- [contact/index.astro](../../src/pages/contact/index.astro) renders the page with [PageLayout.astro](../../src/layouts/PageLayout.astro) and `footer={false}`, because the footer's contact band would repeat the page. Layout, fields and copy follow the lab's contact page (augur-web-lab `1b95a3a`), approved by the owner on 29 October 2026; the notice and result wording were recommended on Track #35 and approved the same day.
+- [contact/index.astro](../../src/pages/contact/index.astro) renders the page with [PageLayout.astro](../../src/layouts/PageLayout.astro) and `contactBand={false}`: the footer's contact call would point back at this page, so it is left out and the footer proper stays. The `/contact/<result>/` pages pass `footer={false}` and render no footer. Layout, fields and copy follow the lab's contact page (augur-web-lab `1b95a3a`), approved by the owner on 29 October 2026; the notice and result wording were recommended on Track #35 and approved the same day.
 - Fields, limits, the notice, the status messages and the field rules are in [contact.ts](../../src/data/contact.ts). The Worker imports the same file, so the page and the server accept the same input.
 
 | Field | `name` | Required | Limit and rule |

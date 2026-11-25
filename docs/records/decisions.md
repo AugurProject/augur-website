@@ -260,3 +260,7 @@ From melo's review of the footer branches on 18 November 2026.
 - **Footer keeps its desktop layout down to 1024 px.** Between 1024 and 1279 px the logo stays left of the link columns, on the section headings' 500 / 668 grid, instead of stacking above them; there the four link columns take the width of their longest link, so "Telegram ↗" stays inside the page edge. Below 1024 the footer stacks as before. (jubalm)
 - **Funding sentence under the footer logo.** "Augur's work is funded and coordinated by the Lituus Foundation" moves from the base line to 16 px under the logo; the base line runs the full width, Privacy and Terms on the left edge and "Back to top" on the right. (jubalm)
 - **Blog index intro and description.** The intro and meta description become one sentence, "News, research, and progress reports from the Augur reboot.", replacing "News, updates, and progress from the Augur reboot. Follow our journey as we rebuild decentralized prediction markets." (melo's change in #30; approved by jubalm)
+
+## 25 November 2026
+
+- **Footer back on the contact page.** `/contact/` renders the footer proper (logo, link columns, base line) and leaves out only the footer's contact call, which links to the page itself (`contactBand={false}` in place of `footer={false}`). Replaces the full footer removal from the contact form's addition on 29 October 2026, made before `contactBand` existed. The `/contact/<result>/` pages still render no footer. (jubalm)
