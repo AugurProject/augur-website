@@ -66,7 +66,7 @@ const sections = headings.filter(heading => heading.depth === 2);
  /* As wide as the text column on tablets; edge to edge on phones, where the column fills the container. It stacks
     over the sitewide field (page-field.ts, z-index 10), whose squares are placed for where the bar first sits, and
     under the site header (20). */
- .contents-bar{position:sticky;top:0;z-index:11;padding-inline:16px;background:var(--web-quiet);transition:top 280ms var(--ease-reveal)}
+ .contents-bar{position:sticky;top:0;z-index:11;padding-inline:16px;background:var(--web-quiet);transition:top 280ms var(--augur-ease-reveal)}
  @media(max-width:767px){.contents-bar{margin-inline:calc(var(--page-gutter) * -1);padding-inline:var(--page-gutter)}}
  :global(html:has(.site-header[data-stuck]:not([data-hidden]))) .contents-bar{top:96px}
  summary{display:flex;align-items:center;gap:12px;min-height:52px;cursor:pointer;list-style:none;font:600 14px/20px var(--font-heading)}
@@ -74,7 +74,7 @@ const sections = headings.filter(heading => heading.depth === 2);
  summary:focus-visible{outline:2px solid var(--ring);outline-offset:-2px}
  .bar-label{color:var(--muted-foreground);flex:none}
  .bar-current{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--foreground)}
- summary :global(.web-icon){margin-left:auto;transition:transform 200ms var(--ease-reveal)}
+ summary :global(.web-icon){margin-left:auto;transition:transform 200ms var(--augur-ease-reveal)}
  .contents-bar[open] summary :global(.web-icon){transform:rotate(180deg)}
  .contents-bar nav{position:absolute;top:100%;left:0;right:0;max-height:min(60vh,420px);overflow-y:auto;padding:8px 16px 12px;background:var(--web-quiet)}
  @media(max-width:767px){.contents-bar nav{padding-inline:var(--page-gutter)}}

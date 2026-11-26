@@ -19,7 +19,7 @@
    line's containing block, so the line jumped across the tab's name before landing in the gutter. */
 .home-page .case-label{padding-top:0}
 .home-page .case-mark{width:8px;height:8px;margin-top:calc((clamp(20px,1.67vw,24px) * 1.3 - 8px) / 2)}
-.home-page .case-mark::after{content:'';display:block;width:8px;height:8px;background:var(--mark-participant,#71728A);transition:background-color 240ms ease-out,transform 200ms var(--ease-reveal)}
+.home-page .case-mark::after{content:'';display:block;width:8px;height:8px;background:var(--mark-participant,#71728A);transition:background-color 240ms ease-out,transform 200ms var(--augur-ease-reveal)}
 .home-page .case-tab[aria-selected="true"] .case-mark::after{background:var(--primary);transition-delay:140ms}
 @media(hover:hover) and (pointer:fine){.home-page .case-tab:not([aria-selected="true"]):hover .case-mark::after{background:var(--foreground);transform:rotate(45deg) scale(.9)}}
 .home-page .case-tab:not([aria-selected="true"]):active .case-mark::after{transform:rotate(45deg) scale(.75)}
@@ -101,14 +101,14 @@
    Navy text). Asked is lit for a moment as the query is asked. */
 .home-page .split-status>span{justify-self:end;gap:8px;height:28px;padding:0 10px;font:600 13px/16px var(--font-heading)}
 .home-page .split-status i{flex:none;width:6px;height:6px}
-.home-page .st-ask{position:relative;box-shadow:inset 0 0 0 1px var(--web-outline);color:var(--muted-foreground)}
+.home-page .st-ask{position:relative;box-shadow:inset 0 0 0 1px var(--outline);color:var(--muted-foreground)}
 .home-page .st-glow{position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--foreground);opacity:0;pointer-events:none}
 .home-page .st-ask i{background:var(--mark-participant,#71728A)}
 .home-page .st-rep{box-shadow:inset 0 0 0 1px var(--muted-foreground);color:var(--foreground)}
 .home-page .st-rep i{background:var(--foreground)}
 .home-page .st-fin{background:var(--primary);color:var(--background)}
 .home-page .st-fin i{background:var(--background)}
-.home-page .split-wait{position:relative;display:block;height:2px;margin-top:4px;background:var(--web-outline);opacity:0}
+.home-page .split-wait{position:relative;display:block;height:2px;margin-top:4px;background:var(--outline);opacity:0}
 .home-page .split-wait i{position:absolute;inset:0;background:var(--muted-foreground);transform-origin:left}
 /* A narrow card (1024–1100), where the question takes two lines: the split tightens so the card stays near
    the others' 285. */
@@ -137,7 +137,7 @@
 .home-page .relay-line{position:relative;height:12px}
 .home-page .relay-line>span{position:absolute}
 .home-page :is(.relay-run,.relay-done,.relay-wait,.relay-paid){top:5px;height:2px;transform-origin:left}
-.home-page .relay-run{left:6px;width:calc(2 * var(--leg));background:var(--web-outline)}
+.home-page .relay-run{left:6px;width:calc(2 * var(--leg));background:var(--outline)}
 .home-page .relay-done{left:6px;width:var(--leg);background:var(--foreground)}
 .home-page :is(.relay-wait,.relay-paid){left:calc(var(--leg) + 6px);width:var(--leg)}
 .home-page .relay-wait{background:var(--muted-foreground);opacity:0}
@@ -189,7 +189,7 @@
 .home-page [data-card-kind="switch"]{container:switch/inline-size}
 .home-page .card-switch{margin-top:32px}
 .home-page .switch-row{display:flex;align-items:center;gap:16px;min-height:44px}
-.home-page .switch-track{--travel:32px;position:relative;flex:none;width:64px;height:32px;box-shadow:inset 0 0 0 2px var(--web-outline)}
+.home-page .switch-track{--travel:32px;position:relative;flex:none;width:64px;height:32px;box-shadow:inset 0 0 0 2px var(--outline)}
 .home-page .switch-track>i{position:absolute}
 .home-page .switch-on{inset:0;box-shadow:inset 0 0 0 2px var(--foreground);opacity:0}
 .home-page .switch-knob{left:5px;top:5px;width:22px;height:22px}
@@ -205,7 +205,7 @@
 .home-page .choice{margin-top:16px}
 .home-page .choice-by{display:flex;min-height:16px;margin:0}
 .home-page .choice-row{display:flex;align-items:center;gap:8px;margin-top:8px}
-.home-page .choice-opt{position:relative;display:inline-grid;place-items:center;flex:none;min-width:80px;height:36px;padding:0 16px;box-shadow:inset 0 0 0 1px var(--web-outline);font:600 18px/1 var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
+.home-page .choice-opt{position:relative;display:inline-grid;place-items:center;flex:none;min-width:80px;height:36px;padding:0 16px;box-shadow:inset 0 0 0 1px var(--outline);font:600 18px/1 var(--font-heading);letter-spacing:-.01em;color:var(--foreground)}
 .home-page .choice-opt>i,.home-page .choice-pick{position:absolute;inset:0}
 .home-page .choice-ring{box-shadow:inset 0 0 0 1px var(--foreground)}
 .home-page .choice-fill{background:var(--primary);transform-origin:left}
@@ -230,7 +230,7 @@
    a second message for a second audience (the Law of Common Region). The cue as the Why Augur closer's
    labels, then one paragraph. The box sits on the panel's foot, at the same place on every tab, at least
    16 under the card. The three paragraphs keep three lines from 1024 to 1440 and the cards match. */
-.home-page .case-builders{align-self:stretch;margin-top:auto;padding:20px 28px 24px;border:1px solid var(--web-outline)}
+.home-page .case-builders{align-self:stretch;margin-top:auto;padding:20px 28px 24px;border:1px solid var(--outline)}
 @media(max-width:1200px){.home-page .case-builders{padding:18px 24px 20px}}
 .home-page .builders-cue{display:flex;align-items:center;gap:12px;margin:0;font:600 14px/20px var(--font-heading);color:var(--foreground)}
 .home-page .builders-cue::before{content:'';width:8px;height:8px;background:var(--primary)}
@@ -351,7 +351,7 @@
    whole door. Pressed: Dark 3. Below 1024 the doors stack 12 apart: as rows (object, words, arrow) down to
    768, and as small tiles on phones, where a row would squeeze the line to four lines. */
 .home-page .doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin:0;padding:0;list-style:none}
-.home-page .door{position:relative;display:grid;grid-template-columns:104px minmax(0,1fr) 20px;grid-template-areas:"art . arrow" "title title title" "line line line";align-content:start;min-width:0;padding:32px;background:var(--web-well);border:1px solid var(--web-outline);transition:background-color 180ms ease-out,border-color 180ms ease-out}
+.home-page .door{position:relative;display:grid;grid-template-columns:104px minmax(0,1fr) 20px;grid-template-areas:"art . arrow" "title title title" "line line line";align-content:start;min-width:0;padding:32px;background:var(--web-well);border:1px solid var(--outline);transition:background-color 180ms ease-out,border-color 180ms ease-out}
 .home-page .door::before{content:"";position:absolute;inset:auto -1px -1px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform 240ms ease-out}
 .home-page .door-art{grid-area:art;display:block;width:104px;height:64px;overflow:visible}
 .home-page .door-art [data-door-part]{transition:transform 280ms cubic-bezier(.22,.61,.36,1),opacity 200ms ease-out}
@@ -424,7 +424,7 @@
 .home-page .hero-video{position:relative;z-index:0;display:block;opacity:var(--hero-video-opacity,.9);pointer-events:none;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 48px,#000 calc(100% - 96px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 48px,#000 calc(100% - 96px),transparent)}
 .home-page .hero-video img,.home-page .hero-video video{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:90% 50%}
 .home-page .hero-video canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
-.home-page [data-hero-arrival=entering] .hero-video{animation:hero-video-in calc(var(--field-duration) * var(--hero-motion-factor,1)) var(--ease-reveal) calc(var(--field-start) * var(--hero-motion-factor,1)) backwards}
+.home-page [data-hero-arrival=entering] .hero-video{animation:hero-video-in calc(var(--field-duration) * var(--hero-motion-factor,1)) var(--augur-ease-reveal) calc(var(--field-start) * var(--hero-motion-factor,1)) backwards}
 @media(min-width:1024px){
 .home-page .hero-video{position:absolute;inset:max(0px,calc(50% - 28vw)) 0 max(0px,calc(50% - 28vw)) 30%}
 .home-page .hero-video::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--background) 0%,var(--background) 27%,transparent 45%)}
@@ -474,11 +474,11 @@
    height less half the name's line), so a link runs from 4 px under one square to 4 px above the next whatever the
    rows' height. */
 .home-page .how-path-tab{--how-pad:24px;--how-lift:14px;position:relative;flex:1 1 0;display:grid;grid-template-columns:24px minmax(0,1fr);column-gap:16px;row-gap:4px;align-items:center;align-content:center;min-width:0;padding:20px 32px 20px var(--how-pad);border:0;background:none;color:var(--foreground);text-align:left;cursor:pointer;transition:background-color 180ms ease-out}
-.home-page .how-path-tab:not(:last-child)::before{content:'';position:absolute;left:calc(var(--how-pad) + 12px);top:calc(50% - var(--how-lift) + 16px);width:1px;height:calc(100% - 32px);background:var(--web-outline)}
+.home-page .how-path-tab:not(:last-child)::before{content:'';position:absolute;left:calc(var(--how-pad) + 12px);top:calc(50% - var(--how-lift) + 16px);width:1px;height:calc(100% - 32px);background:var(--outline)}
 .home-page .how-path-rail{position:absolute;left:calc(var(--how-pad) + 11px);top:calc(50% - var(--how-lift) + 16px);width:2px;height:calc(100% - 32px);background:var(--primary);transform:scaleY(0);transform-origin:50% 0;pointer-events:none}
 .home-page .how-path-tab:last-child .how-path-rail{display:none}
 .home-page .how-path-tab:has(~[aria-selected="true"]) .how-path-rail{transform:none}
-.home-page .how-path-index{display:grid;place-items:center;width:24px;height:24px;box-shadow:inset 0 0 0 1px var(--web-outline);font:600 12px/1 var(--font-heading);font-variant-numeric:tabular-nums;color:var(--muted-foreground)}
+.home-page .how-path-index{display:grid;place-items:center;width:24px;height:24px;box-shadow:inset 0 0 0 1px var(--outline);font:600 12px/1 var(--font-heading);font-variant-numeric:tabular-nums;color:var(--muted-foreground)}
 .home-page .how-path-tab:has(~[aria-selected="true"]) .how-path-index{box-shadow:inset 0 0 0 1px var(--primary);color:var(--foreground)}
 .home-page .how-path-name{min-width:0;font:600 24px/32px var(--font-heading);letter-spacing:-.01em}
 .home-page .how-path-note{grid-column:2;min-width:0;font-size:16px;line-height:24px;color:var(--muted-foreground);text-wrap:balance}
