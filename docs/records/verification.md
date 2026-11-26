@@ -483,3 +483,11 @@ Checked the working tree based on `7e346c8` in Chromium 156. `npm run build` pas
 Tab and Enter selected all four topics with a visible focus ring, updated the topic query and displayed the corresponding posts. Reduced motion settled the underline, forced colors rendered the selection mark, and print media displayed all four labels. With JavaScript disabled, the filters stayed hidden and the posts rendered.
 
 Safari, Firefox, real phones and screen readers were not checked in this pass.
+
+## 25 November 2026 — design system 0.4.0
+
+Built the site twice in Chromium 156: `main` at `71b16a0` with `0.3.0`, and this branch with a locally packed `0.4.0` tarball from the design-system branch (the release did not exist yet). `npm run build` passed for both. Full-page screenshots of `/`, `/faq/`, `/blog/`, a blog post, `/rep/`, `/about/`, `/products/`, `/contact/`, `/brand/`, `/learn/how-augur-answers-a-question/`, `/learn/fork/` and `/whitepapers/augur-v2/` at 1440px and 390px, with reduced motion, matched pixel for pixel, except the whitepaper's inline commit hash: on Linux, without `ui-monospace`, `<code>` outside prose now falls back to the generic monospace face (see [design reference](../reference/design.md#design-system-alignment)).
+
+Computed styles matched on the homepage between the two builds: outline button edge at rest and on hover (edge and fill), a probe field's invalid rule, placeholder colour, hover fill and focus rule, the text-action easing, and the content width at 1440px and 390px.
+
+Keyboard, Safari, Firefox, real phones and screen readers were not checked in this pass.

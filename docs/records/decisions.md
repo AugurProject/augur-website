@@ -260,3 +260,7 @@ From melo's review of the footer branches on 18 November 2026.
 - **Footer keeps its desktop layout down to 1024 px.** Between 1024 and 1279 px the logo stays left of the link columns, on the section headings' 500 / 668 grid, instead of stacking above them; there the four link columns take the width of their longest link, so "Telegram ↗" stays inside the page edge. Below 1024 the footer stacks as before. (jubalm)
 - **Funding sentence under the footer logo.** "Augur's work is funded and coordinated by the Lituus Foundation" moves from the base line to 16 px under the logo; the base line runs the full width, Privacy and Terms on the left edge and "Back to top" on the right. (jubalm)
 - **Blog index intro and description.** The intro and meta description become one sentence, "News, research, and progress reports from the Augur reboot.", replacing "News, updates, and progress from the Augur reboot. Follow our journey as we rebuild decentralized prediction markets." (melo's change in #30; approved by jubalm)
+
+## 25 November 2026
+
+- **The design system adopts the site.** Where `@augurproject/design-system` and the website disagreed, the website's choice wins: the outline edge `#383848`, the filled field, the `#cf294e` invalid rule, the green outline-button hover, Sora 600 headings, the site's type sizes, spacing, frame, gutters and motion. They ship in design system `0.4.0`, and the site reads them from the package instead of declaring its own copies. Audit: https://claude.ai/artifact/BdQkdmxrMjFRZDeCKUj6bd (jubalm)

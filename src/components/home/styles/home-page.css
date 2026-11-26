@@ -77,7 +77,7 @@
    carries the state; the chevron turns with it. Which words show is home-extra.css's (.how-more),
    beside the box that keeps one width for both. */
 .home-page .how-toggle{justify-self:start}
-.home-page .how-toggle .web-icon{transition:transform 180ms var(--ease-reveal)}.home-page .how-toggle[aria-expanded=true] .web-icon{transform:rotate(180deg)}
+.home-page .how-toggle .web-icon{transition:transform 180ms var(--augur-ease-reveal)}.home-page .how-toggle[aria-expanded=true] .web-icon{transform:rotate(180deg)}
 /* Closed, the example is hidden="until-found", so find in page and text fragments can still open it
    (Chromium, Firefox). base.css's [hidden]{display:none!important} would defeat that, so this one
    element gets its box back; the browser keeps its content unrendered (content-visibility). Without

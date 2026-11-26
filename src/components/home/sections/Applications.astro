@@ -40,7 +40,7 @@ const cards=copy.applications.cards;
 ---
 <section class="applications section" aria-labelledby="applications-heading">
  <div class="site-container">
-  <div class="section-heading"><h2 id="applications-heading" data-reveal>What can Augur&nbsp;Lituus power?</h2><p class="lead" data-reveal>{copy.applications.lead}</p></div>
+  <div class="section-heading"><h2 id="applications-heading" data-reveal>What can Augur&nbsp;Lituus power?</h2><p class="lead augur-type-editorial-lead" data-reveal>{copy.applications.lead}</p></div>
   <div class="cases" data-tabs data-use-cases data-panel-swap data-activation="automatic" data-active="0" data-reveal>
    <div class="case-tabs" role="tablist" aria-label="Use cases" aria-orientation="vertical" style={`--count:${cases.length}`}>
     {cases.map((app,i)=><button type="button" role="tab" id={`application-tab-${app.id}`} aria-controls={`application-panel-${app.id}`} aria-selected={i===0?'true':'false'} tabindex={i===0?0:-1} class="case-tab"><span class="case-mark" aria-hidden="true"><span class="case-link"></span></span><span class="case-label"><span class="case-name">{app.title}</span><span class="case-blurb" aria-hidden="true">{app.summary}</span></span></button>)}

@@ -115,7 +115,7 @@ const shareData = JSON.stringify({ markdown: postMarkdown(post, Astro.site!), ur
  .post-head,.post-bar,.post-cover,.post-text,.post-end{grid-column:3}
 
  /* The rail stays in view and clears the site header while headroom.ts shows it (96px tall). */
- .aside-sticky{position:sticky;top:40px;width:240px;max-height:calc(100vh - 80px);overflow-y:auto;scrollbar-width:thin;padding-top:12px;transition:top 280ms var(--ease-reveal)}
+ .aside-sticky{position:sticky;top:40px;width:240px;max-height:calc(100vh - 80px);overflow-y:auto;scrollbar-width:thin;padding-top:12px;transition:top 280ms var(--augur-ease-reveal)}
  :global(html:has(.site-header[data-stuck]:not([data-hidden]))) .aside-sticky{top:136px;max-height:calc(100vh - 176px)}
 
  .post-head{display:flex;flex-direction:column;align-items:start}
@@ -136,7 +136,7 @@ const shareData = JSON.stringify({ markdown: postMarkdown(post, Astro.site!), ur
 
  .post-bar{display:none}
  .post-cover{margin-block:40px 56px}
- .post-cover :global(img){display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover;border:1px solid var(--web-outline);background:var(--web-quiet)}
+ .post-cover :global(img){display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover;border:1px solid var(--outline);background:var(--web-quiet)}
  .post-end{margin-top:48px}
 
  /* Reading text, over Prose's defaults: a calmer body colour than the headings, 1.7 line height, and paragraph
@@ -160,13 +160,13 @@ const shareData = JSON.stringify({ markdown: postMarkdown(post, Astro.site!), ur
  .post-text :global(.prose-article.post-prose .signoff){margin-top:48px;font-size:16px;line-height:26px;color:var(--muted-foreground)}
 
  /* Callouts (paragraphs that opened with 👉): a pointer in a quiet panel with a green edge. */
- .post-text :global(.prose-article.post-prose .callout){position:relative;padding:16px 20px 16px 52px;border:1px solid var(--web-outline);border-left:2px solid var(--primary);background:var(--web-quiet);color:var(--foreground);font-size:17px;line-height:28px}
+ .post-text :global(.prose-article.post-prose .callout){position:relative;padding:16px 20px 16px 52px;border:1px solid var(--outline);border-left:2px solid var(--primary);background:var(--web-quiet);color:var(--foreground);font-size:17px;line-height:28px}
  .post-text :global(.prose-article.post-prose .callout::before){content:'→';position:absolute;left:20px;top:16px;font:600 17px/28px var(--font-heading);color:var(--primary)}
  .post-text :global(.prose-article.post-prose .callout+.callout){margin-top:8px}
 
  /* Notices (ProseCard): a labelled panel. rehype-post-text lifts the bold opening ("MIGRATION CLOSED") into a
     label above the note. */
- .post-text :global(.prose-article.post-prose .prose-card){padding:20px 24px;border:1px solid var(--web-outline);border-left:2px solid var(--primary);background:var(--web-quiet);color:var(--foreground);font-size:16px;line-height:26px}
+ .post-text :global(.prose-article.post-prose .prose-card){padding:20px 24px;border:1px solid var(--outline);border-left:2px solid var(--primary);background:var(--web-quiet);color:var(--foreground);font-size:16px;line-height:26px}
  .post-text :global(.prose-article.post-prose .notice-label){display:flex;align-items:center;gap:10px;margin-bottom:8px;font:600 12px/16px var(--font-heading);letter-spacing:.08em;color:var(--primary)}
  .post-text :global(.prose-article.post-prose .notice-label::before){content:'';width:6px;height:6px;background:var(--primary)}
 
