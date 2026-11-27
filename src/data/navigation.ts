@@ -8,6 +8,7 @@ export type NavigationItem = { label: string; href: string; external?: boolean; 
 const external = (label: string, linkKey: LinkKey, extra: Partial<NavigationItem> = {}): NavigationItem => ({ label, href: links[linkKey].url, external: true, linkKey, ...extra });
 /** Shared destinations on this site. */
 export const pages = { contact: '/contact/', faq: '/faq/', fork: '/learn/fork/', rep: '/rep/', rss: '/rss.xml', workedExample: '/learn/how-augur-answers-a-question/' } as const;
+export const repSupplyFeeds = { circulating: '/api/supply/circulating/', total: '/api/supply/total/', metadata: '/api/supply/meta.json' } as const;
 const tagline = (id: (typeof products)[number]['id']) => products.find(product => product.id === id)!.tagline;
 
 /** Header and footer consume this same directory. The blog is local (`/blog/`), ported from the old augur.net. */

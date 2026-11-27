@@ -1,3 +1,6 @@
+/** Ethereum Uniswap v4 pool ID, verified against the PositionManager's pool key on 27 November 2026. */
+export const repUsdcPoolId = '0xc7f36420837b77375d71714e9a00071445fa7fa1634ee571e85326c31e9f5144';
+
 /** Destinations cited across the site. Reachability was checked with HTTP GET on 2026-10-05.
  * verified means reachable, not a claim of protocol readiness or inbox ownership.
  * Keep all external hrefs here; callers may add encoded query parameters. The blog posts were on the old
@@ -18,6 +21,13 @@ export const links = {
   foundation: { url: "https://lituus.foundation/", verified: true, source: "Official Augur footer." },
   moonFork: { url: "/blog/post-fork-announcements/", verified: true, source: "Official Augur blog, The Augur Moon Fork Is Complete, 5 August 2026. Ported page (src/content/blog)." },
   repToken: { url: "https://etherscan.io/token/0xCf6A0A7826fa124B7705d6f3c675eAD76f1e540D", verified: true, source: "Etherscan token page for REPv2_Yes_1 (Reputation, 18 decimals, source verified), the address in the Lituus Foundation's REP contract reference on augur.net/rep (updated 13 August 2026) and its FAQ; read 19 October 2026." },
+  cmcAugur: { url: "https://coinmarketcap.com/currencies/augur/", verified: true, source: "CoinMarketCap record 1104 and its spot markets, checked 27 November 2026." },
+  coinGeckoAugur: { url: "https://www.coingecko.com/en/coins/augur", verified: true, source: "CoinGecko's listing for the current token, checked 27 November 2026." },
+  coinGeckoAugurOld: { url: "https://www.coingecko.com/en/coins/augur-old", verified: true, source: "CoinGecko's separate legacy listing, checked 27 November 2026." },
+  krakenAugurUsd: { url: "https://pro.kraken.com/app/trade/augur-usd", verified: true, source: "Kraken Pro spot market. Kraken's AssetPairs API reported AUGUR/USD online on 27 November 2026." },
+  krakenAugurTicker: { url: "https://api.kraken.com/0/public/Ticker?pair=AUGURUSD", verified: true, source: "Kraken's public ticker for AUGUR/USD, checked 27 November 2026." },
+  uniswapRepUsdc: { url: `https://app.uniswap.org/explore/pools/ethereum/${repUsdcPoolId}`, verified: true, source: "Uniswap v4 pool on Ethereum. Tokens and 0.99% fee verified on-chain on 27 November 2026." },
+  repUsdcPoolStats: { url: `https://api.geckoterminal.com/api/v2/networks/eth/pools/${repUsdcPoolId}`, verified: true, source: "GeckoTerminal's volume for this pool ID, checked 27 November 2026." },
   q2Report: { url: "/blog/q2-2026-progress-report/", verified: true, source: "Official Augur blog, Q2 2026: The Fork and What Comes Next, 1 October 2026. Ported page (src/content/blog)." },
   reboot: { url: "/blog/augur-reboot-2025/", verified: true, source: "Official Augur blog, Augur Reboot 2025 Roadmap, 1 April 2025. Ported page (src/content/blog)." },
   generalized: { url: "/blog/generalized-augur/", verified: true, source: "Official Augur blog, Generalized Augur, 13 May 2025. Ported page (src/content/blog)." },
