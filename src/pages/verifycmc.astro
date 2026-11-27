@@ -1,0 +1,40 @@
+---
+import Brand from '../components/primitives/Brand.astro';
+import Button from '../components/primitives/Button.astro';
+import { pages } from '../data/navigation';
+import { currentRep } from '../data/rep';
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout title="CoinMarketCap verification | Augur" description="Confirmation from the Lituus Foundation of Augur’s token listing request." bare noindex>
+  <article class="site-container section max-w-2xl">
+    <a href="/" class="inline-block" aria-label="Augur home"><Brand /></a>
+
+    <h1 class="mt-10 text-[2rem] sm:text-[2.5rem]">CoinMarketCap verification</h1>
+    <p class="mt-4 text-lg leading-7">
+      The Lituus Foundation manages this listing request on Augur’s behalf.
+      We submitted CoinMarketCap ticket <strong>#1476631</strong> to list Augur’s current {currentRep.name} token.
+    </p>
+
+    <dl class="token-details my-7 grid gap-5 bg-quiet p-5 sm:grid-cols-3 sm:p-6">
+      <div><dt>Listing ticker</dt><dd>{currentRep.listing}</dd></div>
+      <div><dt>On-chain symbol</dt><dd>{currentRep.symbol}</dd></div>
+      <div><dt>Network</dt><dd>{currentRep.chain}</dd></div>
+      <div class="col-span-full"><dt>Contract address</dt><dd><code>{currentRep.address}</code></dd></div>
+    </dl>
+
+    <Button href={`${pages.rep}#contract`} variant="outline">View REP contract details</Button>
+  </article>
+</PageLayout>
+
+<style>
+  .token-details dt {
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+
+  .token-details dd {
+    margin-top: 0.25rem;
+    overflow-wrap: anywhere;
+  }
+</style>
