@@ -53,6 +53,7 @@ CoinMarketCap reads these. [generate-supply.mjs](../../scripts/generate-supply.m
 | `/api/supply/circulating/` | [public/api/supply/circulating/index.html](../../public/api/supply/circulating/index.html) | the same value: no locked, reserved or treasury allocations | `text/html; charset=utf-8` |
 | `/api/supply/meta.json` | [public/api/supply/meta.json](../../public/api/supply/meta.json) | provenance: block number, generation time, and the wei value as a string; tab-indented with a trailing newline | `application/json` |
 
+- The [CoinMarketCap verification page](../../src/pages/verifycmc.astro) reads the supply, Ethereum block number and UTC timestamp from `meta.json` at build time.
 - The value is ERC-20 `totalSupply()` of REPv2_Yes_1, `0xCf6A0A7826fa124B7705d6f3c675eAD76f1e540D`, read five blocks behind the tip. It still grows slowly: forkAndRedeem on unredeemed forking-market bonds mints REP (6,546,099.87 on 30 October 2026, 6,546,319.74 on 2 November 2026).
 - **GitHub Pages** (www.augur.net) regenerates the files in every workflow run, hourly and on each push to `main`, so they are at most about an hour old (owner, 2 November 2026). The script is fail-closed: unless the on-chain symbol is `REPv2_Yes_1`, decimals are 18 and the supply is within (0, 11,000,000] REP, it writes nothing and the run stops before deploying.
 - **Cloudflare** serves the committed files, which change only when someone runs `npm run supply` and commits ([deploy](../guides/deploy.md#refresh-the-rep-supply-snapshot)).
