@@ -36,7 +36,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
   <div class="section-heading mission">
    <h2 id="mission-title">No company or committee should hold the final word on what happened.</h2>
    <div class="mission-copy">
-    <p class="lead">Augur was built on that position from the start, and Augur Lituus is too.</p>
+    <p class="lead augur-type-editorial-lead">Augur was built on that position from the start, and Augur Lituus is too.</p>
     <p>Knowledge of the world is spread across many people, and no central authority can gather all of it without bias. So Augur’s answers come from the people who know, with something to lose if they are wrong.</p>
     <a class="cite line-link is-ruled" href={links.whitepaper.url}><span class="button-label">Augur Lituus whitepaper, §1</span><span aria-hidden="true">↗</span></a>
    </div>
@@ -44,7 +44,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
  </section>
 
  <section id="history" class="section site-container ruled" aria-labelledby="history-title">
-  <div class="section-heading"><h2 id="history-title">The story so far</h2><p class="lead">Over a decade on Ethereum, from a prediction market to an oracle for any app.</p></div>
+  <div class="section-heading"><h2 id="history-title">The story so far</h2><p class="lead augur-type-editorial-lead">Over a decade on Ethereum, from a prediction market to an oracle for any app.</p></div>
   <ol class="timeline">
    {history.map((entry, index) => (
     <li class:list={['event', { now: !entry.datetime, 'gap-after': gapAfter(index) }]}>
@@ -62,7 +62,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
  </section>
 
  <section id="who" class="section site-container ruled" aria-labelledby="who-title">
-  <div class="section-heading"><h2 id="who-title">Who does what</h2><p class="lead">The Lituus Foundation funds independent teams to build Augur. Neither the Foundation nor the teams decide what the oracle answers.</p></div>
+  <div class="section-heading"><h2 id="who-title">Who does what</h2><p class="lead augur-type-editorial-lead">The Lituus Foundation funds independent teams to build Augur. Neither the Foundation nor the teams decide what the oracle answers.</p></div>
   <ul class="builders" role="list" style={`--builders:${roles.length}`}>
    {roles.map(item => (
     <li class="tile">
@@ -86,7 +86,7 @@ const gapAfter = (index: number) => index < history.length - 1 && history[index 
  </section>
 
  <section id="principles" class="section site-container ruled" aria-labelledby="principles-title">
-  <div class="section-heading"><h2 id="principles-title">How the work is done</h2><p class="lead">The work happens in public, so anyone can check it.</p></div>
+  <div class="section-heading"><h2 id="principles-title">How the work is done</h2><p class="lead augur-type-editorial-lead">The work happens in public, so anyone can check it.</p></div>
   <ul class="principles" role="list">
    {principles.map(item => (
     <li>

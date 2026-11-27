@@ -30,10 +30,10 @@ const { class: className } = Astro.props;
  .prose-article :global(:where(blockquote)){padding-left:20px;border-left:2px solid var(--primary)}
  .prose-article :global(:where(blockquote>*+*)){margin-top:12px}
  .prose-article :global(:where(:not(pre)>code)){font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85em;padding:1px 5px;background:var(--web-tile);overflow-wrap:anywhere}
- .prose-article :global(:where(pre)){padding:16px 20px;background:var(--web-quiet);border:1px solid var(--web-outline);overflow-x:auto;font-size:14px;line-height:22px}
+ .prose-article :global(:where(pre)){padding:16px 20px;background:var(--web-quiet);border:1px solid var(--outline);overflow-x:auto;font-size:14px;line-height:22px}
  .prose-article :global(:where(hr)){margin-block:48px}
  .prose-article :global(:where(hr+*)){margin-top:0}
- .prose-article :global(:where(img)){display:block;height:auto;border:1px solid var(--web-outline)}
+ .prose-article :global(:where(img)){display:block;height:auto;border:1px solid var(--outline)}
  .prose-article :global(:where(sup)){font-size:.7em;line-height:0}
  .prose-article :global(:where(sup a)){text-decoration:none;padding-inline:1px}
  .prose-article :global(:where(.footnotes)){margin-top:56px;font-size:15px;line-height:24px;color:var(--muted-foreground)}

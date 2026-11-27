@@ -31,10 +31,10 @@ const mention = /((?<![\p{L}\p{N}_@])@[a-z\d_]{1,15}(?![a-z\d_]))/iu;
 </figure>
 <style>
   .x-post-frame{max-inline-size:550px;margin-inline:auto}
-  a.x-post{display:grid;gap:16px;padding:clamp(16px,4vw,24px);border:1px solid var(--web-outline);background:var(--web-quiet);overflow-wrap:anywhere;text-decoration:none}
+  a.x-post{display:grid;gap:16px;padding:clamp(16px,4vw,24px);border:1px solid var(--outline);background:var(--web-quiet);overflow-wrap:anywhere;text-decoration:none}
   a.x-post:is(:hover,:focus-visible){border-color:var(--brand-hover-edge)}
   .x-post-header{display:flex;align-items:center;gap:12px}
-  .x-post-avatar{display:grid;place-items:center;inline-size:44px;block-size:44px;padding:7px;flex:none;background:var(--web-well);border:1px solid var(--web-outline)}
+  .x-post-avatar{display:grid;place-items:center;inline-size:44px;block-size:44px;padding:7px;flex:none;background:var(--web-well);border:1px solid var(--outline)}
   .x-post-avatar img{border:0;margin:0;width:28px;height:28px}
   .x-post-author{display:grid;line-height:1.35;font-family:var(--font-heading);min-inline-size:0}
   .x-post-author strong{font-size:16px}
@@ -45,7 +45,7 @@ const mention = /((?<![\p{L}\p{N}_@])@[a-z\d_]{1,15}(?![a-z\d_]))/iu;
   .x-post-content p{margin:0;font-size:clamp(17px,2.5vw,18px);line-height:1.55;color:var(--foreground)}
   .x-post-content p+p{margin-block-start:12px}
   .x-post-mention{color:var(--primary)}
-  .x-post-footer{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px 20px;border-block-start:1px solid var(--web-outline);padding-block-start:12px}
+  .x-post-footer{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px 20px;border-block-start:1px solid var(--outline);padding-block-start:12px}
   .x-post-action{display:inline-flex;align-items:center;gap:6px;font:600 14px/20px var(--font-heading);text-decoration:underline;text-underline-offset:4px}
   .x-post-action :global(.web-icon svg){inline-size:14px;block-size:14px}
   @media(forced-colors:active){a.x-post{border-color:LinkText}}
