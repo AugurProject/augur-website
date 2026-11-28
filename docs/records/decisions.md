@@ -35,7 +35,7 @@ From the launch interview of 30 October 2026, unless noted.
 
 - **Melo's design.** From PR #3 on, Melo's design decisions are adopted: copy, motion and layout as Melo made them. The website implements only the technical side. (jubalm; PR #3)
 - **Footer email.** Adopt Melo's removal of contact@augur.net from the footer ("pretty sure there is a reason"). The newsletter consent line links `/contact/` instead. (jubalm; PR #3)
-- **Pull request titles and merges.** Pull request titles use Conventional Commits, `type(scope): what changes`; commit messages keep the plain imperative style; pull requests are merged with merge commits. (jubalm; [CONTRIBUTING.md](../../CONTRIBUTING.md#pull-request-title))
+- **Pull request titles and merges.** Pull request titles use Conventional Commits, `type(scope): what changes`; commit messages keep the plain imperative style; pull requests are merged with merge commits. (jubalm; titles and commits in [CONTRIBUTING.md](../../CONTRIBUTING.md#pull-request-title), merges in [deploy](../guides/deploy.md#one-deploy-at-a-time))
 - **One deploy at a time.** Merge one pull request, wait until its deploy is live and `npm run check:launch` passes against production, then merge the next. This follows the race between the PR #1 and PR #2 builds ([verification](verification.md#31-october-2026-production-after-the-deploy-race)). (jubalm; [deploy](../guides/deploy.md#one-deploy-at-a-time))
 
 ## 2 November 2026
