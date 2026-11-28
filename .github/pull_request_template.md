@@ -1,20 +1,16 @@
-<!--
-Title: Conventional Commits, `type(scope): what changes`, e.g. `docs: log decisions`.
-Summary, What changes and Verification are required. Delete Notes, Decisions or Credit when empty.
-CONTRIBUTING.md says what each section expects.
--->
+<!-- Title and how to fill this in: CONTRIBUTING.md. Delete an optional section when it is empty. -->
 
 ## Summary
 
-<!-- One or two sentences: what this changes and why. -->
+<!-- Required. One or two sentences: what this changes and why. -->
 
 ## What changes
 
-<!-- Grouped by area. Quote before → after for copy changes. -->
+<!-- Required. Grouped by area. Quote before → after for copy changes. -->
 
 ## Verification
 
-<!-- What you checked, against which revision, and the result: `npm run build`, `npm run check:launch`, browser checks. Say what you did not check. -->
+<!-- Required. What you checked, against which revision, and the result: `npm run build`, `npm run check:launch`, browser checks. Say what you did not check. -->
 
 ## Notes
 
@@ -22,7 +18,7 @@ CONTRIBUTING.md says what each section expects.
 
 ## Decisions
 
-<!-- Optional. The decisions this relies on or adds, linked to their entries in docs/records/decisions.md (https://github.com/AugurProject/augur-website/blob/main/docs/records/decisions.md). New decisions are appended there in this PR. -->
+<!-- Optional. Links to the entries in docs/records/decisions.md this relies on or adds (CONTRIBUTING.md#decisions). -->
 
 ## Credit
 

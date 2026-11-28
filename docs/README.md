@@ -64,7 +64,7 @@ Link an external source only when it is needed to verify a documented fact, and 
 
 ## Writing style
 
-Write each Markdown paragraph, in docs and in the repository root, as a single line. Do not hard-wrap prose; let the editor wrap it. Break lines only between blocks: paragraphs, list items, headings and code fences.
+Write each paragraph of every Markdown file in the repository as a single line. Do not hard-wrap prose; let the editor wrap it. Break lines only between blocks: paragraphs, list items, headings and code fences.
 
 Write guides as instructions. Use numbered steps for ordered tasks, bullets for settings, and exact command, file and Worker names. Keep guides to steps and facts.
 

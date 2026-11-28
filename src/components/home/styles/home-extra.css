@@ -631,7 +631,7 @@
 /* Hero fork (Ryan 16; Melo's too, owner, 29 Oct 2026; Ryan + Augus has none): three reader links in the
    action area, so the page's main fork is on the first screen at every width. It takes the place of "See how it works" rather than adding to it: three
    choices plus the whitepaper link, instead of five (Hick's law), in the place a hero's actions are
-   expected (Jakob's law). One Green link, the traders' (DESIGN.md: one Primary per view; AGENTS.md:
+   expected (Jakob's law). One Green link, the traders' (DESIGN.md: one Primary per view; conventions.md:
    traders first), and two outline links, all 48 px tall and 12 px apart, so they read as one group;
    the whitepaper link takes the next row, 16 px under it.
    The three share one row where the copy column holds them (402 px at 14 px labels, 488 at 16;

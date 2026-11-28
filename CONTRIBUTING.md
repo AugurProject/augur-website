@@ -22,14 +22,7 @@ Use Conventional Commits: `type(scope): what changes`. For example:
 
 ## Pull request description
 
-GitHub fills the description with the [pull request template](.github/pull_request_template.md). Summary, What changes and Verification are required. Notes, Decisions and Credit are optional: delete the heading when there is nothing to put under it.
-
-- **Summary:** one or two sentences on what the change does and why.
-- **What changes:** the changes grouped by area. For copy changes, quote the text before → after.
-- **Verification:** what you checked, against which revision, and the result: `npm run build`, `npm run check:launch`, browser checks. Say what you did not check. See [Verification](#verification).
-- **Notes:** optional. Anything a reviewer or the next contributor needs: follow-ups, known issues, stacking and retargeting.
-- **Decisions:** optional. The decisions the change relies on or adds. See [Decisions](#decisions).
-- **Credit:** optional. Whose design, copy or review the change carries, for example "Design and copy: Melo".
+Use the [pull request template](.github/pull_request_template.md); GitHub fills it in when a pull request is opened on the site. Each section's comment says what it needs and whether it is optional. [Verification](#verification) and [Decisions](#decisions) below cover those two sections.
 
 ## Verification
 
@@ -47,7 +40,7 @@ If the change relies on a decision, link its entry in [docs/records/decisions.md
 
 ## Documentation
 
-Document types, organization and the writing guide, including one line per paragraph for all Markdown in the repository, are in the [documentation index](docs/README.md#document-types).
+Document types, organization and the writing guide for every Markdown file are in the [documentation index](docs/README.md#document-types).
 
 ## Merging
 
