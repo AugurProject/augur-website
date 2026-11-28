@@ -1,6 +1,6 @@
 # Design reference
 
-Read this before changing identity tokens, shared controls or homepage geometry. To upgrade the package or change a shared token, follow [update the design system](../guides/update-design-system.md). Why the site and the design system have separate owners is in [design ownership](../explanation/design-ownership.md). Repository rules are in [AGENTS.md](../../AGENTS.md); build inputs and motion tools are in [homepage reference](homepage.md).
+Read this before changing identity tokens, shared controls or homepage geometry. To upgrade the package or change a shared token, follow [update the design system](../guides/update-design-system.md). Why the site and the design system have separate owners is in [design ownership](../explanation/design-ownership.md). Repository rules are in [conventions](conventions.md); build inputs and motion tools are in [homepage reference](homepage.md).
 
 ## Design references
 
@@ -22,7 +22,7 @@ Each adaptation is a source-level fact, not a claim of rendered conformity. "App
 - **Error state.** Invalid fields use `border-bottom: 2px solid #cf294e` through `[aria-invalid=true]` (`global.css`). Error text is Paper (`.field-error`), so the text carries the message and the colour only marks it. Approval not found.
 - **Focus.** The design system paints a 2px `--ring` (Green in the dark scheme) for `:focus-visible`, with a 6px offset on links and 2px elsewhere, unless a scoped component rule overrides it. Owner decision, confirmed 24 October 2026: links keep the 6px offset; adopted upstream in `0.2.0` (AugurProject/augur-design-system#8).
 - **Type and composition.** Sora 400/600 and Schibsted Grotesk 400 (upright and italic, so `<em>` is a real italic) load through Fontsource. `font-sans` (Schibsted Grotesk) and `font-heading` (Sora) come from the package's Tailwind bridge. Section grids and artwork are owned by shared CSS and the [home components](../../src/components/home/sections/). Approval not found.
-- **Integration.** The site uses native Astro controls and local CSS, not a React runtime. [AGENTS.md](../../AGENTS.md) requires a scoped request before adding one.
+- **Integration.** The site uses native Astro controls and local CSS, not a React runtime. [Conventions](conventions.md#code) require a scoped request before adding one.
 
 ## Landing page headers
 

@@ -89,7 +89,7 @@ export const homeCopy = {
       // (Abstract p1: not "token holders, governance, multisigs, or anyone else").
       { who: 'For traders', line: ['You’ve probably seen a market misresolve.', 'Here, no authority decides the outcome.'] },
       // Ryan 8: liability first (his PR disasters from bad resolutions), then why it goes away: the builder's
-      // team never rules on the outcome. "Your team" is scoped by "For builders" (AGENTS.md).
+      // team never rules on the outcome. "Your team" is scoped by "For builders" (docs/reference/conventions.md).
       { who: 'For builders', line: ['One bad resolution can turn into a PR disaster.', 'With Augur Lituus, your team isn’t the judge.'] },
     ],
   },
@@ -114,7 +114,7 @@ export const homeCopy = {
       ask: ['Want Augur Lituus in a platform you use?', 'Or one you’re building?'],
       reasons: [
         // Augus: "When outcomes get contentious, Augur's dispute process makes the call - not you." Not
-        // "not you" (AGENTS.md: no "your call" for traders-first copy) or "makes the call" (an idiom the
+        // "not you" or "makes the call" (an idiom the
         // owner replaced on 19 Oct). The project never picking a side is what keeps a bad call from
         // landing on it (disputes escalate in public, §2.1–2.2 p2); "in the open" echoes each case's
         // "Decided in the open". Every point keeps two lines from 1024 to 1440 (measured), so the three

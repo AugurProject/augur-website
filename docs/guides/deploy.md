@@ -37,7 +37,7 @@ The site assumes it is served from the root of its host, so there is no base pat
 
 When Workers Builds is connected to this repository, every merge to `main` starts a Workers Build, and the build that finishes last becomes the Worker's active version, whatever its commit. Two merges close together can race: on 31 October 2026 PR #1's build finished after PR #2's and put the old site back on production ([verification](../records/verification.md#31-october-2026-production-after-the-deploy-race)). The Pages workflow doesn't race: its runs queue in one `concurrency` group, and each builds the commit it was started for.
 
-1. Merge one pull request.
+1. Merge one pull request, with a merge commit (not a squash or rebase).
 2. Wait for the Pages deploy and any configured Workers deploy of this repository to finish for that merge.
 3. Run `npm run check:launch -- https://www.augur.net`. If this repository also has a Workers deployment, run the same command against its verified URL from the dashboard. No row may fail on either applicable host.
 4. Merge the next pull request.

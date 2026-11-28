@@ -115,7 +115,7 @@ Nothing is required of holders today, and reporting or challenging in Augur Litu
   {
     // Removed from the FAQ on 16 November 2026 at the owner's request, as it stood: owner-approved wording of
     // 15 November. It was the one place the FAQ said what a fork asks of a holder. Holding never requires
-    // reporting or challenging (AGENTS.md), and nothing has been announced for launch: the Foundation said on
+    // reporting or challenging (docs/reference/conventions.md), and nothing has been announced for launch: the Foundation said on
     // 21 July 2026 that it would address this in a future post.
     id: 'rep-action', question: 'Do $REP holders need to take any action?',
     answer: `Not today. Holding $REP requires nothing, and no step has been announced for the launch of Augur Lituus; any instruction will come through Augur's [official channels](/faq/#official-channels). The one exception is a fork: holders must migrate their $REP to the universe they consider correct before the migration window closes, or it loses its role in Augur. The [REP page](${pages.rep}#fork) explains what a fork involves.`,

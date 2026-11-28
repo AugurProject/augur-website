@@ -1,31 +1,24 @@
-<!--
-Title: Conventional Commits, `type(scope): what changes`
-  e.g. `feat(home): add the About scene`, `fix(forms): keep focus on submit`, `docs: log decisions`
-Commits inside the PR stay plain imperative sentences. Merge with a merge commit, one PR at a time:
-wait until its deploy is live and `npm run check:launch` passes before merging the next (AGENTS.md).
--->
+<!-- Title and how to fill this in: CONTRIBUTING.md. Delete an optional section when it is empty. -->
 
 ## Summary
 
-<!-- One or two sentences: what this changes and why. -->
+<!-- Required. One or two sentences: what this changes and why. -->
 
 ## What changes
 
-<!-- Grouped by area. Quote before → after for copy changes. -->
+<!-- Required. What a reviewer needs to know, in a few bullets. Not a file list; the diff shows that. Quote before → after for copy changes. -->
 
 ## Verification
 
-<!-- What you checked, against which revision, and the result: `npm run build`, `npm run check:launch`, browser checks. Say what you did not check. -->
+<!-- Required. What you checked and what you didn't, in a sentence or two. -->
 
 ## Notes
 
-<!-- Anything a reviewer or the next contributor needs: follow-ups, known issues, stacking and retargeting. -->
+<!-- Optional. Anything a reviewer or the next contributor needs: follow-ups, known issues, stacking and retargeting. -->
 
 ## Decisions
 
-<!-- The decisions this relies on or adds, linked to docs/records/decisions.md. New decisions are appended there in this PR. -->
-
-See [docs/records/decisions.md](https://github.com/AugurProject/augur-website/blob/main/docs/records/decisions.md).
+<!-- Optional. Links to the entries in docs/records/decisions.md this relies on or adds (CONTRIBUTING.md#decisions). -->
 
 ## Credit
 

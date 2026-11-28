@@ -328,8 +328,8 @@
    longer moves its foot (its height ran 190–258 px). From 1024 to 1279 the evidence column is 360 wide:
    at 480 the story column wrapped Now's two links onto two rows, and leaving Now moved the page below by
    68 px at 1024. Every panel is 376 tall from 1024 up, the tallest stop's height with 14 px captions
-   (Launch's quote, measured 25 Oct), so no stop moves the page. One pulse: the Now stop keeps its ring
-   (AGENTS.md); the panel's status square rests.
+   (Launch's quote, measured 25 Oct), so no stop moves the page. One pulse: the Now stop keeps its ring;
+   the panel's status square rests.
    Green stays on Now: the completed Moon Fork's bar is Paper. Labels and captions reach 14 px, and the
    box's padding and label gap sit on the scale. */
 @media(min-width:1024px){.home-page .roadmap-panel{min-height:376px}.home-page .roadmap-evidence{align-self:stretch;display:flex;flex-direction:column;justify-content:center;padding:24px}}
@@ -397,8 +397,8 @@
 .home-page .hero-emphasis{font-weight:400}
 
 /* Hero background layer (owner, 22 Oct 2026: a full-screen hero video "like most websites", then a
-   series of generated loops, then "Let's try live first"; the motion-rule exception is in
-   AGENTS.md). It is the hero's only art at every width (owner, 3 Nov 2026: one hero image, the desktop
+   series of generated loops, then "Let's try live first").
+   It is the hero's only art at every width (owner, 3 Nov 2026: one hero image, the desktop
    one; the lituus flock that phones and portrait tablets showed is gone). Hero.astro picks what it holds:
    the live floor (hero-floor.js draws a tilted floor of royal navy squares on a canvas, where reports
    run into one block that fills Green) or the generated video (hero-video.js). The markup is a still
@@ -631,8 +631,8 @@
 /* Hero fork (Ryan 16; Melo's too, owner, 29 Oct 2026; Ryan + Augus has none): three reader links in the
    action area, so the page's main fork is on the first screen at every width. It takes the place of "See how it works" rather than adding to it: three
    choices plus the whitepaper link, instead of five (Hick's law), in the place a hero's actions are
-   expected (Jakob's law). One Green link, the traders' (DESIGN.md: one Primary per view; AGENTS.md:
-   traders first), and two outline links, all 48 px tall and 12 px apart, so they read as one group;
+   expected (Jakob's law). One Green link, the traders' (DESIGN.md: one Primary per view; conventions.md:
+   write for traders), and two outline links, all 48 px tall and 12 px apart, so they read as one group;
    the whitepaper link takes the next row, 16 px under it.
    The three share one row where the copy column holds them (402 px at 14 px labels, 488 at 16;
    410 leaves room for font differences). Narrower (768, 414–360), traders' link takes the full row
