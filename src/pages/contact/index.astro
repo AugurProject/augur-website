@@ -16,7 +16,7 @@ const mailto = `${links.contact.url}?subject=${encodeURIComponent('Augur inquiry
 const max = (field: keyof typeof contact.fields) => contact.fields[field].maxLength;
 const describedBy = (field: string) => `contact-${field}-error${live ? ' contact-notice' : ''}`;
 ---
-<PageLayout title="Contact Augur | Let’s talk" description="Ask the Augur team anything, or share a project and the answers it depends on." footer={false}>
+<PageLayout title="Contact Augur | Let’s talk" description="Ask the Augur team anything, or share a project and the answers it depends on." contactBand={false}>
  <div class="site-container contact-layout">
   <section class="contact-intro" aria-labelledby="contact-title">
    <h1 id="contact-title">Let’s talk!</h1>

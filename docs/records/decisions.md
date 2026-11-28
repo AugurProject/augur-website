@@ -264,3 +264,4 @@ From melo's review of the footer branches on 18 November 2026.
 ## 25 November 2026
 
 - **The design system adopts the site.** Where `@augurproject/design-system` and the website disagreed, the website's choice wins: the outline edge `#383848`, the filled field, the `#cf294e` invalid rule, the green outline-button hover, Sora 600 headings, the site's type sizes, spacing, frame, gutters and motion. They ship in design system `0.4.0`, and the site reads them from the package instead of declaring its own copies. (jubalm)
+- **Footer back on the contact page.** `/contact/` renders the footer proper (logo, link columns, base line) and leaves out only the footer's contact call, which links to the page itself (`contactBand={false}` in place of `footer={false}`). Replaces the full footer removal from the contact form's addition on 29 October 2026, made before `contactBand` existed. The `/contact/<result>/` pages still render no footer. (jubalm)
