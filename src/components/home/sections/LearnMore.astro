@@ -24,7 +24,7 @@ const doors=[
 // The section reveal (reveal.js): the heading, the lead, then the doors left to right.
 ---
 <section class="home-learn section" id="learn-more" aria-labelledby="learn-heading"><div class="site-container">
- <div class="section-heading"><h2 id="learn-heading" data-reveal>{keep.heading}</h2><p class="lead" data-reveal>{keep.lead}</p></div>
+ <div class="section-heading"><h2 id="learn-heading" data-reveal>{keep.heading}</h2><p class="lead augur-type-editorial-lead" data-reveal>{keep.lead}</p></div>
  <ul class="doors">{doors.map(door=><li class="door" data-external={door.external?'':undefined} data-reveal="item">
   <svg class="door-art" viewBox={`0 0 ${doorBox.w} ${doorBox.h}`} width={doorBox.w} height={doorBox.h} aria-hidden="true" focusable="false" data-door={door.id}><g transform={doorScenes[door.id].transform}>{(function render(nodes:SvgNode[]):any{return nodes.map(({tag,attrs,children})=>{const Tag=tag as any;return children?<Tag {...attrs}>{render(children)}</Tag>:<Tag {...attrs}/>;});})(doorScenes[door.id].world)}</g></svg><Icon name={door.external?'arrow-up-right':'arrow-right'} class="door-arrow"/>
   <h3 class="door-title"><a class="door-link" href={door.href} aria-describedby={`door-${door.id}`}>{door.title}</a></h3>

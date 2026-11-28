@@ -62,19 +62,19 @@ summary::-webkit-details-marker{display:none}
 /* Hover and the open item: a 2 px Green line on the item's bottom edge, from
    the label's first stroke to the chevron's tip, draws in from the left and
    retracts back to it. */
-.nav-item::after{content:'';position:absolute;left:14px;right:14px;bottom:0;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform 240ms var(--ease-reveal)}
+.nav-item::after{content:'';position:absolute;left:14px;right:14px;bottom:0;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;transition:transform 240ms var(--augur-ease-reveal)}
 .nav-item:hover::after,.nav-disclosure[open]>.nav-item::after{transform:none}
 .nav-item:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 /* Icon renders its own spans, which carry no scope attribute: the chevron is
    reached through its item, and its inner span is sized too. */
 .nav-item :global(.nav-chevron),.nav-item :global(.nav-chevron > span),.nav-item :global(.nav-chevron svg){width:14px;height:14px}
-.nav-item :global(.nav-chevron){color:var(--muted-foreground);transition:transform 200ms var(--ease-reveal),color 180ms ease-out}
+.nav-item :global(.nav-chevron){color:var(--muted-foreground);transition:transform 200ms var(--augur-ease-reveal),color 180ms ease-out}
 .nav-item:hover :global(.nav-chevron),.nav-disclosure[open] :global(.nav-chevron){color:var(--foreground)}
 .nav-disclosure[open] :global(.nav-chevron){transform:rotate(180deg)}
 /* With the controller running, one line draws in, glides between items and
    retracts instead. */
 .nav-highlight{display:none}
-[data-nav-enhanced] .nav-highlight{display:block;position:absolute;left:0;top:0;width:100px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;pointer-events:none;transition:transform 240ms var(--ease-reveal)}
+[data-nav-enhanced] .nav-highlight{display:block;position:absolute;left:0;top:0;width:100px;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:left;pointer-events:none;transition:transform 240ms var(--augur-ease-reveal)}
 [data-nav-enhanced] .nav-highlight[data-instant]{transition:none}
 [data-nav-enhanced] .nav-item::after{content:none}
 /* Current section: the same line rests under its label. With the controller
@@ -82,12 +82,12 @@ summary::-webkit-details-marker{display:none}
 .nav-link[data-current]::after,.nav-disclosure[data-current]>.nav-item::after{transform:none}
 .nav-disclosure{position:relative}
 /* Panels hang from the header's bottom edge; the 28 px between belongs to the panel. */
-.nav-panel{position:absolute;top:calc(100% + 28px);left:0;width:248px;padding:8px;isolation:isolate;animation:nav-in 200ms var(--ease-reveal)}
-.nav-panel::before{content:'';position:absolute;inset:0;z-index:-1;background:var(--web-tile);border:1px solid var(--web-outline);border-top-color:var(--web-tile);transform-origin:top left}
+.nav-panel{position:absolute;top:calc(100% + 28px);left:0;width:248px;padding:8px;isolation:isolate;animation:nav-in 200ms var(--augur-ease-reveal)}
+.nav-panel::before{content:'';position:absolute;inset:0;z-index:-1;background:var(--web-tile);border:1px solid var(--outline);border-top-color:var(--web-tile);transform-origin:top left}
 .nav-panel::after{content:'';position:absolute;left:0;right:0;bottom:100%;height:29px}
 .nav-panel[data-variant=products]{width:624px;padding:12px}
 @supports selector(details::details-content){
-  .nav-disclosure::details-content{opacity:0;transform:translateY(-6px);transition:opacity 150ms ease-out,transform 150ms var(--ease-reveal),content-visibility 150ms allow-discrete}
+  .nav-disclosure::details-content{opacity:0;transform:translateY(-6px);transition:opacity 150ms ease-out,transform 150ms var(--augur-ease-reveal),content-visibility 150ms allow-discrete}
   .nav-disclosure[open]::details-content{opacity:1;transform:none;transition-duration:200ms}
   [data-nav-switching] .nav-disclosure::details-content{transition:none}
   .nav-panel{animation:none}
@@ -102,9 +102,9 @@ ul{list-style:none;padding:0;margin:0}
 .nav-glyph,.nav-glyph :global(svg){width:18px;height:18px}
 .nav-glyph{flex:none;color:var(--muted-foreground);transition:color 140ms ease-out}
 /* Products carry Augur's square mark, which turns Green under the pointer. */
-.nav-mark{flex:none;width:8px;height:8px;margin:8px 5px 0;background:var(--mark-participant,#71728A);transition:background-color 140ms ease-out,transform 200ms var(--ease-reveal)}
+.nav-mark{flex:none;width:8px;height:8px;margin:8px 5px 0;background:var(--mark-participant,#71728A);transition:background-color 140ms ease-out,transform 200ms var(--augur-ease-reveal)}
 .nav-external,.nav-external :global(svg){width:14px;height:14px}
-.nav-external{flex:none;color:var(--muted-foreground);transition:color 140ms ease-out,transform 200ms var(--ease-reveal)}
+.nav-external{flex:none;color:var(--muted-foreground);transition:color 140ms ease-out,transform 200ms var(--augur-ease-reveal)}
 .nav-panel a:hover,.nav-panel a:focus-visible{background:var(--web-raised)}
 .nav-panel a:focus-visible{outline:2px solid var(--ring);outline-offset:-2px}
 .nav-panel a:hover .nav-glyph,.nav-panel a:focus-visible .nav-glyph{color:var(--primary)}
@@ -125,7 +125,7 @@ ul{list-style:none;padding:0;margin:0}
 .nav-feature .nav-mark{margin:9px 0 0;background:var(--primary)}
 .nav-panel .nav-feature .nav-cta{position:static;margin:auto 0 0;min-height:48px;justify-content:center;align-items:center;gap:12px;padding:11px 24px;border:1px solid transparent;font:600 16px/24px var(--font-heading);background:var(--primary);color:var(--primary-foreground)}
 .nav-cta::after{content:'';position:absolute;inset:0}
-.nav-cta-arrow{transition:transform 200ms var(--ease-reveal)}
+.nav-cta-arrow{transition:transform 200ms var(--augur-ease-reveal)}
 .nav-feature:hover{background:var(--web-raised)}
 .nav-panel .nav-feature:hover .nav-cta,.nav-panel .nav-feature .nav-cta:focus-visible{background:var(--primary-hover)}
 .nav-panel .nav-feature .nav-cta:active{background:var(--primary-active)}
@@ -136,7 +136,7 @@ ul{list-style:none;padding:0;margin:0}
 .header-actions{display:flex;gap:16px;align-items:center}.mobile-open{display:none}
 .mobile-navigation{position:fixed;inset:0;margin:0;width:100%;max-width:none;height:100svh;max-height:none;padding:24px;background:var(--background);color:var(--foreground);border:0;overflow-y:auto}
 .mobile-navigation::backdrop{background:var(--background)}.mobile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
-.mobile-top button,.mobile-open{width:44px;height:44px;align-items:center;justify-content:center;background:transparent;border:1px solid var(--web-outline);color:var(--foreground)}
+.mobile-top button,.mobile-open{width:44px;height:44px;align-items:center;justify-content:center;background:transparent;border:1px solid var(--outline);color:var(--foreground)}
 .mobile-navigation nav{display:grid;grid-template-columns:1fr 1fr;gap:32px 16px}.mobile-group h3{font-size:14px;line-height:20px;color:var(--muted-foreground);margin-bottom:12px}
 .mobile-group a{display:flex;gap:8px;align-items:center;min-height:44px;padding-block:10px;text-decoration:none}
 .mobile-group a :global(.web-icon),.mobile-group a :global(svg){width:16px;height:16px}.mobile-group a :global(.social-logo),.mobile-group a :global(.social-logo svg){width:20px;height:20px}.mobile-group a :global(.social-logo){margin-right:4px}

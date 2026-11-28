@@ -290,7 +290,7 @@ Checked after the controls were removed and the questions made exclusive, agains
 
 ## 11 November 2026: FAQ rewrite
 
-Checked on `feat/new-faq-page` against the working tree, with `npm run build` and the dev server, in the Claude desktop app's built-in Chromium-based browser.
+Checked on `feat/new-faq-page` against the working tree, with `npm run build` and the dev server, in a Chromium-based browser.
 
 - **Build.** `npm run build` completes and writes `/faq/index.html` and `/faq.md`. Lightning CSS warns that `:target-current` is not a known pseudo-class and keeps the rule. The duplicate-fragment guard in [index.ts](../../src/data/faq/index.ts) failed a build once, on an alias that matched a topic id, before it was removed.
 - **Deep links.** `/faq/#question-lifecycle` opened that question. The old fragment `#faq-rep-wallet` was rewritten to `#rep-wallet`, opened, and scrolled to 48px from the top, and the topic rail marked REP. A Start here link, followed with the keyboard, opened its question, and the next Tab moved into it.
@@ -431,7 +431,7 @@ Not checked: a real Cloudflare preview deployment, `astro check` (not installed)
 
 ## 29 October 2026: newsletter interest list
 
-Run against the newsletter change on its task branch, with the forms Worker under `wrangler dev` on port 8790 (local D1, `SITE_URL` and `ALLOWED_ORIGINS` set to `http://localhost:4335`) and the site under `astro dev` on port 4335 with `PUBLIC_FORMS_URL=http://localhost:8790`, in the Claude desktop app's built-in browser and with `curl`. `npm run build` passed with and without `PUBLIC_FORMS_URL`; `tsc` passed for the Worker; `wrangler deploy --dry-run` bundled it. No remote database existed; nothing was sent to production.
+Run against the newsletter change on its task branch, with the forms Worker under `wrangler dev` on port 8790 (local D1, `SITE_URL` and `ALLOWED_ORIGINS` set to `http://localhost:4335`) and the site under `astro dev` on port 4335 with `PUBLIC_FORMS_URL=http://localhost:8790`, in a Chromium-based browser and with `curl`. `npm run build` passed with and without `PUBLIC_FORMS_URL`; `tsc` passed for the Worker; `wrangler deploy --dry-run` bundled it. No remote database existed; nothing was sent to production.
 
 - Worker, JSON (`Accept: application/json`, allowed Origin): a new address returned 200 `accepted` and was stored lowercased with `created_at`, `consent_version` `2026-10-29` and `source` `footer`; the same address again returned 200 `accepted` and no second row; `nope` and an empty address returned 422 `invalid` with an `email` field error; a filled `nickname` honeypot returned 400 `rejected` and stored nothing; a JSON body and a 20 KB body returned 400 `rejected`; responses carried `Access-Control-Allow-Origin` for the allowed origin and `Vary: Origin`, and `OPTIONS` answered 204 with the same origin.
 - Worker, refusals: a foreign Origin and a missing Origin returned 403; `GET` returned 405; an unknown path returned 404.
@@ -445,7 +445,7 @@ Not checked: a browser with JavaScript turned off, a real screen reader, Safari 
 
 ## 26 October 2026: homepage browser checks
 
-Run against `main` at fd9018e (`npm run build`, then `astro preview`) in the Claude desktop app's built-in browser. Findings are filed as comments on Track task #7 and are not fixed here.
+Run against `main` at fd9018e (`npm run build`, then `astro preview`) in a Chromium-based browser. Findings are filed as comments on Track task #7 and are not fixed here.
 
 - Phone and tablet: at 390px and 768px the page had no horizontal overflow. The mobile menu dialog opened as a modal, kept Tab and Shift+Tab inside it, closed on Escape and returned focus to the menu button, and closed when an in-page link was chosen. Choosing a link left focus on the menu button instead of the target section. The FAQ reveal in [FaqItem.astro](../../src/components/content/FaqItem.astro) brought the opened question into view. The tab reveal in [tabs.ts](../../src/motion/tabs.ts) ran but overshot in the How taking part works tabs, leaving the panel top 40 to 88px above the viewport. Several small links (20px or 17px tall) fall under the 24px WCAG 2.2 target size.
 - Keyboard: the tab order from the skip link through the header, hero and first tab was logical, every focused element had a 2px outline, tabs followed the manual-activation pattern (arrows and Home/End move focus, Enter selects), and the desktop navigation disclosure opened with Enter and closed with Escape. Not walked: the full page tab order below the first section.
@@ -487,3 +487,11 @@ Checked the working tree based on `7e346c8` in Chromium 156. `npm run build` pas
 Tab and Enter selected all four topics with a visible focus ring, updated the topic query and displayed the corresponding posts. Reduced motion settled the underline, forced colors rendered the selection mark, and print media displayed all four labels. With JavaScript disabled, the filters stayed hidden and the posts rendered.
 
 Safari, Firefox, real phones and screen readers were not checked in this pass.
+
+## 25 November 2026 — design system 0.4.0
+
+Built the site twice in Chromium 156: `main` at `71b16a0` with `0.3.0`, and this branch with a locally packed `0.4.0` tarball from the design-system branch (the release did not exist yet). `npm run build` passed for both. Full-page screenshots of `/`, `/faq/`, `/blog/`, a blog post, `/rep/`, `/about/`, `/products/`, `/contact/`, `/brand/`, `/learn/how-augur-answers-a-question/`, `/learn/fork/` and `/whitepapers/augur-v2/` at 1440px and 390px, with reduced motion, matched pixel for pixel, except the whitepaper's inline commit hash: on Linux, without `ui-monospace`, `<code>` outside prose now falls back to the generic monospace face (see [design reference](../reference/design.md#design-system-alignment)).
+
+Computed styles matched on the homepage between the two builds: outline button edge at rest and on hover (edge and fill), a probe field's invalid rule, placeholder colour, hover fill and focus rule, the text-action easing, and the content width at 1440px and 390px.
+
+Keyboard, Safari, Firefox, real phones and screen readers were not checked in this pass.

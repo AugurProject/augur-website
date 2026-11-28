@@ -10,7 +10,7 @@ const hasArt = Astro.slots.has('art');
   <div class:list={['site-container', { 'has-art': hasArt }]}>
     <div class="page-hero-text">
       <hgroup>
-        <h1>{title}</h1>
+        <h1 class="augur-type-editorial-title">{title}</h1>
         <p class="page-hero-lead">{lead}</p>
       </hgroup>
       <slot />
@@ -29,10 +29,8 @@ const hasArt = Astro.slots.has('art');
     row-gap: 1.25rem;
     min-inline-size: 0;
   }
+  /* Type comes from the design system's editorial-title role. */
   h1 {
-    font-size: clamp(2rem, 1.5rem + 3vw, 3.75rem);
-    line-height: 1.1;
-    letter-spacing: -.03em;
     overflow-wrap: anywhere;
   }
   .page-hero-lead {

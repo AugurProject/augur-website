@@ -36,5 +36,4 @@ Decisions and owner actions still outstanding, checked against the code on 31 Oc
 
 ## Design
 
-- **`--color-muted` override.** It could be removed by changing the two `text-muted` uses in [global.css](../../src/styles/global.css) to `text-muted-foreground`; not done. See [design reference](../reference/design.md#design-system-alignment).
-- **Design-system alignment.** The package is pinned to `0.3.0`; the brand foundation PDF reference stays at `f3c089a`. Alignment with later design-system changes is not established.
+- **Design-system alignment.** The package is pinned to `0.4.0`, which adopted the site's choices (see [decisions](decisions.md#25-november-2026)); the brand foundation PDF reference stays at `f3c089a`. Light-theme values for the adopted roles are provisional upstream; the site is dark only.

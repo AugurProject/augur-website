@@ -21,26 +21,26 @@ const questions = repFaq.ids.map(id => { const entry = faqEntries.find(item => i
   <div class="site-container rep-hero-grid">
    <div class="rep-hero-copy">
     <h1 id="rep-title">{hero.title}</h1>
-    <p class="lead">{hero.lead}</p>
+    <p class="lead augur-type-editorial-lead">{hero.lead}</p>
     <nav class="actions" aria-label="On this page"><a class="button outline" href="#versions">Which REP do I hold?</a><a class="button outline" href="#fork">If a fork happens</a></nav>
    </div>
    <TokenCard />
   </div>
  </section>
  <section class="section site-container" id="how-rep-works" aria-labelledby="ladder-heading">
-  <div class="section-heading"><h2 id="ladder-heading">{ladder.title}</h2><p class="lead">{ladder.lead}</p></div>
+  <div class="section-heading"><h2 id="ladder-heading">{ladder.title}</h2><p class="lead augur-type-editorial-lead">{ladder.lead}</p></div>
   <BondLadder />
  </section>
  <section class="section band" id="taking-part" aria-labelledby="taking-part-heading"><div class="site-container">
-  <div class="section-heading"><h2 id="taking-part-heading">{participation.title}</h2><p class="lead">{participation.lead}</p></div>
+  <div class="section-heading"><h2 id="taking-part-heading">{participation.title}</h2><p class="lead augur-type-editorial-lead">{participation.lead}</p></div>
   <Participation />
  </div></section>
  <section class="section site-container" id="fork" aria-labelledby="fork-heading">
-  <div class="section-heading"><h2 id="fork-heading">{fork.title}</h2><p class="lead">{fork.lead}</p></div>
+  <div class="section-heading"><h2 id="fork-heading">{fork.title}</h2><p class="lead augur-type-editorial-lead">{fork.lead}</p></div>
   <ForkStory />
  </section>
  <section class="section band" id="versions" aria-labelledby="versions-heading"><div class="site-container">
-  <div class="section-heading"><h2 id="versions-heading">{versions.title}</h2><p class="lead">{versions.lead}</p></div>
+  <div class="section-heading"><h2 id="versions-heading">{versions.title}</h2><p class="lead augur-type-editorial-lead">{versions.lead}</p></div>
   <VersionRail />
  </div></section>
  <section class="section site-container rep-faq" id="questions" aria-labelledby="questions-heading">
@@ -57,8 +57,8 @@ const questions = repFaq.ids.map(id => { const entry = faqEntries.find(item => i
  .rep-hero .lead{margin-top:24px}
  .rep-hero .actions{gap:12px 16px;margin-top:40px}
  .rep-faq h2{margin-bottom:32px}
- .faq-accordion{border:1px solid var(--web-outline);background:var(--web-quiet)}
- .faq-accordion :global(.faq-item+.faq-item){border-top:1px solid var(--web-outline)}
+ .faq-accordion{border:1px solid var(--outline);background:var(--web-quiet)}
+ .faq-accordion :global(.faq-item+.faq-item){border-top:1px solid var(--outline)}
  .faq-accordion :global(.faq-answer){max-width:720px;padding-right:56px}
  .faq-accordion :global(details[open]>summary){padding-bottom:12px}
  .faq-accordion :global(.faq-answer p){color:var(--foreground);opacity:.86}

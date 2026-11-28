@@ -14,11 +14,9 @@ The package puts all its rules in `@layer augur`, after Tailwind's layers. Unlay
 
 The exception is `!important`. For important declarations the layer order reverses, and a layered `!important` beats an unlayered one. The package's reduced-motion rule is a layered `!important` rule, so it outranks the site's: durations collapse to the package's 0.01ms rather than the site's 0.001ms.
 
-## Why the muted colour is overridden
+## Why the muted colour was overridden
 
-The package follows shadcn naming, where `muted` is a surface colour and `muted-foreground` is the text colour on it. The site used `muted` to mean a text colour. The package's Tailwind bridge therefore maps the site's `text-muted` to a background-dark value, which would make placeholder and disabled-button text invisible. The site's own `--color-muted` override restores the text colour.
-
-This is a naming collision, not a cascade-layer or `@theme inline` effect. Changing the two `text-muted` uses in `global.css` to `text-muted-foreground` would let the override go; that change has not been made.
+The package follows shadcn naming, where `muted` is a surface colour and `muted-foreground` is the text colour on it. The site used `muted` to mean a text colour, so it kept its own `--color-muted` override. With the `0.4.0` upgrade the two `text-muted` uses became `text-muted-foreground` and the override was removed.
 
 ## Why no React
 

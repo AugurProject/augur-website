@@ -33,10 +33,10 @@
 .site-header .nav-lead .nav-label{font:600 20px/26px var(--font-heading)}
 .site-header .nav-lead-action{display:inline-flex;align-items:center;gap:8px;margin-left:20px;font:600 16px/24px var(--font-heading);color:var(--foreground)}
 .site-header .nav-lead-label{position:relative}
-.site-header .nav-lead-label::after{content:'';position:absolute;left:0;right:0;top:100%;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform 240ms var(--ease-reveal)}
+.site-header .nav-lead-label::after{content:'';position:absolute;left:0;right:0;top:100%;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform 240ms var(--augur-ease-reveal)}
 .site-header .nav-lead>a:is(:hover,:focus-visible) .nav-lead-label::after{transform:none}
 .site-header .nav-lead-arrow,.site-header .nav-lead-arrow svg{width:16px;height:16px}
-.site-header .nav-lead-arrow{transition:transform 200ms var(--ease-reveal)}
+.site-header .nav-lead-arrow{transition:transform 200ms var(--augur-ease-reveal)}
 .site-header .nav-lead>a:is(:hover,:focus-visible) .nav-lead-arrow{transform:translateX(3px)}
 @media(prefers-reduced-motion:reduce){.site-header .nav-lead-label::after,.site-header .nav-lead-arrow{transition:none}}
 @media(forced-colors:active){.site-header .nav-lead>a{border:1px solid CanvasText}.site-header .nav-lead-label::after{forced-color-adjust:none;background:CanvasText}}
@@ -45,15 +45,15 @@
    without JavaScript the header stays in the flow). Sticky at the top; slid up by its own height, a
    transform, when hidden. Once it has left its place under the announcement, a 1 px Outline line marks
    its foot so the page doesn't run into it unseen (no shadows). Reduced motion swaps the slide for a cut. */
-.site-header[data-headroom]{position:sticky;top:0;transition:transform 280ms var(--ease-reveal)}
+.site-header[data-headroom]{position:sticky;top:0;transition:transform 280ms var(--augur-ease-reveal)}
 .site-header[data-headroom][data-hidden]{transform:translateY(-100%)}
-.site-header[data-headroom][data-stuck]::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--web-outline);pointer-events:none}
+.site-header[data-headroom][data-stuck]::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--outline);pointer-events:none}
 @media(prefers-reduced-motion:reduce){.site-header[data-headroom]{transition:none}}
 @media print{.site-header[data-headroom]{position:relative;transform:none}}
 
 /* Footer (item 7, from the 25 Oct audit). A hairline opens the link directory, so the contact band and
    the links read as two groups (they shared one Navy with 48 px between them), and the funding line sits
    16 under the logo instead of 130 px lower at the column's foot. */
-.site-footer .directory{border-top:1px solid var(--web-outline)}
+.site-footer .directory{border-top:1px solid var(--outline)}
 .site-footer .identity{justify-content:flex-start;gap:16px}
 @media(forced-colors:active){.site-footer .directory{border-top-color:CanvasText}}
