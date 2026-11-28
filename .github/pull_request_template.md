@@ -3,6 +3,7 @@ Title: Conventional Commits, `type(scope): what changes`
   e.g. `feat(home): add the About scene`, `fix(forms): keep focus on submit`, `docs: log decisions`
 Commits inside the PR stay plain imperative sentences. Merge with a merge commit, one PR at a time:
 wait until its deploy is live and `npm run check:launch` passes before merging the next (AGENTS.md).
+Fill in every section below; CONTRIBUTING.md says what each one expects.
 -->
 
 ## Summary

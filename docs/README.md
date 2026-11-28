@@ -4,6 +4,7 @@ Documents are grouped by type. What each type is for, and how to tell them apart
 
 - [Project overview](../README.md): What the site is and where it is served, setup, project layout and where to start in the docs.
 - [Repository agent guidance](../AGENTS.md): Repository-wide rules for coding agents.
+- [Contributing](../CONTRIBUTING.md): What a pull request needs: title, template sections, verification, decisions and the rules that are easy to miss.
 - [Documentation agent guidance](AGENTS.md): Document types and rules for agents maintaining this directory.
 
 ## Guides
