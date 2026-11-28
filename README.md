@@ -20,7 +20,7 @@ npm run dev -- --background
 - `src/pages/`: routes
 - `src/data/`: shared facts, links and navigation
 - `src/content/`: blog, fork guides, Augur v2 whitepaper and the Learn worked example
-- `public/`: static files, including `llms.txt` and the Markdown copies of pages
+- `public/`: static files, including `llms.txt` and hand-written Markdown copies of the main pages
 - `scripts/`: launch check, REP supply and X post refresh
 - `workers/forms/`: the `augur-forms` Worker behind the forms
 - `docs/`: documentation
