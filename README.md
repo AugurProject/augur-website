@@ -30,14 +30,14 @@ See `npm run astro -- dev --help` for server management options.
 - `src/pages/`: routes, including the generated `/faq.md`, `/rss.xml` and the Augur v2 whitepaper's Markdown endpoints.
 - `src/data/`: shared facts, links, navigation and page data, such as `links.ts`, `navigation.ts` and the FAQ entries in `faq/`.
 - `src/content/`: Markdown and MDX sources: the blog, fork guides and Augur v2 whitepaper collections, and the Learn worked example.
-- `public/`: static files served as-is, including the hand-written `.md` copy of each page, `llms.txt`, `_headers`, `_redirects` and the REP supply endpoints in `api/supply/` ([markdown pages](docs/reference/markdown-pages.md)).
+- `public/`: static files served as-is, including the hand-written `.md` copies of the listed pages, `llms.txt`, `_headers`, `_redirects` and the REP supply endpoints in `api/supply/` ([markdown pages](docs/reference/markdown-pages.md)).
 - `scripts/`: `check-launch.mjs`, `generate-supply.mjs` and `refresh-x-posts.mjs`, behind the scripts above.
 - `workers/forms/`: the separate `augur-forms` Worker behind the newsletter and contact forms, with its own [README](workers/forms/README.md).
 - `docs/`: project documentation.
 
 ## Deploy and launch check
 
-Merge one pull request at a time, wait for its deploy and run `npm run check:launch` against production before merging the next. Steps, the GitHub Pages and Cloudflare setup and recovery are in [deploy](docs/guides/deploy.md).
+Merge one pull request at a time: wait until its deploy is live and `npm run check:launch` passes against production before merging the next ([one deploy at a time](docs/guides/deploy.md#one-deploy-at-a-time)). Steps, the GitHub Pages and Cloudflare setup and recovery are in [deploy](docs/guides/deploy.md).
 
 ## Documentation
 
