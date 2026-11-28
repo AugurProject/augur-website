@@ -1,6 +1,6 @@
 # Working on Augur Website
 
-Start with [documentation index](docs/README.md) for project context, guidelines and conventions.
+Before any change, read the [documentation index](docs/README.md) for project context, guidelines and conventions, and [CONTRIBUTING.md](CONTRIBUTING.md) for what a pull request needs: titles, commit messages, the template, decisions and merging.
 Important Distinction: External prototypes are not specifications or required dependencies.
 
 ## Development
@@ -16,10 +16,6 @@ A claim is verified when you have checked it against its source in the current s
 When writing markdown, write each paragraph as a single line. Do not hard-wrap prose; let the editor wrap it. Break lines only between blocks: paragraphs, list items, headings and code fences.
 
 Docs are organized by type (guides, reference, explanation, records); see [docs/AGENTS.md](docs/AGENTS.md#document-types).
-
-## Pull requests
-
-Titles, commit messages, the template, decisions and merging are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Working with Astro
 
