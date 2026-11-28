@@ -1,6 +1,6 @@
 # Contributing
 
-What a change to the Augur website needs, from setup to merge, including a pull request from a fork. Content, design and code rules are in [conventions](docs/reference/conventions.md).
+What a change to the Augur website needs, from setup to an open pull request, including one from a fork. Content, design and code rules are in [conventions](docs/reference/conventions.md).
 
 ## Set up
 
@@ -41,7 +41,3 @@ If the change relies on a decision, link its entry in [docs/records/decisions.md
 ## Documentation
 
 Document types, organization and the writing guide for every Markdown file are in the [documentation index](docs/README.md#document-types).
-
-## Merging
-
-Maintainers merge with a merge commit, not a squash or rebase, and one pull request at a time: after each merge they wait until its deploy is live and `npm run check:launch` passes against production before merging the next. The steps are in [deploy](docs/guides/deploy.md#one-deploy-at-a-time).

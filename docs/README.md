@@ -3,7 +3,7 @@
 Documents are grouped by type. The [types](#document-types), organization and writing guide follow the index.
 
 - [Project overview](../README.md): What the site is and where it is served, setup, project layout and where to start in the docs.
-- [Contributing](../CONTRIBUTING.md): What a change needs: branches and commits, the pull request title and template, verification, decisions, documentation and merging.
+- [Contributing](../CONTRIBUTING.md): What a change needs: branches and commits, the pull request title and template, verification, decisions and documentation.
 - [Agent guidance](../AGENTS.md): Pointers and the few extra rules for coding agents.
 - [Documentation agent guidance](AGENTS.md): Pointer for agents maintaining this directory.
 
