@@ -2,7 +2,7 @@
 
 Documents are grouped by type. What each type is for, and how to tell them apart, is in [AGENTS.md](AGENTS.md#document-types).
 
-- [Project overview](../README.md): What the site is and where it deploys, requirements, local development, npm scripts, project layout and the deploy check.
+- [Project overview](../README.md): What the site is and where it is served, setup, project layout and where to start in the docs.
 - [Repository agent guidance](../AGENTS.md): Repository-wide rules for coding agents.
 - [Documentation agent guidance](AGENTS.md): Document types and rules for agents maintaining this directory.
 
