@@ -35,7 +35,7 @@ Documentation-only changes do not need a build or tests. Check the links, file p
 If the change relies on a decision, link its entry in [docs/records/decisions.md](docs/records/decisions.md) in the Decisions section. When the change makes a decision, in the same pull request:
 
 1. Delete its entry from [open decisions](docs/records/open-decisions.md), if it has one.
-2. Append it to the end of `docs/records/decisions.md` with who decided and the source. Never edit a past entry.
+2. Append it to the end of `docs/records/decisions.md` with who decided and the source. Never edit a past entry, except to fix a broken link.
 3. Update the reference it affects.
 
 ## Documentation

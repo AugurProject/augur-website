@@ -1,6 +1,6 @@
 # Decisions
 
-Closed decisions, oldest first, one entry each, with who decided and where it was recorded (pull request, or the owner's word where none exists). The log is append-only: add new entries at the end and do not edit past ones. If a decision is reversed, add an entry that names the one it replaces. The current facts each decision produced live in the reference docs; questions still open are in [open decisions](open-decisions.md).
+Closed decisions, oldest first, one entry each, with who decided and where it was recorded (pull request, or the owner's word where none exists). The log is append-only: add new entries at the end and do not edit past ones, except to fix a broken link. If a decision is reversed, add an entry that names the one it replaces. The current facts each decision produced live in the reference docs; questions still open are in [open decisions](open-decisions.md).
 
 ## 29 October 2026
 
