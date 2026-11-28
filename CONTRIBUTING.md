@@ -22,13 +22,13 @@ Use Conventional Commits: `type(scope): what changes`. Examples from the [pull r
 
 ## Pull request description
 
-GitHub fills the description with the [pull request template](.github/pull_request_template.md). Fill in its sections under their headings; do not replace the template with your own text or delete sections. If a section has nothing to report, say so in it.
+GitHub fills the description with the [pull request template](.github/pull_request_template.md). Summary, What changes and Verification are required. Notes, Decisions and Credit are optional: delete the heading when there is nothing to put under it.
 
 - **Summary:** one or two sentences on what the change does and why.
 - **What changes:** the changes grouped by area. For copy changes, quote the text before → after.
 - **Verification:** what you checked, against which revision, and the result: `npm run build`, `npm run check:launch`, browser checks. Say what you did not check. See [Verification](#verification).
-- **Notes:** anything a reviewer or the next contributor needs: follow-ups, known issues, stacking and retargeting.
-- **Decisions:** the decisions the change relies on or adds. See [Decisions](#decisions).
+- **Notes:** optional. Anything a reviewer or the next contributor needs: follow-ups, known issues, stacking and retargeting.
+- **Decisions:** optional. The decisions the change relies on or adds. See [Decisions](#decisions).
 - **Credit:** optional. Whose design, copy or review the change carries, for example "Design and copy: Melo".
 
 ## Verification

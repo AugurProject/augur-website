@@ -3,7 +3,8 @@ Title: Conventional Commits, `type(scope): what changes`
   e.g. `feat(home): add the About scene`, `fix(forms): keep focus on submit`, `docs: log decisions`
 Commits inside the PR stay plain imperative sentences. Merge with a merge commit, one PR at a time:
 wait until its deploy is live and `npm run check:launch` passes before merging the next (AGENTS.md).
-Fill in every section below; CONTRIBUTING.md says what each one expects.
+Summary, What changes and Verification are required. Delete Notes, Decisions or Credit when empty.
+CONTRIBUTING.md says what each section expects.
 -->
 
 ## Summary
@@ -20,13 +21,11 @@ Fill in every section below; CONTRIBUTING.md says what each one expects.
 
 ## Notes
 
-<!-- Anything a reviewer or the next contributor needs: follow-ups, known issues, stacking and retargeting. -->
+<!-- Optional. Anything a reviewer or the next contributor needs: follow-ups, known issues, stacking and retargeting. -->
 
 ## Decisions
 
-<!-- The decisions this relies on or adds, linked to docs/records/decisions.md. New decisions are appended there in this PR. -->
-
-See [docs/records/decisions.md](https://github.com/AugurProject/augur-website/blob/main/docs/records/decisions.md).
+<!-- Optional. The decisions this relies on or adds, linked to their entries in docs/records/decisions.md (https://github.com/AugurProject/augur-website/blob/main/docs/records/decisions.md). New decisions are appended there in this PR. -->
 
 ## Credit
 
