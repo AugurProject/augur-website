@@ -1,6 +1,6 @@
 # Contributing
 
-This page covers what a pull request to the Augur website needs, including one opened from a fork. It links to the rules in [AGENTS.md](AGENTS.md) and the [documentation index](docs/README.md) rather than repeating them in full.
+What a change to the Augur website needs, from setup to merge, including a pull request from a fork. Content, design and code rules are in [conventions](docs/reference/conventions.md).
 
 ## Set up
 
@@ -14,7 +14,7 @@ Commit messages are plain imperative sentences, for example `Keep legacy Learn U
 
 ## Pull request title
 
-Use Conventional Commits: `type(scope): what changes`. Examples from the [pull request template](.github/pull_request_template.md):
+Use Conventional Commits: `type(scope): what changes`. For example:
 
 - `feat(home): add the About scene`
 - `fix(forms): keep focus on submit`
@@ -33,15 +33,21 @@ GitHub fills the description with the [pull request template](.github/pull_reque
 
 ## Verification
 
-What counts as checked, and what a build does and does not prove, are in [AGENTS.md](AGENTS.md#verification). Documentation-only changes follow [docs/AGENTS.md](docs/AGENTS.md#verification).
+Report what you checked and what you did not. Run `npm run build` after implementation changes; it confirms the project compiles and nothing more. Responsive, keyboard/focus, no-JavaScript and reduced-motion states are verified only by checking them in a browser. Do not add tests unless requested.
+
+Documentation-only changes do not need a build or tests. Check the links, file paths, commands and references they touch against their sources, and report anything you could not verify.
 
 ## Decisions
 
-If the change relies on a decision, link its entry in [docs/records/decisions.md](docs/records/decisions.md) in the Decisions section. If it needs a new decision, propose it in the pull request and append the entry to the end of that log in the same pull request, saying who decided and where; never edit past entries. Questions still open are in [open decisions](docs/records/open-decisions.md).
+If the change relies on a decision, link its entry in [docs/records/decisions.md](docs/records/decisions.md) in the Decisions section. When the change makes a decision, in the same pull request:
 
-## Content, design and code rules
+1. Delete its entry from [open decisions](docs/records/open-decisions.md), if it has one.
+2. Append it to the end of `docs/records/decisions.md` with who decided and the source. Never edit a past entry.
+3. Update the reference it affects.
 
-Every change follows [Scope and implementation](AGENTS.md#scope-and-implementation) in AGENTS.md. Documentation changes also follow [Documenting](AGENTS.md#documenting) there and [docs/AGENTS.md](docs/AGENTS.md).
+## Documentation
+
+Document types, organization and the writing guide, including one line per paragraph for all Markdown in the repository, are in the [documentation index](docs/README.md#document-types).
 
 ## Merging
 

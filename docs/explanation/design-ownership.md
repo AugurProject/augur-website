@@ -20,4 +20,4 @@ The package follows shadcn naming, where `muted` is a surface colour and `muted-
 
 ## Why no React
 
-The repository rules keep the site to Astro-rendered HTML with native browser enhancement, so the site uses native Astro controls and local CSS rather than a React runtime. Adding hydration or React needs a scoped request ([AGENTS.md](../../AGENTS.md)). No further rationale is recorded.
+The repository rules keep the site to Astro-rendered HTML with native browser enhancement, so the site uses native Astro controls and local CSS rather than a React runtime. Adding hydration or React needs a scoped request ([conventions](../reference/conventions.md#code)). No further rationale is recorded.

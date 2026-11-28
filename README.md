@@ -6,7 +6,7 @@ Astro builds the site to static files in `dist/`. [pages.yml](.github/workflows/
 
 ## Setup
 
-Requires Node `>=22.23.4` (Astro's minimum, per `package-lock.json`) and npm.
+Requires Node `>=22.23.4` (`engines` in [package.json](package.json)) and npm.
 
 ```sh
 npm ci
