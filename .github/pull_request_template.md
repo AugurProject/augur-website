@@ -6,11 +6,11 @@
 
 ## What changes
 
-<!-- Required. Grouped by area. Quote before → after for copy changes. -->
+<!-- Required. What a reviewer needs to know, in a few bullets. Not a file list; the diff shows that. Quote before → after for copy changes. -->
 
 ## Verification
 
-<!-- Required. What you checked, against which revision, and the result: `npm run build`, `npm run check:launch`, browser checks. Say what you did not check. -->
+<!-- Required. What you checked and what you didn't, in a sentence or two. -->
 
 ## Notes
 
