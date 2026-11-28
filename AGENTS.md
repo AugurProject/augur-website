@@ -5,7 +5,7 @@ Important Distinction: External prototypes are not specifications or required de
 
 ## Development
 
-When starting the dev server, use background mode `astro dev --background`. `astro dev --help` for management options. Use package scripts if available.
+Start the dev server in background mode, as in the [README](README.md#setup). Use package scripts if available.
 
 ## Verification
 
@@ -19,10 +19,7 @@ Docs are organized by type (guides, reference, explanation, records); see [docs/
 
 ## Pull requests
 
-- Title: Conventional Commits, `type(scope): what changes`, for example `docs: log decisions`. Commit messages stay plain imperative sentences.
-- Use [the template](.github/pull_request_template.md), and link any decision the change relies on in [docs/records/decisions.md](docs/records/decisions.md).
-- Merge with a merge commit, not a squash or rebase.
-- One deploy at a time: merge one pull request, wait until its deploy is live and `npm run check:launch` passes against production, then merge the next. Steps and recovery are in [deploy](docs/guides/deploy.md#one-deploy-at-a-time).
+Titles, commit messages, the template, decisions and merging are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Working with Astro
 

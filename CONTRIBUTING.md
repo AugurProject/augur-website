@@ -4,7 +4,7 @@ This page covers what a pull request to the Augur website needs, including one o
 
 ## Set up
 
-Use npm and the Node version in the `engines` field of [package.json](package.json), and install from the lockfile with `npm ci`. Running the dev server and building are in the [README](README.md).
+Requirements, install and the dev server are in the [README](README.md#setup).
 
 ## Branches and commits
 
@@ -33,27 +33,15 @@ GitHub fills the description with the [pull request template](.github/pull_reque
 
 ## Verification
 
-Report only what you checked yourself, and name what you did not. `npm run build` confirms that the project compiles and nothing more. Responsive layout, keyboard and focus behavior, the page without JavaScript and reduced motion are verified only by checking them in a browser. Do not add tests unless asked. The full rule is in [AGENTS.md](AGENTS.md#verification).
-
-Documentation-only changes do not need a build; check the links, file paths and commands they mention instead ([docs/AGENTS.md](docs/AGENTS.md#verification)).
+What counts as checked, and what a build does and does not prove, are in [AGENTS.md](AGENTS.md#verification). Documentation-only changes follow [docs/AGENTS.md](docs/AGENTS.md#verification).
 
 ## Decisions
 
 If the change relies on a decision, link its entry in [docs/records/decisions.md](docs/records/decisions.md) in the Decisions section. If it needs a new decision, propose it in the pull request and append the entry to the end of that log in the same pull request, saying who decided and where; never edit past entries. Questions still open are in [open decisions](docs/records/open-decisions.md).
 
-## Rules that are easy to miss
+## Content, design and code rules
 
-These are summaries; the full rules are in [AGENTS.md](AGENTS.md#scope-and-implementation).
-
-- Keep homepage copy unless the change was asked for. Write “Augur Lituus” in full, and do not invent claims, partners, metrics, dates, addresses or guarantees.
-- Keep repeated facts and destinations in shared data: [src/data/links.ts](src/data/links.ts) and [src/data/navigation.ts](src/data/navigation.ts). Do not link to local routes that do not exist.
-- Mark off-site links with ↗; internal links have no arrow.
-- Keep the Navy/Paper/Green palette, the dark scheme, the official logo geometry and square corners.
-- Keep pages as Astro-rendered HTML that works without JavaScript. Adding hydration, React, an animation library, a backend, a wallet connection or third-party tracking needs a scoped request first.
-
-## Documentation
-
-When you change docs, follow [docs/AGENTS.md](docs/AGENTS.md): put each document in the folder for its type, write each paragraph as a single line, and update the [index](docs/README.md) when adding, renaming or removing a document.
+Every change follows [Scope and implementation](AGENTS.md#scope-and-implementation) in AGENTS.md. Documentation changes also follow [Documenting](AGENTS.md#documenting) there and [docs/AGENTS.md](docs/AGENTS.md).
 
 ## Merging
 
