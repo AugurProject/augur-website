@@ -1,13 +1,13 @@
 {
-	"generatedAt": "2026-11-03T03:18:07.324Z",
-	"blockNumber": 26331524,
+	"generatedAt": "2026-11-27T15:42:22.625Z",
+	"blockNumber": 26507505,
 	"note": "Circulating equals total: no locked, reserved, or treasury allocations.",
 	"token": {
 		"address": "0xCf6A0A7826fa124B7705d6f3c675eAD76f1e540D",
 		"symbol": "REPv2_Yes_1",
 		"role": "Current REP, the token of the winning/canonical child universe of the Moon Fork.",
-		"totalSupplyWei": "6546319740033638376287306",
-		"totalSupply": "6546319.740033638376287306",
-		"circulatingSupply": "6546319.740033638376287306"
+		"totalSupplyWei": "6546759714559699713416245",
+		"totalSupply": "6546759.714559699713416245",
+		"circulatingSupply": "6546759.714559699713416245"
 	}
 }

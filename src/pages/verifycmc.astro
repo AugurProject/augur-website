@@ -1,0 +1,131 @@
+---
+import supply from '../../public/api/supply/meta.json';
+import Brand from '../components/primitives/Brand.astro';
+import Button from '../components/primitives/Button.astro';
+import Icon from '../components/primitives/Icon.astro';
+import { pages, repSupplyFeeds } from '../data/navigation';
+import { currentRep } from '../data/rep';
+import { cmcListings, cmcMarkets, cmcOfficialLinks, cmcRequest } from '../data/verifycmc';
+import PageLayout from '../layouts/PageLayout.astro';
+
+// Group whole tokens without rounding the fractional part of the on-chain amount.
+const supplyAmount = supply.token.totalSupply.replace(/^\d+/, whole => BigInt(whole).toLocaleString('en-US'));
+const snapshotTime = new Intl.DateTimeFormat('en-GB', {
+  dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC',
+}).format(new Date(supply.generatedAt));
+const host = (url: string) => new URL(url).host;
+---
+
+<PageLayout title="CoinMarketCap listing verification | Augur" description="The Lituus Foundation’s requested CoinMarketCap listings for current and legacy Augur tokens, with contract, supply and spot market references." bare noindex>
+  <article class="verification site-container max-w-4xl">
+    <header>
+      <a href="/" class="inline-block" aria-label="Augur home"><Brand /></a>
+      <h1 class="mt-10 text-[clamp(2rem,4vw,3rem)]">CoinMarketCap listing verification</h1>
+      <p class="mt-4 max-w-[66ch] text-lg leading-7">
+        The {cmcRequest.manager} manages this request on Augur’s behalf, as a follow-up to the listing application for {currentRep.symbol}.
+      </p>
+      <dl class="fields panel mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div><dt>Active ticket</dt><dd class="strong">{cmcRequest.ticket}</dd></div>
+        <div><dt>Application ticket</dt><dd>{cmcRequest.application}</dd></div>
+        <div><dt>Managed by</dt><dd>{cmcRequest.manager}</dd></div>
+        <div><dt>In talks</dt><dd>{cmcRequest.contact.ours} with {cmcRequest.contact.theirs}</dd></div>
+      </dl>
+    </header>
+
+    <section aria-labelledby="listing-changes">
+      <h2 id="listing-changes">Requested listing changes</h2>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {cmcListings.map(listing => (
+          <div class="panel">
+            <h3 class:list={[{ 'text-signal': listing.current }]}>{listing.title}</h3>
+            <p class="status"><span>Currently</span> {listing.now}</p>
+            <dl class="fields">
+              <div><dt>Request</dt><dd>{listing.request}</dd></div>
+              <div><dt>CoinMarketCap page</dt><dd>{'href' in listing
+                ? <a class="source-link" href={listing.href}><code>{listing.path}</code> <Icon name="arrow-up-right" /></a>
+                : <code>{listing.path}</code>}</dd></div>
+              <div><dt>Token</dt><dd><code>{listing.token}</code></dd></div>
+              <div><dt>Ethereum contract</dt><dd>{'contractHref' in listing
+                ? <a class="source-link" href={listing.contractHref}><code>{listing.contract}</code> <Icon name="arrow-up-right" /><span class="sr-only"> on Etherscan</span></a>
+                : <code>{listing.contract}</code>}</dd></div>
+              <div><dt>CoinGecko</dt><dd><a class="source-link" href={listing.coinGecko}><code>{new URL(listing.coinGecko).pathname}</code> <Icon name="arrow-up-right" /></a></dd></div>
+            </dl>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="current-token">
+      <h2 id="current-token">Current token and supply</h2>
+      <dl class="panel fields grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div><dt>On-chain name</dt><dd>{currentRep.name}</dd></div>
+        <div><dt>On-chain symbol</dt><dd><code>{currentRep.symbol}</code></dd></div>
+        <div><dt>Listing name</dt><dd>{currentRep.listing}</dd></div>
+        <div><dt>Network</dt><dd>{currentRep.chain}</dd></div>
+        <div class="col-span-full">
+          <dt>Circulating and total supply</dt>
+          <dd><code>{supplyAmount}</code> REP</dd>
+          <dd class="note"><time datetime={supply.generatedAt}>{snapshotTime} UTC</time> · <a href={repSupplyFeeds.metadata}>Ethereum block {supply.blockNumber.toLocaleString('en-US')}</a></dd>
+        </div>
+      </dl>
+      <div class="references">
+        <Button href={repSupplyFeeds.circulating} variant="text">Circulating supply feed</Button>
+        <Button href={repSupplyFeeds.total} variant="text">Total supply feed</Button>
+        <Button href={`${pages.rep}#contract`} variant="text">REP contract reference</Button>
+      </div>
+    </section>
+
+    <section aria-labelledby="spot-markets">
+      <h2 id="spot-markets">Spot markets and volume</h2>
+      <p class="max-w-[70ch]">Use trades in {currentRep.symbol} to calculate the current listing’s rolling 24-hour volume.</p>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2">
+        {cmcMarkets.map(market => (
+          <div class="panel">
+            <h3>{market.venue}</h3>
+            <dl class="fields">
+              <div><dt>Market</dt><dd><a class="source-link" href={market.href}>{market.pair} <Icon name="arrow-up-right" /></a></dd></div>
+              <div><dt>Details</dt><dd>{market.detail}</dd></div>
+              {'poolId' in market && <div><dt>Pool ID</dt><dd><code>{market.poolId}</code></dd></div>}
+              <div><dt>24-hour volume</dt><dd><code>{market.field}</code> in {market.unit}</dd></div>
+              <div><dt>Volume feed</dt><dd><a class="source-link" href={market.feed}>{host(market.feed)} <Icon name="arrow-up-right" /></a></dd></div>
+            </dl>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="official-links">
+      <h2 id="official-links">Official links</h2>
+      <dl class="panel fields grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {cmcOfficialLinks.map(link => (
+          <div><dt>{link.label}</dt><dd><a class="source-link" href={link.href}>{link.text} <Icon name="arrow-up-right" /></a></dd></div>
+        ))}
+      </dl>
+    </section>
+  </article>
+</PageLayout>
+
+<style>
+  .verification { padding-block: clamp(2rem, 5vw, 4rem); }
+  .verification > section { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+  h2 { margin-bottom: 1rem; font-size: clamp(1.5rem, 3vw, 1.875rem); }
+  h3 { font-size: 1.125rem; line-height: 1.5; }
+  code { overflow-wrap: anywhere; }
+  .panel { background: var(--web-quiet); padding: clamp(1rem, 3vw, 1.5rem); }
+  .panel > .fields { display: grid; gap: 1rem; margin-top: 1rem; }
+  header .panel.fields { margin-top: 1.5rem; }
+  .fields dt, .note { color: var(--muted-foreground); font-size: 0.875rem; }
+  .fields dd { margin-top: 0.25rem; overflow-wrap: anywhere; }
+  .fields dd code { font-size: 0.875rem; }
+  .status { margin-top: 0.75rem; border: 1px solid var(--border); padding: 0.5rem 0.75rem; }
+  .status span { display: block; margin-bottom: 0.125rem; color: var(--muted-foreground); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .fields .strong { font: 600 1.125rem/1.5 var(--font-heading); }
+  .source-link, .note a { text-decoration: underline; }
+  .source-link :global(.web-icon) { vertical-align: text-bottom; }
+  .references { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1.5rem; margin-top: 0.5rem; }
+  @media print {
+    .verification { padding: 0; }
+    .verification > section { margin-top: 1.5rem; }
+    .panel { break-inside: avoid; }
+  }
+</style>
