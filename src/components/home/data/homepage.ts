@@ -114,7 +114,7 @@ export const homeCopy = {
       ask: ['Want Augur Lituus in a platform you use?', 'Or one you’re building?'],
       reasons: [
         // Augus: "When outcomes get contentious, Augur's dispute process makes the call - not you." Not
-        // "not you" (docs/reference/conventions.md: no "your call" for traders-first copy) or "makes the call" (an idiom the
+        // "not you" or "makes the call" (an idiom the
         // owner replaced on 19 Oct). The project never picking a side is what keeps a bad call from
         // landing on it (disputes escalate in public, §2.1–2.2 p2); "in the open" echoes each case's
         // "Decided in the open". Every point keeps two lines from 1024 to 1440 (measured), so the three
